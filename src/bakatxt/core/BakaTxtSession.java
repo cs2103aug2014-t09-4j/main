@@ -1,11 +1,14 @@
 package bakatxt.core;
+
 public class BakaTxtSession implements BakaTxtSessionInterface {
 
     // TODO Ensure filename input is correct
     // TODO Ensure database is closed
 
+    Database database;
+
     public BakaTxtSession(String fileName) {
-        // TODO set up database
+        database = new Database(fileName);
     }
 
     @Override
