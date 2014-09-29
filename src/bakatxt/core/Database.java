@@ -1,4 +1,5 @@
 package bakatxt.core;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -41,6 +42,10 @@ public class Database implements DatabaseInterface {
     private static final String TAG_OPEN = "[";
     private static final String TAG_CLOSE = "]";
     private static final String TAG_TITLE = TAG_OPEN + "TITLE" + TAG_CLOSE;
+
+    private static final String TAG_DELETED = "9999";
+    private static final String TAG_DONE = "5000";
+    private static final String TAG_FLOATING = "0000";
 
     private static final int CONTENT_INDEX = 1;
 
@@ -94,7 +99,7 @@ public class Database implements DatabaseInterface {
                 CHARSET_DEFAULT)) {
             String line;
             while ((line = inputStream.readLine()) != null) {
-                if (line.isEmpty() || line.contains("9999")
+                if (line.isEmpty() || line.contains(TAG_DELETED)
                         || (line.contains(TASK_DONE) && _removeDone)) {
                     continue;
                 } else if (line.contains(TAG_TITLE)) {
@@ -274,10 +279,10 @@ public class Database implements DatabaseInterface {
     private boolean writeLinesToFile() {
         try {
             for (Map.Entry<String, LinkedList<Task>> entry : bakaMap.entrySet()) {
-                if (_removeDone && entry.getKey().contains("5000")) {
+                if (_removeDone && entry.getKey().contains(TAG_DONE)) {
                     continue;
                 }
-                if (entry.getKey().contains("9999")) {
+                if (entry.getKey().contains(TAG_DELETED)) {
                     continue;
                 }
                 LinkedList<Task> today = entry.getValue();
@@ -325,7 +330,7 @@ public class Database implements DatabaseInterface {
         LinkedList<Task> result = new LinkedList<Task>();
         if (key == null) {
             for (Map.Entry<String, LinkedList<Task>> entry : bakaMap.entrySet()) {
-                if (entry.getKey().contains("0000")) {
+                if (entry.getKey().contains(TAG_FLOATING)) {
                     result.addAll(entry.getValue());
                 }
             }
@@ -340,8 +345,8 @@ public class Database implements DatabaseInterface {
         LinkedList<Task> all = new LinkedList<Task>();
         for (Map.Entry<String, LinkedList<Task>> entry : bakaMap.entrySet()) {
             String key = entry.getKey();
-            if (key.length() == 10 || key.contains("5000")
-                    || key.contains("0000")) {
+            if (key.length() == 10 || key.contains(TAG_DONE)
+                    || key.contains(TAG_FLOATING)) {
                 LinkedList<Task> today = entry.getValue();
                 all.addAll(today);
             }
@@ -354,7 +359,7 @@ public class Database implements DatabaseInterface {
         LinkedList<Task> undone = new LinkedList<Task>();
         for (Map.Entry<String, LinkedList<Task>> entry : bakaMap.entrySet()) {
             String key = entry.getKey();
-            if (!key.contains("5000") && !key.contains("9999")) {
+            if (!key.contains(TAG_DONE) && !key.contains(TAG_DELETED)) {
                 LinkedList<Task> today = entry.getValue();
                 undone.addAll(today);
             }
@@ -386,11 +391,11 @@ public class Database implements DatabaseInterface {
         taskDone = BigInteger.ZERO;
         for (Map.Entry<String, LinkedList<Task>> entry : bakaMap.entrySet()) {
             String key = entry.getKey();
-            if (!key.contains("9999")) {
+            if (!key.contains(TAG_DELETED)) {
                 String size = String.valueOf(entry.getValue().size());
                 taskCount = taskCount.add(new BigInteger(size));
             }
-            if (key.contains("5000")) {
+            if (key.contains(TAG_DONE)) {
                 String size = String.valueOf(entry.getValue().size());
                 taskDone = taskDone.add(new BigInteger(size));
             }
