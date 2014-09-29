@@ -15,6 +15,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.TreeSet;
 
 public class Database implements DatabaseInterface {
 
@@ -61,6 +62,7 @@ public class Database implements DatabaseInterface {
     private String _previousTask;
     private BufferedWriter _outputStream;
     private HashMap<String, LinkedList<Task>> _bakaMap;
+    private TreeSet<String> _sortedKeys;
     private boolean _removeDone;
 
     public Database(String fileName) {
@@ -157,6 +159,7 @@ public class Database implements DatabaseInterface {
 
     @Override
     public void sort() {
+        _sortedKeys = new TreeSet<String>(_bakaMap.keySet());
         for (Map.Entry<String, LinkedList<Task>> entry : _bakaMap.entrySet()) {
             LinkedList<Task> today = entry.getValue();
             Collections.sort(today);
@@ -278,19 +281,20 @@ public class Database implements DatabaseInterface {
 
     private boolean writeLinesToFile() {
         try {
-            for (Map.Entry<String, LinkedList<Task>> entry : _bakaMap
-                    .entrySet()) {
-                if (_removeDone && entry.getKey().contains(TAG_DONE)) {
+            sort();
+            for (String key : _sortedKeys) {
+                if (key.contains(TAG_DONE) && _removeDone) {
                     continue;
                 }
-                if (entry.getKey().contains(TAG_DELETED)) {
+                if (key.contains(TAG_DELETED)) {
                     continue;
                 }
-                LinkedList<Task> today = entry.getValue();
-                for (Task task : today) {
+                LinkedList<Task> listToWrite = _bakaMap.get(key);
+                for (Task task : listToWrite) {
                     _outputStream.write(task.toString());
                     _outputStream.newLine();
                 }
+                _outputStream.newLine();
                 _outputStream.flush();
             }
             return true;
@@ -345,13 +349,9 @@ public class Database implements DatabaseInterface {
     @Override
     public LinkedList<Task> getAllTasks() {
         LinkedList<Task> all = new LinkedList<Task>();
-        for (Map.Entry<String, LinkedList<Task>> entry : _bakaMap.entrySet()) {
-            String key = entry.getKey();
-            if (key.length() == 10 || key.contains(TAG_DONE)
-                    || key.contains(TAG_FLOATING)) {
-                LinkedList<Task> today = entry.getValue();
-                all.addAll(today);
-            }
+        sort();
+        for (String key : _sortedKeys) {
+            all.addAll(_bakaMap.get(key));
         }
         return all;
     }
