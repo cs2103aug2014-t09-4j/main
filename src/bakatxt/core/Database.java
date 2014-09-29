@@ -121,10 +121,10 @@ public class Database implements DatabaseInterface {
     private void addTaskToMap(Task task) {
         String key = task.getKey();
 
-        if (!bakaMap.containsKey(key)) {
-            bakaMap.put(key, new LinkedList<Task>());
+        if (!_bakaMap.containsKey(key)) {
+            _bakaMap.put(key, new LinkedList<Task>());
         }
-        LinkedList<Task> target = bakaMap.get(key);
+        LinkedList<Task> target = _bakaMap.get(key);
         target.add(task);
     }
 
@@ -157,7 +157,7 @@ public class Database implements DatabaseInterface {
 
     @Override
     public void sort() {
-        for (Map.Entry<String, LinkedList<Task>> entry : bakaMap.entrySet()) {
+        for (Map.Entry<String, LinkedList<Task>> entry : _bakaMap.entrySet()) {
             LinkedList<Task> today = entry.getValue();
             Collections.sort(today);
         }
@@ -201,7 +201,7 @@ public class Database implements DatabaseInterface {
     @Override
     public boolean delete(Task task) {
         String key = task.getKey();
-        LinkedList<Task> target = bakaMap.get(key);
+        LinkedList<Task> target = _bakaMap.get(key);
         if (target == null) {
             return false;
         }
@@ -278,7 +278,8 @@ public class Database implements DatabaseInterface {
 
     private boolean writeLinesToFile() {
         try {
-            for (Map.Entry<String, LinkedList<Task>> entry : bakaMap.entrySet()) {
+            for (Map.Entry<String, LinkedList<Task>> entry : _bakaMap
+                    .entrySet()) {
                 if (_removeDone && entry.getKey().contains(TAG_DONE)) {
                     continue;
                 }
@@ -329,13 +330,14 @@ public class Database implements DatabaseInterface {
     public LinkedList<Task> getTasks(String key) {
         LinkedList<Task> result = new LinkedList<Task>();
         if (key == null) {
-            for (Map.Entry<String, LinkedList<Task>> entry : bakaMap.entrySet()) {
+            for (Map.Entry<String, LinkedList<Task>> entry : _bakaMap
+                    .entrySet()) {
                 if (entry.getKey().contains(TAG_FLOATING)) {
                     result.addAll(entry.getValue());
                 }
             }
-        } else if (bakaMap.containsKey(key)) {
-            result = bakaMap.get(key);
+        } else if (_bakaMap.containsKey(key)) {
+            result = _bakaMap.get(key);
         }
         return result;
     }
@@ -343,7 +345,7 @@ public class Database implements DatabaseInterface {
     @Override
     public LinkedList<Task> getAllTasks() {
         LinkedList<Task> all = new LinkedList<Task>();
-        for (Map.Entry<String, LinkedList<Task>> entry : bakaMap.entrySet()) {
+        for (Map.Entry<String, LinkedList<Task>> entry : _bakaMap.entrySet()) {
             String key = entry.getKey();
             if (key.length() == 10 || key.contains(TAG_DONE)
                     || key.contains(TAG_FLOATING)) {
@@ -357,7 +359,7 @@ public class Database implements DatabaseInterface {
     @Override
     public LinkedList<Task> getAllUndoneTasks() {
         LinkedList<Task> undone = new LinkedList<Task>();
-        for (Map.Entry<String, LinkedList<Task>> entry : bakaMap.entrySet()) {
+        for (Map.Entry<String, LinkedList<Task>> entry : _bakaMap.entrySet()) {
             String key = entry.getKey();
             if (!key.contains(TAG_DONE) && !key.contains(TAG_DELETED)) {
                 LinkedList<Task> today = entry.getValue();
@@ -389,7 +391,7 @@ public class Database implements DatabaseInterface {
     public void resetCounters() {
         taskCount = BigInteger.ZERO;
         taskDone = BigInteger.ZERO;
-        for (Map.Entry<String, LinkedList<Task>> entry : bakaMap.entrySet()) {
+        for (Map.Entry<String, LinkedList<Task>> entry : _bakaMap.entrySet()) {
             String key = entry.getKey();
             if (!key.contains(TAG_DELETED)) {
                 String size = String.valueOf(entry.getValue().size());
