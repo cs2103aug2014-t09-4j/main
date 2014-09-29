@@ -12,9 +12,9 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.nio.file.StandardOpenOption;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
-import java.util.TreeMap;
 
 public class Database implements DatabaseInterface {
 
@@ -60,7 +60,7 @@ public class Database implements DatabaseInterface {
     private Path _userFile;
     private String _previousTask;
     private BufferedWriter _outputStream;
-    private TreeMap<String, LinkedList<Task>> bakaMap;
+    private HashMap<String, LinkedList<Task>> _bakaMap;
     private boolean _removeDone;
 
     public Database(String fileName) {
@@ -94,7 +94,7 @@ public class Database implements DatabaseInterface {
     }
 
     private void updateMemory() {
-        bakaMap = new TreeMap<String, LinkedList<Task>>();
+        _bakaMap = new HashMap<String, LinkedList<Task>>();
         try (BufferedReader inputStream = Files.newBufferedReader(_userFile,
                 CHARSET_DEFAULT)) {
             String line;
