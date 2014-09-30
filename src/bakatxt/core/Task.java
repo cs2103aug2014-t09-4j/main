@@ -1,4 +1,5 @@
 package bakatxt.core;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -114,7 +115,8 @@ public class Task implements TaskInterface, Comparable<Task> {
         _isDone = tokenizedInput.get(doneIndex).equals(TAG_TRUE);
 
         int floatingIndex = tokenizedInput.indexOf(TAG_FLOATING) + 1;
-        _isFloating = tokenizedInput.get(floatingIndex).equals(TAG_TRUE);
+        _isFloating = tokenizedInput.get(floatingIndex).equals(TAG_TRUE)
+                || (_date.equals(TAG_NULL) && _date.equals(_time));
 
         int deletedIndex = tokenizedInput.indexOf(TAG_DELETED) + 1;
         _isDeleted = tokenizedInput.get(deletedIndex).equals(TAG_TRUE);
