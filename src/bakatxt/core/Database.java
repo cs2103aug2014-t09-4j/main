@@ -21,6 +21,7 @@ public class Database implements DatabaseInterface {
 
     private static final String LINE_SEPARATOR = System
             .getProperty("line.separator");
+    private static final String SPACE = " ";
 
     private static final String MESSAGE_FILE_CHANGE = "File changed. Current filename is \"%1$s\".";
     private static final String MESSAGE_OUTPUT_FILENAME = "Filename: %1$s"
@@ -30,19 +31,22 @@ public class Database implements DatabaseInterface {
     private static final String MESSAGE_OUTPUT_DONE_COUNT = "No. of tasks completed: %1$s"
             + LINE_SEPARATOR;
 
-    private static final String FILE_COMMENT = "[-] ";
+    private static final String TAG_OPEN = "[";
+    private static final String TAG_CLOSE = "]";
+    private static final String TAG_TITLE = TAG_OPEN + "TITLE" + TAG_CLOSE;
+
+    private static final String TASK_TOTAL = TAG_OPEN + "TOTAL COUNT"
+            + TAG_CLOSE + SPACE;
+    private static final String TASK_DONE = TAG_OPEN + "DONE COUNT" + TAG_CLOSE
+            + SPACE;
+
+    private static final String FILE_COMMENT = TAG_OPEN + "-" + TAG_CLOSE
+            + SPACE;
     private static final String FILE_HEADER = FILE_COMMENT
             + "BakaTXT Human-Readable Human-Fixable Database";
     private static final String FILE_VERSION = FILE_COMMENT + "alpha v0.0";
     private static final String FILE_WARNING = FILE_COMMENT
             + "Each task has to be in the same line";
-
-    private static final String TASK_TOTAL = "[TOTAL COUNT] ";
-    private static final String TASK_DONE = "[DONE COUNT] ";
-
-    private static final String TAG_OPEN = "[";
-    private static final String TAG_CLOSE = "]";
-    private static final String TAG_TITLE = TAG_OPEN + "TITLE" + TAG_CLOSE;
 
     private static final String TAG_DELETED = "9999";
     private static final String TAG_DONE = "5000";
