@@ -236,7 +236,6 @@ public class Database implements DatabaseInterface {
 
     @Override
     public void close() {
-        sort();
         updateFile();
         try {
             _outputStream.close();
