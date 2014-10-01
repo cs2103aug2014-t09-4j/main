@@ -2,6 +2,7 @@ package bakatxt.core;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 import com.joestelmach.natty.DateGroup;
@@ -10,6 +11,7 @@ import com.joestelmach.natty.Parser;
 public class BakaTxtSession implements BakaTxtSessionInterface {
 
     private static final String MESSAGE_ADD_NO_TITLE = "Invalid add command, please add a title!";
+    private static final String MESSAGE_EMPTY_FILE = "The file is empty!";
 
     private static final String STRING_EMPTY = "";
     private static final String STRING_SPACE = " ";
@@ -94,7 +96,7 @@ public class BakaTxtSession implements BakaTxtSessionInterface {
         return task.toDisplayString();
     }
 
-    private String replaceDateTimeDescription(String input) {
+    private static String replaceDateTimeDescription(String input) {
         String inputTemp = input;
         if (_isDate) {
             inputTemp = inputTemp.replace(_originalDateFormat, " ");
@@ -112,7 +114,7 @@ public class BakaTxtSession implements BakaTxtSessionInterface {
         return inputTemp;
     }
 
-    private String removePrepositions(String input) {
+    private static String removePrepositions(String input) {
         String inputTemp = input;
         String part[] = inputTemp.trim().split(STRING_SPACE);
         if (part[part.length - 1].contains(STRING_ON)
@@ -135,7 +137,7 @@ public class BakaTxtSession implements BakaTxtSessionInterface {
         _title = removePrepositions(inputTemp).trim();
     }
 
-    private void identifyDescription(String input) {
+    private static void identifyDescription(String input) {
         String[] part = input.split(STRING_DASH);
         _description = part[1].trim();
         _isDescription = true;
@@ -149,7 +151,7 @@ public class BakaTxtSession implements BakaTxtSessionInterface {
         _venue = removePrepositions(newInput).trim();
     }
 
-    private void identifyDate(String input) {
+    private static void identifyDate(String input) {
         Parser parser = new Parser();
         String[] temp = input.split(STRING_SPACE);
         String newDate;
@@ -198,7 +200,7 @@ public class BakaTxtSession implements BakaTxtSessionInterface {
         }
     }
 
-    private void identifyTime(String input) {
+    private static void identifyTime(String input) {
         try {
             if (_originalDigitDateFormat != null) {
                 input = input.replace(_originalDigitDateFormat, STRING_SPACE);
@@ -241,13 +243,23 @@ public class BakaTxtSession implements BakaTxtSessionInterface {
     @Override
     public String display(String input) {
         // TODO Auto-generated method stub
-        return null;
+        return display();
     }
 
     @Override
     public String display() {
         // TODO Auto-generated method stub
-        return null;
+        LinkedList<Task> allTasks = _database.getAllTasks();
+        String output = new String();
+        if (allTasks.isEmpty()) {
+            output = MESSAGE_EMPTY_FILE;
+        } else {
+            for (int i = 0; i < allTasks.size(); i++) {
+                output += allTasks.get(i).toDisplayString();
+            }
+        }
+
+        return output;
     }
 
     @Override
