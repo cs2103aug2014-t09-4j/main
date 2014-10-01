@@ -1,6 +1,5 @@
 package bakatxt.core;
 
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Scanner;
@@ -19,8 +18,7 @@ public class BakaTxtMain {
     private static final String MESSAGE_INVALID_COMMAND = "Unrecognized command type";
     private static BakaTxtSession session;
 
-    public static void main(String[] args) throws IOException {
-
+    public static void main(String[] args) {
         String filename;
         String command;
 
@@ -35,9 +33,8 @@ public class BakaTxtMain {
                 command = sc.nextLine();
                 executeCommand(command);
             }
-        } else
-            System.out.println(MESSAGE_INVALID_FILE);
-
+        }
+        System.out.println(MESSAGE_INVALID_FILE);
     }
 
     private static void generateStartMessage() {
@@ -57,7 +54,6 @@ public class BakaTxtMain {
         String commandLine = tokenizedCommand.nextToken();
 
         return commandLine;
-
     }
 
     public static String executeCommand(String userCommand) {
@@ -74,6 +70,7 @@ public class BakaTxtMain {
                 return session.display(removeFirstWord(userCommand));
             case EXIT :
                 System.exit(0);
+                //$FALL-THROUGH$ (to remove fall-through warning in eclipse)
             default :
                 // throw an error if the command is not recognized
                 throw new Error(MESSAGE_INVALID_COMMAND);
