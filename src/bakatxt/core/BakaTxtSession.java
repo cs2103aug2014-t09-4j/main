@@ -237,28 +237,37 @@ public class BakaTxtSession implements BakaTxtSessionInterface {
     @Override
     public String delete(String input) {
         // TODO Auto-generated method stub
+        // TODO Get a specific task to delete
+        // TODO main function to filter for exact title to delete
         return null;
     }
 
     @Override
     public String display(String input) {
         // TODO Auto-generated method stub
-        return display();
+        if (input.isEmpty()) {
+            return display();
+        }
+        LinkedList<Task> selectedTasks = _database.getTaskWithTitle(input);
+        return toOutputString(selectedTasks);
     }
 
     @Override
     public String display() {
         // TODO Auto-generated method stub
         LinkedList<Task> allTasks = _database.getAllTasks();
+        return toOutputString(allTasks);
+    }
+
+    private String toOutputString(LinkedList<Task> tasks) {
         String output = new String();
-        if (allTasks.isEmpty()) {
+        if (tasks.isEmpty()) {
             output = MESSAGE_EMPTY_FILE;
         } else {
-            for (int i = 0; i < allTasks.size(); i++) {
-                output += allTasks.get(i).toDisplayString();
+            for (int i = 0; i < tasks.size(); i++) {
+                output += (i + 1) + ". " + tasks.get(i).toDisplayString();
             }
         }
-
         return output;
     }
 
