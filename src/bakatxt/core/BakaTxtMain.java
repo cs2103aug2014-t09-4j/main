@@ -1,7 +1,5 @@
 package bakatxt.core;
 
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Scanner;
 import java.util.StringTokenizer;
 
@@ -28,7 +26,6 @@ public class BakaTxtMain {
         _sc = new Scanner(System.in);
 
         initializeFile();
-        _session = new BakaTxtSession(_filename);
 
         while (true) {
             System.out.print(MESSAGE_ENTER_COMMAND);
@@ -47,13 +44,12 @@ public class BakaTxtMain {
             _filename = _sc.nextLine();
         }
 
+        _session = new BakaTxtSession(_filename);
         System.out.println(MESSAGE_WELCOME);
     }
 
     private static boolean checkFileName() {
-        if (!Files.isReadable(Paths.get(_filename))) {
-            return false;
-        }
+        // TODO check filename grammar
         return true;
     }
 
