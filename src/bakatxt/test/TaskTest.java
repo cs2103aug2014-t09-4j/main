@@ -1,6 +1,7 @@
 package bakatxt.test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
@@ -22,10 +23,10 @@ public class TaskTest {
         task.addDate("2014-05-02");
         task.addTime("2230");
         task.setDone(true);
-        String expected = "[TITLE] New Task \n" + "[DATE] 2014-05-02 \n"
-                + "[TIME] 2230 \n" + "[VENUE] null \n"
-                + "[DESCRIPTION] null \n" + "[DONE] true \n"
-                + "[FLOATING] false \n";
+        String expected = "\t[TITLE] New Task \n" + "\t[DATE] 2014-05-02 \n"
+                + "\t[TIME] 2230 \n" + "\t[VENUE] null \n"
+                + "\t[DESCRIPTION] null \n" + "\t[DONE] true \n"
+                + "\t[FLOATING] false \n\n";
         String output = task.toDisplayString();
         System.out.println(output);
         assertEquals(expected, output);
@@ -50,10 +51,10 @@ public class TaskTest {
 
     @Test
     public void testTaskFromDatabaseString() {
-        String databaseStr = "[9999 5000 0000 2014-05-02 2230] [TITLE] New Task [DATE] 2014-05-02 [TIME] 2230 [VENUE] null [DONE] true [FLOATING] true [DELETED] true [DESCRIPTION] null ";
+        String databaseStr = "[9999 5000 2014-05-02 2230] [TITLE] New Task [DATE] 2014-05-02 [TIME] 2230 [VENUE] null [DONE] true [FLOATING] false [DELETED] true [DESCRIPTION] null ";
         Task task = new Task(databaseStr);
         assertTrue(task.isDone());
-        assertTrue(task.isFloating());
+        assertFalse(task.isFloating());
         assertEquals("null", task.getVenue());
         assertEquals(databaseStr, task.toString());
     }

@@ -1,4 +1,5 @@
 package bakatxt.test;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -78,15 +79,15 @@ public class DatabaseTest {
         task3.setDone(true);
         task3.setFloating(true);
         database.add(task3);
-        LinkedList<Task> result = database.getTasks("2014-03-02");
+        LinkedList<Task> result = database.getTasksWithDate("2014-03-02");
         assertTrue(result.contains(task1));
-        result = database.getTasks("2014-12-14");
+        result = database.getTasksWithDate("2014-12-14");
         assertFalse(result.contains(task1));
         result = database.getAllUndoneTasks();
         assertFalse(result.contains(task3));
         result = database.getAllTasks();
         assertTrue(result.contains(task2));
-        result = database.getTasks(null);
+        result = database.getTasksWithDate(null);
         assertTrue(result.contains(task3));
     }
 

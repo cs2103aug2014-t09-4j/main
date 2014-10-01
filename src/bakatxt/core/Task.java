@@ -238,7 +238,7 @@ public class Task implements TaskInterface, Comparable<Task> {
                 + LINE_SEPARATOR);
         task.append(TAG_TAB + TAG_FLOATING + SPACE + _isFloating + SPACE
                 + LINE_SEPARATOR);
-
+        task.append(LINE_SEPARATOR);
         return task.toString();
     }
 

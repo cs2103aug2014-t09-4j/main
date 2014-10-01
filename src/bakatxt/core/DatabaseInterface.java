@@ -23,7 +23,7 @@ public interface DatabaseInterface {
 
     public LinkedList<Task> getTaskWithTitle(String title);
 
-    public LinkedList<Task> getTasks(String key);
+    public LinkedList<Task> getTasksWithDate(String key);
 
     public LinkedList<Task> getAllTasks();
 

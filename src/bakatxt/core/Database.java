@@ -336,13 +336,13 @@ public class Database implements DatabaseInterface {
     @Override
     public LinkedList<Task> getTaskWithTitle(String title) {
         LinkedList<Task> result = new LinkedList<Task>();
-        for (Map.Entry<String, LinkedList<Task>> entry : _bakaMap.entrySet()) {
-            LinkedList<Task> dayTasks = entry.getValue();
-            if (dayTasks.contains(TAG_TITLE + SPACE + title)) {
-                for (Task task : dayTasks) {
-                    if (task.getTitle().equals(title)) {
-                        result.add(task);
-                    }
+        sort();
+        for (String key : _sortedKeys) {
+            LinkedList<Task> dayTasks = _bakaMap.get(key);
+            for (Task task : dayTasks) {
+                String taskTitle = task.getTitle().toLowerCase();
+                if (taskTitle.equals(title.toLowerCase())) {
+                    result.add(task);
                 }
             }
         }
@@ -350,7 +350,7 @@ public class Database implements DatabaseInterface {
     }
 
     @Override
-    public LinkedList<Task> getTasks(String key) {
+    public LinkedList<Task> getTasksWithDate(String key) {
         LinkedList<Task> result = new LinkedList<Task>();
         if (key == null) {
             for (Map.Entry<String, LinkedList<Task>> entry : _bakaMap
@@ -378,11 +378,11 @@ public class Database implements DatabaseInterface {
     @Override
     public LinkedList<Task> getAllUndoneTasks() {
         LinkedList<Task> undone = new LinkedList<Task>();
-        for (Map.Entry<String, LinkedList<Task>> entry : _bakaMap.entrySet()) {
-            String key = entry.getKey();
+        sort();
+        for (String key : _sortedKeys) {
             if (!key.contains(TAG_DONE) && !key.contains(TAG_DELETED)) {
-                LinkedList<Task> today = entry.getValue();
-                undone.addAll(today);
+                LinkedList<Task> dayTasks = _bakaMap.get(key);
+                undone.addAll(dayTasks);
             }
         }
         return undone;
