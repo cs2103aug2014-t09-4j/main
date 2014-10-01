@@ -181,25 +181,41 @@ public class Task implements TaskInterface, Comparable<Task> {
 
     @Override
     public String addDate(String input) {
-        _date = input.trim();
+        if (input == null) {
+            _date = null;
+        } else {
+            _date = input.trim();
+        }
         return _date;
     }
 
     @Override
     public String addTime(String input) {
-        _time = input.trim();
+        if (input == null) {
+            _time = null;
+        } else {
+            _time = input.trim();
+        }
         return _time;
     }
 
     @Override
     public String addVenue(String input) {
-        _venue = input.trim();
+        if (input == null) {
+            _venue = null;
+        } else {
+            _venue = input.trim();
+        }
         return _venue;
     }
 
     @Override
     public String addDescription(String input) {
-        _description = input.trim();
+        if (input == null) {
+            _description = null;
+        } else {
+            _description = input.trim();
+        }
         return _description;
     }
 
