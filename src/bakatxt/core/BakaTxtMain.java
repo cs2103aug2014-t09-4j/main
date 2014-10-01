@@ -11,39 +11,47 @@ public class BakaTxtMain {
         ADD, DELETE, DISPLAY, EXIT
     }
 
-    private static Scanner sc;
-    private static final String MESSAGE_INVALID_FILE = "Error opening/creating file";
-    private static final String MESSAGE_INVALID_FORMAT = "invalid command format";
-    private static final String MESSAGE_WELCOME = " Welcome To BakaTxt";
+    private static final String MESSAGE_FILENAME = "Please input a filename: ";
+    private static final String MESSAGE_INVALID_FORMAT = "Invalid command format";
+    private static final String MESSAGE_WELCOME = "Welcome To BakaTxt!";
     private static final String MESSAGE_INVALID_COMMAND = "Unrecognized command type";
-    private static BakaTxtSession session;
+    private static final String MESSAGE_ENTER_COMMAND = "Please enter command: ";
+    private static final String MESSAGE_BYEBYE = "Bye bye!";
+
+    private static Scanner _sc;
+    private static BakaTxtSession _session;
+    private static String _filename;
 
     public static void main(String[] args) {
-        String filename;
         String command;
 
-        sc = new Scanner(System.in);
+        _sc = new Scanner(System.in);
 
-        generateStartMessage();
-        filename = sc.nextLine();
-        session = new BakaTxtSession(filename);
-        if (checkFileName(filename) == true) {
-            while (true) {
+        initializeFile();
+        _session = new BakaTxtSession(_filename);
 
-                command = sc.nextLine();
-                executeCommand(command);
-            }
+        while (true) {
+            System.out.print(MESSAGE_ENTER_COMMAND);
+            command = _sc.nextLine();
+            String output = executeCommand(command);
+            System.out.println(output);
         }
-        System.out.println(MESSAGE_INVALID_FILE);
     }
 
-    private static void generateStartMessage() {
+    private static void initializeFile() {
+        System.out.print(MESSAGE_FILENAME);
+        _filename = _sc.nextLine();
+
+        while (!checkFileName()) {
+            System.out.print(MESSAGE_FILENAME);
+            _filename = _sc.nextLine();
+        }
+
         System.out.println(MESSAGE_WELCOME);
     }
 
-    private static boolean checkFileName(String filename) {
-
-        if (!Files.isReadable(Paths.get(filename))) {
+    private static boolean checkFileName() {
+        if (!Files.isReadable(Paths.get(_filename))) {
             return false;
         }
         return true;
@@ -52,7 +60,6 @@ public class BakaTxtMain {
     private static String getFirstWord(String command) {
         StringTokenizer tokenizedCommand = new StringTokenizer(command);
         String commandLine = tokenizedCommand.nextToken();
-
         return commandLine;
     }
 
@@ -61,21 +68,28 @@ public class BakaTxtMain {
             return invalidFormat(userCommand);
         }
 
+        String output;
+
         switch (CommandType.valueOf(getFirstWord(userCommand).toUpperCase())) {
             case ADD :
-                return session.add(removeFirstWord(userCommand));
+                output = _session.add(removeFirstWord(userCommand));
+                break;
             case DELETE :
-                return session.delete(removeFirstWord(userCommand));
+                output = _session.delete(removeFirstWord(userCommand));
+                break;
             case DISPLAY :
-                return session.display(removeFirstWord(userCommand));
+                output = _session.display(removeFirstWord(userCommand));
+                break;
             case EXIT :
+                System.out.println(MESSAGE_BYEBYE);
+                _session.exit();
                 System.exit(0);
                 //$FALL-THROUGH$ (to remove fall-through warning in eclipse)
             default :
-                // throw an error if the command is not recognized
-                throw new Error(MESSAGE_INVALID_COMMAND);
+                output = MESSAGE_INVALID_COMMAND;
         }
 
+        return output;
     }
 
     private static String invalidFormat(String userCommand) {
