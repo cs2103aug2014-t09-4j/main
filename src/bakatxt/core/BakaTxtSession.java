@@ -116,7 +116,18 @@ public class BakaTxtSession implements BakaTxtSessionInterface {
 
     private static String removePrepositions(String input) {
         String inputTemp = input.replace("\\s+", "\\s");
-        // String[] part = inputTemp.trim().split(STRING_SPACE);
+        String[] part = inputTemp.trim().split(STRING_SPACE);
+
+        do {
+            int lastIndex = part.length - 1;
+            if (part[lastIndex].equals(STRING_AT)
+                    || part[lastIndex].equals(STRING_ON)) {
+                inputTemp = inputTemp.substring(0, inputTemp.length() - 2)
+                        .trim();
+            }
+            part = inputTemp.split(STRING_SPACE);
+        } while (part[part.length - 1].equals(STRING_AT)
+                || part[part.length - 1].equals(STRING_ON));
 
         return inputTemp;
     }
