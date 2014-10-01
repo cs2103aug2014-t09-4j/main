@@ -291,6 +291,9 @@ public class Task implements TaskInterface, Comparable<Task> {
     @Override
     public void setFloating(boolean isFloating) {
         _isFloating = isFloating;
+        if (_isFloating) {
+            _date = _time = TAG_NULL;
+        }
     }
 
     @Override
