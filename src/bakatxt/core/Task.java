@@ -15,7 +15,6 @@ public class Task implements TaskInterface, Comparable<Task> {
     private static final String MESSAGE_NO_VENUE = "No venue is specified for this task";
     private static final String MESSAGE_NO_DESCRIPTION = "No description is specified for this task";
 
-    private static final String TAG_TAB = "\t";
     private static final String TAG_OPEN = "[";
     private static final String TAG_CLOSE = "]";
     private static final String TAG_TITLE = TAG_OPEN + "TITLE" + TAG_CLOSE;
