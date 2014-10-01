@@ -9,8 +9,24 @@ import com.joestelmach.natty.Parser;
 
 public class BakaTxtSession implements BakaTxtSessionInterface {
 
-    // TODO Ensure filename input is correct
-    // TODO Ensure database is closed
+    private static final String MESSAGE_ADD_NO_TITLE = "Invalid add command, please add a title!";
+
+    private static final String STRING_EMPTY = "";
+    private static final String STRING_SPACE = " ";
+    private static final String STRING_ADD = "@";
+    private static final String STRING_DASH = "--";
+    private static final String STRING_AT = "at";
+    private static final String STRING_ON = "on";
+    private static final String STRING_DASH_DATE = "-";
+    private static final String STRING_YEAR = "2014";
+    private static final String STRING_YEAR_FRAG = "20";
+
+    private static final String DATE_FORMAT_DDMMYY_REGEX = "(0?[12]?[0-9]|3[01])[/-](0?[1-9]|1[012])[/-](\\d\\d)";
+    private static final String DATE_FORMAT_DDMMYYYY_REGEX = "(0?[12]?[0-9]|3[01])[/-](0?[1-9]|1[012])[/-]((19|2[01])\\d\\d)";
+    private static final String DATE_FORMAT_DDMM_REGEX = "(0?[12]?[0-9]|3[01])[/-](0?[1-9]|1[012])";
+    private static final String DATE_FORMAT_DIVIDER_REGEX = "[/-]";
+    private static final String DATE_FORMAT_STANDARD = "yyyy-MM-dd";
+
     private static boolean _isDate;
     private static boolean _isTime;
     private static boolean _isVenue;
@@ -39,8 +55,8 @@ public class BakaTxtSession implements BakaTxtSessionInterface {
         // TODO Auto-generated method stub
         String str = input;
 
-        if (str.contains("--")) {
-            str.replace("-- ", "--");
+        if (str.contains(STRING_DASH)) {
+            str.replace(STRING_DASH + STRING_SPACE, STRING_DASH);
             identifyDescription(str);
         }
 
@@ -54,15 +70,15 @@ public class BakaTxtSession implements BakaTxtSessionInterface {
             _isTime = true;
         }
 
-        if (str.contains("@")) {
-            str = str.replace("@ ", "@");
+        if (str.contains(STRING_ADD)) {
+            str = str.replace(STRING_ADD + STRING_SPACE, STRING_ADD);
             identifyVenue(str);
         }
 
         identifyTitle(str);
 
-        if (_title.equals("")) {
-            return "Invalid add command, please add a title!";
+        if (_title.equals(STRING_EMPTY)) {
+            return MESSAGE_ADD_NO_TITLE;
         }
 
         Task task = new Task(_title);
@@ -99,11 +115,11 @@ public class BakaTxtSession implements BakaTxtSessionInterface {
 
     private String removePrepositions(String input) {
         String inputTemp = input;
-        String part[] = inputTemp.trim().split(" ");
-        if (part[part.length - 1].contains("on")
-                || part[part.length - 1].contains("at")) {
-            inputTemp = inputTemp.replace("on", "");
-            inputTemp = inputTemp.replace("at", "");
+        String part[] = inputTemp.trim().split(STRING_SPACE);
+        if (part[part.length - 1].contains(STRING_ON)
+                || part[part.length - 1].contains(STRING_AT)) {
+            inputTemp = inputTemp.replace(STRING_ON, STRING_EMPTY);
+            inputTemp = inputTemp.replace(STRING_AT, STRING_EMPTY);
         }
         return inputTemp;
     }
@@ -113,22 +129,22 @@ public class BakaTxtSession implements BakaTxtSessionInterface {
         String inputTemp = newInput;
 
         if (_isVenue) {
-            String venueTemp = "@" + _venue;
-            inputTemp = inputTemp.replace(venueTemp, " ");
+            String venueTemp = STRING_ADD + _venue;
+            inputTemp = inputTemp.replace(venueTemp, STRING_SPACE);
         }
 
         _title = removePrepositions(inputTemp).trim();
     }
 
     private void identifyDescription(String input) {
-        String[] part = input.split("--");
+        String[] part = input.split(STRING_DASH);
         _description = part[1].trim();
         _isDescription = true;
     }
 
     private void identifyVenue(String input) {
         String newInput = replaceDateTimeDescription(input);
-        int index = newInput.indexOf('@') + 1;
+        int index = newInput.indexOf(STRING_ADD) + 1;
         _isVenue = true;
         newInput = newInput.substring(index).trim();
         _venue = removePrepositions(newInput).trim();
@@ -136,7 +152,7 @@ public class BakaTxtSession implements BakaTxtSessionInterface {
 
     private void identifyDate(String input) {
         Parser parser = new Parser();
-        String[] temp = input.split(" ");
+        String[] temp = input.split(STRING_SPACE);
         String newDate;
         String[] dateFragment;
 
@@ -145,24 +161,24 @@ public class BakaTxtSession implements BakaTxtSessionInterface {
                 String messageFragment = temp[i];
                 String originalFragment = temp[i];
                 // dd/MM/YY or dd/MM/YYYY or dd/MM
-                if (messageFragment
-                        .matches("(0?[12]?[0-9]|3[01])[/-](0?[1-9]|1[012])[/-]((19|2[01])\\d\\d)")
-                        || messageFragment
-                                .matches("(0?[12]?[0-9]|3[01])[/-](0?[1-9]|1[012])[/-](\\d\\d)")
-                        || messageFragment
-                                .matches("(0?[12]?[0-9]|3[01])[/-](0?[1-9]|1[012])")) {
+                if (messageFragment.matches(DATE_FORMAT_DDMMYYYY_REGEX)
+                        || messageFragment.matches(DATE_FORMAT_DDMMYY_REGEX)
+                        || messageFragment.matches(DATE_FORMAT_DDMM_REGEX)) {
 
                     // dd/MM
                     if (messageFragment.length() <= 5
                             && messageFragment.length() > 2) {
-                        messageFragment = messageFragment + "-2014";
+                        messageFragment = messageFragment + STRING_DASH_DATE
+                                + STRING_YEAR;
                     }
 
-                    dateFragment = messageFragment.split("[/-]");
+                    dateFragment = messageFragment
+                            .split(DATE_FORMAT_DIVIDER_REGEX);
                     if (dateFragment[2].length() == 2) {
-                        dateFragment[2] = "20" + dateFragment[2];
+                        dateFragment[2] = STRING_YEAR_FRAG + dateFragment[2];
                     }
-                    newDate = dateFragment[2] + "-" + dateFragment[1] + "-"
+                    newDate = dateFragment[2] + STRING_DASH_DATE
+                            + dateFragment[1] + STRING_DASH_DATE
                             + dateFragment[0];
 
                     input = input.replace(originalFragment, newDate);
@@ -173,7 +189,8 @@ public class BakaTxtSession implements BakaTxtSessionInterface {
             List<DateGroup> dateGroup = parser.parse(input);
             Date date = dateGroup.get(0).getDates().get(0);
             _originalDateFormat = dateGroup.get(0).getText();
-            SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
+            SimpleDateFormat DATE_FORMAT = new SimpleDateFormat(
+                    DATE_FORMAT_STANDARD);
             String output = DATE_FORMAT.format(date);
 
             _date = output;
@@ -185,7 +202,7 @@ public class BakaTxtSession implements BakaTxtSessionInterface {
     private void identifyTime(String input) {
         try {
             if (_originalDigitDateFormat != null) {
-                input = input.replace(_originalDigitDateFormat, " ");
+                input = input.replace(_originalDigitDateFormat, STRING_SPACE);
             }
 
             Parser parser = new Parser();
