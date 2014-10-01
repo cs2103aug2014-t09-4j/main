@@ -334,6 +334,22 @@ public class Database implements DatabaseInterface {
     }
 
     @Override
+    public LinkedList<Task> getTaskWithTitle(String title) {
+        LinkedList<Task> result = new LinkedList<Task>();
+        for (Map.Entry<String, LinkedList<Task>> entry : _bakaMap.entrySet()) {
+            LinkedList<Task> dayTasks = entry.getValue();
+            if (dayTasks.contains(TAG_TITLE + SPACE + title)) {
+                for (Task task : dayTasks) {
+                    if (task.getTitle().equals(title)) {
+                        result.add(task);
+                    }
+                }
+            }
+        }
+        return result;
+    }
+
+    @Override
     public LinkedList<Task> getTasks(String key) {
         LinkedList<Task> result = new LinkedList<Task>();
         if (key == null) {

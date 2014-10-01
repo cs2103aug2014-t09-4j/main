@@ -1,4 +1,5 @@
 package bakatxt.core;
+
 import java.util.LinkedList;
 
 // Interface for Database to write to textfile
@@ -19,6 +20,8 @@ public interface DatabaseInterface {
     public boolean add(Task task);
 
     public boolean delete(Task task);
+
+    public LinkedList<Task> getTaskWithTitle(String title);
 
     public LinkedList<Task> getTasks(String key);
 
