@@ -114,9 +114,7 @@ public class Task implements TaskInterface, Comparable<Task> {
         int doneIndex = tokenizedInput.indexOf(TAG_DONE) + 1;
         _isDone = tokenizedInput.get(doneIndex).equals(TAG_TRUE);
 
-        int floatingIndex = tokenizedInput.indexOf(TAG_FLOATING) + 1;
-        _isFloating = tokenizedInput.get(floatingIndex).equals(TAG_TRUE)
-                || (_date.equals(TAG_NULL) && _date.equals(_time));
+        _isFloating = _date.equals(_time);
 
         int deletedIndex = tokenizedInput.indexOf(TAG_DELETED) + 1;
         _isDeleted = tokenizedInput.get(deletedIndex).equals(TAG_TRUE);
@@ -228,20 +226,14 @@ public class Task implements TaskInterface, Comparable<Task> {
     public String toDisplayString() {
         StringBuilder task = new StringBuilder();
 
-        task.append(TAG_OPEN + _date + SPACE + _time + TAG_CLOSE + SPACE
+        task.append(TAG_TITLE + SPACE + _title + SPACE + LINE_SEPARATOR);
+        task.append(TAG_DATE + SPACE + _date + SPACE + LINE_SEPARATOR);
+        task.append(TAG_TIME + SPACE + _time + SPACE + LINE_SEPARATOR);
+        task.append(TAG_VENUE + SPACE + _venue + SPACE + LINE_SEPARATOR);
+        task.append(TAG_DESCRIPTION + SPACE + _description + SPACE
                 + LINE_SEPARATOR);
-        task.append(TAG_TAB + TAG_TITLE + SPACE + _title + SPACE
-                + LINE_SEPARATOR);
-        task.append(TAG_TAB + TAG_DATE + SPACE + _date + SPACE + LINE_SEPARATOR);
-        task.append(TAG_TAB + TAG_TIME + SPACE + _time + SPACE + LINE_SEPARATOR);
-        task.append(TAG_TAB + TAG_VENUE + SPACE + _venue + SPACE
-                + LINE_SEPARATOR);
-        task.append(TAG_TAB + TAG_DESCRIPTION + SPACE + _description + SPACE
-                + LINE_SEPARATOR);
-        task.append(TAG_TAB + TAG_DONE + SPACE + _isDone + SPACE
-                + LINE_SEPARATOR);
-        task.append(TAG_TAB + TAG_FLOATING + SPACE + _isFloating + SPACE
-                + LINE_SEPARATOR);
+        task.append(TAG_DONE + SPACE + _isDone + SPACE + LINE_SEPARATOR);
+        task.append(TAG_FLOATING + SPACE + _isFloating + SPACE + LINE_SEPARATOR);
 
         return task.toString();
     }

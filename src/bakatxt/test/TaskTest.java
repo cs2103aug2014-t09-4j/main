@@ -1,4 +1,5 @@
 package bakatxt.test;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -21,10 +22,10 @@ public class TaskTest {
         task.addDate("2014-05-02");
         task.addTime("2230");
         task.setDone(true);
-        String expected = "[2014-05-02 2230] \n" + "\t[TITLE] New Task \n"
-                + "\t[DATE] 2014-05-02 \n" + "\t[TIME] 2230 \n"
-                + "\t[VENUE] null \n" + "\t[DESCRIPTION] null \n"
-                + "\t[DONE] true \n" + "\t[FLOATING] false \n";
+        String expected = "[TITLE] New Task \n" + "[DATE] 2014-05-02 \n"
+                + "[TIME] 2230 \n" + "[VENUE] null \n"
+                + "[DESCRIPTION] null \n" + "[DONE] true \n"
+                + "[FLOATING] false \n";
         String output = task.toDisplayString();
         System.out.println(output);
         assertEquals(expected, output);
