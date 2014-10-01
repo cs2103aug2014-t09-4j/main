@@ -39,11 +39,10 @@ public class BakaTxtSession implements BakaTxtSessionInterface {
     private static String _originalDateFormat;
     private static String _originalTimeFormat;
     private static String _originalDigitDateFormat;
-
-    Database database;
+    private static Database _database;
 
     public BakaTxtSession(String fileName) {
-        database = new Database(fileName);
+        _database = new Database(fileName);
         _isDate = false;
         _isTime = false;
         _isVenue = false;
@@ -90,7 +89,7 @@ public class BakaTxtSession implements BakaTxtSessionInterface {
             task.setFloating(true);
         }
 
-        database.add(task);
+        _database.add(task);
 
         return task.toDisplayString();
     }
@@ -259,13 +258,12 @@ public class BakaTxtSession implements BakaTxtSessionInterface {
 
     @Override
     public void exit() {
-        // TODO Auto-generated method stub
-
+        _database.close();
     }
 
     @Override
     public String getFileName() {
-        return database.getFileName();
+        return _database.getFileName();
     }
 
     @Override
