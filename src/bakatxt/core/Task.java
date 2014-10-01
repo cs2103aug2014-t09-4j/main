@@ -30,6 +30,7 @@ public class Task implements TaskInterface, Comparable<Task> {
 
     private static final String TAG_TRUE = "true";
     private static final String TAG_NULL = "null";
+    private static final String TAG_TAB = "\t";
 
     private static final String TAG_FLOATING_HEAD = "0000" + SPACE;
     private static final String TAG_DONE_HEAD = "5000" + SPACE;
@@ -225,14 +226,18 @@ public class Task implements TaskInterface, Comparable<Task> {
     public String toDisplayString() {
         StringBuilder task = new StringBuilder();
 
-        task.append(TAG_TITLE + SPACE + _title + SPACE + LINE_SEPARATOR);
-        task.append(TAG_DATE + SPACE + _date + SPACE + LINE_SEPARATOR);
-        task.append(TAG_TIME + SPACE + _time + SPACE + LINE_SEPARATOR);
-        task.append(TAG_VENUE + SPACE + _venue + SPACE + LINE_SEPARATOR);
-        task.append(TAG_DESCRIPTION + SPACE + _description + SPACE
+        task.append(TAG_TAB + TAG_TITLE + SPACE + _title + SPACE
                 + LINE_SEPARATOR);
-        task.append(TAG_DONE + SPACE + _isDone + SPACE + LINE_SEPARATOR);
-        task.append(TAG_FLOATING + SPACE + _isFloating + SPACE + LINE_SEPARATOR);
+        task.append(TAG_TAB + TAG_DATE + SPACE + _date + SPACE + LINE_SEPARATOR);
+        task.append(TAG_TAB + TAG_TIME + SPACE + _time + SPACE + LINE_SEPARATOR);
+        task.append(TAG_TAB + TAG_VENUE + SPACE + _venue + SPACE
+                + LINE_SEPARATOR);
+        task.append(TAG_TAB + TAG_DESCRIPTION + SPACE + _description + SPACE
+                + LINE_SEPARATOR);
+        task.append(TAG_TAB + TAG_DONE + SPACE + _isDone + SPACE
+                + LINE_SEPARATOR);
+        task.append(TAG_TAB + TAG_FLOATING + SPACE + _isFloating + SPACE
+                + LINE_SEPARATOR);
 
         return task.toString();
     }
