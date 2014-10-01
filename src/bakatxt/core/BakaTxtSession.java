@@ -115,13 +115,9 @@ public class BakaTxtSession implements BakaTxtSessionInterface {
     }
 
     private static String removePrepositions(String input) {
-        String inputTemp = input;
-        String part[] = inputTemp.trim().split(STRING_SPACE);
-        if (part[part.length - 1].contains(STRING_ON)
-                || part[part.length - 1].contains(STRING_AT)) {
-            inputTemp = inputTemp.replace(STRING_ON, STRING_EMPTY);
-            inputTemp = inputTemp.replace(STRING_AT, STRING_EMPTY);
-        }
+        String inputTemp = input.replace("\\s+", "\\s");
+        // String[] part = inputTemp.trim().split(STRING_SPACE);
+
         return inputTemp;
     }
 
@@ -184,6 +180,13 @@ public class BakaTxtSession implements BakaTxtSessionInterface {
 
                     input = input.replace(originalFragment, newDate);
                     _originalDigitDateFormat = originalFragment;
+                }
+
+                if (input.contains("tomorrow")) {
+                    _originalDigitDateFormat = "tomorrow";
+                }
+                if (input.contains("today")) {
+                    _originalDigitDateFormat = "today";
                 }
             }
 
