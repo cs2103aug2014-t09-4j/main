@@ -55,7 +55,7 @@ public class BakaTxtSession implements BakaTxtSessionInterface {
         String str = input;
 
         if (str.contains(STRING_DASH)) {
-            str.replace(STRING_DASH + STRING_SPACE, STRING_DASH);
+            str = str.replace(STRING_DASH + STRING_SPACE, STRING_DASH);
             identifyDescription(str);
         }
 
