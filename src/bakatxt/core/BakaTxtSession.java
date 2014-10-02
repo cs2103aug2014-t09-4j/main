@@ -59,6 +59,7 @@ public class BakaTxtSession implements BakaTxtSessionInterface {
         if (str.contains(STRING_DASH)) {
             str = str.replace(STRING_DASH + STRING_SPACE, STRING_DASH);
             identifyDescription(str);
+            str = replaceDescription(str);
         }
 
         identifyDate(str);
@@ -90,10 +91,17 @@ public class BakaTxtSession implements BakaTxtSessionInterface {
         if (!_isDate && !_isTime) {
             task.setFloating(true);
         }
-
         _database.add(task);
+        resetDetails();
 
         return task.toDisplayString();
+    }
+
+    private static void resetDetails() {
+        _date = null;
+        _time = null;
+        _venue = null;
+        _description = null;
     }
 
     private static String replaceDateTimeDescription(String input) {
@@ -108,8 +116,7 @@ public class BakaTxtSession implements BakaTxtSessionInterface {
             inputTemp = inputTemp.replace(_originalTimeFormat, " ");
         }
         if (_isDescription) {
-            String descriptionTemp = "--" + _description;
-            inputTemp = inputTemp.replace(descriptionTemp, " ");
+            inputTemp = replaceDescription(input);
         }
         return inputTemp;
     }
@@ -132,7 +139,15 @@ public class BakaTxtSession implements BakaTxtSessionInterface {
         return inputTemp;
     }
 
-    private void identifyTitle(String input) {
+    private static String replaceDescription(String input) {
+        if (_isDescription) {
+            String descriptionTemp = "--" + _description;
+            input = input.replace(descriptionTemp, " ").trim();
+        }
+        return input;
+    }
+
+    private static void identifyTitle(String input) {
         String newInput = replaceDateTimeDescription(input);
         String inputTemp = newInput;
 
@@ -140,8 +155,12 @@ public class BakaTxtSession implements BakaTxtSessionInterface {
             String venueTemp = STRING_ADD + _venue;
             inputTemp = inputTemp.replace(venueTemp, STRING_SPACE);
         }
-
-        _title = removePrepositions(inputTemp).trim();
+        inputTemp = inputTemp.trim();
+        if (inputTemp.isEmpty()) {
+            _title = inputTemp;
+        } else {
+            _title = removePrepositions(inputTemp).trim();
+        }
     }
 
     private static void identifyDescription(String input) {
@@ -150,7 +169,7 @@ public class BakaTxtSession implements BakaTxtSessionInterface {
         _isDescription = true;
     }
 
-    private void identifyVenue(String input) {
+    private static void identifyVenue(String input) {
         String newInput = replaceDateTimeDescription(input);
         int index = newInput.indexOf(STRING_ADD) + 1;
         _isVenue = true;
