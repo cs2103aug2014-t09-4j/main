@@ -65,16 +65,18 @@ public class BakaTxtMain {
         }
 
         String output;
+        String parsingCommand = getFirstWord(userCommand).toUpperCase();
+        String contentString = removeFirstWord(userCommand);
 
-        switch (CommandType.valueOf(getFirstWord(userCommand).toUpperCase())) {
+        switch (CommandType.valueOf(parsingCommand)) {
             case ADD :
-                output = _session.add(removeFirstWord(userCommand));
+                output = _session.add(contentString);
                 break;
             case DELETE :
-                output = _session.delete(removeFirstWord(userCommand));
+                output = _session.delete(contentString);
                 break;
             case DISPLAY :
-                output = _session.display(removeFirstWord(userCommand));
+                output = _session.display(contentString);
                 break;
             case EXIT :
                 System.out.println(MESSAGE_BYEBYE);
