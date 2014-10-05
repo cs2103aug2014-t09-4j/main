@@ -10,7 +10,7 @@ import javax.swing.JPanel;
 
 class BakaPanel extends JPanel {
 
-    private static Input input_;
+    private static Input _input;
     private static final int BORDER = UIHelper.WINDOW_BORDER;
 
     public BakaPanel() {
@@ -29,7 +29,7 @@ class BakaPanel extends JPanel {
     }
 
     private void setInputBox(GridBagConstraints layout) {
-        input_ = new Input();
+        _input = new Input();
         layout.fill = GridBagConstraints.BOTH;
         layout.anchor = GridBagConstraints.FIRST_LINE_START;
         layout.weightx = 1.0;
@@ -37,11 +37,11 @@ class BakaPanel extends JPanel {
         layout.gridx = 0;
         layout.gridy = 0;
         layout.insets = new Insets(2 * BORDER, 2 * BORDER, BORDER, 2 * BORDER);
-        this.add(input_, layout);
+        this.add(_input, layout);
     }
 
     private void setContent(GridBagConstraints layout) {
-        Contents contents = new Contents(input_);
+        Contents contents = new Contents(_input);
         layout.fill = GridBagConstraints.BOTH;
         layout.anchor = GridBagConstraints.FIRST_LINE_START;
         layout.weightx = 1.0;
