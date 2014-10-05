@@ -9,7 +9,7 @@ public class BakaTxtMain {
     private static final String MESSAGE_ENTER_COMMAND = "Please enter command: ";
 
     enum CommandType {
-        ADD, DELETE, DISPLAY, EXIT, NULL;
+        ADD, DELETE, DISPLAY, EXIT;
     }
 
     private static Scanner _sc;
@@ -54,13 +54,19 @@ public class BakaTxtMain {
                     // TODO error in adding
                 }
                 break;
+
             case DELETE :
                 break;
+
             case DISPLAY :
                 break;
+
             case EXIT :
                 System.out.println(MESSAGE_BYEBYE);
+                _database.close();
+                System.exit(0);
                 break;
+
             default :
         }
 
