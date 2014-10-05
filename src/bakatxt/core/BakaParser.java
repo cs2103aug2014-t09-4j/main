@@ -2,13 +2,12 @@ package bakatxt.core;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.LinkedList;
 import java.util.List;
 
 import com.joestelmach.natty.DateGroup;
 import com.joestelmach.natty.Parser;
 
-public class BakaTxtSession {
+public class BakaParser implements BakaParserInterface {
 
     private static final String MESSAGE_ADD_NO_TITLE = "Invalid add command, please add a title!";
     private static final String MESSAGE_EMPTY_FILE = "The file is empty!";
@@ -41,10 +40,8 @@ public class BakaTxtSession {
     private static String _originalDateFormat;
     private static String _originalTimeFormat;
     private static String _originalDigitDateFormat;
-    private static Database _database;
 
-    public BakaTxtSession(String fileName) {
-        _database = new Database(fileName);
+    public BakaParser() {
         _isDate = false;
         _isTime = false;
         _isVenue = false;
@@ -52,7 +49,7 @@ public class BakaTxtSession {
     }
 
     @Override
-    public String add(String input) {
+    public Task add(String input) {
         // TODO Auto-generated method stub
         String str = input;
 
@@ -80,7 +77,7 @@ public class BakaTxtSession {
         identifyTitle(str);
 
         if (_title.equals(STRING_EMPTY)) {
-            return MESSAGE_ADD_NO_TITLE;
+            // TODO return MESSAGE_ADD_NO_TITLE;
         }
 
         Task task = new Task(_title);
@@ -91,10 +88,9 @@ public class BakaTxtSession {
         if (!_isDate && !_isTime) {
             task.setFloating(true);
         }
-        _database.add(task);
         resetDetails();
 
-        return task.toDisplayString();
+        return task;
     }
 
     private static void resetDetails() {
@@ -268,7 +264,7 @@ public class BakaTxtSession {
     }
 
     @Override
-    public String delete(String input) {
+    public Task delete(String input) {
         // TODO Auto-generated method stub
         // TODO Get a specific task to delete
         // TODO main function to filter for exact title to delete
@@ -276,88 +272,13 @@ public class BakaTxtSession {
     }
 
     @Override
-    public String display(String input) {
-        // TODO Auto-generated method stub
-        if (input.isEmpty()) {
-            return display();
-        }
-        LinkedList<Task> selectedTasks = _database.getTaskWithTitle(input);
-        return toOutputString(selectedTasks);
-    }
-
-    @Override
-    public String display() {
-        // TODO Auto-generated method stub
-        LinkedList<Task> allTasks = _database.getAllTasks();
-        return toOutputString(allTasks);
-    }
-
-    private String toOutputString(LinkedList<Task> tasks) {
-        String output = new String();
-        if (tasks.isEmpty()) {
-            output = MESSAGE_EMPTY_FILE;
-        } else {
-            for (int i = 0; i < tasks.size(); i++) {
-                output += (i + 1) + ". " + tasks.get(i).toDisplayString();
-            }
-        }
-        return output;
-    }
-
-    @Override
-    public void sort() {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void exit() {
-        _database.close();
-    }
-
-    @Override
-    public String getFileName() {
-        return _database.getFileName();
-    }
-
-    @Override
-    public String getPrevious() {
+    public Task display(String input) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public String getTotal() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public String getUndone() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public String getDone() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public String done(String input) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public String getTask(String title) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public String deleteDone() {
+    public String getCommand(String input) {
         // TODO Auto-generated method stub
         return null;
     }

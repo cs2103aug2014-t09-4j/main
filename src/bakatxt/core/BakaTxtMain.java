@@ -1,107 +1,69 @@
 package bakatxt.core;
 
-import java.awt.GraphicsEnvironment;
 import java.util.Scanner;
-import java.util.StringTokenizer;
-
-import bakatxt.gui.BakaUI;
 
 public class BakaTxtMain {
 
-    enum CommandType {
-        ADD, DELETE, DISPLAY, EXIT
-    }
-
-    private static final String MESSAGE_FILENAME = "Please input a filename: ";
-    private static final String MESSAGE_INVALID_FORMAT = "Invalid command format";
     private static final String MESSAGE_WELCOME = "Welcome To BakaTxt!";
-    private static final String MESSAGE_INVALID_COMMAND = "Unrecognized command type";
-    private static final String MESSAGE_ENTER_COMMAND = "Please enter command: ";
     private static final String MESSAGE_BYEBYE = "Bye bye!";
+    private static final String MESSAGE_ENTER_COMMAND = "Please enter command: ";
+
+    enum CommandType {
+        ADD, DELETE, DISPLAY, EXIT, NULL;
+    }
 
     private static Scanner _sc;
-    private static BakaTxtSession _session;
+    private static BakaParser _parser;
+    private static Database _database;
     private static String _filename;
 
+    public BakaTxtMain() {
+        // TODO this is kludge code - to be removed
+        _filename = "mytestfile.txt";
+        _sc = new Scanner(System.in);
+        _parser = new BakaParser();
+        _database = new Database(_filename);
+    }
+
     public static void main(String[] args) {
-        String command;
+        BakaTxtMain thisSession = new BakaTxtMain();
 
-        if (GraphicsEnvironment.isHeadless()) {
-            _sc = new Scanner(System.in);
-            // initializeFile();
-            _filename = "mytestfile.txt";
-            _session = new BakaTxtSession(_filename);
-            while (true) {
-                System.out.print(MESSAGE_ENTER_COMMAND);
-                command = _sc.nextLine();
-                String output = executeCommand(command);
-                System.out.println(output);
-            }
+        System.out.println(MESSAGE_WELCOME);
+
+        while (true) {
+            System.out.print(MESSAGE_ENTER_COMMAND);
+            String input = _sc.nextLine();
+            String result = executeCommand(input);
+            System.out.println(result);
         }
-
-        BakaUI.startGui();
     }
 
-    // private static void initializeFile() {
-    // System.out.print(MESSAGE_FILENAME);
-    // _filename = _sc.nextLine();
-    //
-    // while (!checkFileName()) {
-    // System.out.print(MESSAGE_FILENAME);
-    // _filename = _sc.nextLine();
-    // }
-    //
-    // _session = new BakaTxtSession(_filename);
-    // System.out.println(MESSAGE_WELCOME);
-    // }
+    private static String executeCommand(String input) {
+        String command = _parser.getCommand(input);
+        CommandType commandType = CommandType.valueOf(command);
 
-    private static boolean checkFileName() {
-        // TODO check filename grammar
-        return true;
-    }
-
-    private static String getFirstWord(String command) {
-        StringTokenizer tokenizedCommand = new StringTokenizer(command);
-        String commandLine = tokenizedCommand.nextToken();
-        return commandLine;
-    }
-
-    public static String executeCommand(String userCommand) {
-        if (userCommand.trim().equals("")) {
-            return invalidFormat(userCommand);
-        }
-
-        String output;
-        String parsingCommand = getFirstWord(userCommand).toUpperCase();
-        String contentString = removeFirstWord(userCommand);
-
-        switch (CommandType.valueOf(parsingCommand)) {
+        String output = null;
+        switch (commandType) {
             case ADD :
-                output = _session.add(contentString);
+                Task toAdd = _parser.add(input);
+                boolean isAdded = _database.add(toAdd);
+                if (isAdded) {
+                    // TODO something when added
+                    output = toAdd.toDisplayString();
+                } else {
+                    // TODO error in adding
+                }
                 break;
             case DELETE :
-                output = _session.delete(contentString);
                 break;
             case DISPLAY :
-                output = _session.display(contentString);
                 break;
             case EXIT :
                 System.out.println(MESSAGE_BYEBYE);
-                _session.exit();
-                System.exit(0);
-                //$FALL-THROUGH$ (to remove fall-through warning in eclipse)
+                break;
             default :
-                output = MESSAGE_INVALID_COMMAND;
         }
 
         return output;
-    }
-
-    private static String invalidFormat(String userCommand) {
-        return String.format(MESSAGE_INVALID_FORMAT, userCommand);
-    }
-
-    private static String removeFirstWord(String command) {
-        return command.replace(getFirstWord(command), "").trim();
     }
 }
