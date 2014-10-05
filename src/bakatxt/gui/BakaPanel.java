@@ -14,6 +14,9 @@ class BakaPanel extends JPanel {
     private static final int BORDER = UIHelper.WINDOW_BORDER;
 
     public BakaPanel() {
+
+        _input = new Input();
+
         setOpaque(false);
         setPreferredSize(new Dimension(UIHelper.WINDOW_X, UIHelper.WINDOW_Y));
         setBackground(UIHelper.GRAY_MEDIUM);
@@ -33,7 +36,6 @@ class BakaPanel extends JPanel {
     }
 
     private void setInputBox(GridBagConstraints layout) {
-        _input = new Input();
         layout.fill = GridBagConstraints.BOTH;
         layout.anchor = GridBagConstraints.FIRST_LINE_START;
         layout.weightx = 1.0;

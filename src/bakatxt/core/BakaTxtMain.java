@@ -1,7 +1,10 @@
 package bakatxt.core;
 
+import java.awt.GraphicsEnvironment;
 import java.util.Scanner;
 import java.util.StringTokenizer;
+
+import bakatxt.gui.BakaUI;
 
 public class BakaTxtMain {
 
@@ -23,16 +26,18 @@ public class BakaTxtMain {
     public static void main(String[] args) {
         String command;
 
-        _sc = new Scanner(System.in);
+        if (GraphicsEnvironment.isHeadless()) {
+            _sc = new Scanner(System.in);
+            initializeFile();
+            while (true) {
+                System.out.print(MESSAGE_ENTER_COMMAND);
+                command = _sc.nextLine();
+                String output = executeCommand(command);
+                System.out.println(output);
+            }
+       }
 
-        initializeFile();
-
-        while (true) {
-            System.out.print(MESSAGE_ENTER_COMMAND);
-            command = _sc.nextLine();
-            String output = executeCommand(command);
-            System.out.println(output);
-        }
+        BakaUI.startGui();
     }
 
     private static void initializeFile() {

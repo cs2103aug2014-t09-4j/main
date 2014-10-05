@@ -6,27 +6,14 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JFrame;
 
+import bakatxt.core.BakaTxtMain;
+
 public class BakaUI extends JFrame {
 
     private static BakaPanel _baka;
-    private static String _inputString;
 
     public BakaUI() {
         initUI();
-    }
-
-    public static String getInput() {
-
-        Input input = _baka.getInput();
-        input.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                _inputString = input.getText();
-            }
-        });
-
-        return _inputString;
     }
 
     public static void startGui() {
@@ -35,6 +22,19 @@ public class BakaUI extends JFrame {
             public void run() {
                 BakaUI baka = new BakaUI();
                 baka.setVisible(true);
+                processInput();
+            }
+        });
+    }
+
+    public static void processInput() {
+
+        Input input = _baka.getInput();
+        input.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                BakaTxtMain.executeCommand(input.getText());
             }
         });
     }
