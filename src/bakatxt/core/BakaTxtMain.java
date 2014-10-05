@@ -37,7 +37,7 @@ public class BakaTxtMain {
             }
        }
 
-        BakaUI.startGui();
+        BakaUI.startGui(_session);
     }
 
     private static void initializeFile() {

@@ -362,4 +362,7 @@ public class BakaTxtSession implements BakaTxtSessionInterface {
         return null;
     }
 
+    public LinkedList<Task> getTasks() {
+        return _database.getAllTasks();
+    }
 }
