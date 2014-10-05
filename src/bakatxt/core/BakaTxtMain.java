@@ -28,30 +28,32 @@ public class BakaTxtMain {
 
         if (GraphicsEnvironment.isHeadless()) {
             _sc = new Scanner(System.in);
-            initializeFile();
+            // initializeFile();
+            _filename = "mytestfile.txt";
+            _session = new BakaTxtSession(_filename);
             while (true) {
                 System.out.print(MESSAGE_ENTER_COMMAND);
                 command = _sc.nextLine();
                 String output = executeCommand(command);
                 System.out.println(output);
             }
-       }
+        }
 
         BakaUI.startGui(_session);
     }
 
-    private static void initializeFile() {
-        System.out.print(MESSAGE_FILENAME);
-        _filename = _sc.nextLine();
-
-        while (!checkFileName()) {
-            System.out.print(MESSAGE_FILENAME);
-            _filename = _sc.nextLine();
-        }
-
-        _session = new BakaTxtSession(_filename);
-        System.out.println(MESSAGE_WELCOME);
-    }
+    // private static void initializeFile() {
+    // System.out.print(MESSAGE_FILENAME);
+    // _filename = _sc.nextLine();
+    //
+    // while (!checkFileName()) {
+    // System.out.print(MESSAGE_FILENAME);
+    // _filename = _sc.nextLine();
+    // }
+    //
+    // _session = new BakaTxtSession(_filename);
+    // System.out.println(MESSAGE_WELCOME);
+    // }
 
     private static boolean checkFileName() {
         // TODO check filename grammar
