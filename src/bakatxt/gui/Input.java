@@ -6,13 +6,10 @@ import java.awt.Shape;
 import java.awt.geom.RoundRectangle2D;
 
 import javax.swing.JTextField;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 
-class Input extends JTextField implements DocumentListener {
+class Input extends JTextField {
 
     private Shape shape;
-    private static String inputValue;
 
     public Input() {
         setOpaque(false);
@@ -21,10 +18,6 @@ class Input extends JTextField implements DocumentListener {
         setForeground(UIHelper.PRESET_COLOR_DEFAULT);
         setCaretColor(UIHelper.PRESET_COLOR_DEFAULT);
         setFocusTraversalKeysEnabled(false);
-    }
-
-    public static String getInput() {
-        return inputValue;
     }
 
     @Override
@@ -46,19 +39,5 @@ class Input extends JTextField implements DocumentListener {
                     UIHelper.WINDOW_ROUNDNESS, UIHelper.WINDOW_ROUNDNESS);
         }
         return shape.contains(x, y);
-    }
-
-    @Override
-    public void insertUpdate(DocumentEvent e) {
-        inputValue = getText();
-    }
-
-    @Override
-    public void removeUpdate(DocumentEvent e) {
-        inputValue = getText();
-    }
-
-    @Override
-    public void changedUpdate(DocumentEvent e) {
     }
 }
