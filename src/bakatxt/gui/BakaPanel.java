@@ -21,6 +21,10 @@ class BakaPanel extends JPanel {
         addComponentsToPane();
     }
 
+    public Input getInput() {
+        return _input;
+    }
+
     private void addComponentsToPane() {
         GridBagConstraints layout = new GridBagConstraints();
 
