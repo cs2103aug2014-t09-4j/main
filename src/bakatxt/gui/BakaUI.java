@@ -34,6 +34,7 @@ public class BakaUI extends JFrame {
 
             @Override
             public void actionPerformed(ActionEvent e) {
+                input.selectAll();
                 BakaTxtMain.executeCommand(input.getText());
             }
         });
