@@ -8,7 +8,7 @@ import java.util.List;
 import com.joestelmach.natty.DateGroup;
 import com.joestelmach.natty.Parser;
 
-public class BakaTxtSession implements BakaTxtSessionInterface {
+public class BakaTxtSession {
 
     private static final String MESSAGE_ADD_NO_TITLE = "Invalid add command, please add a title!";
     private static final String MESSAGE_EMPTY_FILE = "The file is empty!";

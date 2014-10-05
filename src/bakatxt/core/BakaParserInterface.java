@@ -1,13 +1,17 @@
 package bakatxt.core;
-// Interface for a BakaTxtSession
 
-public interface BakaTxtSessionInterface {
-    public String add(String input);
+// Interface for Parser
 
-    public String delete(String input);
+public interface BakaParserInterface {
+    public String getFirstWord(String input);
 
-    public String display(String input);
+    public Task add(String input);
 
+    public Task delete(String input);
+
+    public Task display(String input);
+
+    // old stuff; not required anymore.
     public String display();
 
     public String done(String input);
