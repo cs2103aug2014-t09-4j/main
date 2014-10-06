@@ -9,8 +9,9 @@ import com.joestelmach.natty.Parser;
 
 public class BakaParser implements BakaParserInterface {
 
-    private static final String MESSAGE_ADD_NO_TITLE = "Invalid add command, please add a title!";
-    private static final String MESSAGE_EMPTY_FILE = "The file is empty!";
+    // private static final String MESSAGE_ADD_NO_TITLE =
+    // "Invalid add command, please add a title!";
+    // private static final String MESSAGE_EMPTY_FILE = "The file is empty!";
 
     private static final String STRING_EMPTY = "";
     private static final String STRING_SPACE = " ";
@@ -279,11 +280,11 @@ public class BakaParser implements BakaParserInterface {
 
     @Override
     public String getCommand(String input) {
-        // TODO Auto-generated method stub
-        return null;
+        String[] part = input.split(STRING_SPACE);
+        return part[0];
     }
 
-    public LinkedList<Task> getTasks() {
-        return _database.getAllTasks();
-    }
+    // public LinkedList<Task> getTasks() {
+    // return _database.getAllTasks();
+    // }
 }
