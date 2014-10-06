@@ -25,6 +25,7 @@ class TaskBox extends JPanel {
             + "mollit anim id est laborum.";*/
 
     public TaskBox(boolean isEven) {
+        System.out.println(isEven);
         setOpaque(false);
         isEven_ = isEven;
         setColor();

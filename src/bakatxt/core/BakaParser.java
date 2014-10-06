@@ -283,4 +283,7 @@ public class BakaParser implements BakaParserInterface {
         return null;
     }
 
+    public LinkedList<Task> getTasks() {
+        return _database.getAllTasks();
+    }
 }

@@ -34,7 +34,7 @@ class UIHelper {
     protected static final Color GRAY_BLACK = new Color(36, 36, 36);
 
     protected static final Color PRESET_COLOR_DATE = new Color(253, 184, 19);
-    protected static final Color PRESET_COLOR_TIME = new Color(253, 184, 19);
+    protected static final Color PRESET_COLOR_ALERT = new Color(250, 250, 250);
     protected static final Color PRESET_COLOR_LOCATION = new Color(227, 122, 37);
     protected static final Color PRESET_COLOR_TITLE = new Color(239, 62, 47);
     protected static final Color PRESET_COLOR_DEFAULT = new Color(228, 224, 227);
