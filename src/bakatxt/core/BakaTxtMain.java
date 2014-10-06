@@ -69,7 +69,7 @@ public class BakaTxtMain {
                 break;
 
             case DISPLAY :
-                _database.getAllTasks();
+                _displayTasks = _database.getAllTasks();
                 output = "Get from LinkedList";
                 break;
 
@@ -83,5 +83,9 @@ public class BakaTxtMain {
         }
 
         return output;
+    }
+
+    public LinkedList<Task> getAllTasks() {
+        return _displayTasks;
     }
 }
