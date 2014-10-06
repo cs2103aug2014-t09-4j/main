@@ -65,7 +65,7 @@ public class Task implements TaskInterface, Comparable<Task> {
             _venue = null;
             _description = null;
             _isDone = false;
-            _isFloating = false;
+            _isFloating = true;
             _isDeleted = false;
         } else if (isValidTaskString(input)) {
             // TODO fix semi corrupted tasks
@@ -183,6 +183,7 @@ public class Task implements TaskInterface, Comparable<Task> {
             _date = null;
         } else {
             _date = input.trim();
+            _isFloating = false;
         }
         return _date;
     }
@@ -193,6 +194,7 @@ public class Task implements TaskInterface, Comparable<Task> {
             _time = null;
         } else {
             _time = input.trim();
+            _isFloating = false;
         }
         return _time;
     }
@@ -312,9 +314,13 @@ public class Task implements TaskInterface, Comparable<Task> {
 
     @Override
     public int compareTo(Task task) {
-        String thisOne = getKey() + getTime();
-        String thatOne = task.getKey() + getTime();
-        return thisOne.compareTo(thatOne);
+        String thisOne = this.getKey() + this.getTime();
+        String thatOne = task.getKey() + task.getTime();
+        int timeComparison = thisOne.compareTo(thatOne);
+        if (timeComparison == 0) {
+            return this.getTitle().compareTo(task.getTitle());
+        }
+        return timeComparison;
     }
 
     @Override
