@@ -30,9 +30,9 @@ class BakaPanel extends JPanel {
         return _input;
     }
 
-    public void setContents() {
+    public void setContents(String stuff) {
          _contents.removeAll();
-         _contents.updateContents();
+         _contents.updateContents(stuff);
          _contents.validate();
          _contents.repaint();
 

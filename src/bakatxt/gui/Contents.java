@@ -25,8 +25,8 @@ class Contents extends JPanel {
         addComponentsToPane();
     }
 
-    protected void updateContents() {
-        _tasks = new Tasks();
+    protected void updateContents(String stuff) {
+        _tasks.setTasks(stuff);
         _alertMessage = setAlertMessageText(WELCOME_MESSAGE);
         _dayAndDate = setDayAndDateText("<DayDate>");
 
