@@ -21,7 +21,7 @@ class Tasks extends JPanel {
         addComponentsToPane();
     }
 
-    protected static void setTasks(String s) {
+    protected void setTasks(String s) {
         _tasks = s;
         System.out.println(_tasks);
         //setNoEvents(_layout, 0);
