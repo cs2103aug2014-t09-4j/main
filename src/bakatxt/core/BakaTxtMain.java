@@ -26,11 +26,12 @@ public class BakaTxtMain {
     public static void main(String[] args) {
         String command;
 
+        _filename = "mytestfile.txt";
+        _session = new BakaTxtSession(_filename);
+
         if (GraphicsEnvironment.isHeadless()) {
             _sc = new Scanner(System.in);
             // initializeFile();
-            _filename = "mytestfile.txt";
-            _session = new BakaTxtSession(_filename);
             while (true) {
                 System.out.print(MESSAGE_ENTER_COMMAND);
                 command = _sc.nextLine();
