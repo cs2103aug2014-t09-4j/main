@@ -1,6 +1,5 @@
 package bakatxt.gui;
 
-import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -9,10 +8,28 @@ import javax.swing.JPanel;
 
 class Contents extends JPanel {
 
+    private Tasks _tasks;
+    private FormattedText _alertMessage;
+    private FormattedText _dayAndDate;
+
+    private static String WELCOME_MESSAGE = "Welcome to BakaTXT! For help please type help in the box above";
+
     public Contents() {
+        _tasks = new Tasks();
+        _alertMessage = setAlertMessageText(WELCOME_MESSAGE);
+        _dayAndDate = setDayAndDateText("<Day><Date>");
+
         setOpaque(false);
         setBackground(UIHelper.TRANSPARENT);
         setLayout(new GridBagLayout());
+        addComponentsToPane();
+    }
+
+    protected void updateContents() {
+        _tasks = new Tasks();
+        _alertMessage = setAlertMessageText(WELCOME_MESSAGE);
+        _dayAndDate = setDayAndDateText("<DayDate>");
+
         addComponentsToPane();
     }
 
@@ -25,8 +42,6 @@ class Contents extends JPanel {
     }
 
     private void setAlertMessage(GridBagConstraints layout) {
-        // TODO set message
-        FormattedText time = new FormattedText("<Message>", Font.PLAIN, 12, UIHelper.PRESET_COLOR_DATE);
         layout.fill = GridBagConstraints.NONE;
         layout.anchor = GridBagConstraints.PAGE_START;
         layout.weightx = 0.0;
@@ -35,12 +50,10 @@ class Contents extends JPanel {
         layout.gridy = 0;
         layout.gridheight = 1;
         layout.gridwidth = 1;
-        this.add(time, layout);
+        this.add(_alertMessage, layout);
     }
 
     private void setDateAndDay(GridBagConstraints layout) {
-        // TODO set time and day
-        FormattedText time = new FormattedText("<Day><Date>", Font.PLAIN, 12, UIHelper.PRESET_COLOR_DATE);
         layout.fill = GridBagConstraints.NONE;
         layout.anchor = GridBagConstraints.LAST_LINE_END;
         layout.weightx = 0.0;
@@ -49,11 +62,10 @@ class Contents extends JPanel {
         layout.gridy = 1;
         layout.gridheight = 1;
         layout.gridwidth = 1;
-        this.add(time, layout);
+        this.add(_dayAndDate, layout);
     }
 
     private void setEvents(GridBagConstraints layout) {
-        Tasks events = new Tasks();
         layout.fill = GridBagConstraints.BOTH;
         layout.anchor = GridBagConstraints.FIRST_LINE_START;
         layout.weightx = 1.0;
@@ -63,6 +75,16 @@ class Contents extends JPanel {
         layout.gridheight = 1;
         layout.gridwidth = GridBagConstraints.REMAINDER;
         layout.insets = new Insets(UIHelper.WINDOW_BORDER, 0, 0, 0);
-        this.add(events, layout);
+        this.add(_tasks, layout);
+    }
+
+    private static FormattedText setAlertMessageText (String message) {
+        return new FormattedText(message, UIHelper.PRESET_TYPE_DEFAULT,
+                UIHelper.PRESET_SIZE_DEFAULT, UIHelper.PRESET_COLOR_ALERT);
+    }
+
+    private static FormattedText setDayAndDateText (String dayAndDate) {
+        return new FormattedText(dayAndDate, UIHelper.PRESET_TYPE_DATE,
+                UIHelper.PRESET_SIZE_DATE, UIHelper.PRESET_COLOR_DATE);
     }
 }

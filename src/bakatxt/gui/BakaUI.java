@@ -27,6 +27,7 @@ public class BakaUI extends JFrame {
                 BakaUI baka = new BakaUI();
                 baka.setVisible(true);
                 processInput(session);
+                _tasks = session.getTasks();
             }
         });
     }
@@ -41,6 +42,7 @@ public class BakaUI extends JFrame {
                 input.selectAll();
                 BakaTxtMain.executeCommand(input.getText());
                 _tasks = session.getTasks();
+                _baka.setContents();
             }
         });
     }

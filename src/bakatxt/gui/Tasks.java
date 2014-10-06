@@ -10,25 +10,33 @@ class Tasks extends JPanel {
 
     private static boolean isEven_ = false;
     private static boolean isLast_ = false;
+    private static String _tasks;
+    private static GridBagConstraints _layout = new GridBagConstraints();
     //private Input input_;
 
-    public Tasks(Input input) {
+    public Tasks() {
         setOpaque(false);
         setBackground(UIHelper.GRAY_DARK);
         setLayout(new GridBagLayout());
         addComponentsToPane();
     }
 
+    protected static void setTasks(String s) {
+        _tasks = s;
+        System.out.println(_tasks);
+        //setNoEvents(_layout, 0);
+    }
+
     private void addComponentsToPane() {
-        GridBagConstraints layout = new GridBagConstraints();
+        int size;
 
-        int size = 5;
-
-        if (size == 0) {
-            setNoEvents(layout, size);
-        } else {
-            addCurrentEvents(layout, size);
-        }
+        //try {
+            //size = BakaUI.getTasks().size();
+            //addCurrentEvents(layout, size);
+        //} catch (NullPointerException e) {
+            size = 0;
+            setNoEvents(_layout, size);
+        //}
     }
 
     private void addCurrentEvents(GridBagConstraints layout, int size) {
@@ -54,7 +62,8 @@ class Tasks extends JPanel {
     }
 
     private void setNoEvents(GridBagConstraints layout, int y) {
-        FormattedText task = new FormattedText("You have no tasks, hooray!", UIHelper.PRESET_TYPE_TITLE,
+
+        FormattedText task = new FormattedText(_tasks, UIHelper.PRESET_TYPE_TITLE,
                 UIHelper.PRESET_SIZE_TITLE, UIHelper.PRESET_COLOR_TITLE);
         /*FormattedText task = new FormattedText("", UIHelper.PRESET_TYPE_TITLE,
                 UIHelper.PRESET_SIZE_TITLE, UIHelper.PRESET_COLOR_TITLE);*/

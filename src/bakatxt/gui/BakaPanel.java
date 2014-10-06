@@ -11,11 +11,13 @@ import javax.swing.JPanel;
 class BakaPanel extends JPanel {
 
     private static Input _input;
+    private static Contents _contents;
     private static final int BORDER = UIHelper.WINDOW_BORDER;
 
     public BakaPanel() {
 
         _input = new Input();
+        _contents = new Contents();
 
         setOpaque(false);
         setPreferredSize(new Dimension(UIHelper.WINDOW_X, UIHelper.WINDOW_Y));
@@ -26,6 +28,14 @@ class BakaPanel extends JPanel {
 
     public Input getInput() {
         return _input;
+    }
+
+    public void setContents() {
+         _contents.removeAll();
+         _contents.updateContents();
+         _contents.validate();
+         _contents.repaint();
+
     }
 
     private void addComponentsToPane() {
@@ -47,7 +57,6 @@ class BakaPanel extends JPanel {
     }
 
     private void setContent(GridBagConstraints layout) {
-        Contents contents = new Contents(_input);
         layout.fill = GridBagConstraints.BOTH;
         layout.anchor = GridBagConstraints.FIRST_LINE_START;
         layout.weightx = 1.0;
@@ -55,7 +64,7 @@ class BakaPanel extends JPanel {
         layout.gridx = 0;
         layout.gridy = 1;
         layout.insets = new Insets(0, 2 * BORDER, 2 * BORDER, 2 * BORDER);
-        this.add(contents, layout);
+        this.add(_contents, layout);
     }
 
     @Override
