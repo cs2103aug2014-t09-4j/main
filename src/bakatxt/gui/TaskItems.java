@@ -6,7 +6,7 @@ import java.awt.GridBagLayout;
 
 import javax.swing.JPanel;
 
-class Tasks extends JPanel {
+class TaskItems extends JPanel {
 
     private static boolean isEven_ = false;
     private static boolean isLast_ = false;
@@ -14,7 +14,7 @@ class Tasks extends JPanel {
     private static GridBagConstraints _layout = new GridBagConstraints();
     //private Input input_;
 
-    public Tasks() {
+    public TaskItems() {
         setOpaque(false);
         setBackground(UIHelper.GRAY_DARK);
         setLayout(new GridBagLayout());
