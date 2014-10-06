@@ -1,6 +1,9 @@
 package bakatxt.core;
 
+import java.awt.GraphicsEnvironment;
 import java.util.Scanner;
+
+import bakatxt.gui.BakaUI;
 
 public class BakaTxtMain {
 
@@ -26,19 +29,23 @@ public class BakaTxtMain {
     }
 
     public static void main(String[] args) {
-        BakaTxtMain thisSession = new BakaTxtMain();
 
-        System.out.println(MESSAGE_WELCOME);
+        if (GraphicsEnvironment.isHeadless()) {
+            BakaTxtMain thisSession = new BakaTxtMain();
 
-        while (true) {
-            System.out.print(MESSAGE_ENTER_COMMAND);
-            String input = _sc.nextLine();
-            String result = executeCommand(input);
-            System.out.println(result);
+            System.out.println(MESSAGE_WELCOME);
+
+            while (true) {
+                System.out.print(MESSAGE_ENTER_COMMAND);
+                String input = _sc.nextLine();
+                String result = executeCommand(input);
+                System.out.println(result);
+            }
         }
+        BakaUI.startGui();
     }
 
-    private static String executeCommand(String input) {
+    public static String executeCommand(String input) {
         String command = _parser.getCommand(input);
         CommandType commandType = CommandType.valueOf(command);
 
