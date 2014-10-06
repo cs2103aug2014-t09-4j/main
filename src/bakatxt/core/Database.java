@@ -161,8 +161,7 @@ public class Database implements DatabaseInterface {
         return taskCount.subtract(taskDone).toString();
     }
 
-    @Override
-    public void sort() {
+    private void sort() {
         _sortedKeys = new TreeSet<String>(_bakaMap.keySet());
         for (Map.Entry<String, LinkedList<Task>> entry : _bakaMap.entrySet()) {
             LinkedList<Task> today = entry.getValue();
@@ -200,9 +199,8 @@ public class Database implements DatabaseInterface {
         taskCount = taskCount.add(BigInteger.ONE);
         String count = TASK_TOTAL + taskCount.toString();
 
-        dirtyWrite(task.toString());
         dirtyWrite(count);
-        return updateFile();
+        return dirtyWrite(task.toString());
     }
 
     @Override
@@ -327,9 +325,9 @@ public class Database implements DatabaseInterface {
     }
 
     @Override
-    public boolean setDone(Task task) {
+    public boolean setDone(Task task, boolean isDone) {
         delete(task);
-        task.setDone(true);
+        task.setDone(isDone);
         return add(task);
     }
 
@@ -338,8 +336,8 @@ public class Database implements DatabaseInterface {
         LinkedList<Task> result = new LinkedList<Task>();
         sort();
         for (String key : _sortedKeys) {
-            LinkedList<Task> dayTasks = _bakaMap.get(key);
-            for (Task task : dayTasks) {
+            LinkedList<Task> today = _bakaMap.get(key);
+            for (Task task : today) {
                 String taskTitle = task.getTitle().toLowerCase();
                 if (taskTitle.equals(title.toLowerCase())) {
                     result.add(task);
@@ -381,28 +379,30 @@ public class Database implements DatabaseInterface {
         sort();
         for (String key : _sortedKeys) {
             if (!key.contains(TAG_DONE) && !key.contains(TAG_DELETED)) {
-                LinkedList<Task> dayTasks = _bakaMap.get(key);
-                undone.addAll(dayTasks);
+                LinkedList<Task> today = _bakaMap.get(key);
+                undone.addAll(today);
             }
         }
         return undone;
     }
 
     @Override
-    public boolean setFloating(Task task) {
+    public boolean setFloating(Task task, boolean isFloating) {
         delete(task);
-        task.setFloating(true);
+        task.setFloating(isFloating);
         add(task);
         return updateFile();
     }
 
-    private void dirtyWrite(String line) {
+    private boolean dirtyWrite(String line) {
         try {
             _outputStream.write(line);
             _outputStream.newLine();
             _outputStream.flush();
+            return true;
         } catch (IOException ex) {
             ex.printStackTrace();
+            return false;
         }
     }
 

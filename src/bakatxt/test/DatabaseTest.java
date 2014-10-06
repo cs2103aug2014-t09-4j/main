@@ -20,6 +20,8 @@ public class DatabaseTest {
     @Before
     public void setUp() throws Exception {
         database = new Database("mytestfile.txt");
+        Task task = new Task("beforeTask");
+        database.add(task);
     }
 
     @After
@@ -57,7 +59,7 @@ public class DatabaseTest {
     public void testSetTaskDone() {
         Task task = new Task("set done!");
         database.add(task);
-        assertTrue(database.setDone(task));
+        assertTrue(database.setDone(task, true));
     }
 
     @Test
@@ -92,8 +94,18 @@ public class DatabaseTest {
     }
 
     @Test
-    public void testDatabaseFunctions() {
-        database.resetCounters();
-        database.removeDone();
+    public void testDatabaseOverflow() {
+        for (int year = 2014; year < 3014; year++) {
+            for (int month = 1; month <= 12; month++) {
+                for (int day = 1; day <= 31; day++) {
+                    String date = year
+                            + ((month < 10) ? "-0" + month : "-" + month)
+                            + ((day < 10) ? "-0" + day : "-" + day);
+                    Task task = new Task(date);
+                    task.addDate(date);
+                    database.add(task);
+                }
+            }
+        }
     }
 }

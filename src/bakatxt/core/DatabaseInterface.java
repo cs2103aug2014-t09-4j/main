@@ -17,9 +17,19 @@ public interface DatabaseInterface {
 
     public String getUndoneCount();
 
+    public void resetCounters();
+
     public boolean add(Task task);
 
     public boolean delete(Task task);
+
+    public boolean setDone(Task task, boolean isDone);
+
+    public boolean setFloating(Task task, boolean isFloating);
+
+    public void close();
+
+    public void removeDone();
 
     public LinkedList<Task> getTaskWithTitle(String title);
 
@@ -29,15 +39,4 @@ public interface DatabaseInterface {
 
     public LinkedList<Task> getAllUndoneTasks();
 
-    public boolean setDone(Task task);
-
-    public boolean setFloating(Task task);
-
-    public void sort();
-
-    public void close();
-
-    public void resetCounters();
-
-    public void removeDone();
 }
