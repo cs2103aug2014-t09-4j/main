@@ -1,6 +1,7 @@
 package bakatxt.core;
 
 import java.awt.GraphicsEnvironment;
+import java.util.LinkedList;
 import java.util.Scanner;
 
 import bakatxt.gui.BakaUI;
@@ -19,6 +20,7 @@ public class BakaTxtMain {
     private static BakaParser _parser;
     private static Database _database;
     private static String _filename;
+    private static LinkedList<Task> _displayTasks;
 
     public BakaTxtMain() {
         // TODO this is kludge code - to be removed
@@ -26,6 +28,7 @@ public class BakaTxtMain {
         _sc = new Scanner(System.in);
         _parser = new BakaParser();
         _database = new Database(_filename);
+        _displayTasks = null;
     }
 
     public static void main(String[] args) {
@@ -66,6 +69,8 @@ public class BakaTxtMain {
                 break;
 
             case DISPLAY :
+                _database.getAllTasks();
+                output = "Get from LinkedList";
                 break;
 
             case EXIT :
