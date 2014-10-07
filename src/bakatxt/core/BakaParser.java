@@ -281,7 +281,7 @@ public class BakaParser implements BakaParserInterface {
     @Override
     public String getCommand(String input) {
         String[] part = input.split(STRING_SPACE);
-        return part[0];
+        return part[0].toUpperCase();
     }
 
     // public LinkedList<Task> getTasks() {
