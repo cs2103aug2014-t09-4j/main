@@ -24,7 +24,7 @@ class TaskBox extends JPanel {
     private static final String AT = "@";
 
     public TaskBox(Task task, boolean isEven) {
-        System.out.println(isEven);
+
         _task = task;
         isEven_ = isEven;
 
