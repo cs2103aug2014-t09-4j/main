@@ -80,6 +80,9 @@ class Contents extends JPanel {
     }
 
     private static boolean isSameDate(LinkedList<Task> tasks, String currentDate) {
+        if (tasks.peek() == null) {
+            return false;
+        }
         return tasks.peek().getDate().equals(currentDate);
     }
 
