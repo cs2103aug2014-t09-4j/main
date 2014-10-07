@@ -35,9 +35,9 @@ class Contents extends JPanel {
         // TODO set alert message to the specific alert
         setAlertMessage(setAlertMessageText(WELCOME_MESSAGE));
 
-        if (tasks.peek() != null) {
+        try {
             addTasksByDate(tasks);
-        } else {
+        } catch (NullPointerException e) {
             setDateAndDay(setDayAndDateText(""), DATE_AND_TASKS_START_POSITION);
             setEvents(new TaskItems(null), DATE_AND_TASKS_START_POSITION + 1);
         }
