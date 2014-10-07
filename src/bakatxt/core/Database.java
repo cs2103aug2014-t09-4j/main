@@ -52,6 +52,7 @@ public class Database implements DatabaseInterface {
     private static final String TAG_DONE = "5000";
     private static final String TAG_FLOATING = "0000";
 
+    private static final int MAX_TASKS_TO_DISPLAY = 5;
     private static final int CONTENT_INDEX = 1;
 
     private static final Charset CHARSET_DEFAULT = Charset.forName("UTF-8");
@@ -369,6 +370,14 @@ public class Database implements DatabaseInterface {
         sort();
         for (String key : _sortedKeys) {
             all.addAll(_bakaMap.get(key));
+            if (all.size() > MAX_TASKS_TO_DISPLAY) {
+                Task warningTask = new Task(
+                        "Please be more specific in your display command.");
+                warningTask.addVenue(SPACE);
+                warningTask.addDescription(SPACE);
+                all.add(warningTask);
+                break;
+            }
         }
         return all;
     }
