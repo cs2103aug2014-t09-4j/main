@@ -53,7 +53,7 @@ public class BakaParser implements BakaParserInterface {
     public Task add(String input) {
         // TODO Auto-generated method stub
         String str = input;
-
+        str = str.replace("add", STRING_EMPTY).trim();
         if (str.contains(STRING_DASH)) {
             str = str.replace(STRING_DASH + STRING_SPACE, STRING_DASH);
             identifyDescription(str);
