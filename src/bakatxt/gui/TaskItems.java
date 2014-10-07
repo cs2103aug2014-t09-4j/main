@@ -17,8 +17,6 @@ class TaskItems extends JPanel {
 
     // TODO clean up cruft & make the code clearer
     // TODO fix color bug
-    private static boolean isEven_ = false;
-    private static boolean isLast_ = false;
     private static LinkedList<Task> _tasks;
     private static GridBagConstraints _layout = new GridBagConstraints();
     //private Input input_;
@@ -41,25 +39,16 @@ class TaskItems extends JPanel {
 
     private void addCurrentEvents() {
         int i = 0;
+        boolean isLast = false;
+        boolean isEven = false;
+
         while(_tasks.peek() != null) {
-            setIsLast(_tasks.size(), i);
+            if (i + 1 == _tasks.size()) {
+                isLast = true;
+            }
             setActive(_tasks.pop(), i);
-            flipIsEven();
+            isEven = !isEven;
             i++;
-        }
-    }
-
-    private static void flipIsEven() {
-        if (isEven_) {
-            isEven_ = false;
-        } else {
-            isEven_ = true;
-        }
-    }
-
-    private static void setIsLast(int size, int i) {
-        if (i + 1 == size) {
-            isLast_ = true;
         }
     }
 
@@ -84,12 +73,15 @@ class TaskItems extends JPanel {
         _layout.weightx = 1.0;
         _layout.weighty = 1.0;
         _layout.gridy = y;
+    }
 
-        if (isLast_) {
-            this.add(new FinalTaskBox(task, isEven_), _layout);
-        } else {
-            this.add(new TaskBox(task, isEven_), _layout);
-        }
+    /**
+     * This method decides what kind of color and shape the box should be
+     *
+     * @param task is the task to put in the box
+     */
+    private void setBoxType(Task task) {
+
     }
 
     @Override

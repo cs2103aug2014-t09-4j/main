@@ -18,6 +18,8 @@ import bakatxt.core.Task;
  * 2. Draw the date and content for each date
  *
  */
+
+// TODO merge in TaskItems class
 class Contents extends JPanel {
 
     private static GridBagConstraints _layout = new GridBagConstraints();
