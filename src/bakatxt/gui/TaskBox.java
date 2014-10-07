@@ -1,4 +1,8 @@
+//@author A0116538A
+
 package bakatxt.gui;
+
+//TODO comments
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -9,25 +13,22 @@ import java.awt.geom.Rectangle2D;
 
 import javax.swing.JPanel;
 
+import bakatxt.core.Task;
+
 class TaskBox extends JPanel {
 
     public static boolean isEven_;
+    private Task _task;
 
     protected static final boolean IS_LINE_WRAP = true;
+    private static final String AT = "@";
 
-    protected static final String LOREM_IPSUM =
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod ";
-            /*+ "tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim "
-            + "veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex "
-            + "ea commodo consequat. Duis aute irure dolor in reprehenderit in "
-            + "voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur "
-            + "sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt "
-            + "mollit anim id est laborum.";*/
-
-    public TaskBox(boolean isEven) {
+    public TaskBox(Task task, boolean isEven) {
         System.out.println(isEven);
-        setOpaque(false);
+        _task = task;
         isEven_ = isEven;
+
+        setOpaque(false);
         setColor();
         setLayout(new GridBagLayout());
         addComponentsToPane();
@@ -44,15 +45,15 @@ class TaskBox extends JPanel {
     protected void addComponentsToPane() {
         GridBagConstraints layout = new GridBagConstraints();
 
-        setTask(layout);
-        setLocation(layout);
-        setTimeStart(layout);
-        setDescription(layout);
+        setTask(layout, _task.getTitle());
+        setLocation(layout, _task.getVenue());
+        setTimeStart(layout, _task.getTime());
+        setDescription(layout, _task.getDescription());
         setTimeEnd(layout);
     }
 
-    private void setTask(GridBagConstraints layout) {
-        FormattedText task = new FormattedText("<Task Name>", UIHelper.PRESET_TYPE_TITLE,
+    private void setTask(GridBagConstraints layout, String titleText) {
+        FormattedText task = new FormattedText(titleText, UIHelper.PRESET_TYPE_TITLE,
                 UIHelper.PRESET_SIZE_TITLE, UIHelper.PRESET_COLOR_TITLE);
         layout.fill = GridBagConstraints.NONE;
         layout.anchor = GridBagConstraints.LINE_START;
@@ -66,8 +67,8 @@ class TaskBox extends JPanel {
         this.add(task, layout);
     }
 
-    private void setLocation(GridBagConstraints layout) {
-        FormattedText location = new FormattedText("@" + "<Task Location>", UIHelper.PRESET_TYPE_LOCATION,
+    private void setLocation(GridBagConstraints layout, String locationText) {
+        FormattedText location = new FormattedText(AT + locationText, UIHelper.PRESET_TYPE_LOCATION,
                 UIHelper.PRESET_SIZE_LOCATION , UIHelper.PRESET_COLOR_LOCATION);
         layout.fill = GridBagConstraints.NONE;
         layout.anchor = GridBagConstraints.LINE_START;
@@ -81,8 +82,8 @@ class TaskBox extends JPanel {
         this.add(location, layout);
     }
 
-    private void setDescription(GridBagConstraints layout) {
-        FormattedText description = new FormattedText(LOREM_IPSUM, UIHelper.PRESET_TYPE_DEFAULT,
+    private void setDescription(GridBagConstraints layout, String descriptionText) {
+        FormattedText description = new FormattedText(descriptionText, UIHelper.PRESET_TYPE_DEFAULT,
                 UIHelper.PRESET_SIZE_DEFAULT, UIHelper.PRESET_COLOR_DEFAULT, IS_LINE_WRAP);
         layout.fill = GridBagConstraints.BOTH;
         layout.anchor = GridBagConstraints.FIRST_LINE_START;
@@ -96,8 +97,8 @@ class TaskBox extends JPanel {
         this.add(description, layout);
     }
 
-    private void setTimeStart(GridBagConstraints layout) {
-        FormattedText time = new FormattedText("<start time>", UIHelper.PRESET_TYPE_DATE,
+    private void setTimeStart(GridBagConstraints layout, String startTimeText) {
+        FormattedText time = new FormattedText(startTimeText, UIHelper.PRESET_TYPE_DATE,
                 UIHelper.PRESET_SIZE_DATE, UIHelper.PRESET_COLOR_DATE);
         layout.fill = GridBagConstraints.NONE;
         layout.anchor = GridBagConstraints.FIRST_LINE_END;
@@ -112,6 +113,7 @@ class TaskBox extends JPanel {
     }
 
     private void setTimeEnd(GridBagConstraints layout) {
+        // TODO add end time once it has been implemented
         FormattedText time = new FormattedText("<end time>", UIHelper.PRESET_TYPE_DATE,
                 UIHelper.PRESET_SIZE_DATE, UIHelper.PRESET_COLOR_DATE);
         layout.fill = GridBagConstraints.NONE;

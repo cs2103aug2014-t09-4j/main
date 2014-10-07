@@ -1,13 +1,19 @@
+//@author A0116538A
+
 package bakatxt.gui;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.geom.Path2D;
 
+import bakatxt.core.Task;
+
+//TODO comments
+
 class FinalTaskBox extends TaskBox {
 
-    public FinalTaskBox(boolean isEven) {
-        super(isEven);
+    public FinalTaskBox(Task task, boolean isEven) {
+        super(task, isEven);
     }
 
     @Override
