@@ -1,49 +1,51 @@
+//@author A0116538A
+
 package bakatxt.gui;
 
 import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.util.LinkedList;
 
 import javax.swing.JPanel;
 
+import bakatxt.core.Task;
+
+//TODO comments
+
 class TaskItems extends JPanel {
 
+    // TODO clean up cruft & make the code clearer
+    // TODO fix color bug
     private static boolean isEven_ = false;
     private static boolean isLast_ = false;
-    private static String _tasks;
+    private static LinkedList<Task> _tasks;
     private static GridBagConstraints _layout = new GridBagConstraints();
     //private Input input_;
 
-    public TaskItems() {
+    public TaskItems(LinkedList<Task> tasks) {
+        _tasks = tasks;
         setOpaque(false);
         setBackground(UIHelper.GRAY_DARK);
         setLayout(new GridBagLayout());
         addComponentsToPane();
     }
 
-    protected void setTasks(String s) {
-        _tasks = s;
-        System.out.println(_tasks);
-        //setNoEvents(_layout, 0);
-    }
-
     private void addComponentsToPane() {
-        int size;
-
-        //try {
-            //size = BakaUI.getTasks().size();
-            //addCurrentEvents(layout, size);
-        //} catch (NullPointerException e) {
-            size = 0;
-            setNoEvents(_layout, size);
-        //}
+        try {
+            addCurrentEvents();
+        } catch (NullPointerException e) {
+            setNoEvents();
+        }
     }
 
-    private void addCurrentEvents(GridBagConstraints layout, int size) {
-        for (int i = 0; i < size; i++) {
-            setIsLast(size, i);
-            setActive(layout, i);
+    private void addCurrentEvents() {
+        int i = 0;
+        while(_tasks.peek() != null) {
+            setIsLast(_tasks.size(), i);
+            setActive(_tasks.pop(), i);
             flipIsEven();
+            i++;
         }
     }
 
@@ -61,32 +63,32 @@ class TaskItems extends JPanel {
         }
     }
 
-    private void setNoEvents(GridBagConstraints layout, int y) {
+    private void setNoEvents() {
 
-        FormattedText task = new FormattedText(_tasks, UIHelper.PRESET_TYPE_TITLE,
+        FormattedText task = new FormattedText("You have no events!", UIHelper.PRESET_TYPE_TITLE,
                 UIHelper.PRESET_SIZE_TITLE, UIHelper.PRESET_COLOR_TITLE);
         /*FormattedText task = new FormattedText("", UIHelper.PRESET_TYPE_TITLE,
                 UIHelper.PRESET_SIZE_TITLE, UIHelper.PRESET_COLOR_TITLE);*/
        // input_.getDocument().addDocumentListener(new Controller(input_, task));
-        layout.fill = GridBagConstraints.NONE;
-        layout.anchor = GridBagConstraints.CENTER;
-        layout.weightx = 1.0;
-        layout.weighty = 1.0;
-        layout.gridy = y;
-        this.add(task, layout);
+        _layout.fill = GridBagConstraints.NONE;
+        _layout.anchor = GridBagConstraints.CENTER;
+        _layout.weightx = 1.0;
+        _layout.weighty = 1.0;
+        _layout.gridy = 0;
+        this.add(task, _layout);
     }
 
-    private void setActive(GridBagConstraints layout, int y) {
-        layout.fill = GridBagConstraints.BOTH;
-        layout.anchor = GridBagConstraints.FIRST_LINE_START;
-        layout.weightx = 1.0;
-        layout.weighty = 1.0;
-        layout.gridy = y;
+    private void setActive(Task task, int y) {
+        _layout.fill = GridBagConstraints.BOTH;
+        _layout.anchor = GridBagConstraints.FIRST_LINE_START;
+        _layout.weightx = 1.0;
+        _layout.weighty = 1.0;
+        _layout.gridy = y;
 
         if (isLast_) {
-            this.add(new FinalTaskBox(isEven_), layout);
+            this.add(new FinalTaskBox(task, isEven_), _layout);
         } else {
-            this.add(new TaskBox(isEven_), layout);
+            this.add(new TaskBox(task, isEven_), _layout);
         }
     }
 
