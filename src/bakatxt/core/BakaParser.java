@@ -265,11 +265,11 @@ public class BakaParser implements BakaParserInterface {
     }
 
     @Override
-    public Task delete(String input) {
-        // TODO Auto-generated method stub
-        // TODO Get a specific task to delete
-        // TODO main function to filter for exact title to delete
-        return null;
+    public String delete(String input) {
+        // TODO remove first word and return the title
+        int index = input.indexOf(STRING_SPACE);
+        input = input.substring(index);
+        return input;
     }
 
     @Override

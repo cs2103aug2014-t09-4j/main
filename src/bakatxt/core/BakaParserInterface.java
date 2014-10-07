@@ -7,7 +7,7 @@ public interface BakaParserInterface {
 
     public Task add(String input);
 
-    public Task delete(String input);
+    public String delete(String input);
 
     public Task display(String input);
 
