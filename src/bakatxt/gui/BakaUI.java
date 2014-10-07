@@ -10,15 +10,26 @@ import javax.swing.JFrame;
 
 import bakatxt.core.BakaTxtMain;
 
-// TODO comments
+/**
+ * BakaUI is the "main window" of the GUI for BakaTXT. Since we are doing a custom
+ * window design, BakaUI is actually completely transparent. We will instead draw
+ * a BakaPanel that fills the BakaUI window, and treat it as our actual window.
+ *
+ */
 public class BakaUI extends JFrame {
 
     private static BakaPanel _baka;
 
+    /**
+     * @param thisSession refers to the logic module we are interacting with
+     */
     public BakaUI(BakaTxtMain thisSession) {
         initUI(thisSession);
     }
 
+    /**
+     * This method initializes the GUI and updates it when necessary
+     */
     public static void startGui() {
         EventQueue.invokeLater(new Runnable() {
             @Override
@@ -31,6 +42,17 @@ public class BakaUI extends JFrame {
         });
     }
 
+    /**
+     * This method listens for input from the GUI and does the following when the
+     * return key is pressed:
+     *
+     * 1. Highlight all the text in the input box (to make it trivial for the user
+     *    to input new commands)
+     * 2. Passes the input to the logic module to process it
+     * 3. Lastly, updates the contents of the GUI to fit the command
+     *
+     * @param thisSession refers to the logic module we are interacting with
+     */
     public static void processInput(BakaTxtMain thisSession) {
 
         Input input = _baka.getInput();
@@ -45,6 +67,12 @@ public class BakaUI extends JFrame {
         });
     }
 
+    /**
+     * This method draws the BakaPanel and sets the window as transparent, centered,
+     * unmovable, and always on top.
+     *
+     * @param thisSession refers to the logic module we are interacting with
+     */
     private void initUI(BakaTxtMain thisSession) {
         _baka = new BakaPanel(thisSession);
         setUndecorated(true);
