@@ -1,3 +1,5 @@
+//@author A0116538A
+
 package bakatxt.gui;
 
 import java.awt.EventQueue;
@@ -8,26 +10,28 @@ import javax.swing.JFrame;
 
 import bakatxt.core.BakaTxtMain;
 
+// TODO comments
 public class BakaUI extends JFrame {
 
     private static BakaPanel _baka;
 
-    public BakaUI() {
-        initUI();
+    public BakaUI(BakaTxtMain thisSession) {
+        initUI(thisSession);
     }
 
     public static void startGui() {
         EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
-                BakaUI baka = new BakaUI();
+                BakaTxtMain thisSession = new BakaTxtMain();
+                BakaUI baka = new BakaUI(thisSession);
                 baka.setVisible(true);
-                processInput();
+                processInput(thisSession);
             }
         });
     }
 
-    public static void processInput() {
+    public static void processInput(BakaTxtMain thisSession) {
 
         Input input = _baka.getInput();
         input.addActionListener(new ActionListener() {
@@ -35,13 +39,14 @@ public class BakaUI extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 input.selectAll();
-                _baka.setContents(BakaTxtMain.executeCommand(input.getText()));
+                BakaTxtMain.executeCommand(input.getText());
+                _baka.setContents(thisSession);
             }
         });
     }
 
-    private void initUI() {
-        _baka = new BakaPanel();
+    private void initUI(BakaTxtMain thisSession) {
+        _baka = new BakaPanel(thisSession);
         setUndecorated(true);
         setBackground(UIHelper.TRANSPARENT);
         setContentPane(_baka);

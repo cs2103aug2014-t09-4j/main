@@ -1,3 +1,5 @@
+//@author A0116538A
+
 package bakatxt.gui;
 
 import java.awt.Dimension;
@@ -8,16 +10,19 @@ import java.awt.Insets;
 
 import javax.swing.JPanel;
 
+import bakatxt.core.BakaTxtMain;
+
+// TODO comments
 class BakaPanel extends JPanel {
 
     private static Input _input;
     private static Contents _contents;
     private static final int BORDER = UIHelper.WINDOW_BORDER;
 
-    public BakaPanel() {
+    public BakaPanel(BakaTxtMain session) {
 
         _input = new Input();
-        _contents = new Contents();
+        _contents = new Contents(session.getAllTasks());
 
         setOpaque(false);
         setPreferredSize(new Dimension(UIHelper.WINDOW_X, UIHelper.WINDOW_Y));
@@ -30,9 +35,10 @@ class BakaPanel extends JPanel {
         return _input;
     }
 
-    public void setContents(String stuff) {
+    public void setContents(BakaTxtMain session) {
+
          _contents.removeAll();
-         _contents.updateContents(stuff);
+         _contents.updateContents(session.getAllTasks());
          _contents.validate();
          _contents.repaint();
 
