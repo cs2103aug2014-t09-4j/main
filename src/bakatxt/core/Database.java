@@ -345,6 +345,17 @@ public class Database implements DatabaseInterface {
                 }
             }
         }
+
+        // for demo purposes
+        if (result.size() > MAX_TASKS_TO_DISPLAY) {
+            LinkedList<Task> truncated = new LinkedList<Task>();
+            for (int i = 0; i < MAX_TASKS_TO_DISPLAY; i++) {
+                truncated.add(result.get(i));
+            }
+            result = truncated;
+        }
+        // end demo code
+
         return result;
     }
 
@@ -361,6 +372,17 @@ public class Database implements DatabaseInterface {
         } else if (_bakaMap.containsKey(key)) {
             result = _bakaMap.get(key);
         }
+
+        // for demo purposes
+        if (result.size() > MAX_TASKS_TO_DISPLAY) {
+            LinkedList<Task> truncated = new LinkedList<Task>();
+            for (int i = 0; i < MAX_TASKS_TO_DISPLAY; i++) {
+                truncated.add(result.get(i));
+            }
+            result = truncated;
+        }
+        // end demo code
+
         return result;
     }
 
@@ -370,15 +392,18 @@ public class Database implements DatabaseInterface {
         sort();
         for (String key : _sortedKeys) {
             all.addAll(_bakaMap.get(key));
-            if (all.size() > MAX_TASKS_TO_DISPLAY) {
-                Task warningTask = new Task(
-                        "Please be more specific in your display command.");
-                warningTask.addVenue(SPACE);
-                warningTask.addDescription(SPACE);
-                all.add(warningTask);
-                break;
-            }
         }
+
+        // for demo purposes
+        if (all.size() > MAX_TASKS_TO_DISPLAY) {
+            LinkedList<Task> truncated = new LinkedList<Task>();
+            for (int i = 0; i < MAX_TASKS_TO_DISPLAY; i++) {
+                truncated.add(all.get(i));
+            }
+            all = truncated;
+        }
+        // end demo code
+
         return all;
     }
 

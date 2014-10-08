@@ -23,13 +23,25 @@ public class BakaTxtMain {
     private static String _filename;
     private static LinkedList<Task> _displayTasks;
 
+    // ds kludge for demo
+    private static boolean withinDelete;
+    private static String titleDelete;
+
+    // end demo code
+
     public BakaTxtMain() {
         // TODO this is kludge code - to be removed
         _filename = "mytestfile.txt";
+
         _sc = new Scanner(System.in);
         _parser = new BakaParser();
         _database = new Database(_filename);
         _displayTasks = null;
+
+        // ds kludge for demo
+        withinDelete = false;
+        titleDelete = null;
+        // end demo code
     }
 
     public static void main(String[] args) {
@@ -50,6 +62,14 @@ public class BakaTxtMain {
     }
 
     public static String executeCommand(String input) {
+        System.out.println(_displayTasks);
+
+        // ds kludge for demo
+        if (withinDelete) {
+            input = "delete " + input;
+        }
+        // end demo code
+
         String command = _parser.getCommand(input);
         CommandType commandType = CommandType.valueOf(command);
 
@@ -67,21 +87,47 @@ public class BakaTxtMain {
                 break;
 
             case DELETE :
-                String titleName = _parser.delete(input);
-                _displayTasks = _database.getTaskWithTitle(titleName);
-                System.out.println(MESSAGE_ENTER_NUM);
-                String inputNumber = _sc.nextLine();
-                int digit = Integer.valueOf(inputNumber);
+                // Ki Hyun's codes
+                // String titleName = _parser.delete(input);
+                // _displayTasks = _database.getTaskWithTitle(titleName);
+                // System.out.println(MESSAGE_ENTER_NUM);
+                // String inputNumber = _sc.nextLine();
+                // int digit = Integer.valueOf(inputNumber);
+                //
+                // boolean isDeleted = _database.delete(_displayTasks
+                // .get(digit - 1));
+                //
+                // if (isDeleted) {
+                // // TODO something when deleted
+                //
+                // } else {
+                // // TODO error in deleting
+                // }
 
-                boolean isDeleted = _database.delete(_displayTasks
-                        .get(digit - 1));
-
-                if (isDeleted) {
-                    // TODO something when deleted
-
+                // ds kludge for demo
+                if (!withinDelete) {
+                    String titleName = _parser.delete(input).trim();
+                    _displayTasks = _database.getTaskWithTitle(titleName);
+                    System.out.println(_displayTasks.toString());
+                    withinDelete = true;
+                    titleDelete = titleName;
+                    if (_displayTasks.size() == 0) {
+                        withinDelete = false;
+                        titleDelete = null;
+                    }
                 } else {
-                    // TODO error in deleting
+                    _displayTasks = _database.getTaskWithTitle(titleDelete);
+                    System.out.println(_displayTasks.toString());
+                    String index = _parser.delete(input).trim();
+                    int trueIndex = Integer.valueOf(index.trim());
+                    Task target = _displayTasks.get(trueIndex - 1);
+                    _database.delete(target);
+                    _displayTasks.remove(target);
+                    withinDelete = false;
+                    titleDelete = null;
                 }
+                // end demo code
+
                 break;
 
             case DISPLAY :
