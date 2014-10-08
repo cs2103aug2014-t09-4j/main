@@ -113,7 +113,7 @@ public class BakaParser implements BakaParserInterface {
             inputTemp = inputTemp.replace(_originalTimeFormat, " ");
         }
         if (_isDescription) {
-            inputTemp = replaceDescription(input);
+            inputTemp = replaceDescription(inputTemp);
         }
         return inputTemp;
     }
