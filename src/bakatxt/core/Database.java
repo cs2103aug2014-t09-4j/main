@@ -343,7 +343,7 @@ public class Database implements DatabaseInterface {
             LinkedList<Task> today = _bakaMap.get(key);
             for (Task task : today) {
                 String taskTitle = task.getTitle().toLowerCase();
-                if (taskTitle.equals(title.toLowerCase())) {
+                if (taskTitle.contains(title.toLowerCase())) {
                     result.add(task);
                 }
             }
