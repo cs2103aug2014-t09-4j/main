@@ -13,15 +13,19 @@ public class BakaParser implements BakaParserInterface {
     // "Invalid add command, please add a title!";
     // private static final String MESSAGE_EMPTY_FILE = "The file is empty!";
 
+    private static final String STRING_NEWLINE = System
+            .getProperty("line.separator");
     private static final String STRING_EMPTY = "";
     private static final String STRING_SPACE = " ";
     private static final String STRING_ADD = "@";
     private static final String STRING_DASH = "--";
+    private static final String STRING_DOTS = "...";
     private static final String STRING_AT = "at";
     private static final String STRING_ON = "on";
     private static final String STRING_DASH_DATE = "-";
     private static final String STRING_YEAR = "2014";
     private static final String STRING_YEAR_FRAG = "20";
+    private static final int MAX_TITLE_LENGTH = 30;
 
     private static final String DATE_FORMAT_DDMMYY_REGEX = "(0?[12]?[0-9]|3[01])[/-](0?[1-9]|1[012])[/-](\\d\\d)";
     private static final String DATE_FORMAT_DDMMYYYY_REGEX = "(0?[12]?[0-9]|3[01])[/-](0?[1-9]|1[012])[/-]((19|2[01])\\d\\d)";
@@ -76,9 +80,23 @@ public class BakaParser implements BakaParserInterface {
         }
 
         identifyTitle(str);
+        _title = _title + STRING_SPACE;
 
         if (_title.equals(STRING_EMPTY)) {
             // TODO return MESSAGE_ADD_NO_TITLE;
+        }
+
+        if (_title.length() > MAX_TITLE_LENGTH) {
+            if (_isDescription) {
+                _description = STRING_DOTS + STRING_SPACE
+                        + _title.substring(MAX_TITLE_LENGTH) + STRING_NEWLINE
+                        + STRING_NEWLINE + _description;
+            } else {
+                _description = STRING_DOTS + STRING_SPACE
+                        + _title.substring(MAX_TITLE_LENGTH);
+            }
+            _title = _title.substring(0, MAX_TITLE_LENGTH).trim() + STRING_DOTS
+                    + STRING_SPACE;
         }
 
         Task task = new Task(_title);
