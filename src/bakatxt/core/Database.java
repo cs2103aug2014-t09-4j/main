@@ -391,6 +391,9 @@ public class Database implements DatabaseInterface {
         LinkedList<Task> all = new LinkedList<Task>();
         sort();
         for (String key : _sortedKeys) {
+            if (key.contains(TAG_DELETED)) {
+                continue;
+            }
             all.addAll(_bakaMap.get(key));
         }
 
