@@ -80,7 +80,6 @@ public class BakaParser implements BakaParserInterface {
         }
 
         identifyTitle(str);
-        _title = _title + STRING_SPACE;
 
         if (_title.equals(STRING_EMPTY)) {
             // TODO return MESSAGE_ADD_NO_TITLE;
@@ -95,8 +94,7 @@ public class BakaParser implements BakaParserInterface {
                 _description = STRING_DOTS + STRING_SPACE
                         + _title.substring(MAX_TITLE_LENGTH);
             }
-            _title = _title.substring(0, MAX_TITLE_LENGTH).trim() + STRING_DOTS
-                    + STRING_SPACE;
+            _title = _title.substring(0, MAX_TITLE_LENGTH).trim() + STRING_DOTS;
         }
 
         Task task = new Task(_title);
