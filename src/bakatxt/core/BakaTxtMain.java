@@ -125,7 +125,8 @@ public class BakaTxtMain {
                             targetTitle.indexOf(" ") + 1).trim();
                     target.addTitle(targetTitle);
                     // System.out.println(target);
-                    _database.delete(target);
+                    boolean deleted = _database.delete(target);
+                    // System.out.println(deleted);
                     _displayTasks = _database.getAllTasks();
                     withinDelete = false;
                     titleDelete = null;

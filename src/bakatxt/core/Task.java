@@ -123,6 +123,8 @@ public class Task implements TaskInterface, Comparable<Task> {
         if (descriptionIndex + 1 == tokenizedInput.size()) {
             if (tokenizedInput.get(descriptionIndex).equals(TAG_NULL)) {
                 _description = null;
+            } else {
+                _description = tokenizedInput.get(descriptionIndex);
             }
         } else {
             StringBuilder description = new StringBuilder();
