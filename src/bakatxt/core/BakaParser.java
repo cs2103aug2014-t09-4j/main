@@ -57,7 +57,7 @@ public class BakaParser implements BakaParserInterface {
     public Task add(String input) {
         // TODO Auto-generated method stub
         String str = input;
-        str = str.replace("add", STRING_EMPTY).trim();
+        str = str.replaceFirst("add", STRING_EMPTY).trim();
         if (str.contains(STRING_DASH)) {
             str = str.replace(STRING_DASH + STRING_SPACE, STRING_DASH);
             identifyDescription(str);
@@ -86,15 +86,23 @@ public class BakaParser implements BakaParserInterface {
         }
 
         if (_title.length() > MAX_TITLE_LENGTH) {
-            if (_isDescription) {
-                _description = STRING_DOTS + STRING_SPACE
-                        + _title.substring(MAX_TITLE_LENGTH) + STRING_NEWLINE
-                        + STRING_NEWLINE + _description;
-            } else {
-                _description = STRING_DOTS + STRING_SPACE
-                        + _title.substring(MAX_TITLE_LENGTH);
+            String truncatedBack = _title.substring(MAX_TITLE_LENGTH);
+            String truncatedFront = _title.substring(0, MAX_TITLE_LENGTH);
+
+            if (truncatedFront.lastIndexOf(STRING_SPACE) < MAX_TITLE_LENGTH - 1) {
+                int indexToAdd = truncatedBack.indexOf(STRING_SPACE);
+                String excess = truncatedBack.substring(0, indexToAdd);
+                truncatedFront = truncatedFront + excess;
+                truncatedBack = truncatedBack.substring(indexToAdd).trim();
             }
-            _title = _title.substring(0, MAX_TITLE_LENGTH).trim() + STRING_DOTS;
+
+            if (_isDescription) {
+                _description = STRING_DOTS + STRING_SPACE + truncatedBack
+                        + STRING_NEWLINE + STRING_NEWLINE + _description;
+            } else {
+                _description = STRING_DOTS + STRING_SPACE + truncatedBack;
+            }
+            _title = truncatedFront.trim() + STRING_DOTS;
         }
 
         Task task = new Task(_title);
