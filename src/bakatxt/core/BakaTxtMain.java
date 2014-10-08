@@ -11,6 +11,7 @@ public class BakaTxtMain {
     private static final String MESSAGE_WELCOME = "Welcome To BakaTxt!";
     private static final String MESSAGE_BYEBYE = "Bye bye!";
     private static final String MESSAGE_ENTER_COMMAND = "Please enter command: ";
+    private static final String MESSAGE_ENTER_NUM = "Please enter the number that you wish to delete: ";
 
     enum CommandType {
         ADD, DELETE, DISPLAY, EXIT;
@@ -66,6 +67,21 @@ public class BakaTxtMain {
                 break;
 
             case DELETE :
+                String titleName = _parser.delete(input);
+                _displayTasks = _database.getTaskWithTitle(titleName);
+                System.out.println(MESSAGE_ENTER_NUM);
+                String inputNumber = _sc.nextLine();
+                int digit = Integer.valueOf(inputNumber);
+
+                boolean isDeleted = _database.delete(_displayTasks
+                        .get(digit - 1));
+
+                if (isDeleted) {
+                    // TODO something when deleted
+
+                } else {
+                    // TODO error in deleting
+                }
                 break;
 
             case DISPLAY :
