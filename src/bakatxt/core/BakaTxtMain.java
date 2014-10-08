@@ -36,7 +36,7 @@ public class BakaTxtMain {
         _sc = new Scanner(System.in);
         _parser = new BakaParser();
         _database = new Database(_filename);
-        _displayTasks = null;
+        _displayTasks = _database.getAllTasks();
 
         // ds kludge for demo
         withinDelete = false;
@@ -62,8 +62,6 @@ public class BakaTxtMain {
     }
 
     public static String executeCommand(String input) {
-        System.out.println(_displayTasks);
-
         // ds kludge for demo
         if (withinDelete) {
             input = "delete " + input;
@@ -81,6 +79,7 @@ public class BakaTxtMain {
                 if (isAdded) {
                     // TODO something when added
                     output = toAdd.toDisplayString();
+                    _displayTasks = _database.getAllTasks();
                 } else {
                     // TODO error in adding
                 }
@@ -108,7 +107,7 @@ public class BakaTxtMain {
                 if (!withinDelete) {
                     String titleName = _parser.delete(input).trim();
                     _displayTasks = _database.getTaskWithTitle(titleName);
-                    System.out.println(_displayTasks.toString());
+                    // System.out.println(_displayTasks.toString());
                     withinDelete = true;
                     titleDelete = titleName;
                     if (_displayTasks.size() == 0) {
@@ -117,14 +116,14 @@ public class BakaTxtMain {
                     }
                 } else {
                     _displayTasks = _database.getTaskWithTitle(titleDelete);
-                    System.out.println(_displayTasks.toString());
+                    // System.out.println(_displayTasks.toString());
                     String index = _parser.delete(input).trim();
                     int trueIndex = Integer.valueOf(index.trim());
                     Task target = _displayTasks.get(trueIndex - 1);
                     String targetTitle = target.getTitle();
                     targetTitle = targetTitle.substring(3);
                     target.addTitle(targetTitle);
-                    System.out.println(target);
+                    // System.out.println(target);
                     _database.delete(target);
                     _displayTasks.remove(target);
                     withinDelete = false;
