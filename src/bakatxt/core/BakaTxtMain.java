@@ -121,7 +121,8 @@ public class BakaTxtMain {
                     int trueIndex = Integer.valueOf(index.trim());
                     Task target = _displayTasks.get(trueIndex - 1);
                     String targetTitle = target.getTitle();
-                    targetTitle = targetTitle.substring(3);
+                    targetTitle = targetTitle.substring(
+                            targetTitle.indexOf(" ") + 1).trim();
                     target.addTitle(targetTitle);
                     // System.out.println(target);
                     _database.delete(target);
