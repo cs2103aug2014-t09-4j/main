@@ -39,4 +39,5 @@ public interface DatabaseInterface {
 
     public LinkedList<Task> getAllUndoneTasks();
 
+    public void clear();
 }

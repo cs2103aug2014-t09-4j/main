@@ -476,4 +476,10 @@ public class Database implements DatabaseInterface {
         _removeDone = false;
     }
 
+    @Override
+    public void clear() {
+        resetFile();
+        updateMemory();
+    }
+
 }

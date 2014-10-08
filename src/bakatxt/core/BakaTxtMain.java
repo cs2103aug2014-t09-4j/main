@@ -14,7 +14,7 @@ public class BakaTxtMain {
     private static final String MESSAGE_ENTER_NUM = "Please enter the number that you wish to delete: ";
 
     enum CommandType {
-        ADD, DELETE, DISPLAY, EXIT;
+        ADD, DELETE, DISPLAY, CLEAR, EXIT;
     }
 
     private static Scanner _sc;
@@ -137,6 +137,11 @@ public class BakaTxtMain {
             case DISPLAY :
                 _displayTasks = _database.getAllTasks();
                 output = "Get from LinkedList";
+                break;
+
+            case CLEAR :
+                _database.clear();
+                _displayTasks = _database.getAllTasks();
                 break;
 
             case EXIT :
