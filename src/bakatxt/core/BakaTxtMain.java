@@ -121,6 +121,10 @@ public class BakaTxtMain {
                     String index = _parser.delete(input).trim();
                     int trueIndex = Integer.valueOf(index.trim());
                     Task target = _displayTasks.get(trueIndex - 1);
+                    String targetTitle = target.getTitle();
+                    targetTitle = targetTitle.substring(3);
+                    target.addTitle(targetTitle);
+                    System.out.println(target);
                     _database.delete(target);
                     _displayTasks.remove(target);
                     withinDelete = false;

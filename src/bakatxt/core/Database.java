@@ -354,6 +354,12 @@ public class Database implements DatabaseInterface {
             }
             result = truncated;
         }
+        for (int i = 0; i < result.size(); i++) {
+            Task task = new Task(result.get(i).toString());
+            String taskTitle = task.getTitle();
+            task.addTitle(i + 1 + ". " + taskTitle);
+            result.set(i, task);
+        }
         // end demo code
 
         return result;
