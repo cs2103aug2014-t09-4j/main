@@ -11,12 +11,12 @@ import bakatxt.core.Task;
 
 /**
  * This class dictates the color and shape of the box which the task will be put in.
- * This box is specifically for a bottom most box.
+ * This box is specifically for a top most box.
  *
  */
-class FinalTaskBox extends TaskBox {
+class FirstTaskBox extends TaskBox {
 
-    public FinalTaskBox(Task task, Color backgroundColor) {
+    public FirstTaskBox(Task task, Color backgroundColor) {
         super(task, backgroundColor);
     }
 
@@ -25,14 +25,15 @@ class FinalTaskBox extends TaskBox {
         Graphics2D g2d = (Graphics2D) g.create();
         g2d.setColor(getBackground());
         g2d.setRenderingHints(UIHelper.antiAlias());
-        g2d.fill(new BottomRounded(getWidth(), getHeight()));
+        g2d.fill(new TopRounded(getWidth(), getHeight()));
         g2d.dispose();
         super.paintComponent(g);
     }
 
-    class BottomRounded extends Path2D.Double {
+    // TODO fix topRounded method
+    class TopRounded extends Path2D.Double {
 
-        public BottomRounded(double width, double height) {
+        public TopRounded(double width, double height) {
             moveTo(0, 0);
             lineTo(width, 0);
             lineTo(width, height - UIHelper.WINDOW_ROUNDNESS);

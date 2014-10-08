@@ -4,51 +4,40 @@ package bakatxt.gui;
 
 //TODO comments
 
+import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.geom.Rectangle2D;
 
 import javax.swing.JPanel;
 
 import bakatxt.core.Task;
 
-class TaskBox extends JPanel {
-
-    public static boolean isEven_;
-    private Task _task;
+/**
+ * This class places the elements of a single task correctly in their box.
+ *
+ */
+abstract class TaskBox extends JPanel {
 
     protected static final boolean IS_LINE_WRAP = true;
     private static final String AT = "@";
 
-    public TaskBox(Task task, boolean isEven) {
-
-        _task = task;
-        isEven_ = isEven;
+    public TaskBox(Task task, Color backgroundColor) {
 
         setOpaque(false);
-        setColor();
+        setBackground(backgroundColor);
         setLayout(new GridBagLayout());
-        addComponentsToPane();
+        addComponentsToPane(task);
     }
 
-    protected void setColor() {
-        if (isEven_) {
-            setBackground(UIHelper.GRAY_BLACK);
-        } else {
-            setBackground(UIHelper.TRANSPARENT);
-        }
-    }
-
-    protected void addComponentsToPane() {
+    protected void addComponentsToPane(Task task) {
         GridBagConstraints layout = new GridBagConstraints();
 
-        setTask(layout, _task.getTitle());
-        setLocation(layout, _task.getVenue());
-        setTimeStart(layout, _task.getTime());
-        setDescription(layout, _task.getDescription());
+        setTask(layout, task.getTitle());
+        setLocation(layout, task.getVenue());
+        setTimeStart(layout, task.getTime());
+        setDescription(layout, task.getDescription());
         setTimeEnd(layout);
     }
 
@@ -129,22 +118,7 @@ class TaskBox extends JPanel {
     }
 
     @Override
-    protected void paintComponent(Graphics g) {
-        buildBackground(g);
-        super.paintComponent(g);
-    }
-
-    @Override
     protected void paintBorder(Graphics g) {
         g.setColor(UIHelper.TRANSPARENT);
-    }
-
-    protected void buildBackground(Graphics g) {
-        if(isEven_) {
-            Graphics2D g2d = (Graphics2D) g.create();
-            g2d.setColor(getBackground());
-            g2d.fill(new Rectangle2D.Double(0, 0, getWidth(), getHeight()));
-            g2d.dispose();
-        }
     }
 }
