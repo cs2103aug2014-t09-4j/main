@@ -12,9 +12,10 @@ public class BakaTxtMain {
     private static final String MESSAGE_BYEBYE = "Bye bye!";
     private static final String MESSAGE_ENTER_COMMAND = "Please enter command: ";
     private static final String MESSAGE_ENTER_NUM = "Please enter the number that you wish to delete: ";
+    private static final String MESSAGE_INVALID_COMMAND = "The command entered is Invalid";
 
     enum CommandType {
-        ADD, DELETE, DISPLAY, CLEAR, EXIT;
+        ADD, DELETE, DISPLAY, CLEAR, DEFAULT, EXIT
     }
 
     private static Scanner _sc;
@@ -67,12 +68,17 @@ public class BakaTxtMain {
             input = "delete " + input;
         }
         // end demo code
-
         String command = _parser.getCommand(input);
-        CommandType commandType = CommandType.valueOf(command);
 
+        CommandType commandType;
+        try {
+            commandType = CommandType.valueOf(command);
+        } catch (IllegalArgumentException e) {
+            commandType = CommandType.DEFAULT;
+        }
         String output = null;
         switch (commandType) {
+
             case ADD :
                 Task toAdd = _parser.add(input);
                 boolean isAdded = _database.add(toAdd);
@@ -86,6 +92,7 @@ public class BakaTxtMain {
                 break;
 
             case DELETE :
+
                 // Ki Hyun's codes
                 // String titleName = _parser.delete(input);
                 // _displayTasks = _database.getTaskWithTitle(titleName);
@@ -151,10 +158,12 @@ public class BakaTxtMain {
                 System.exit(0);
                 break;
 
+            case DEFAULT :
             default :
+                break;
         }
-
         return output;
+
     }
 
     public LinkedList<Task> getAllTasks() {
