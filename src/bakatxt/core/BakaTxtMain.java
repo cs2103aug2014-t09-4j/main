@@ -12,7 +12,7 @@ public class BakaTxtMain {
     private static final String MESSAGE_BYEBYE = "Bye bye!";
     private static final String MESSAGE_ENTER_COMMAND = "Please enter command: ";
     private static final String MESSAGE_ENTER_NUM = "Please enter the number that you wish to delete: ";
-    private static final String MESSAGE_INVALID_COMMAND = "The command entered is Invalid";
+    private static final String MESSAGE_INVALID_COMMAND = "Invalid Command!";
 
     enum CommandType {
         ADD, DELETE, DISPLAY, CLEAR, DEFAULT, EXIT
@@ -75,6 +75,7 @@ public class BakaTxtMain {
             commandType = CommandType.valueOf(command);
         } catch (IllegalArgumentException e) {
             commandType = CommandType.DEFAULT;
+            System.out.println(MESSAGE_INVALID_COMMAND);
         }
         String output = null;
         switch (commandType) {
