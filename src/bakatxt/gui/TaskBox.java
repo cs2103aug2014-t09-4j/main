@@ -20,8 +20,9 @@ import bakatxt.core.Task;
  */
 abstract class TaskBox extends JPanel {
 
+    //TODO set min/max size
     protected static final boolean IS_LINE_WRAP = true;
-    private static final String AT = "@";
+    private static final String AT = " @";
 
     public TaskBox(Task task, Color backgroundColor) {
 

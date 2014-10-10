@@ -22,6 +22,7 @@ class BakaPanel extends JPanel {
 
     private static Input _input;
     private static Contents _contents;
+    //TODO do NOT completely destroy linkedlist
 
     public BakaPanel(BakaTxtMain session) {
 
