@@ -10,11 +10,6 @@ public class Task implements TaskInterface, Comparable<Task> {
     private static final String LINE_SEPARATOR = System
             .getProperty("line.separator");
 
-    private static final String MESSAGE_NO_DATE = "No date is specified for this task.";
-    private static final String MESSAGE_NO_TIME = "No time is specified for this task.";
-    private static final String MESSAGE_NO_VENUE = "No venue is specified for this task";
-    private static final String MESSAGE_NO_DESCRIPTION = "No description is specified for this task";
-
     private static final String TAG_OPEN = "[";
     private static final String TAG_CLOSE = "]";
     private static final String TAG_TITLE = TAG_OPEN + "TITLE" + TAG_CLOSE;
@@ -146,33 +141,21 @@ public class Task implements TaskInterface, Comparable<Task> {
 
     @Override
     public String getDate() {
-        if (_date == null) {
-            return MESSAGE_NO_DATE;
-        }
         return _date;
     }
 
     @Override
     public String getTime() {
-        if (_time == null) {
-            return MESSAGE_NO_TIME;
-        }
         return _time;
     }
 
     @Override
     public String getVenue() {
-        if (_venue == null) {
-            return MESSAGE_NO_VENUE;
-        }
         return _venue;
     }
 
     @Override
     public String getDescription() {
-        if (_description == null) {
-            return MESSAGE_NO_DESCRIPTION;
-        }
         return _description;
     }
 
