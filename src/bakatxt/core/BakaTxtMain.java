@@ -15,7 +15,7 @@ public class BakaTxtMain {
     private static final String MESSAGE_INVALID_COMMAND = "Invalid Command!";
 
     enum CommandType {
-        ADD, DELETE, DISPLAY, CLEAR, DEFAULT, EXIT
+        ADD, DELETE, DISPLAY, CLEAR, DEFAULT, EDIT, EXIT
     }
 
     private static Scanner _sc;
@@ -82,15 +82,7 @@ public class BakaTxtMain {
         switch (commandType) {
 
             case ADD :
-                Task toAdd = _parser.add(input);
-                boolean isAdded = _database.add(toAdd);
-                if (isAdded) {
-                    // TODO something when added
-                    output = toAdd.toDisplayString();
-                    _displayTasks = _database.getAllTasks();
-                } else {
-                    // TODO error in adding
-                }
+                output = addTask(input, output);
                 break;
 
             case DELETE :
@@ -113,45 +105,21 @@ public class BakaTxtMain {
                 // }
 
                 // ds kludge for demo
-                if (!withinDelete) {
-                    String titleName = _parser.getString(input).trim();
-                    _displayTasks = _database.getTaskWithTitle(titleName);
-                    // System.out.println(_displayTasks.toString());
-                    withinDelete = true;
-                    titleDelete = titleName;
-                    if (_displayTasks.size() == 0) {
-                        withinDelete = false;
-                        titleDelete = null;
-                    }
-                } else {
-                    _displayTasks = _database.getTaskWithTitle(titleDelete);
-                    // System.out.println(_displayTasks.toString());
-                    String index = _parser.getString(input).trim();
-                    int trueIndex = Integer.valueOf(index.trim());
-                    Task target = _displayTasks.get(trueIndex - 1);
-                    String targetTitle = target.getTitle();
-                    targetTitle = targetTitle.substring(
-                            targetTitle.indexOf(" ") + 1).trim();
-                    target.addTitle(targetTitle);
-                    // System.out.println(target);
-                    boolean deleted = _database.delete(target);
-                    // System.out.println(deleted);
-                    _displayTasks = _database.getAllTasks();
-                    withinDelete = false;
-                    titleDelete = null;
-                }
+                deleteTask(input);
                 // end demo code
 
                 break;
 
             case DISPLAY :
-                _displayTasks = _database.getAllTasks();
-                output = "Get from LinkedList";
+                output = displayTask();
                 break;
 
             case CLEAR :
-                _database.clear();
-                _displayTasks = _database.getAllTasks();
+                clearTask();
+                break;
+
+            case EDIT :
+                editTask();
                 break;
 
             case EXIT :
@@ -166,6 +134,65 @@ public class BakaTxtMain {
         }
         return output;
 
+    }
+
+    private static void clearTask() {
+        _database.clear();
+        _displayTasks = _database.getAllTasks();
+    }
+
+    private static String displayTask() {
+        String output;
+        _displayTasks = _database.getAllTasks();
+        output = "Get from LinkedList";
+        return output;
+    }
+
+    private static void deleteTask(String input) {
+        if (!withinDelete) {
+            String titleName = _parser.getString(input).trim();
+            _displayTasks = _database.getTaskWithTitle(titleName);
+            // System.out.println(_displayTasks.toString());
+            withinDelete = true;
+            titleDelete = titleName;
+            if (_displayTasks.size() == 0) {
+                withinDelete = false;
+                titleDelete = null;
+            }
+        } else {
+            _displayTasks = _database.getTaskWithTitle(titleDelete);
+            // System.out.println(_displayTasks.toString());
+            String index = _parser.getString(input).trim();
+            int trueIndex = Integer.valueOf(index.trim());
+            Task target = _displayTasks.get(trueIndex - 1);
+            String targetTitle = target.getTitle();
+            targetTitle = targetTitle.substring(targetTitle.indexOf(" ") + 1)
+                    .trim();
+            target.addTitle(targetTitle);
+            // System.out.println(target);
+            boolean deleted = _database.delete(target);
+            // System.out.println(deleted);
+            _displayTasks = _database.getAllTasks();
+            withinDelete = false;
+            titleDelete = null;
+        }
+    }
+
+    private static String addTask(String input, String output) {
+        Task toAdd = _parser.add(input);
+        boolean isAdded = _database.add(toAdd);
+        if (isAdded) {
+            // TODO something when added
+            output = toAdd.toDisplayString();
+            _displayTasks = _database.getAllTasks();
+        } else {
+            // TODO error in adding
+        }
+        return output;
+    }
+
+    private static void editTask() {
+        // TODO add lines in to make it work
     }
 
     public LinkedList<Task> getAllTasks() {
