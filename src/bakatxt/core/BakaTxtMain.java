@@ -31,7 +31,7 @@ public class BakaTxtMain {
     public BakaTxtMain() {
 
         _sc = new Scanner(System.in);
-        _parser = new BakaParser();
+        _parser = BakaParser.getInstance();
         _database = Database.getInstance();
         _displayTasks = _database.getAllTasks();
 

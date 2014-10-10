@@ -34,6 +34,7 @@ public class BakaParser implements BakaParserInterface {
     private static final String DATE_FORMAT_STANDARD = "yyyy-MM-dd";
     private static final String NUMBER_REGEX = "\\d{3,}?";
 
+    private static BakaParser _parser = null;
     private static boolean _isDate;
     private static boolean _isTime;
     private static boolean _isVenue;
@@ -53,6 +54,13 @@ public class BakaParser implements BakaParserInterface {
         _isTime = false;
         _isVenue = false;
         _isDescription = false;
+    }
+
+    public static BakaParser getInstance() {
+        if (_parser == null) {
+            _parser = new BakaParser();
+        }
+        return _parser;
     }
 
     @Override
