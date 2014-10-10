@@ -52,11 +52,12 @@ public class Database implements DatabaseInterface {
     private static Database _database = null;
 
     private Path _userFile;
-    private String _previousTask;
     private BufferedWriter _outputStream;
     private HashMap<String, LinkedList<Task>> _bakaMap;
     private TreeSet<String> _sortedKeys;
     private boolean _removeDone;
+    private String _lastCommand;
+    private Task _lastTask;
 
     public Database(String fileName) {
         setEnvironment(fileName);
@@ -77,7 +78,8 @@ public class Database implements DatabaseInterface {
 
     private void initializeVariables() {
         updateMemory();
-        _previousTask = null;
+        _lastCommand = null;
+        _lastTask = null;
         _removeDone = false;
     }
 
