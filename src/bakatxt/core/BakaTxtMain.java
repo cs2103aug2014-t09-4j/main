@@ -98,9 +98,7 @@ public class BakaTxtMain {
                 break;
 
             case EXIT :
-                System.out.println(MESSAGE_BYEBYE);
-                _database.close();
-                System.exit(0);
+                exitProg();
                 break;
 
             case DEFAULT :
@@ -109,6 +107,12 @@ public class BakaTxtMain {
         }
         return output;
 
+    }
+
+    private static void exitProg() {
+        System.out.println(MESSAGE_BYEBYE);
+        _database.close();
+        System.exit(0);
     }
 
     private static void clearTask() {
