@@ -348,23 +348,6 @@ public class Database implements DatabaseInterface {
                 }
             }
         }
-
-        // for demo purposes
-        if (result.size() > MAX_TASKS_TO_DISPLAY) {
-            LinkedList<Task> truncated = new LinkedList<Task>();
-            for (int i = 0; i < MAX_TASKS_TO_DISPLAY; i++) {
-                truncated.add(result.get(i));
-            }
-            result = truncated;
-        }
-        for (int i = 0; i < result.size(); i++) {
-            Task task = new Task(result.get(i).toString());
-            String taskTitle = task.getTitle();
-            task.addTitle(i + 1 + ". " + taskTitle);
-            result.set(i, task);
-        }
-        // end demo code
-
         return result;
     }
 
@@ -381,17 +364,6 @@ public class Database implements DatabaseInterface {
         } else if (_bakaMap.containsKey(key)) {
             result = _bakaMap.get(key);
         }
-
-        // for demo purposes
-        if (result.size() > MAX_TASKS_TO_DISPLAY) {
-            LinkedList<Task> truncated = new LinkedList<Task>();
-            for (int i = 0; i < MAX_TASKS_TO_DISPLAY; i++) {
-                truncated.add(result.get(i));
-            }
-            result = truncated;
-        }
-        // end demo code
-
         return result;
     }
 
@@ -405,17 +377,6 @@ public class Database implements DatabaseInterface {
             }
             all.addAll(_bakaMap.get(key));
         }
-
-        // for demo purposes
-        if (all.size() > MAX_TASKS_TO_DISPLAY) {
-            LinkedList<Task> truncated = new LinkedList<Task>();
-            for (int i = 0; i < MAX_TASKS_TO_DISPLAY; i++) {
-                truncated.add(all.get(i));
-            }
-            all = truncated;
-        }
-        // end demo code
-
         return all;
     }
 
