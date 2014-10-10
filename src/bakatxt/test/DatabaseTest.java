@@ -1,6 +1,5 @@
 package bakatxt.test;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -29,12 +28,13 @@ public class DatabaseTest {
         database.close();
     }
 
-    @Test
-    public void testSetFile() {
-        String expected = "File changed. Current filename is \"mytestfile2.txt\".";
-        String output = database.setFile("mytestfile2.txt");
-        assertEquals(expected, output);
-    }
+    // @Test
+    // public void testSetFile() {
+    // String expected =
+    // "File changed. Current filename is \"mytestfile2.txt\".";
+    // String output = database.setFile("mytestfile2.txt");
+    // assertEquals(expected, output);
+    // }
 
     @Test
     public void testAddAndDeleteTask() {

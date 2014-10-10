@@ -10,11 +10,6 @@ public class Task implements TaskInterface, Comparable<Task> {
     private static final String LINE_SEPARATOR = System
             .getProperty("line.separator");
 
-    private static final String MESSAGE_NO_DATE = "No date is specified for this task.";
-    private static final String MESSAGE_NO_TIME = "No time is specified for this task.";
-    private static final String MESSAGE_NO_VENUE = "No venue is specified for this task";
-    private static final String MESSAGE_NO_DESCRIPTION = "No description is specified for this task";
-
     private static final String TAG_OPEN = "[";
     private static final String TAG_CLOSE = "]";
     private static final String TAG_TITLE = TAG_OPEN + "TITLE" + TAG_CLOSE;
@@ -103,26 +98,31 @@ public class Task implements TaskInterface, Comparable<Task> {
         _title = title.toString().trim();
 
         int dateIndex = tokenizedInput.indexOf(TAG_DATE) + 1;
-        _date = tokenizedInput.get(dateIndex);
-
         int timeIndex = tokenizedInput.indexOf(TAG_TIME) + 1;
+        int venueIndex = tokenizedInput.indexOf(TAG_VENUE) + 1;
+        int doneIndex = tokenizedInput.indexOf(TAG_DONE) + 1;
+        int deletedIndex = tokenizedInput.indexOf(TAG_DELETED) + 1;
+        int descriptionIndex = tokenizedInput.indexOf(TAG_DESCRIPTION) + 1;
+
+        _date = tokenizedInput.get(dateIndex);
         _time = tokenizedInput.get(timeIndex);
 
-        int venueIndex = tokenizedInput.indexOf(TAG_VENUE) + 1;
-        _venue = tokenizedInput.get(venueIndex);
-
-        int doneIndex = tokenizedInput.indexOf(TAG_DONE) + 1;
+        for (int i = venueIndex; i < doneIndex - 1; i++) {
+            if (_venue == null) {
+                _venue = tokenizedInput.get(i);
+            } else {
+                _venue = _venue + SPACE + tokenizedInput.get(i);
+            }
+        }
         _isDone = tokenizedInput.get(doneIndex).equals(TAG_TRUE);
-
         _isFloating = _date.equals(_time);
-
-        int deletedIndex = tokenizedInput.indexOf(TAG_DELETED) + 1;
         _isDeleted = tokenizedInput.get(deletedIndex).equals(TAG_TRUE);
 
-        int descriptionIndex = tokenizedInput.indexOf(TAG_DESCRIPTION) + 1;
         if (descriptionIndex + 1 == tokenizedInput.size()) {
             if (tokenizedInput.get(descriptionIndex).equals(TAG_NULL)) {
                 _description = null;
+            } else {
+                _description = tokenizedInput.get(descriptionIndex);
             }
         } else {
             StringBuilder description = new StringBuilder();
@@ -141,33 +141,21 @@ public class Task implements TaskInterface, Comparable<Task> {
 
     @Override
     public String getDate() {
-        if (_date == null) {
-            return MESSAGE_NO_DATE;
-        }
         return _date;
     }
 
     @Override
     public String getTime() {
-        if (_time == null) {
-            return MESSAGE_NO_TIME;
-        }
         return _time;
     }
 
     @Override
     public String getVenue() {
-        if (_venue == null) {
-            return MESSAGE_NO_VENUE;
-        }
         return _venue;
     }
 
     @Override
     public String getDescription() {
-        if (_description == null) {
-            return MESSAGE_NO_DESCRIPTION;
-        }
         return _description;
     }
 
