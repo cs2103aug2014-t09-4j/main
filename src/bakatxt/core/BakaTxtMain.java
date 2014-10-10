@@ -156,9 +156,10 @@ public class BakaTxtMain {
 
     private static String addTask(String input, String output) {
         Task toAdd = _parser.add(input);
+        String content = _parser.getString(input);
         boolean isAdded = _database.add(toAdd);
         if (isAdded) {
-            // TODO something when added
+            System.out.println("Task" + " -" + content + " - " + "added");
             output = toAdd.toDisplayString();
             _displayTasks = _database.getAllTasks();
         } else {
