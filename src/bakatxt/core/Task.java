@@ -103,23 +103,26 @@ public class Task implements TaskInterface, Comparable<Task> {
         _title = title.toString().trim();
 
         int dateIndex = tokenizedInput.indexOf(TAG_DATE) + 1;
-        _date = tokenizedInput.get(dateIndex);
-
         int timeIndex = tokenizedInput.indexOf(TAG_TIME) + 1;
+        int venueIndex = tokenizedInput.indexOf(TAG_VENUE) + 1;
+        int doneIndex = tokenizedInput.indexOf(TAG_DONE) + 1;
+        int deletedIndex = tokenizedInput.indexOf(TAG_DELETED) + 1;
+        int descriptionIndex = tokenizedInput.indexOf(TAG_DESCRIPTION) + 1;
+
+        _date = tokenizedInput.get(dateIndex);
         _time = tokenizedInput.get(timeIndex);
 
-        int venueIndex = tokenizedInput.indexOf(TAG_VENUE) + 1;
-        _venue = tokenizedInput.get(venueIndex);
-
-        int doneIndex = tokenizedInput.indexOf(TAG_DONE) + 1;
+        for (int i = venueIndex; i < doneIndex - 1; i++) {
+            if (_venue == null) {
+                _venue = tokenizedInput.get(i);
+            } else {
+                _venue = _venue + SPACE + tokenizedInput.get(i);
+            }
+        }
         _isDone = tokenizedInput.get(doneIndex).equals(TAG_TRUE);
-
         _isFloating = _date.equals(_time);
-
-        int deletedIndex = tokenizedInput.indexOf(TAG_DELETED) + 1;
         _isDeleted = tokenizedInput.get(deletedIndex).equals(TAG_TRUE);
 
-        int descriptionIndex = tokenizedInput.indexOf(TAG_DESCRIPTION) + 1;
         if (descriptionIndex + 1 == tokenizedInput.size()) {
             if (tokenizedInput.get(descriptionIndex).equals(TAG_NULL)) {
                 _description = null;
