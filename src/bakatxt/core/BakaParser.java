@@ -43,10 +43,10 @@ public class BakaParser implements BakaParserInterface {
     private static String _time;
     private static String _venue;
     private static String _description;
-    private static String _originalDateFormat;
-    private static String _originalTimeFormat;
-    private static String _originalDigitDateFormat;
-    private static String _numbersThatCannotBeParsed;
+    private static String _inputDate;
+    private static String _inputTime;
+    private static String _inputDateThatCantParse;
+    private static String _inputNumThatCantParse;
 
     public BakaParser() {
         _isDate = false;
@@ -128,61 +128,59 @@ public class BakaParser implements BakaParserInterface {
     }
 
     private static String replaceDateTimeDescription(String input) {
-        String inputTemp = input;
+
         if (_isDate) {
-            inputTemp = inputTemp.replace(_originalDateFormat, " ");
-            if (_originalDigitDateFormat != null) {
-                inputTemp = inputTemp.replace(_originalDigitDateFormat, " ");
+            input = input.replace(_inputDate, STRING_SPACE);
+            if (_inputDateThatCantParse != null) {
+                input = input.replace(_inputDateThatCantParse, STRING_SPACE);
             }
         }
         if (_isTime) {
-            inputTemp = inputTemp.replace(_originalTimeFormat, " ");
+            input = input.replace(_inputTime, STRING_SPACE);
         }
         if (_isDescription) {
-            inputTemp = replaceDescription(inputTemp);
+            input = replaceDescription(input);
         }
-        return inputTemp;
+        return input;
     }
 
     private static String removePrepositions(String input) {
-        String inputTemp = input.replace("\\s+", "\\s");
-        String[] part = inputTemp.trim().split(STRING_SPACE);
+        input = input.replace("\\s+", "\\s");
+        String[] part = input.trim().split(STRING_SPACE);
 
         do {
             int lastIndex = part.length - 1;
             if (part[lastIndex].equals(STRING_AT)
                     || part[lastIndex].equals(STRING_ON)) {
-                inputTemp = inputTemp.substring(0, inputTemp.length() - 2)
-                        .trim();
+                input = input.substring(0, input.length() - 2).trim();
             }
-            part = inputTemp.split(STRING_SPACE);
+            part = input.split(STRING_SPACE);
         } while (part[part.length - 1].equals(STRING_AT)
                 || part[part.length - 1].equals(STRING_ON));
 
-        return inputTemp;
+        return input;
     }
 
     private static String replaceDescription(String input) {
         if (_isDescription) {
-            String descriptionTemp = "--" + _description;
-            input = input.replace(descriptionTemp, " ").trim();
+            String descriptionTemp = STRING_DASH + _description;
+            input = input.replace(descriptionTemp, STRING_SPACE).trim();
         }
         return input;
     }
 
     private static void identifyTitle(String input) {
-        String newInput = replaceDateTimeDescription(input);
-        String inputTemp = newInput;
+        input = replaceDateTimeDescription(input);
 
         if (_isVenue) {
             String venueTemp = STRING_ADD + _venue;
-            inputTemp = inputTemp.replace(venueTemp, STRING_SPACE);
+            input = input.replace(venueTemp, STRING_SPACE);
         }
-        inputTemp = inputTemp.trim();
-        if (inputTemp.isEmpty()) {
-            _title = inputTemp;
+        input = input.trim();
+        if (input.isEmpty()) {
+            _title = input;
         } else {
-            _title = removePrepositions(inputTemp).trim();
+            _title = removePrepositions(input).trim();
         }
     }
 
@@ -193,11 +191,11 @@ public class BakaParser implements BakaParserInterface {
     }
 
     private static void identifyVenue(String input) {
-        String newInput = replaceDateTimeDescription(input);
-        int index = newInput.indexOf(STRING_ADD) + 1;
+        input = replaceDateTimeDescription(input);
+        int index = input.indexOf(STRING_ADD) + 1;
         _isVenue = true;
-        newInput = newInput.substring(index).trim();
-        _venue = removePrepositions(newInput).trim();
+        input = input.substring(index).trim();
+        _venue = removePrepositions(input).trim();
     }
 
     private static void identifyDate(String input) {
@@ -232,25 +230,25 @@ public class BakaParser implements BakaParserInterface {
                             + dateFragment[0];
 
                     input = input.replace(originalFragment, newDate);
-                    _originalDigitDateFormat = originalFragment;
+                    _inputDateThatCantParse = originalFragment;
                 }
 
                 if (input.contains("tomorrow")) {
-                    _originalDigitDateFormat = "tomorrow";
+                    _inputDateThatCantParse = "tomorrow";
                 }
                 if (input.contains("today")) {
-                    _originalDigitDateFormat = "today";
+                    _inputDateThatCantParse = "today";
                 }
 
                 if (messageFragment.matches(NUMBER_REGEX)) {
-                    _numbersThatCannotBeParsed = messageFragment;
-                    input = input.replace(messageFragment, STRING_SPACE);
+                    _inputNumThatCantParse = originalFragment;
+                    input = input.replace(originalFragment, STRING_SPACE);
                 }
             }
 
             List<DateGroup> dateGroup = parser.parse(input);
             Date date = dateGroup.get(0).getDates().get(0);
-            _originalDateFormat = dateGroup.get(0).getText();
+            _inputDate = dateGroup.get(0).getText();
             SimpleDateFormat DATE_FORMAT = new SimpleDateFormat(
                     DATE_FORMAT_STANDARD);
             String output = DATE_FORMAT.format(date);
@@ -263,12 +261,12 @@ public class BakaParser implements BakaParserInterface {
 
     private static void identifyTime(String input) {
         try {
-            if (_originalDigitDateFormat != null) {
-                input = input.replace(_originalDigitDateFormat, STRING_SPACE);
+            if (_inputDateThatCantParse != null) {
+                input = input.replace(_inputDateThatCantParse, STRING_SPACE);
             }
 
-            if (_numbersThatCannotBeParsed != null) {
-                input = input.replace(_numbersThatCannotBeParsed, STRING_SPACE);
+            if (_inputNumThatCantParse != null) {
+                input = input.replace(_inputNumThatCantParse, STRING_SPACE);
             }
 
             Parser parser = new Parser();
@@ -283,7 +281,7 @@ public class BakaParser implements BakaParserInterface {
                 timeStart = dateGroup.get(0).getDates().get(0);
                 timeEnd = dateGroup.get(0).getDates().get(1);
             }
-            _originalTimeFormat = dateGroup.get(0).getText();
+            _inputTime = dateGroup.get(0).getText();
             SimpleDateFormat TIME_FORMAT = new SimpleDateFormat("HHmm");
             String outputStart = TIME_FORMAT.format(timeStart);
             if (timeEnd != null) {
