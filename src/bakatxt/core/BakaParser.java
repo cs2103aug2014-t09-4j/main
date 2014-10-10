@@ -33,6 +33,7 @@ public class BakaParser implements BakaParserInterface {
     private static final String DATE_FORMAT_DIVIDER_REGEX = "[/-]";
     private static final String DATE_FORMAT_STANDARD = "yyyy-MM-dd";
     private static final String NUMBER_REGEX = "\\d{3,}?";
+    private static final String DISABLE_PARSING_REGEX = "(([0-2]\\d[0-5]\\d)|(\\d{1,2}))[a-z]";
 
     private static BakaParser _parser = null;
     private static boolean _isDate;
@@ -47,7 +48,7 @@ public class BakaParser implements BakaParserInterface {
     private static String _inputDate;
     private static String _inputTime;
     private static String _inputDateThatCantParse;
-    private static String _inputNumThatCantParse;
+    private static String _inputThatCantParse;
 
     public BakaParser() {
         _isDate = false;
@@ -248,8 +249,9 @@ public class BakaParser implements BakaParserInterface {
                     _inputDateThatCantParse = "today";
                 }
 
-                if (messageFragment.matches(NUMBER_REGEX)) {
-                    _inputNumThatCantParse = originalFragment;
+                if (messageFragment.matches(NUMBER_REGEX)
+                        || messageFragment.matches(DISABLE_PARSING_REGEX)) {
+                    _inputThatCantParse = originalFragment;
                     input = input.replace(originalFragment, STRING_SPACE);
                 }
             }
@@ -273,8 +275,8 @@ public class BakaParser implements BakaParserInterface {
                 input = input.replace(_inputDateThatCantParse, STRING_SPACE);
             }
 
-            if (_inputNumThatCantParse != null) {
-                input = input.replace(_inputNumThatCantParse, STRING_SPACE);
+            if (_inputThatCantParse != null) {
+                input = input.replace(_inputThatCantParse, STRING_SPACE);
             }
 
             Parser parser = new Parser();
