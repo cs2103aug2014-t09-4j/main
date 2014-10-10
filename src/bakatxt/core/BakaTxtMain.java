@@ -69,14 +69,15 @@ public class BakaTxtMain {
         }
         // end demo code
         String command = _parser.getCommand(input);
-
         CommandType commandType;
+
         try {
             commandType = CommandType.valueOf(command);
         } catch (IllegalArgumentException e) {
             commandType = CommandType.DEFAULT;
             System.out.println(MESSAGE_INVALID_COMMAND);
         }
+
         String output = null;
         switch (commandType) {
 
@@ -113,7 +114,7 @@ public class BakaTxtMain {
 
                 // ds kludge for demo
                 if (!withinDelete) {
-                    String titleName = _parser.delete(input).trim();
+                    String titleName = _parser.getString(input).trim();
                     _displayTasks = _database.getTaskWithTitle(titleName);
                     // System.out.println(_displayTasks.toString());
                     withinDelete = true;
@@ -125,7 +126,7 @@ public class BakaTxtMain {
                 } else {
                     _displayTasks = _database.getTaskWithTitle(titleDelete);
                     // System.out.println(_displayTasks.toString());
-                    String index = _parser.delete(input).trim();
+                    String index = _parser.getString(input).trim();
                     int trueIndex = Integer.valueOf(index.trim());
                     Task target = _displayTasks.get(trueIndex - 1);
                     String targetTitle = target.getTitle();

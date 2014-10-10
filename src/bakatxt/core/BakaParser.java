@@ -298,7 +298,7 @@ public class BakaParser implements BakaParserInterface {
     }
 
     @Override
-    public String delete(String input) {
+    public String getString(String input) {
         // TODO remove first word and return the title
         int index = input.indexOf(STRING_SPACE);
         input = input.substring(index);
