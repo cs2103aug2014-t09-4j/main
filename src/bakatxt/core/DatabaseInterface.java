@@ -11,14 +11,6 @@ public interface DatabaseInterface {
 
     public Task getPrevious();
 
-    public String getTotalCount();
-
-    public String getDoneCount();
-
-    public String getUndoneCount();
-
-    public void resetCounters();
-
     public boolean add(Task task);
 
     public boolean delete(Task task);
