@@ -60,6 +60,7 @@ public class Database implements DatabaseInterface {
     private static final OpenOption[] OPEN_OPTIONS = {
             StandardOpenOption.CREATE, StandardOpenOption.APPEND };
 
+    private static Database _database = null;
     private static BigInteger taskCount;
     private static BigInteger taskDone;
 
@@ -72,6 +73,13 @@ public class Database implements DatabaseInterface {
 
     public Database(String fileName) {
         setEnvironment(fileName);
+    }
+
+    public static Database getInstance() {
+        if (_database == null) {
+            _database = new Database("mytestfile.txt");
+        }
+        return _database;
     }
 
     private void setEnvironment(String fileName) {

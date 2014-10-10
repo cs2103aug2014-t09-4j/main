@@ -21,7 +21,6 @@ public class BakaTxtMain {
     private static Scanner _sc;
     private static BakaParser _parser;
     private static Database _database;
-    private static String _filename;
     private static LinkedList<Task> _displayTasks;
 
     // ds kludge for demo
@@ -31,12 +30,10 @@ public class BakaTxtMain {
     // end demo code
 
     public BakaTxtMain() {
-        // TODO this is kludge code - to be removed
-        _filename = "mytestfile.txt";
 
         _sc = new Scanner(System.in);
         _parser = new BakaParser();
-        _database = new Database(_filename);
+        _database = Database.getInstance();
         _displayTasks = _database.getAllTasks();
 
         // ds kludge for demo
