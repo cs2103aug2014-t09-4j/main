@@ -86,7 +86,7 @@ public class BakaTxtMain {
                 break;
 
             case DISPLAY :
-                output = displayTask();
+                displayTask();
                 break;
 
             case CLEAR :
@@ -116,11 +116,8 @@ public class BakaTxtMain {
         _displayTasks = _database.getAllTasks();
     }
 
-    private static String displayTask() {
-        String output;
+    private static void displayTask() {
         _displayTasks = _database.getAllTasks();
-        output = "Get from LinkedList";
-        return output;
     }
 
     private static void deleteTask(String input) {
