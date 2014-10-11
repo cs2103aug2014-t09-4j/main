@@ -14,7 +14,7 @@ import bakatxt.core.Task;
  * This box is specifically for a bottom most box.
  *
  */
-class FinalTaskBox extends TaskBox {
+final class FinalTaskBox extends TaskBox {
 
     public FinalTaskBox(Task task, Color backgroundColor) {
         super(task, backgroundColor);

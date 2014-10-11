@@ -12,7 +12,7 @@ import bakatxt.core.Task;
  * This box is specifically for box that is by itself.
  *
  */
-class OnlyTaskBox extends TaskBox {
+final class OnlyTaskBox extends TaskBox {
 
     public OnlyTaskBox(Task task, Color backgroundColor) {
         super(task, backgroundColor);

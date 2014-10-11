@@ -14,7 +14,7 @@ import bakatxt.core.Task;
  * This box is specifically for a box in the middle.
  *
  */
-class MiddleTaskBox extends TaskBox {
+final class MiddleTaskBox extends TaskBox {
 
     public MiddleTaskBox(Task task, Color backgroundColor) {
         super(task, backgroundColor);
