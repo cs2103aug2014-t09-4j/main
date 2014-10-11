@@ -2,6 +2,7 @@
 
 package bakatxt.gui;
 
+import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -20,9 +21,11 @@ import bakatxt.core.Task;
  */
 
 // TODO merge in TaskItems class
+// TODO comments
 class Contents extends JPanel {
 
     private static GridBagConstraints _layout = new GridBagConstraints();
+    private static boolean _isEven = true;
 
     // TODO should not need to print this, rather, take the thing to be printed from logic
     private static final String MESSAGE_WELCOME = "Welcome to BakaTXT! For help "
@@ -36,7 +39,8 @@ class Contents extends JPanel {
         setOpaque(false);
         setBackground(UIHelper.TRANSPARENT);
         setLayout(new GridBagLayout());
-        updateContents(tasks);
+        LinkedList<Task> tempTasks = tasks;
+        updateContents(tempTasks);
     }
 
     /**
@@ -52,8 +56,11 @@ class Contents extends JPanel {
         try {
             addTasksByDate(tasks);
         } catch (NullPointerException e) {
+            setNoEvents();
+            /*
             setDateAndDay(setDayAndDateText(""), DATE_AND_TASKS_START_POSITION);
             setEvents(new TaskItems(null), DATE_AND_TASKS_START_POSITION + 1);
+            */
         }
     }
 
@@ -64,18 +71,14 @@ class Contents extends JPanel {
      */
     private void addTasksByDate(LinkedList<Task> tasks) {
         String currentDate;
-        TaskItems taskItems;
-        int i = DATE_AND_TASKS_START_POSITION;
+        int y = DATE_AND_TASKS_START_POSITION;
 
         while(tasks.peek() != null) {
 
             currentDate = tasks.peek().getDate();
-            taskItems = new TaskItems(getAllTasksInOneDate(tasks));
 
-            setDateAndDay(setDayAndDateText(currentDate), i);
-            setEvents(taskItems, i + 1);
-
-            i += 2;
+            setDateAndDay(setDayAndDateText(currentDate), y);
+            y = addCurrentEvents(getAllTasksInOneDate(tasks), y + 1);
         }
     }
 
@@ -113,6 +116,38 @@ class Contents extends JPanel {
         return tasks.peek().getDate().equals(currentDate);
     }
 
+    private int addCurrentEvents(LinkedList<Task> tasks, int y) {
+
+        if (tasks.size() == 1) {
+            setEvents(new OnlyTaskBox(tasks.pop(), alternatingColors()), y);
+            y++;
+
+        } else {
+            setEvents(new FirstTaskBox(tasks.pop(), alternatingColors()), y);
+            y++;
+            while(true) {
+
+                if (tasks.size() == 1) {
+                    setEvents(new FinalTaskBox(tasks.pop(), alternatingColors()), y);
+                    y++;
+                    break;
+                }
+                setEvents(new MiddleTaskBox(tasks.pop(), alternatingColors()), y);
+                y++;
+            }
+        }
+
+    return y;
+    }
+
+    private static Color alternatingColors() {
+        _isEven = !_isEven;
+        if (_isEven) {
+            return UIHelper.GRAY_BLACK;
+        }
+        return UIHelper.GRAY_DARK;
+    }
+
     /**
      * @param alertMessage is the message to put in the layout specified
      */
@@ -141,14 +176,15 @@ class Contents extends JPanel {
         _layout.gridy = y;
         _layout.gridheight = 1;
         _layout.gridwidth = 1;
+        _layout.insets = new Insets(UIHelper.BORDER, 0, UIHelper.BORDER, 0);
         this.add(dateAndDay, _layout);
     }
 
     /**
-     * @param tasks is the message to put in the layout specified
+     * @param task is the message to put in the layout specified
      * @param y is the vertical order whereby it is placed
      */
-    private void setEvents(TaskItems tasks, int y) {
+    private void setEvents(TaskBox task, int y) {
         _layout.fill = GridBagConstraints.BOTH;
         _layout.anchor = GridBagConstraints.FIRST_LINE_START;
         _layout.weightx = 1.0;
@@ -157,8 +193,21 @@ class Contents extends JPanel {
         _layout.gridy = y;
         _layout.gridheight = 1;
         _layout.gridwidth = GridBagConstraints.REMAINDER;
-        _layout.insets = new Insets(UIHelper.WINDOW_BORDER, 0, 0, 0);
-        this.add(tasks, _layout);
+        _layout.insets = new Insets(0, 0, 0, 0);
+        this.add(task, _layout);
+    }
+
+    //TODO probably a better method to do this
+    private void setNoEvents() {
+        FormattedText task = new FormattedText("You have no events!", UIHelper.PRESET_TYPE_TITLE,
+                UIHelper.PRESET_SIZE_TITLE, UIHelper.PRESET_COLOR_TITLE);
+        _layout.fill = GridBagConstraints.NONE;
+        _layout.anchor = GridBagConstraints.CENTER;
+        _layout.weightx = 1.0;
+        _layout.weighty = 1.0;
+        _layout.gridx = 0;
+        _layout.gridy = 0;
+        this.add(task, _layout);
     }
 
     /**
