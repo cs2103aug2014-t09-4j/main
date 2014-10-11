@@ -94,7 +94,7 @@ public class BakaTxtMain {
                 break;
 
             case EDIT :
-                editTask();
+                editTask(input);
                 break;
 
             case EXIT :
@@ -166,8 +166,23 @@ public class BakaTxtMain {
         return output;
     }
 
-    private static void editTask() {
-        // TODO add lines in to make it work
+    private static void editTask(String input) {
+        String index = _parser.getString(input).trim();
+        int trueIndex = Integer.valueOf(index.trim());
+        _displayTasks = _database.getAllTasks();
+        Task target = _displayTasks.get(trueIndex - 1);
+        String newContent = BakaUI.getInput();
+        target.setTitle(newContent);
+        newContent = BakaUI.getInput();
+        target.setVenue(newContent);
+        newContent = BakaUI.getInput();
+        target.setDate(newContent);
+        newContent = BakaUI.getInput();
+        target.setTime(newContent);
+        newContent = BakaUI.getInput();
+        target.setDescription(newContent);
+
+        BakaUI.updateUI();
     }
 
     public LinkedList<Task> getAllTasks() {
