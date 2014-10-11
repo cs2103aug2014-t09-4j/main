@@ -80,7 +80,7 @@ public class BakaUI extends JFrame {
         setContentPane(_baka);
         pack();
         setLocationRelativeTo(null); // centers the window on screen
-        setAlwaysOnTop(true);
+        setAlwaysOnTop(false);
         setTitle("Baka TX");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
