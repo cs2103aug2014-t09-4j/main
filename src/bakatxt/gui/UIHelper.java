@@ -18,7 +18,7 @@ class UIHelper {
     protected static final int WINDOW_X = WINDOW_SCALE;
     protected static final int WINDOW_Y = (int)(WINDOW_RATIO * WINDOW_SCALE);
     protected static final int WINDOW_ROUNDNESS = 20;
-    protected static final int WINDOW_BORDER = 4; // leave as half of actual border
+    protected static final int BORDER = 4; // leave as half of actual border
 
     /* to be implemented?
     protected static final List<String> SUGGESTIONS_MAIN = new ArrayList<>(asList(
