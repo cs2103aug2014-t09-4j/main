@@ -30,17 +30,16 @@ class FirstTaskBox extends TaskBox {
         super.paintComponent(g);
     }
 
-    // TODO fix topRounded method
     class TopRounded extends Path2D.Double {
 
         public TopRounded(double width, double height) {
-            moveTo(0, 0);
-            lineTo(width, 0);
-            lineTo(width, height - UIHelper.WINDOW_ROUNDNESS);
-            curveTo(width, height, width, height, width - UIHelper.WINDOW_ROUNDNESS, height);
-            lineTo(UIHelper.WINDOW_ROUNDNESS, height);
-            curveTo(0, height, 0, height, 0, height - UIHelper.WINDOW_ROUNDNESS);
-            lineTo(0, 0);
+            moveTo(0, height);
+            lineTo(0, UIHelper.WINDOW_ROUNDNESS);
+            curveTo(0, 0, 0, 0, UIHelper.WINDOW_ROUNDNESS, 0);
+            lineTo(width - UIHelper.WINDOW_ROUNDNESS, 0);
+            curveTo(width, 0, width, 0, width, UIHelper.WINDOW_ROUNDNESS);
+            lineTo(width, height);
+            lineTo(0, height);
             closePath();
         }
     }
