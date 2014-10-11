@@ -79,8 +79,8 @@ class BakaPanel extends JPanel {
         layout.weighty = 0.03;
         layout.gridx = 0;
         layout.gridy = 0;
-        layout.insets = new Insets(2 * UIHelper.WINDOW_BORDER, 2 * UIHelper.WINDOW_BORDER,
-                UIHelper.WINDOW_BORDER, 2 * UIHelper.WINDOW_BORDER);
+        layout.insets = new Insets(2 * UIHelper.BORDER, 2 * UIHelper.BORDER,
+                UIHelper.BORDER, 2 * UIHelper.BORDER);
         this.add(_input, layout);
     }
 
@@ -96,8 +96,8 @@ class BakaPanel extends JPanel {
         layout.weighty = 1.0;
         layout.gridx = 0;
         layout.gridy = 1;
-        layout.insets = new Insets(0, 2 * UIHelper.WINDOW_BORDER,
-                2 * UIHelper.WINDOW_BORDER, 2 * UIHelper.WINDOW_BORDER);
+        layout.insets = new Insets(0, 2 * UIHelper.BORDER,
+                2 * UIHelper.BORDER, 2 * UIHelper.BORDER);
         this.add(_contents, layout);
     }
 

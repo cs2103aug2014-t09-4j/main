@@ -35,9 +35,9 @@ abstract class TaskBox extends JPanel {
     protected void addComponentsToPane(Task task) {
         GridBagConstraints layout = new GridBagConstraints();
 
-        setTaskAndLocation(layout, _task.getTitle(), _task.getVenue());
-        setTimeStart(layout, _task.getTime());
-        setDescription(layout, _task.getDescription());
+        setTaskAndLocation(layout, task.getTitle(), task.getVenue());
+        setTimeStart(layout, task.getTime());
+        setDescription(layout, task.getDescription());
         setTimeEnd(layout);
     }
 
@@ -53,7 +53,7 @@ abstract class TaskBox extends JPanel {
         layout.gridy = 0;
         layout.gridwidth = 1;
         layout.gridheight = 1;
-        layout.insets = new Insets(0, 3 * UIHelper.WINDOW_BORDER, 0, 0);
+        layout.insets = new Insets(0, 3 * UIHelper.BORDER, 0, 0);
         this.add(task, layout);
     }
 
@@ -68,7 +68,7 @@ abstract class TaskBox extends JPanel {
         layout.gridy = 1;
         layout.gridwidth = 1;
         layout.gridheight = 1;
-        layout.insets = new Insets(0, 4 * UIHelper.WINDOW_BORDER, 0, 0);
+        layout.insets = new Insets(0, 4 * UIHelper.BORDER, 0, 0);
         this.add(description, layout);
     }
 
@@ -83,7 +83,7 @@ abstract class TaskBox extends JPanel {
         layout.gridy = 0;
         layout.gridwidth = 1;
         layout.gridheight = 1;
-        layout.insets = new Insets(3 * UIHelper.WINDOW_BORDER, 0, 0, 2 * UIHelper.WINDOW_BORDER);
+        layout.insets = new Insets(3 * UIHelper.BORDER, 0, 0, 2 * UIHelper.BORDER);
         this.add(time, layout);
     }
 
@@ -99,7 +99,7 @@ abstract class TaskBox extends JPanel {
         layout.gridy = 1;
         layout.gridwidth = 1;
         layout.gridheight = 1;
-        layout.insets = new Insets(0, 0, 3 * UIHelper.WINDOW_BORDER, 2 * UIHelper.WINDOW_BORDER);
+        layout.insets = new Insets(0, 0, 3 * UIHelper.BORDER, 2 * UIHelper.BORDER);
         this.add(time, layout);
     }
 
