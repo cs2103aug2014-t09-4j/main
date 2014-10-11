@@ -39,8 +39,8 @@ public class DatabaseTest {
     @Test
     public void testAddAndDeleteTask() {
         Task task = new Task("helloWorld!");
-        task.addDate("2014-05-02");
-        task.addTime("2230");
+        task.setDate("2014-05-02");
+        task.setTime("2230");
         task.setDone(true);
         assertTrue(database.add(task));
         assertTrue(database.delete(task));
@@ -49,8 +49,8 @@ public class DatabaseTest {
     @Test
     public void testDeleteTaskFalse() {
         Task task = new Task("helloWorld!    ");
-        task.addDate("2014-05-02");
-        task.addTime("2230");
+        task.setDate("2014-05-02");
+        task.setTime("2230");
         task.setDone(true);
         assertFalse(database.delete(task));
     }
@@ -72,10 +72,10 @@ public class DatabaseTest {
     @Test
     public void testGetTasks() {
         Task task1 = new Task("task1");
-        task1.addDate("2014-03-02");
+        task1.setDate("2014-03-02");
         database.add(task1);
         Task task2 = new Task("task2");
-        task2.addDate("2014-12-14");
+        task2.setDate("2014-12-14");
         database.add(task2);
         Task task3 = new Task("task3");
         task3.setDone(true);
@@ -102,7 +102,7 @@ public class DatabaseTest {
                             + ((month < 10) ? "-0" + month : "-" + month)
                             + ((day < 10) ? "-0" + day : "-" + day);
                     Task task = new Task(date);
-                    task.addDate(date);
+                    task.setDate(date);
                     database.add(task);
                 }
             }

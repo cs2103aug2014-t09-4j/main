@@ -142,7 +142,7 @@ public class BakaTxtMain {
             int trueIndex = Integer.valueOf(index.trim());
             Task target = _displayTasks.get(trueIndex - 1);
             String targetTitle = target.getTitle();
-            target.addTitle(targetTitle);
+            target.setTitle(targetTitle);
             // System.out.println(target);
             boolean deleted = _database.delete(target);
             // System.out.println(deleted);

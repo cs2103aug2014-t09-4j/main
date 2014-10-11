@@ -117,10 +117,10 @@ public class BakaParser implements BakaParserInterface {
         }
 
         Task task = new Task(_title);
-        task.addDate(_date);
-        task.addTime(_time);
-        task.addVenue(_venue);
-        task.addDescription(_description);
+        task.setDate(_date);
+        task.setTime(_time);
+        task.setVenue(_venue);
+        task.setDescription(_description);
         if (!_isDate && !_isTime) {
             task.setFloating(true);
         }
