@@ -54,7 +54,7 @@ class TaskBox extends JPanel {
 
     private void setTask(GridBagConstraints layout, String titleText) {
         FormattedText task = new FormattedText(titleText, UIHelper.PRESET_TYPE_TITLE,
-                UIHelper.PRESET_SIZE_TITLE, UIHelper.PRESET_COLOR_TITLE);
+                UIHelper.PRESET_SIZE_TITLE, UIHelper.PRESET_COLOR_TITLE, IS_LINE_WRAP);
         layout.fill = GridBagConstraints.NONE;
         layout.anchor = GridBagConstraints.LINE_START;
         layout.weightx = 0.0;
