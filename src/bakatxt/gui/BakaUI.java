@@ -83,5 +83,9 @@ public class BakaUI extends JFrame {
         setAlwaysOnTop(false);
         setTitle("Baka TX");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
+
+        MouseActions mouseActions = new MouseActions(_baka);
+        _baka.addMouseListener(mouseActions);
+        _baka.addMouseMotionListener(mouseActions);
     }
 }
