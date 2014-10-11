@@ -19,12 +19,14 @@ import bakatxt.core.BakaTxtMain;
 public class BakaUI extends JFrame {
 
     private static BakaPanel _baka;
+    private static BakaTxtMain _thisSession;
 
     /**
      * @param thisSession refers to the logic module we are interacting with
      */
     public BakaUI(BakaTxtMain thisSession) {
-        initUI(thisSession);
+        _thisSession = thisSession;
+        initUI();
     }
 
     /**
@@ -37,7 +39,34 @@ public class BakaUI extends JFrame {
                 BakaTxtMain thisSession = new BakaTxtMain();
                 BakaUI baka = new BakaUI(thisSession);
                 baka.setVisible(true);
-                processInput(thisSession);
+                processInput();
+            }
+        });
+    }
+
+    //TODO remove our dependency for this method
+    /**
+     * This method listens for input from the GUI and does the following when the
+     * return key is pressed:
+     *
+     * 1. Highlight all the text in the input box (to make it trivial for the user
+     *    to input new commands)
+     * 2. Passes the input to the logic module to process it
+     * 3. Lastly, updates the contents of the GUI to fit the command
+     *
+     * @deprecated use the getInput and updateUI methods instead at the logic module
+     */
+    @Deprecated
+    public static void processInput() {
+
+        Input input = _baka.getInput();
+        input.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                input.selectAll();
+                BakaTxtMain.executeCommand(input.getText());
+                _baka.setContents(_thisSession);
             }
         });
     }
@@ -49,11 +78,10 @@ public class BakaUI extends JFrame {
      * 1. Highlight all the text in the input box (to make it trivial for the user
      *    to input new commands)
      * 2. Passes the input to the logic module to process it
-     * 3. Lastly, updates the contents of the GUI to fit the command
      *
-     * @param thisSession refers to the logic module we are interacting with
+     *@return the text in the input box
      */
-    public static void processInput(BakaTxtMain thisSession) {
+    public static String getInput() {
 
         Input input = _baka.getInput();
         input.addActionListener(new ActionListener() {
@@ -61,20 +89,26 @@ public class BakaUI extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 input.selectAll();
-                BakaTxtMain.executeCommand(input.getText());
-                _baka.setContents(thisSession);
             }
         });
+
+        return input.getText();
+    }
+
+    /**
+     * update the contents of the GUI
+     */
+    public static void updateUI() {
+        _baka.setContents(_thisSession);
     }
 
     /**
      * This method draws the BakaPanel and sets the window as transparent, centered,
      * unmovable, and always on top.
      *
-     * @param thisSession refers to the logic module we are interacting with
      */
-    private void initUI(BakaTxtMain thisSession) {
-        _baka = new BakaPanel(thisSession);
+    private void initUI() {
+        _baka = new BakaPanel(_thisSession);
         setUndecorated(true);
         setBackground(UIHelper.TRANSPARENT);
         setContentPane(_baka);
