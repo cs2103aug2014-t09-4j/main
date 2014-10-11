@@ -1,4 +1,5 @@
 package bakatxt.core;
+
 // Interface for a Task object
 
 public interface TaskInterface {
@@ -12,15 +13,15 @@ public interface TaskInterface {
 
     public String getDescription();
 
-    public String addTitle(String input);
+    public String setTitle(String input);
 
-    public String addDate(String input);
+    public String setDate(String input);
 
-    public String addTime(String input);
+    public String setTime(String input);
 
-    public String addVenue(String input);
+    public String setVenue(String input);
 
-    public String addDescription(String input);
+    public String setDescription(String input);
 
     public boolean isDone();
 

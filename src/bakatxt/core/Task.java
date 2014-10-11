@@ -160,13 +160,13 @@ public class Task implements TaskInterface, Comparable<Task> {
     }
 
     @Override
-    public String addTitle(String input) {
+    public String setTitle(String input) {
         _title = input.trim();
         return _title;
     }
 
     @Override
-    public String addDate(String input) {
+    public String setDate(String input) {
         if (input == null) {
             _date = null;
         } else {
@@ -177,7 +177,7 @@ public class Task implements TaskInterface, Comparable<Task> {
     }
 
     @Override
-    public String addTime(String input) {
+    public String setTime(String input) {
         if (input == null) {
             _time = null;
         } else {
@@ -188,7 +188,7 @@ public class Task implements TaskInterface, Comparable<Task> {
     }
 
     @Override
-    public String addVenue(String input) {
+    public String setVenue(String input) {
         if (input == null) {
             _venue = null;
         } else {
@@ -198,7 +198,7 @@ public class Task implements TaskInterface, Comparable<Task> {
     }
 
     @Override
-    public String addDescription(String input) {
+    public String setDescription(String input) {
         if (input == null) {
             _description = null;
         } else {

@@ -13,19 +13,15 @@ public class BakaParser implements BakaParserInterface {
     // "Invalid add command, please add a title!";
     // private static final String MESSAGE_EMPTY_FILE = "The file is empty!";
 
-    private static final String STRING_NEWLINE = System
-            .getProperty("line.separator");
     private static final String STRING_EMPTY = "";
     private static final String STRING_SPACE = " ";
     private static final String STRING_ADD = "@";
     private static final String STRING_DASH = "--";
-    private static final String STRING_DOTS = "...";
     private static final String STRING_AT = "at";
     private static final String STRING_ON = "on";
     private static final String STRING_DASH_DATE = "-";
     private static final String STRING_YEAR = "2014";
     private static final String STRING_YEAR_FRAG = "20";
-    private static final int MAX_TITLE_LENGTH = 30;
 
     private static final String DATE_FORMAT_DDMMYY_REGEX = "(0?[12]?[0-9]|3[01])[/-](0?[1-9]|1[012])[/-](\\d\\d)";
     private static final String DATE_FORMAT_DDMMYYYY_REGEX = "(0?[12]?[0-9]|3[01])[/-](0?[1-9]|1[012])[/-]((19|2[01])\\d\\d)";
@@ -96,31 +92,11 @@ public class BakaParser implements BakaParserInterface {
             // TODO return MESSAGE_ADD_NO_TITLE;
         }
 
-        if (_title.length() > MAX_TITLE_LENGTH) {
-            String truncatedBack = _title.substring(MAX_TITLE_LENGTH);
-            String truncatedFront = _title.substring(0, MAX_TITLE_LENGTH);
-
-            if (truncatedFront.lastIndexOf(STRING_SPACE) < MAX_TITLE_LENGTH - 1) {
-                int indexToAdd = truncatedBack.indexOf(STRING_SPACE);
-                String excess = truncatedBack.substring(0, indexToAdd);
-                truncatedFront = truncatedFront + excess;
-                truncatedBack = truncatedBack.substring(indexToAdd).trim();
-            }
-
-            if (_isDescription) {
-                _description = STRING_DOTS + STRING_SPACE + truncatedBack
-                        + STRING_NEWLINE + STRING_NEWLINE + _description;
-            } else {
-                _description = STRING_DOTS + STRING_SPACE + truncatedBack;
-            }
-            _title = truncatedFront.trim() + STRING_DOTS;
-        }
-
         Task task = new Task(_title);
-        task.addDate(_date);
-        task.addTime(_time);
-        task.addVenue(_venue);
-        task.addDescription(_description);
+        task.setDate(_date);
+        task.setTime(_time);
+        task.setVenue(_venue);
+        task.setDescription(_description);
         if (!_isDate && !_isTime) {
             task.setFloating(true);
         }

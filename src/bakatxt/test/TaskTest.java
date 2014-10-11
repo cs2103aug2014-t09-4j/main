@@ -20,8 +20,8 @@ public class TaskTest {
 
     @Test
     public void testTaskOutput() {
-        task.addDate("2014-05-02");
-        task.addTime("2230");
+        task.setDate("2014-05-02");
+        task.setTime("2230");
         task.setDone(true);
         String expected = "\t[TITLE] New Task \n" + "\t[DATE] 2014-05-02 \n"
                 + "\t[TIME] 2230 \n" + "\t[VENUE] null \n"
@@ -34,8 +34,8 @@ public class TaskTest {
 
     @Test
     public void testTaskFileOutput() {
-        task.addDate("2014-05-02");
-        task.addTime("2230");
+        task.setDate("2014-05-02");
+        task.setTime("2230");
         task.setDone(true);
         task.setFloating(true);
         task.setDeleted(true);
