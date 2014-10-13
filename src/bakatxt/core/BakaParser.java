@@ -65,17 +65,10 @@ public class BakaParser implements BakaParserInterface {
         // TODO Auto-generated method stub
         String str = input;
         str = str.replaceFirst("add", STRING_EMPTY).trim();
-
         if (str.contains(STRING_DASH)) {
             str = str.replace(STRING_DASH + STRING_SPACE, STRING_DASH);
             identifyDescription(str);
             str = replaceDescription(str);
-        }
-
-        if (str.contains(STRING_ADD)) {
-            str = str.replace(STRING_ADD + STRING_SPACE, STRING_ADD);
-            identifyVenue(str);
-            str = replaceVenue(str);
         }
 
         identifyDate(str);
@@ -86,6 +79,11 @@ public class BakaParser implements BakaParserInterface {
         identifyTime(str);
         if (_time != null) {
             _isTime = true;
+        }
+
+        if (str.contains(STRING_ADD)) {
+            str = str.replace(STRING_ADD + STRING_SPACE, STRING_ADD);
+            identifyVenue(str);
         }
 
         identifyTitle(str);
@@ -156,18 +154,14 @@ public class BakaParser implements BakaParserInterface {
         return input;
     }
 
-    private static String replaceVenue(String input) {
+    private static void identifyTitle(String input) {
+        input = replaceDateTimeDescription(input);
+
         if (_isVenue) {
             String venueTemp = STRING_ADD + _venue;
-            input = input.replace(venueTemp, STRING_SPACE).trim();
+            input = input.replace(venueTemp, STRING_SPACE);
         }
-        return input;
-    }
-
-    private static void identifyTitle(String input) {
-        input = replaceDateTimeDescription(input).trim();
-        input = replaceVenue(input);
-
+        input = input.trim();
         if (input.isEmpty()) {
             _title = input;
         } else {
