@@ -1,5 +1,7 @@
 package bakatxt.core;
 
+import java.util.ArrayList;
+
 // Interface for Parser
 
 public interface BakaParserInterface {
@@ -9,6 +11,5 @@ public interface BakaParserInterface {
 
     public String getString(String input);
 
-    public Task display(String input);
-
+    public ArrayList<Integer> getIndexList(String input);
 }

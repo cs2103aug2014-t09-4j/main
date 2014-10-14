@@ -1,6 +1,7 @@
 package bakatxt.core;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -16,10 +17,12 @@ public class BakaParser implements BakaParserInterface {
     private static final String STRING_EMPTY = "";
     private static final String STRING_SPACE = " ";
     private static final String STRING_ADD = "@";
-    private static final String STRING_DASH = "--";
+    private static final String STRING_DOUBLE_DASH = "--";
+    private static final String STRING_COMMA = ",";
     private static final String STRING_AT = "at";
     private static final String STRING_ON = "on";
-    private static final String STRING_DASH_DATE = "-";
+    private static final String STRING_TO = "to";
+    private static final String STRING_DASH = "-";
     private static final String STRING_YEAR = "2014";
     private static final String STRING_YEAR_FRAG = "20";
 
@@ -65,8 +68,9 @@ public class BakaParser implements BakaParserInterface {
         // TODO Auto-generated method stub
         String str = input;
         str = str.replaceFirst("add", STRING_EMPTY).trim();
-        if (str.contains(STRING_DASH)) {
-            str = str.replace(STRING_DASH + STRING_SPACE, STRING_DASH);
+        if (str.contains(STRING_DOUBLE_DASH)) {
+            str = str.replace(STRING_DOUBLE_DASH + STRING_SPACE,
+                    STRING_DOUBLE_DASH);
             identifyDescription(str);
             str = replaceDescription(str);
         }
@@ -148,7 +152,7 @@ public class BakaParser implements BakaParserInterface {
 
     private static String replaceDescription(String input) {
         if (_isDescription) {
-            String descriptionTemp = STRING_DASH + _description;
+            String descriptionTemp = STRING_DOUBLE_DASH + _description;
             input = input.replace(descriptionTemp, STRING_SPACE).trim();
         }
         return input;
@@ -170,7 +174,7 @@ public class BakaParser implements BakaParserInterface {
     }
 
     private static void identifyDescription(String input) {
-        String[] part = input.split(STRING_DASH);
+        String[] part = input.split(STRING_DOUBLE_DASH);
         _description = part[1].trim();
         _isDescription = true;
     }
@@ -201,7 +205,7 @@ public class BakaParser implements BakaParserInterface {
                     // dd/MM
                     if (messageFragment.length() <= 5
                             && messageFragment.length() > 2) {
-                        messageFragment = messageFragment + STRING_DASH_DATE
+                        messageFragment = messageFragment + STRING_DASH
                                 + STRING_YEAR;
                     }
 
@@ -210,9 +214,8 @@ public class BakaParser implements BakaParserInterface {
                     if (dateFragment[2].length() == 2) {
                         dateFragment[2] = STRING_YEAR_FRAG + dateFragment[2];
                     }
-                    newDate = dateFragment[2] + STRING_DASH_DATE
-                            + dateFragment[1] + STRING_DASH_DATE
-                            + dateFragment[0];
+                    newDate = dateFragment[2] + STRING_DASH + dateFragment[1]
+                            + STRING_DASH + dateFragment[0];
 
                     input = input.replace(originalFragment, newDate);
                     _inputDateThatCantParse = originalFragment;
@@ -285,16 +288,10 @@ public class BakaParser implements BakaParserInterface {
 
     @Override
     public String getString(String input) {
-        // TODO remove first word and return the title
+        // remove first word (command) and return the rest of the input
         int index = input.indexOf(STRING_SPACE);
         input = input.substring(index);
         return input;
-    }
-
-    @Override
-    public Task display(String input) {
-        // TODO Auto-generated method stub
-        return null;
     }
 
     @Override
@@ -303,7 +300,35 @@ public class BakaParser implements BakaParserInterface {
         return part[0].toUpperCase();
     }
 
-    // public LinkedList<Task> getTasks() {
-    // return _database.getAllTasks();
-    // }
+    @Override
+    public ArrayList<Integer> getIndexList(String input) {
+        input = input.trim();
+        ArrayList<Integer> list = new ArrayList<Integer>();
+        String[] num;
+
+        if (input.contains(STRING_DASH) || input.contains(STRING_TO)) {
+            input = input.replaceAll("\\s+", STRING_EMPTY);
+            if (input.contains(STRING_DASH)) {
+                num = input.split(STRING_DASH);
+            } else {
+                num = input.split(STRING_TO);
+            }
+            int firstIndex = Integer.valueOf(num[0]);
+            int lastIndex = Integer.valueOf(num[1]);
+            for (int i = firstIndex; i <= lastIndex; i++) {
+                list.add(i);
+            }
+        } else {
+            if (input.contains(STRING_COMMA)) {
+                num = input.split(STRING_COMMA);
+            } else {
+                num = input.split("\\s+");
+            }
+            for (int i = 0; i < num.length; i++) {
+                list.add(Integer.valueOf(num[i].trim()));
+            }
+
+        }
+        return list;
+    }
 }
