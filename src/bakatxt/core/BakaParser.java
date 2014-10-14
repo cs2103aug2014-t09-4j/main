@@ -25,20 +25,24 @@ public class BakaParser implements BakaParserInterface {
     private static final String STRING_DASH = "-";
     private static final String STRING_YEAR = "2014";
     private static final String STRING_YEAR_FRAG = "20";
+    private static final String STRING_CANT_PARSE = "vista";
+    private static final String STRING_REPLACEMENT = "\\/ista";
 
     private static final String DATE_FORMAT_DDMMYY_REGEX = "(0?[12]?[0-9]|3[01])[/-](0?[1-9]|1[012])[/-](\\d\\d)";
     private static final String DATE_FORMAT_DDMMYYYY_REGEX = "(0?[12]?[0-9]|3[01])[/-](0?[1-9]|1[012])[/-]((19|2[01])\\d\\d)";
     private static final String DATE_FORMAT_DDMM_REGEX = "(0?[12]?[0-9]|3[01])[/-](0?[1-9]|1[012])";
     private static final String DATE_FORMAT_DIVIDER_REGEX = "[/-]";
     private static final String DATE_FORMAT_STANDARD = "yyyy-MM-dd";
-    private static final String NUMBER_REGEX = "\\d{3,}?";
-    private static final String DISABLE_PARSING_REGEX = "(([0-2]\\d[0-5]\\d)|(\\d{1,2}))[a-z]";
+    private static final String DISABLE_NUMBER_REGEX = "\\d{3,}?";
+    private static final String DISABLE_PARSING_REGEX = "(([0-2]\\d[0-5]\\d)|(\\d{1,2}))[^h]";
+    private static final String DISABLE_FAKE_TIME_REGEX = "\\D+\\d";
 
     private static BakaParser _parser = null;
     private static boolean _isDate;
     private static boolean _isTime;
     private static boolean _isVenue;
     private static boolean _isDescription;
+    private static boolean _isExceptionString;
     private static String _title;
     private static String _date;
     private static String _time;
@@ -47,7 +51,9 @@ public class BakaParser implements BakaParserInterface {
     private static String _inputDate;
     private static String _inputTime;
     private static String _inputDateThatCantParse;
-    private static String _inputThatCantParse;
+    private static String _inputThatCantParse1;
+    private static String _inputThatCantParse2;
+    private static String _inputThatCantParse3;
 
     public BakaParser() {
         _isDate = false;
@@ -65,14 +71,19 @@ public class BakaParser implements BakaParserInterface {
 
     @Override
     public Task add(String input) {
-        // TODO Auto-generated method stub
         String str = input;
         str = str.replaceFirst("add", STRING_EMPTY).trim();
+
         if (str.contains(STRING_DOUBLE_DASH)) {
             str = str.replace(STRING_DOUBLE_DASH + STRING_SPACE,
                     STRING_DOUBLE_DASH);
             identifyDescription(str);
             str = replaceDescription(str);
+        }
+
+        if (str.contains(STRING_CANT_PARSE)) {
+            str = str.replaceAll(STRING_CANT_PARSE, STRING_REPLACEMENT);
+            _isExceptionString = true;
         }
 
         identifyDate(str);
@@ -85,16 +96,16 @@ public class BakaParser implements BakaParserInterface {
             _isTime = true;
         }
 
+        if (_isExceptionString) {
+            str = str.replaceAll(STRING_REPLACEMENT, STRING_CANT_PARSE);
+        }
+
         if (str.contains(STRING_ADD)) {
             str = str.replace(STRING_ADD + STRING_SPACE, STRING_ADD);
             identifyVenue(str);
         }
 
         identifyTitle(str);
-
-        if (_title.equals(STRING_EMPTY)) {
-            // TODO return MESSAGE_ADD_NO_TITLE;
-        }
 
         Task task = new Task(_title);
         task.setDate(_date);
@@ -228,9 +239,16 @@ public class BakaParser implements BakaParserInterface {
                     _inputDateThatCantParse = "today";
                 }
 
-                if (messageFragment.matches(NUMBER_REGEX)
-                        || messageFragment.matches(DISABLE_PARSING_REGEX)) {
-                    _inputThatCantParse = originalFragment;
+                if (messageFragment.matches(DISABLE_NUMBER_REGEX)) {
+                    _inputThatCantParse1 = originalFragment;
+                    input = input.replace(originalFragment, STRING_SPACE);
+                }
+                if (messageFragment.matches(DISABLE_PARSING_REGEX)) {
+                    _inputThatCantParse2 = originalFragment;
+                    input = input.replace(originalFragment, STRING_SPACE);
+                }
+                if (messageFragment.matches(DISABLE_FAKE_TIME_REGEX)) {
+                    _inputThatCantParse3 = originalFragment;
                     input = input.replace(originalFragment, STRING_SPACE);
                 }
             }
@@ -253,9 +271,14 @@ public class BakaParser implements BakaParserInterface {
             if (_inputDateThatCantParse != null) {
                 input = input.replace(_inputDateThatCantParse, STRING_SPACE);
             }
-
-            if (_inputThatCantParse != null) {
-                input = input.replace(_inputThatCantParse, STRING_SPACE);
+            if (_inputThatCantParse1 != null) {
+                input = input.replace(_inputThatCantParse1, STRING_SPACE);
+            }
+            if (_inputThatCantParse2 != null) {
+                input = input.replace(_inputThatCantParse2, STRING_SPACE);
+            }
+            if (_inputThatCantParse3 != null) {
+                input = input.replace(_inputThatCantParse3, STRING_SPACE);
             }
 
             Parser parser = new Parser();
