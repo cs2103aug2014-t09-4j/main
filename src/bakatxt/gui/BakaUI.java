@@ -89,6 +89,9 @@ public class BakaUI extends JFrame {
      * update the contents of the GUI
      */
     public static void updateUI(LinkedList<Task> tasks) {
+
+        assert(tasks != null) : "tasks must not be null";
+
         _bakaPanel.setContents(tasks);
         _bakaUI.pack();
         _bakaUI.setLocationRelativeTo(null);
@@ -103,7 +106,11 @@ public class BakaUI extends JFrame {
      *
      */
     private void initUI() {
-        _bakaPanel = new BakaPanel(_bakaProcessor.getAllTasks());
+        try {
+            _bakaPanel = new BakaPanel(_bakaProcessor.getAllTasks());
+        } catch (NullPointerException e) {
+            throw new Error("bakaProcessor.getAllTasks() is null");
+        }
         setUndecorated(true);
         setBackground(UIHelper.TRANSPARENT);
         setContentPane(_bakaPanel);

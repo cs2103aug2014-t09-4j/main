@@ -123,8 +123,8 @@ class Contents extends JPanel {
 
     private int addCurrentEvents(LinkedList<Task> tasks, int y, int offset) {
 
-        assert(y > 0) : "";
-        assert(offset > 0) : "";
+        assert(y > 0) : "y must be greater than zero";
+        assert(offset > 0) : "offset must be at least 1";
 
         if (tasks.size() == 1) {
             setEvents(new OnlyTaskBox(tasks.pop(), y - offset, alternatingColors()), y);
