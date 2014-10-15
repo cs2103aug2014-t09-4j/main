@@ -61,4 +61,10 @@ public class BakaProcessor implements BakaProcessorInterface {
 
     }
 
+    @Override
+    public String executeCommand(String input) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
 }
