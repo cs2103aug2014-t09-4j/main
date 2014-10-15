@@ -9,6 +9,10 @@ public class BakaProcessor implements BakaProcessorInterface {
     private static BakaParser _parser;
     private static LinkedList<Task> _displayTasks;
 
+    enum CommandType {
+        ADD, DELETE, DISPLAY, CLEAR, DEFAULT, EDIT, EXIT
+    }
+
     public BakaProcessor() {
         _database = Database.getInstance();
         _parser = BakaParser.getInstance();
@@ -63,8 +67,47 @@ public class BakaProcessor implements BakaProcessorInterface {
 
     @Override
     public String executeCommand(String input) {
-        // TODO Auto-generated method stub
-        return null;
+
+        String command = _parser.getCommand(input);
+        CommandType commandType;
+
+        try {
+            commandType = CommandType.valueOf(command);
+        } catch (IllegalArgumentException e) {
+            commandType = CommandType.DEFAULT;
+        }
+
+        String output = null;
+        switch (commandType) {
+
+            case ADD :
+                output = addTask(input, output);
+                break;
+
+            case DELETE :
+                deleteTask(input);
+                break;
+
+            case DISPLAY :
+                displayTask();
+                break;
+
+            case CLEAR :
+                clearTask();
+                break;
+
+            case EDIT :
+                editTask(input);
+                break;
+
+            case EXIT :
+                break;
+
+            case DEFAULT :
+            default :
+                break;
+        }
+        return output;
     }
 
 }

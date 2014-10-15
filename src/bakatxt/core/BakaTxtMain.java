@@ -14,20 +14,11 @@ public class BakaTxtMain {
     private static final String MESSAGE_ENTER_COMMAND = "Please enter command: ";
     private static final String MESSAGE_INVALID_COMMAND = "Invalid Command!";
 
-    enum CommandType {
-        ADD, DELETE, DISPLAY, CLEAR, DEFAULT, EDIT, EXIT
-    }
-
     private static Scanner _sc;
     private static BakaParser _parser;
     private static Database _database;
     private static LinkedList<Task> _displayTasks;
-
-    // ds kludge for demo
-    private static boolean withinDelete;
-    private static String titleDelete;
-
-    // end demo code
+    private static BakaProcessor _processor;
 
     public BakaTxtMain() {
 
@@ -35,11 +26,7 @@ public class BakaTxtMain {
         _parser = BakaParser.getInstance();
         _database = Database.getInstance();
         _displayTasks = _database.getAllTasks();
-
-        // ds kludge for demo
-        withinDelete = false;
-        titleDelete = null;
-        // end demo code
+        _processor = new BakaProcessor();
     }
 
     public static void main(String[] args) {
@@ -52,62 +39,11 @@ public class BakaTxtMain {
             while (true) {
                 System.out.print(MESSAGE_ENTER_COMMAND);
                 String input = _sc.nextLine();
-                String result = executeCommand(input);
+                String result = _processor.executeCommand(input);
                 System.out.println(result);
             }
         }
         BakaUI.startGui();
-    }
-
-    public static String executeCommand(String input) {
-        // ds kludge for demo
-        if (withinDelete) {
-            input = "delete " + input;
-        }
-        // end demo code
-        String command = _parser.getCommand(input);
-        CommandType commandType;
-
-        try {
-            commandType = CommandType.valueOf(command);
-        } catch (IllegalArgumentException e) {
-            commandType = CommandType.DEFAULT;
-            System.out.println(MESSAGE_INVALID_COMMAND);
-        }
-
-        String output = null;
-        switch (commandType) {
-
-            case ADD :
-                output = addTask(input, output);
-                break;
-
-            case DELETE :
-                deleteTask(input);
-                break;
-
-            case DISPLAY :
-                displayTask();
-                break;
-
-            case CLEAR :
-                clearTask();
-                break;
-
-            case EDIT :
-                editTask(input);
-                break;
-
-            case EXIT :
-                exitProg();
-                break;
-
-            case DEFAULT :
-            default :
-                break;
-        }
-        return output;
-
     }
 
     private static void exitProg() {
