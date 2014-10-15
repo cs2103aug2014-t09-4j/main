@@ -1,7 +1,6 @@
 package bakatxt.core;
 
 import java.awt.GraphicsEnvironment;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Scanner;
 
@@ -46,94 +45,4 @@ public class BakaTxtMain {
         BakaUI.startGui();
     }
 
-    private static void exitProg() {
-        System.out.println(MESSAGE_BYEBYE);
-        _database.close();
-        System.exit(0);
-    }
-
-    private static void clearTask() {
-        _database.clear();
-        _displayTasks = _database.getAllTasks();
-    }
-
-    private static void displayTask() {
-        _displayTasks = _database.getAllTasks();
-    }
-
-    private static void deleteTask(String input) {
-
-        String content = _parser.getString(input).trim();
-        ArrayList<Integer> listOfIndex = _parser.getIndexList(content);
-        for (int i = 0; i < listOfIndex.size(); i++) {
-            int trueIndex = listOfIndex.get(i);
-            Task target = _displayTasks.get(trueIndex - 1);
-            _database.delete(target);
-        }
-
-        _displayTasks = _database.getAllTasks();
-
-        // if (!withinDelete) {
-        // String titleName = _parser.getString(input).trim();
-        // _displayTasks = _database.getTaskWithTitle(titleName);
-        // System.out.println(_displayTasks.toString());
-        // withinDelete = true;
-        // titleDelete = titleName;
-        // if (_displayTasks.size() == 0) {
-        // withinDelete = false;
-        // titleDelete = null;
-        // }
-        // } else {
-        // _displayTasks = _database.getTaskWithTitle(titleDelete);
-        // // System.out.println(_displayTasks.toString());
-        // String index = _parser.getString(input).trim();
-        // int trueIndex = Integer.valueOf(index.trim());
-        // Task target = _displayTasks.get(trueIndex - 1);
-        // String targetTitle = target.getTitle();
-        // target.setTitle(targetTitle);
-        // System.out.println(target);
-        // boolean deleted = _database.delete(target);
-        // System.out.println(deleted);
-        // _displayTasks = _database.getAllTasks();
-        // withinDelete = false;
-        // titleDelete = null;
-        // }
-    }
-
-    private static String addTask(String input, String output) {
-        Task toAdd = _parser.add(input);
-        String content = _parser.getString(input);
-        boolean isAdded = _database.add(toAdd);
-        if (isAdded) {
-            System.out.println("Task" + " -" + content + " - " + "added");
-            output = toAdd.toDisplayString();
-            _displayTasks = _database.getAllTasks();
-        } else {
-            // TODO error in adding
-        }
-        return output;
-    }
-
-    private static void editTask(String input) {
-        String index = _parser.getString(input).trim();
-        int trueIndex = Integer.valueOf(index.trim());
-        _displayTasks = _database.getAllTasks();
-        Task target = _displayTasks.get(trueIndex - 1);
-        String newContent = BakaUI.getInputText();
-        target.setTitle(newContent);
-        newContent = BakaUI.getInputText();
-        target.setVenue(newContent);
-        newContent = BakaUI.getInputText();
-        target.setDate(newContent);
-        newContent = BakaUI.getInputText();
-        target.setTime(newContent);
-        newContent = BakaUI.getInputText();
-        target.setDescription(newContent);
-
-        BakaUI.updateUI(_displayTasks);
-    }
-
-    public LinkedList<Task> getAllTasks() {
-        return _displayTasks;
-    }
 }

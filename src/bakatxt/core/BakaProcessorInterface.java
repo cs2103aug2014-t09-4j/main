@@ -16,4 +16,6 @@ public interface BakaProcessorInterface {
     public LinkedList<Task> getAllTasks();
 
     public void clearTask();
+
+    public void exitProg();
 }

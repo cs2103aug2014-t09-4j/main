@@ -3,6 +3,8 @@ package bakatxt.core;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
+import bakatxt.gui.BakaUI;
+
 public class BakaProcessor implements BakaProcessorInterface {
 
     private static Database _database;
@@ -61,8 +63,20 @@ public class BakaProcessor implements BakaProcessorInterface {
 
     @Override
     public void editTask(String input) {
-        // TODO Auto-generated method stub
+        String index = _parser.getString(input).trim();
+        int trueIndex = Integer.valueOf(index.trim());
+        _displayTasks = _database.getAllTasks();
+        Task target = _displayTasks.get(trueIndex - 1);
+        _database.delete(target);
+        Task toAdd = _parser.add("add" + BakaUI.getInputText());
+        _database.add(toAdd);
+        _displayTasks = _database.getAllTasks();
+    }
 
+    @Override
+    public void exitProg() {
+        _database.close();
+        System.exit(0);
     }
 
     @Override
