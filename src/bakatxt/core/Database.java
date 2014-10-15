@@ -193,6 +193,7 @@ public class Database implements DatabaseInterface {
         } catch (IOException ex) {
             ex.printStackTrace();
         }
+        _database = null;
     }
 
     private boolean updateFile() {
