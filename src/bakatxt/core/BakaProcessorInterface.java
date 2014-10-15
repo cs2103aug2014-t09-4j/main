@@ -3,11 +3,15 @@ package bakatxt.core;
 import java.util.LinkedList;
 
 public interface BakaProcessorInterface {
-    public String addTask(String input);
+    public String addTask(String input, String output);
 
     public void deleteTask(String input);
 
-    public LinkedList<Task> displayTask();
+    public void displayTask();
 
     public void editTask(String input);
+
+    public LinkedList<Task> getAllTasks();
+
+    public void clearTask();
 }
