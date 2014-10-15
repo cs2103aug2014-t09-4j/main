@@ -42,8 +42,6 @@ public class Database implements DatabaseInterface {
     private static final String TAG_DONE = "5000";
     private static final String TAG_FLOATING = "0000";
 
-    private static final int CONTENT_INDEX = 1;
-
     private static final Charset CHARSET_DEFAULT = Charset.forName("UTF-8");
     private static final byte[] EMPTY_BYTE = {};
     private static final OpenOption[] OPEN_OPTIONS = {
