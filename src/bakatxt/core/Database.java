@@ -57,7 +57,7 @@ public class Database implements DatabaseInterface {
     private TreeSet<String> _sortedKeys;
     private boolean _removeDone;
 
-    public Database(String fileName) {
+    private Database(String fileName) {
         setEnvironment(fileName);
     }
 

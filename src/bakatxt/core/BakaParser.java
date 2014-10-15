@@ -59,7 +59,7 @@ public class BakaParser implements BakaParserInterface {
     private static String _inputThatCantParse2;
     private static String _inputThatCantParse3;
 
-    public BakaParser() {
+    private BakaParser() {
         _isDate = false;
         _isTime = false;
         _isVenue = false;
