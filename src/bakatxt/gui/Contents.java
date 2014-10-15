@@ -3,11 +3,12 @@
 package bakatxt.gui;
 
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
 import java.util.LinkedList;
 
+import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 
 import bakatxt.core.Task;
@@ -38,7 +39,9 @@ class Contents extends JPanel {
 
         setOpaque(false);
         setBackground(UIHelper.TRANSPARENT);
-        setLayout(new GridBagLayout());
+        //setLayout(new GridBagLayout());
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        setAlignmentX(Component.CENTER_ALIGNMENT);
         LinkedList<Task> tempTasks = tasks;
         updateContents(tempTasks);
     }
@@ -72,13 +75,15 @@ class Contents extends JPanel {
     private void addTasksByDate(LinkedList<Task> tasks) {
         String currentDate;
         int y = DATE_AND_TASKS_START_POSITION;
+        int offset = 0;
 
         while(tasks.peek() != null) {
 
             currentDate = tasks.peek().getDate();
 
             setDateAndDay(setDayAndDateText(currentDate), y);
-            y = addCurrentEvents(getAllTasksInOneDate(tasks), y + 1);
+            offset++;
+            y = addCurrentEvents(getAllTasksInOneDate(tasks), y + 1, offset);
         }
     }
 
@@ -116,23 +121,26 @@ class Contents extends JPanel {
         return tasks.peek().getDate().equals(currentDate);
     }
 
-    private int addCurrentEvents(LinkedList<Task> tasks, int y) {
+    private int addCurrentEvents(LinkedList<Task> tasks, int y, int offset) {
+
+        assert(y > 0) : "";
+        assert(offset > 0) : "";
 
         if (tasks.size() == 1) {
-            setEvents(new OnlyTaskBox(tasks.pop(), alternatingColors()), y);
+            setEvents(new OnlyTaskBox(tasks.pop(), y - offset, alternatingColors()), y);
             y++;
 
         } else {
-            setEvents(new FirstTaskBox(tasks.pop(), alternatingColors()), y);
+            setEvents(new FirstTaskBox(tasks.pop(), y - offset, alternatingColors()), y);
             y++;
             while(true) {
 
                 if (tasks.size() == 1) {
-                    setEvents(new FinalTaskBox(tasks.pop(), alternatingColors()), y);
+                    setEvents(new FinalTaskBox(tasks.pop(), y - offset, alternatingColors()), y);
                     y++;
                     break;
                 }
-                setEvents(new MiddleTaskBox(tasks.pop(), alternatingColors()), y);
+                setEvents(new MiddleTaskBox(tasks.pop(), y - offset, alternatingColors()), y);
                 y++;
             }
         }
@@ -148,10 +156,12 @@ class Contents extends JPanel {
         return UIHelper.GRAY_DARK;
     }
 
+    //TODO, move to BakaPanel
     /**
      * @param alertMessage is the message to put in the layout specified
      */
     private void setAlertMessage(FormattedText alertMessage) {
+/*
         _layout.fill = GridBagConstraints.NONE;
         _layout.anchor = GridBagConstraints.PAGE_START;
         _layout.weightx = 0.0;
@@ -160,7 +170,8 @@ class Contents extends JPanel {
         _layout.gridy = 0;
         _layout.gridheight = 1;
         _layout.gridwidth = 1;
-        this.add(alertMessage, _layout);
+*/
+        this.add(alertMessage);
     }
 
     /**
@@ -168,6 +179,7 @@ class Contents extends JPanel {
      * @param y is the vertical order whereby it is placed
      */
     private void setDateAndDay(FormattedText dateAndDay, int y) {
+/*
         _layout.fill = GridBagConstraints.NONE;
         _layout.anchor = GridBagConstraints.LAST_LINE_END;
         _layout.weightx = 0.0;
@@ -177,7 +189,9 @@ class Contents extends JPanel {
         _layout.gridheight = 1;
         _layout.gridwidth = 1;
         _layout.insets = new Insets(UIHelper.BORDER, 0, UIHelper.BORDER, 0);
-        this.add(dateAndDay, _layout);
+*/
+        setAlignmentX(Component.RIGHT_ALIGNMENT);
+        this.add(dateAndDay);
     }
 
     /**
@@ -185,6 +199,7 @@ class Contents extends JPanel {
      * @param y is the vertical order whereby it is placed
      */
     private void setEvents(TaskBox task, int y) {
+/*
         _layout.fill = GridBagConstraints.BOTH;
         _layout.anchor = GridBagConstraints.FIRST_LINE_START;
         _layout.weightx = 1.0;
@@ -194,20 +209,29 @@ class Contents extends JPanel {
         _layout.gridheight = 1;
         _layout.gridwidth = GridBagConstraints.REMAINDER;
         _layout.insets = new Insets(0, 0, 0, 0);
-        this.add(task, _layout);
+*/
+        setAlignmentX(Component.CENTER_ALIGNMENT);
+        task.setMinimumSize(new Dimension(634, 100));
+        task.setPreferredSize(new Dimension(634, 100));
+        task.setMaximumSize(new Dimension(634, 100));
+        this.add(task);
     }
 
     //TODO probably a better method to do this
+
     private void setNoEvents() {
+
         FormattedText task = new FormattedText("You have no events!", UIHelper.PRESET_TYPE_TITLE,
                 UIHelper.PRESET_SIZE_TITLE, UIHelper.PRESET_COLOR_TITLE);
+        /*
         _layout.fill = GridBagConstraints.NONE;
         _layout.anchor = GridBagConstraints.CENTER;
         _layout.weightx = 1.0;
         _layout.weighty = 1.0;
         _layout.gridx = 0;
         _layout.gridy = 0;
-        this.add(task, _layout);
+        */
+        this.add(task);
     }
 
     /**

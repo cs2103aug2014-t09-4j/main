@@ -5,11 +5,12 @@ package bakatxt.gui;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.LinkedList;
 
 import javax.swing.JFrame;
 
-import bakatxt.core.BakaTxtMain;
+import bakatxt.core.BakaProcessor;
 import bakatxt.core.Task;
 
 /**
@@ -20,27 +21,27 @@ import bakatxt.core.Task;
  */
 public class BakaUI extends JFrame {
 
-    private static BakaPanel _baka;
-    private static BakaTxtMain _thisSession;
+    private static BakaUI _bakaUI;
+    private static BakaPanel _bakaPanel;
+    private static BakaProcessor _bakaProcessor;
 
     /**
      * @param thisSession refers to the logic module we are interacting with
      */
-    private BakaUI(BakaTxtMain thisSession) {
-        _thisSession = thisSession;
+    private BakaUI(BakaProcessor bakaProcessor) {
+        _bakaProcessor = bakaProcessor;
         initUI();
     }
 
     /**
      * This method initializes the GUI and updates it when necessary
      */
-    public static void startGui() {
+    public static void startGui(BakaProcessor bakaProcessor) {
         EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
-                BakaTxtMain thisSession = new BakaTxtMain();
-                BakaUI baka = new BakaUI(thisSession);
-                baka.setVisible(true);
+                _bakaUI = new BakaUI(bakaProcessor);
+                _bakaUI.setVisible(true);
                 processInput();
             }
         });
@@ -61,14 +62,18 @@ public class BakaUI extends JFrame {
     @Deprecated
     public static void processInput() {
 
-        Input input = _baka.getInput();
+        Input input = _bakaPanel.getInput();
         input.addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent e) {
                 input.selectAll();
-                BakaTxtMain.executeCommand(input.getText());
-                _baka.setContents(_thisSession.getAllTasks());
+                try {
+                    _bakaProcessor.executeCommand(input.getText());
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+                updateUI(_bakaProcessor.getAllTasks());
             }
         });
     }
@@ -77,34 +82,39 @@ public class BakaUI extends JFrame {
      *@return the text in the input box
      */
     public static String getInputText() {
-        return _baka.getInput().getText();
+        return _bakaPanel.getInput().getText();
     }
 
     /**
      * update the contents of the GUI
      */
     public static void updateUI(LinkedList<Task> tasks) {
-        _baka.setContents(tasks);
+        _bakaPanel.setContents(tasks);
+        _bakaUI.pack();
+        _bakaUI.setLocationRelativeTo(null);
     }
 
+    protected static BakaUI getWindow() {
+        return _bakaUI;
+    }
     /**
      * This method draws the BakaPanel and sets the window as transparent, centered,
      * unmovable, and always on top.
      *
      */
     private void initUI() {
-        _baka = new BakaPanel(_thisSession.getAllTasks());
+        _bakaPanel = new BakaPanel(_bakaProcessor.getAllTasks());
         setUndecorated(true);
         setBackground(UIHelper.TRANSPARENT);
-        setContentPane(_baka);
+        setContentPane(_bakaPanel);
         pack();
         setLocationRelativeTo(null); // centers the window on screen
         setAlwaysOnTop(false);
         setTitle("Baka TX");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-        MouseActions mouseActions = new MouseActions(_baka);
-        _baka.addMouseListener(mouseActions);
-        _baka.addMouseMotionListener(mouseActions);
+        MouseActions mouseActions = new MouseActions(_bakaPanel);
+        _bakaPanel.addMouseListener(mouseActions);
+        _bakaPanel.addMouseMotionListener(mouseActions);
     }
 }

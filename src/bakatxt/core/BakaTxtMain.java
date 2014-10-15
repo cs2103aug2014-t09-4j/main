@@ -19,16 +19,17 @@ public class BakaTxtMain {
 
     public static void main(String[] args) throws IOException {
 
-        if (GraphicsEnvironment.isHeadless()) {
-            BakaTxtMain thisSession = new BakaTxtMain();
+        BakaTxtMain thisSession = new BakaTxtMain();
 
+        if (GraphicsEnvironment.isHeadless()) {
             while (true) {
                 String input = _sc.nextLine();
                 String result = _processor.executeCommand(input);
                 System.out.println(result);
             }
         }
-        BakaUI.startGui();
+
+        BakaUI.startGui(_processor);
     }
 
 }

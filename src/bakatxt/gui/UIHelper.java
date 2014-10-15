@@ -3,6 +3,7 @@
 package bakatxt.gui;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -17,6 +18,7 @@ class UIHelper {
     protected static final int WINDOW_SCALE = 650;
     protected static final int WINDOW_X = WINDOW_SCALE;
     protected static final int WINDOW_Y = (int)(WINDOW_RATIO * WINDOW_SCALE);
+    protected static final Dimension WINDOW_SIZE = new Dimension(WINDOW_X, WINDOW_Y);
     protected static final int WINDOW_ROUNDNESS = 20;
     protected static final int BORDER = 4; // leave as half of actual border
 

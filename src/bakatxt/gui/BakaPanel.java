@@ -2,7 +2,6 @@
 
 package bakatxt.gui;
 
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -31,7 +30,7 @@ class BakaPanel extends JPanel {
         _contents = new Contents(tasks);
 
         setOpaque(false);
-        setPreferredSize(new Dimension(UIHelper.WINDOW_X, UIHelper.WINDOW_Y));
+        setMaximumSize(UIHelper.WINDOW_SIZE);
         setBackground(UIHelper.GRAY_MEDIUM);
         setLayout(new GridBagLayout());
         addComponentsToPane();
