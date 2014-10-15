@@ -183,18 +183,18 @@ public class BakaTxtMain {
         int trueIndex = Integer.valueOf(index.trim());
         _displayTasks = _database.getAllTasks();
         Task target = _displayTasks.get(trueIndex - 1);
-        String newContent = BakaUI.getInput();
+        String newContent = BakaUI.getInputText();
         target.setTitle(newContent);
-        newContent = BakaUI.getInput();
+        newContent = BakaUI.getInputText();
         target.setVenue(newContent);
-        newContent = BakaUI.getInput();
+        newContent = BakaUI.getInputText();
         target.setDate(newContent);
-        newContent = BakaUI.getInput();
+        newContent = BakaUI.getInputText();
         target.setTime(newContent);
-        newContent = BakaUI.getInput();
+        newContent = BakaUI.getInputText();
         target.setDescription(newContent);
 
-        BakaUI.updateUI();
+        BakaUI.updateUI(_displayTasks);
     }
 
     public LinkedList<Task> getAllTasks() {

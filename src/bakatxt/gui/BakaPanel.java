@@ -7,10 +7,11 @@ import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.util.LinkedList;
 
 import javax.swing.JPanel;
 
-import bakatxt.core.BakaTxtMain;
+import bakatxt.core.Task;
 
 /**
  * This class is used as the actual window (i.e, what the user perceives as a window)
@@ -24,10 +25,10 @@ class BakaPanel extends JPanel {
     private static Contents _contents;
     //TODO do NOT completely destroy linkedlist
 
-    public BakaPanel(BakaTxtMain session) {
+    public BakaPanel(LinkedList<Task> tasks) {
 
         _input = new Input();
-        _contents = new Contents(session.getAllTasks());
+        _contents = new Contents(tasks);
 
         setOpaque(false);
         setPreferredSize(new Dimension(UIHelper.WINDOW_X, UIHelper.WINDOW_Y));
@@ -48,10 +49,10 @@ class BakaPanel extends JPanel {
      *
      * @param session is the logic module we are retrieving the new information from
      */
-    protected void setContents(BakaTxtMain session) {
+    protected void setContents(LinkedList<Task> tasks) {
 
          _contents.removeAll();
-         _contents.updateContents(session.getAllTasks());
+         _contents.updateContents(tasks);
          _contents.validate();
          _contents.repaint();
     }

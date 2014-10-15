@@ -5,10 +5,12 @@ package bakatxt.gui;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.LinkedList;
 
 import javax.swing.JFrame;
 
 import bakatxt.core.BakaTxtMain;
+import bakatxt.core.Task;
 
 /**
  * BakaUI is the "main window" of the GUI for BakaTXT. Since we are doing a custom
@@ -24,7 +26,7 @@ public class BakaUI extends JFrame {
     /**
      * @param thisSession refers to the logic module we are interacting with
      */
-    public BakaUI(BakaTxtMain thisSession) {
+    private BakaUI(BakaTxtMain thisSession) {
         _thisSession = thisSession;
         initUI();
     }
@@ -66,40 +68,23 @@ public class BakaUI extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 input.selectAll();
                 BakaTxtMain.executeCommand(input.getText());
-                _baka.setContents(_thisSession);
+                _baka.setContents(_thisSession.getAllTasks());
             }
         });
     }
 
     /**
-     * This method listens for input from the GUI and does the following when the
-     * return key is pressed:
-     *
-     * 1. Highlight all the text in the input box (to make it trivial for the user
-     *    to input new commands)
-     * 2. Passes the input to the logic module to process it
-     *
      *@return the text in the input box
      */
-    public static String getInput() {
-
-        Input input = _baka.getInput();
-        input.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                input.selectAll();
-            }
-        });
-
-        return input.getText();
+    public static String getInputText() {
+        return _baka.getInput().getText();
     }
 
     /**
      * update the contents of the GUI
      */
-    public static void updateUI() {
-        _baka.setContents(_thisSession);
+    public static void updateUI(LinkedList<Task> tasks) {
+        _baka.setContents(tasks);
     }
 
     /**
@@ -108,7 +93,7 @@ public class BakaUI extends JFrame {
      *
      */
     private void initUI() {
-        _baka = new BakaPanel(_thisSession);
+        _baka = new BakaPanel(_thisSession.getAllTasks());
         setUndecorated(true);
         setBackground(UIHelper.TRANSPARENT);
         setContentPane(_baka);
