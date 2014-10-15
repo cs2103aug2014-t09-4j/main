@@ -1,5 +1,6 @@
 package bakatxt.core;
 
+import java.io.IOException;
 import java.util.LinkedList;
 
 // Interface for Database to write to textfile
@@ -13,15 +14,16 @@ public interface DatabaseInterface {
 
     public boolean add(Task task);
 
-    public boolean delete(Task task);
+    public boolean delete(Task task) throws IOException;
 
-    public boolean setDone(Task task, boolean isDone);
+    public boolean setDone(Task task, boolean isDone) throws IOException;
 
-    public boolean setFloating(Task task, boolean isFloating);
+    public boolean setFloating(Task task, boolean isFloating)
+            throws IOException;
 
-    public void close();
+    public void close() throws IOException;
 
-    public void removeDone();
+    public void removeDone() throws IOException;
 
     public LinkedList<Task> getTaskWithTitle(String title);
 
@@ -31,5 +33,5 @@ public interface DatabaseInterface {
 
     public LinkedList<Task> getAllUndoneTasks();
 
-    public void clear();
+    public void clear() throws IOException;
 }

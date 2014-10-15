@@ -1,5 +1,6 @@
 package bakatxt.core;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
@@ -32,7 +33,7 @@ public class BakaProcessor implements BakaProcessorInterface {
     }
 
     @Override
-    public void deleteTask(String input) {
+    public void deleteTask(String input) throws IOException {
         String content = _parser.getString(input).trim();
         ArrayList<Integer> listOfIndex = _parser.getIndexList(content);
         for (int i = 0; i < listOfIndex.size(); i++) {
@@ -56,13 +57,13 @@ public class BakaProcessor implements BakaProcessorInterface {
     }
 
     @Override
-    public void clearTask() {
+    public void clearTask() throws IOException {
         _database.clear();
         _displayTasks = _database.getAllTasks();
     }
 
     @Override
-    public void editTask(String input) {
+    public void editTask(String input) throws IOException {
         String index = _parser.getString(input).trim();
         int trueIndex = Integer.valueOf(index.trim());
         _displayTasks = _database.getAllTasks();
@@ -74,13 +75,13 @@ public class BakaProcessor implements BakaProcessorInterface {
     }
 
     @Override
-    public void exitProg() {
+    public void exitProg() throws IOException {
         _database.close();
         System.exit(0);
     }
 
     @Override
-    public String executeCommand(String input) {
+    public String executeCommand(String input) throws IOException {
 
         String command = _parser.getCommand(input);
         CommandType commandType;
