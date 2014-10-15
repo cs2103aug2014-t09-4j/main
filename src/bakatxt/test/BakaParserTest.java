@@ -19,6 +19,15 @@ public class BakaParserTest {
     }
 
     @Test
+    public void testInputCase() {
+        String input = "adD HELLO testinG @ scHOOl";
+        Task output = _parser.add(input);
+        Task expected = new Task("HELLO testinG");
+        expected.setVenue("scHOOl");
+        assertEquals(expected, output);
+    }
+
+    @Test
     public void testAddWordTitle() {
         String input = "add hello";
         Task output = _parser.add(input);
@@ -128,25 +137,35 @@ public class BakaParserTest {
         assertEquals(expected, output);
     }
 
-    // @Test
-    // public void testAddDateTonight() {
-    // String input = "add dinner tonight";
-    // Task output = _parser.add(input);
-    // Task expected = new Task("dinner");
-    // expected.setDate("2014-10-14");
-    // expected.setTime("2000");
-    // assertEquals(expected, output);
-    // }
+    @Test
+    public void testAddDateTonight() {
+        String input = "add dinner tonight";
+        Task output = _parser.add(input);
+        Task expected = new Task("dinner");
+        expected.setDate("2014-10-15");
+        expected.setTime("1900");
+        assertEquals(expected, output);
+    }
 
     // @Test
     // public void testAddDateAfternoon() {
     // String input = "add tea time afternoon";
     // Task output = _parser.add(input);
     // Task expected = new Task("tea time");
-    // expected.setDate("2014-10-14");
-    // expected.setTime("1500");
+    // expected.setDate("2014-10-15");
+    // expected.setTime("1300");
     // assertEquals(expected, output);
     // }
+
+    @Test
+    public void testAddDateNoon() {
+        String input = "add lunch at noon";
+        Task output = _parser.add(input);
+        Task expected = new Task("lunch");
+        expected.setDate("2014-10-15");
+        expected.setTime("1200");
+        assertEquals(expected, output);
+    }
 
     @Test
     public void testAddDateFormat1() {
