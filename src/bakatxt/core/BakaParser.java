@@ -27,6 +27,10 @@ public class BakaParser implements BakaParserInterface {
     private static final String STRING_YEAR_FRAG = "20";
     private static final String STRING_CANT_PARSE = "vista";
     private static final String STRING_REPLACEMENT = "\\/ista";
+    private static final String STRING_TMR = "tomorrow";
+    private static final String STRING_TODAY = "today";
+    private static final String STRING_TONIGHT = "tonight";
+    private static final String STRING_TONIGHT_TIME = "1900";
 
     private static final String DATE_FORMAT_DDMMYY_REGEX = "(0?[12]?[0-9]|3[01])[/-](0?[1-9]|1[012])[/-](\\d\\d)";
     private static final String DATE_FORMAT_DDMMYYYY_REGEX = "(0?[12]?[0-9]|3[01])[/-](0?[1-9]|1[012])[/-]((19|2[01])\\d\\d)";
@@ -70,9 +74,11 @@ public class BakaParser implements BakaParserInterface {
     }
 
     @Override
-    public Task add(String input) {
-        String str = input;
-        str = str.replaceFirst("add", STRING_EMPTY).trim();
+    public Task add(String str) {
+        String firstWord = getFirstWord(str);
+        if (firstWord.toLowerCase().equals("add")) {
+            str = str.replaceFirst(firstWord, STRING_EMPTY).trim();
+        }
 
         if (str.contains(STRING_DOUBLE_DASH)) {
             str = str.replace(STRING_DOUBLE_DASH + STRING_SPACE,
@@ -118,6 +124,11 @@ public class BakaParser implements BakaParserInterface {
         resetDetails();
 
         return task;
+    }
+
+    private static String getFirstWord(String input) {
+        String[] part = input.split(STRING_SPACE);
+        return part[0].trim();
     }
 
     private static void resetDetails() {
@@ -232,11 +243,11 @@ public class BakaParser implements BakaParserInterface {
                     _inputDateThatCantParse = originalFragment;
                 }
 
-                if (input.contains("tomorrow")) {
-                    _inputDateThatCantParse = "tomorrow";
+                if (input.contains(STRING_TMR)) {
+                    _inputDateThatCantParse = STRING_TMR;
                 }
-                if (input.contains("today")) {
-                    _inputDateThatCantParse = "today";
+                if (input.contains(STRING_TODAY)) {
+                    _inputDateThatCantParse = STRING_TODAY;
                 }
 
                 if (messageFragment.matches(DISABLE_NUMBER_REGEX)) {
@@ -279,6 +290,10 @@ public class BakaParser implements BakaParserInterface {
             }
             if (_inputThatCantParse3 != null) {
                 input = input.replace(_inputThatCantParse3, STRING_SPACE);
+            }
+
+            if (input.contains(STRING_TONIGHT)) {
+                input = input.replace(STRING_TONIGHT, STRING_TONIGHT_TIME);
             }
 
             Parser parser = new Parser();
