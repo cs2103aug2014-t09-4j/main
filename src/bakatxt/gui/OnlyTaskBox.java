@@ -14,8 +14,8 @@ import bakatxt.core.Task;
  */
 final class OnlyTaskBox extends TaskBox {
 
-    public OnlyTaskBox(Task task, Color backgroundColor) {
-        super(task, backgroundColor);
+    public OnlyTaskBox(Task task, int index, Color backgroundColor) {
+        super(task, index, backgroundColor);
     }
 
     @Override

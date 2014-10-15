@@ -5,6 +5,7 @@ package bakatxt.gui;
 //TODO comments
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -24,21 +25,38 @@ abstract class TaskBox extends JPanel {
     protected static final boolean IS_LINE_WRAP = true;
     private static final String AT = " @";
 
-    public TaskBox(Task task, Color backgroundColor) {
+    public TaskBox(Task task, int index, Color backgroundColor) {
 
         setOpaque(false);
         setBackground(backgroundColor);
         setLayout(new GridBagLayout());
-        addComponentsToPane(task);
+        addComponentsToPane(task, index);
     }
 
-    protected void addComponentsToPane(Task task) {
+    protected void addComponentsToPane(Task task, int index) {
         GridBagConstraints layout = new GridBagConstraints();
 
+        setNumber(layout, index);
         setTaskAndLocation(layout, task.getTitle(), task.getVenue());
         setTimeStart(layout, task.getTime());
         setDescription(layout, task.getDescription());
         setTimeEnd(layout);
+    }
+
+    private void setNumber (GridBagConstraints layout, int number) {
+
+        FormattedText index = new FormattedText(Integer.toString(number), Font.PLAIN,
+                16, UIHelper.GRAY_MEDIUM);
+        layout.fill = GridBagConstraints.NONE;
+        layout.anchor = GridBagConstraints.CENTER;
+        layout.weightx = 1.0;
+        layout.weighty = 0.0;
+        layout.gridx = 0;
+        layout.gridy = 0;
+        layout.gridwidth = 1;
+        layout.gridheight = 1;
+        layout.insets = new Insets(0, 3 * UIHelper.BORDER, 0, 0);
+        this.add(index, layout);
     }
 
     //TODO make locationText a different color
@@ -49,11 +67,11 @@ abstract class TaskBox extends JPanel {
         layout.anchor = GridBagConstraints.LINE_START;
         layout.weightx = 0.01;
         layout.weighty = 0.0;
-        layout.gridx = 0;
+        layout.gridx = 1;
         layout.gridy = 0;
         layout.gridwidth = 1;
         layout.gridheight = 1;
-        layout.insets = new Insets(0, 3 * UIHelper.BORDER, 0, 0);
+        layout.insets = new Insets(0, 5 * UIHelper.BORDER, 0, 0);
         this.add(task, layout);
     }
 
@@ -64,7 +82,7 @@ abstract class TaskBox extends JPanel {
         layout.anchor = GridBagConstraints.FIRST_LINE_START;
         layout.weightx = 1.0;
         layout.weighty = 1.0;
-        layout.gridx = 0;
+        layout.gridx = 1;
         layout.gridy = 1;
         layout.gridwidth = 1;
         layout.gridheight = 1;
@@ -79,7 +97,7 @@ abstract class TaskBox extends JPanel {
         layout.anchor = GridBagConstraints.FIRST_LINE_END;
         layout.weightx = 0.01;
         layout.weighty = 1.0;
-        layout.gridx = 1;
+        layout.gridx = 2;
         layout.gridy = 0;
         layout.gridwidth = 1;
         layout.gridheight = 1;
@@ -95,7 +113,7 @@ abstract class TaskBox extends JPanel {
         layout.anchor = GridBagConstraints.LAST_LINE_END;
         layout.weightx = 0.01;
         layout.weighty = 1.0;
-        layout.gridx = 1;
+        layout.gridx = 2;
         layout.gridy = 1;
         layout.gridwidth = 1;
         layout.gridheight = 1;
