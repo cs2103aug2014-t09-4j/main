@@ -149,12 +149,6 @@ public class Database implements DatabaseInterface {
     }
 
     @Override
-    public Task getPrevious() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
     public boolean add(Task task) {
         task.setDeleted(false);
         addTaskToMap(task);
@@ -191,7 +185,6 @@ public class Database implements DatabaseInterface {
     }
 
     private boolean updateFile() {
-        tempCreation();
         resetFile();
         writeFileComments();
         return writeLinesToFile();
