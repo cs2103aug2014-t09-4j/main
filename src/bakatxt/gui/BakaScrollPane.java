@@ -37,10 +37,6 @@ class BakaScrollPane extends JScrollPane {
         this.setPreferredSize(new Dimension(WIDTH, height));
     }
 
-    protected void scrollToTop() {
-        this.getVerticalScrollBar().setValue(0);
-    }
-
     /**
      * Use a 'hack' to have an invisible scrollbar
      * @return an invisible vertical scrollbar
