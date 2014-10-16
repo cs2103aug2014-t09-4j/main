@@ -1,7 +1,6 @@
 package bakatxt.core;
 
 import java.awt.GraphicsEnvironment;
-import java.io.IOException;
 import java.util.Scanner;
 
 import bakatxt.gui.BakaUI;
@@ -17,9 +16,7 @@ public class BakaTxtMain {
         _processor = new BakaProcessor();
     }
 
-    public static void main(String[] args) throws IOException {
-
-        BakaTxtMain thisSession = new BakaTxtMain();
+    public static void main(String[] args) {
 
         if (GraphicsEnvironment.isHeadless()) {
             while (true) {
