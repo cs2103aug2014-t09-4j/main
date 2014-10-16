@@ -15,6 +15,10 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.TreeSet;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import bakatxt.log.BakaLogger;
 
 public class Database implements DatabaseInterface {
 
@@ -47,6 +51,9 @@ public class Database implements DatabaseInterface {
     private static final OpenOption[] OPEN_OPTIONS = {
             StandardOpenOption.CREATE, StandardOpenOption.APPEND };
 
+    private static final Logger LOGGER = Logger.getLogger(Database.class
+            .getName());
+
     private static Database _database = null;
 
     private Path _userFile;
@@ -56,7 +63,15 @@ public class Database implements DatabaseInterface {
     private boolean _removeDone;
 
     private Database(String fileName) {
-        setEnvironment(fileName);
+        try {
+            BakaLogger.setup();
+        } catch (SecurityException | IOException ex) {
+            BakaLogger.setup(true);
+        } finally {
+            LOGGER.setLevel(Level.INFO);
+            setEnvironment(fileName);
+            LOGGER.info("Database setup completed");
+        }
     }
 
     public static Database getInstance() {
@@ -86,11 +101,12 @@ public class Database implements DatabaseInterface {
             _outputStream = Files.newBufferedWriter(_userFile, CHARSET_DEFAULT,
                     OPEN_OPTIONS);
         } catch (IOException ex) {
-            ex.printStackTrace();
+            LOGGER.severe("BufferedWriter failed");
         }
     }
 
     private void updateMemory() {
+        LOGGER.info("bakaMap update initialized");
         _bakaMap = new HashMap<String, LinkedList<Task>>();
         try (BufferedReader inputStream = Files.newBufferedReader(_userFile,
                 CHARSET_DEFAULT)) {
@@ -109,10 +125,12 @@ public class Database implements DatabaseInterface {
             }
         } catch (IOException ex) {
             ex.printStackTrace();
+            LOGGER.severe("bakaMap update failed");
         }
     }
 
     private void addTaskToMap(Task task) {
+        LOGGER.info("add to bakaMap");
         String key = task.getKey();
 
         if (!_bakaMap.containsKey(key)) {
@@ -150,6 +168,7 @@ public class Database implements DatabaseInterface {
 
     @Override
     public boolean add(Task task) {
+        LOGGER.info("add task initialized");
         task.setDeleted(false);
         addTaskToMap(task);
         return dirtyWrite(task.toString());
@@ -157,6 +176,7 @@ public class Database implements DatabaseInterface {
 
     @Override
     public boolean delete(Task task) {
+        LOGGER.info("delete task initialized");
         String key = task.getKey();
         LinkedList<Task> target = _bakaMap.get(key);
         if (target == null) {
@@ -175,6 +195,7 @@ public class Database implements DatabaseInterface {
 
     @Override
     public void close() {
+        LOGGER.info("end Database initialized");
         updateFile();
         try {
             _outputStream.close();
@@ -182,9 +203,12 @@ public class Database implements DatabaseInterface {
             ex.printStackTrace();
         }
         _database = null;
+        BakaLogger.teardown();
     }
 
     private boolean updateFile() {
+        LOGGER.info("update file initialized");
+        // tempCreation();
         resetFile();
         writeFileComments();
         return writeLinesToFile();
@@ -201,11 +225,12 @@ public class Database implements DatabaseInterface {
             _outputStream.newLine();
             _outputStream.flush();
         } catch (IOException ex) {
-            ex.printStackTrace();
+            LOGGER.severe("unable to write to file!");
         }
     }
 
     private boolean writeLinesToFile() {
+        LOGGER.info("write to file initialized");
         try {
             sort();
             for (String key : _sortedKeys) {
@@ -222,16 +247,17 @@ public class Database implements DatabaseInterface {
             }
             return true;
         } catch (IOException ex) {
-            ex.printStackTrace();
+            LOGGER.severe("unable to write to file!");
             return false;
         }
     }
 
     private void resetFile() {
+        LOGGER.info("reset file initialized");
         try {
             Files.write(_userFile, EMPTY_BYTE);
         } catch (IOException ex) {
-            ex.printStackTrace();
+            LOGGER.severe("file reset failed");
         }
     }
 
@@ -242,12 +268,15 @@ public class Database implements DatabaseInterface {
             tempFile = Files.createTempFile("bakatxt", "old");
             Files.copy(_userFile, tempFile, StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException ex) {
-            ex.printStackTrace();
+            LOGGER.warning("Temp creation failed");
         }
+        LOGGER.info("Temp creation completed");
     }
 
     @Override
     public boolean setDone(Task task, boolean isDone) {
+        LOGGER.info("done status change initialized");
+        assert (isExist(task));
         delete(task);
         task.setDone(isDone);
         return add(task);
@@ -316,6 +345,7 @@ public class Database implements DatabaseInterface {
 
     @Override
     public boolean setFloating(Task task, boolean isFloating) {
+        LOGGER.info("set floating status initialized");
         delete(task);
         task.setFloating(isFloating);
         add(task);
@@ -329,13 +359,13 @@ public class Database implements DatabaseInterface {
             _outputStream.flush();
             return true;
         } catch (IOException ex) {
-            ex.printStackTrace();
             return false;
         }
     }
 
     @Override
     public void removeDone() {
+        LOGGER.info("delete done initialized");
         _removeDone = true;
         updateFile();
         updateMemory();
