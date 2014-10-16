@@ -165,7 +165,7 @@ blockquote {
     margin-bottom: 0; }
 
 table {
-  font-size: 10px;
+  font-size: 12px;
   padding: 0;border-collapse: collapse; }
   table tr {
     border-top: 1px solid #cccccc;
@@ -555,7 +555,7 @@ pre[class*="language-"] {
 <li><p>You can add new items into the list with the following command format:<br>
 <code>add &lt;title&gt; &lt;date&gt; &lt;time&gt; @&lt;venue&gt; --&lt;description&gt;</code><br>
 <sup><strong>Note</strong>: All commands are to be entered without the angle brackets.</sup><br>
-<img src="http://i.imgur.com/4PILNBv.png" alt="">
+<img src="http://i.imgur.com/4PILNBv.png" alt=""><br>
 You can add overlapping tasks. This is intentionally done to allow you to manage your tasks hassle-free. 
 A <em>title</em> is essential and the other details are optional. There must also be a ‘@’ before the <em>venue</em> and ‘--’ before the <em>description</em>. The positions of <em>title</em> and <em>description</em> are fixed while positions of the <em>date</em>, <em>time</em> and <em>venue</em> are interchangeable.<br>
 In addition, there is a range of syntax for both <em>date</em> and <em>time</em> inputs.  </p>
@@ -579,17 +579,17 @@ As for a <em>time</em> duration, the supported formats are to include  ‘-’ o
 <li><p>You can delete existing items from the list with the following command format:<br>
 <code>delete &lt;title&gt;</code><br>
 A numbered list of tasks containing the same title will be displayed. You can then choose the index to delete with the following command format: <code>&lt;index&gt;</code><br>
-<img src="http://i.imgur.com/kJaEo45.png" alt="">
+<img src="http://i.imgur.com/kJaEo45.png" alt=""><br>
 As for multiple deletes, you can enter a few index with a space in between. For example, using the command: <code>1 4 6</code> will delete tasks with index 1, 4 and 6.</p></li>
 <li><p>You can edit existing items from the list with the following command format:<br>
 <code>edit &lt;title&gt;</code><br>
 Similar to the delete function, a numbered list of tasks containing the same title will be displayed. You can then choose the index to edit with the follow command format: <code>&lt;index&gt;</code><br>
 After choosing the task to edit, the existing <em>title</em> will appear in the text box. You can edit the <em>title</em> or press enter to move on to the next detail. It will be in the following order: <em>title</em>, <em>time</em>, <em>date</em>, <em>venue</em> and lastly, <em>description</em>.<br>
-<img src="http://i.imgur.com/DmQcgKI.png" alt="">
-<img src="http://i.imgur.com/pAuzAcL.png" alt=""></p></li>
+<img src="http://i.imgur.com/DmQcgKI.png" alt=""><br>
+<img src="http://i.imgur.com/pAuzAcL.png" alt="">  </p></li>
 <li><p>You can view existing items from the list with the following command format:<br>
 <code>display &lt;day/week/month&gt;</code><br>
-<img src="http://i.imgur.com/TPL6fud.png" alt="">
+<img src="http://i.imgur.com/TPL6fud.png" alt=""><br>
 The details (<code>day</code>, <code>week</code>, <code>month</code>) after display represents the current day, week or month when the command is entered. To display all tasks, you can just enter <code>display</code>.<br>
 In addition, floating tasks will be displayed first, followed by all day tasks. The remaining tasks will be displayed according to the dates. Within the same day, the tasks will be displayed according to the time.</p></li>
 <li><p>On the Graphic User Interface, the following command format will close the program: <code>exit</code></p></li>
@@ -631,7 +631,7 @@ In addition, floating tasks will be displayed first, followed by all day tasks. 
 <h4>2.2.1 Architecture</h4>
 
 <p>Following a top-down development approach, you will be first introduced to the architecture of <em>BakaTxt</em>. This architecture will form the basis of implementation of <em>BakaTxt</em>.<br>
-<img src="http://i.imgur.com/dTopb42.png" alt="">
+<img src="http://i.imgur.com/dTopb42.png" alt=""><br>
 <sup>Fig.1. Architecture of <em>BakaTxt</em>.</sup></p>
 
 <p><a name="design-api"></a></p>
@@ -644,10 +644,10 @@ In addition, floating tasks will be displayed first, followed by all day tasks. 
 
 <h4>2.2.3 Sequence Diagrams</h4>
 
-<p><img src="http://i.imgur.com/sS0o4s7.png" alt="">
+<p><img src="http://i.imgur.com/sS0o4s7.png" alt=""><br>
 <sup>Fig.2. A sequence diagram depicting the initiation of <em>BakaTxt</em>.</sup>  </p>
 
-<p><img src="http://i.imgur.com/qGht8Ys.png" alt="">
+<p><img src="http://i.imgur.com/qGht8Ys.png" alt=""><br>
 <sup>Fig.3. A sequence diagram depicting the adding of a <code>Task</code>.</sup></p>
 
 <hr>
