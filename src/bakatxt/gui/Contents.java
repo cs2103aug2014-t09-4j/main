@@ -5,7 +5,6 @@ package bakatxt.gui;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.GridBagConstraints;
 import java.util.LinkedList;
 
 import javax.swing.BoxLayout;
@@ -21,16 +20,11 @@ import bakatxt.core.Task;
  *
  */
 
-// TODO merge in TaskItems class
 // TODO comments
 class Contents extends JPanel {
 
-    private static GridBagConstraints _layout = new GridBagConstraints();
     private static boolean _isEven = true;
 
-    // TODO should not need to print this, rather, take the thing to be printed from logic
-    private static final String MESSAGE_WELCOME = "Welcome to BakaTXT! For help "
-                                                + "please type help in the box above";
     private static final String MESSAGE_EMPTY = "null";
 
     private static final int DATE_AND_TASKS_START_POSITION = 1;
@@ -39,7 +33,6 @@ class Contents extends JPanel {
 
         setOpaque(false);
         setBackground(UIHelper.TRANSPARENT);
-        //setLayout(new GridBagLayout());
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setAlignmentX(Component.CENTER_ALIGNMENT);
         LinkedList<Task> tempTasks = tasks;
@@ -53,17 +46,11 @@ class Contents extends JPanel {
      * @param tasks is all the tasks in the LinkedList<Task> we need to add
      */
     protected void updateContents(LinkedList<Task> tasks) {
-        // TODO set alert message to the specific alert
-        setAlertMessage(setAlertMessageText(MESSAGE_WELCOME));
 
         try {
             addTasksByDate(tasks);
         } catch (NullPointerException e) {
             setNoEvents();
-            /*
-            setDateAndDay(setDayAndDateText(""), DATE_AND_TASKS_START_POSITION);
-            setEvents(new TaskItems(null), DATE_AND_TASKS_START_POSITION + 1);
-            */
         }
     }
 
@@ -156,40 +143,11 @@ class Contents extends JPanel {
         return UIHelper.GRAY_DARK;
     }
 
-    //TODO, move to BakaPanel
-    /**
-     * @param alertMessage is the message to put in the layout specified
-     */
-    private void setAlertMessage(FormattedText alertMessage) {
-/*
-        _layout.fill = GridBagConstraints.NONE;
-        _layout.anchor = GridBagConstraints.PAGE_START;
-        _layout.weightx = 0.0;
-        _layout.weighty = 0.01;
-        _layout.gridx = 0;
-        _layout.gridy = 0;
-        _layout.gridheight = 1;
-        _layout.gridwidth = 1;
-*/
-        this.add(alertMessage);
-    }
-
     /**
      * @param alertMessage is the message to put in the layout specified
      * @param y is the vertical order whereby it is placed
      */
     private void setDateAndDay(FormattedText dateAndDay, int y) {
-/*
-        _layout.fill = GridBagConstraints.NONE;
-        _layout.anchor = GridBagConstraints.LAST_LINE_END;
-        _layout.weightx = 0.0;
-        _layout.weighty = 0.01;
-        _layout.gridx = 0;
-        _layout.gridy = y;
-        _layout.gridheight = 1;
-        _layout.gridwidth = 1;
-        _layout.insets = new Insets(UIHelper.BORDER, 0, UIHelper.BORDER, 0);
-*/
         setAlignmentX(Component.RIGHT_ALIGNMENT);
         this.add(dateAndDay);
     }
@@ -199,48 +157,22 @@ class Contents extends JPanel {
      * @param y is the vertical order whereby it is placed
      */
     private void setEvents(TaskBox task, int y) {
-/*
-        _layout.fill = GridBagConstraints.BOTH;
-        _layout.anchor = GridBagConstraints.FIRST_LINE_START;
-        _layout.weightx = 1.0;
-        _layout.weighty = 1.0;
-        _layout.gridx = 0;
-        _layout.gridy = y;
-        _layout.gridheight = 1;
-        _layout.gridwidth = GridBagConstraints.REMAINDER;
-        _layout.insets = new Insets(0, 0, 0, 0);
-*/
         setAlignmentX(Component.CENTER_ALIGNMENT);
-        task.setMinimumSize(new Dimension(634, 100));
-        task.setPreferredSize(new Dimension(634, 100));
-        task.setMaximumSize(new Dimension(634, 100));
+        setTaskBoxSize(task);
         this.add(task);
     }
 
     //TODO probably a better method to do this
-
     private void setNoEvents() {
-
         FormattedText task = new FormattedText("You have no events!", UIHelper.PRESET_TYPE_TITLE,
                 UIHelper.PRESET_SIZE_TITLE, UIHelper.PRESET_COLOR_TITLE);
-        /*
-        _layout.fill = GridBagConstraints.NONE;
-        _layout.anchor = GridBagConstraints.CENTER;
-        _layout.weightx = 1.0;
-        _layout.weighty = 1.0;
-        _layout.gridx = 0;
-        _layout.gridy = 0;
-        */
         this.add(task);
     }
 
-    /**
-     * @param message is the string to style
-     * @return a alert message FormattedText with the string
-     */
-    private static FormattedText setAlertMessageText (String message) {
-        return new FormattedText(message, UIHelper.PRESET_TYPE_DEFAULT,
-                UIHelper.PRESET_SIZE_DEFAULT, UIHelper.PRESET_COLOR_ALERT);
+    private static void setTaskBoxSize(TaskBox task) {
+        task.setMinimumSize(new Dimension(634, 100));
+        task.setPreferredSize(new Dimension(634, 100));
+        task.setMaximumSize(new Dimension(634, 100));
     }
 
     /**

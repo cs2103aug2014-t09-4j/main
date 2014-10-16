@@ -21,15 +21,21 @@ import bakatxt.core.Task;
  */
 class BakaPanel extends JPanel {
 
+    // TODO should not need to print this, rather, take the thing to be printed from logic
+    private static final String MESSAGE_WELCOME = "Welcome to BakaTXT! For help "
+                                                + "please type help in the box above";
+
     private static Input _input;
     private static Contents _contents;
     private static BakaScrollPane _bakaScrollPane;
+    private static FormattedText _alertMessage;
 
     public BakaPanel(LinkedList<Task> tasks) {
 
         _input = new Input();
         _contents = new Contents(tasks);
         _bakaScrollPane = new BakaScrollPane(_contents, _contents.getSize().height);
+        _alertMessage = setAlertMessageText(MESSAGE_WELCOME);
 
         setOpaque(false);
         setMaximumSize(UIHelper.WINDOW_SIZE);
@@ -51,6 +57,9 @@ class BakaPanel extends JPanel {
      * @param session is the logic module we are retrieving the new information from
      */
     protected void refreshContents(LinkedList<Task> tasks) {
+
+        // TODO set alert message to the specific alert
+         _alertMessage.updateContents(MESSAGE_WELCOME);
 
          _contents.removeAll();
          _contents.updateContents(tasks);
@@ -76,6 +85,7 @@ class BakaPanel extends JPanel {
 
         setInputBox(layout);
         setContent(layout);
+        setAlertMessage(layout);
     }
 
     /**
@@ -87,7 +97,7 @@ class BakaPanel extends JPanel {
         layout.fill = GridBagConstraints.BOTH;
         layout.anchor = GridBagConstraints.FIRST_LINE_START;
         layout.weightx = 1.0;
-        layout.weighty = 0.03;
+        layout.weighty = 0.05;
         layout.gridx = 0;
         layout.gridy = 0;
         layout.insets = new Insets(2 * UIHelper.BORDER, 2 * UIHelper.BORDER,
@@ -96,7 +106,22 @@ class BakaPanel extends JPanel {
     }
 
     /**
-     * Tell the GridBag where to draw the content box
+     * @param alertMessage is the message to put in the layout specified
+     */
+    private void setAlertMessage(GridBagConstraints layout) {
+        layout.fill = GridBagConstraints.NONE;
+        layout.anchor = GridBagConstraints.PAGE_START;
+        layout.weightx = 0.0;
+        layout.weighty = 0.01;
+        layout.gridx = 0;
+        layout.gridy = 1;
+        layout.gridheight = 1;
+        layout.gridwidth = 1;
+        this.add(_alertMessage, layout);
+    }
+
+    /**
+     * Tell the GridBag where to draw the BakaScrollPane containing the content box
      *
      * @param layout is the GridBag which is being drawn on
      */
@@ -106,11 +131,19 @@ class BakaPanel extends JPanel {
         layout.weightx = 1.0;
         layout.weighty = 1.0;
         layout.gridx = 0;
-        layout.gridy = 1;
+        layout.gridy = 2;
         layout.insets = new Insets(0, 2 * UIHelper.BORDER,
                 2 * UIHelper.BORDER, 2 * UIHelper.BORDER);
-        //this.add(_contents, layout);
         this.add(_bakaScrollPane, layout);
+    }
+
+    /**
+     * @param message is the string to style
+     * @return a alert message FormattedText with the string
+     */
+    private static FormattedText setAlertMessageText (String message) {
+        return new FormattedText(message, UIHelper.PRESET_TYPE_DEFAULT,
+                UIHelper.PRESET_SIZE_DEFAULT, UIHelper.PRESET_COLOR_ALERT);
     }
 
     /**

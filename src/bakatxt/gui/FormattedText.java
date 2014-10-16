@@ -29,7 +29,9 @@ class FormattedText extends JTextArea {
         setText(s);
     }
 
-
+    protected void updateContents(String s) {
+        setText(s);
+    }
 
     @Override
     protected void paintBorder(Graphics g) {
