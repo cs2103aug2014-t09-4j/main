@@ -92,7 +92,7 @@ public class BakaUI extends JFrame {
 
         assert(tasks != null) : "tasks must not be null";
 
-        _bakaPanel.setContents(tasks);
+        _bakaPanel.refreshContents(tasks);
         _bakaUI.pack();
         _bakaUI.setLocationRelativeTo(null);
     }

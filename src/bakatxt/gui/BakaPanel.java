@@ -2,7 +2,6 @@
 
 package bakatxt.gui;
 
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -10,7 +9,7 @@ import java.awt.Insets;
 import java.util.LinkedList;
 
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
+import javax.swing.SwingUtilities;
 
 import bakatxt.core.Task;
 
@@ -24,32 +23,13 @@ class BakaPanel extends JPanel {
 
     private static Input _input;
     private static Contents _contents;
-    private static JScrollPane _scrollFrame;
-    //TODO Math for scrollFrame
-    //TODO No more ugly scrollFrame
+    private static BakaScrollPane _bakaScrollPane;
 
     public BakaPanel(LinkedList<Task> tasks) {
 
-        System.out.println(tasks.size());
-
-        int height;
-
-        if (tasks.size() > 7) {
-            height = 7;
-        } else {
-            height = tasks.size();
-        }
-
-        height *= 100;
-
         _input = new Input();
         _contents = new Contents(tasks);
-        _scrollFrame = new JScrollPane(_contents);
-        _contents.setAutoscrolls(true);
-        _scrollFrame.setPreferredSize(new Dimension(634, height));
-        _scrollFrame.setOpaque(false);
-        _scrollFrame.setBackground(UIHelper.TRANSPARENT);
-        _scrollFrame.setViewportView(_contents);
+        _bakaScrollPane = new BakaScrollPane(_contents, _contents.getSize().height);
 
         setOpaque(false);
         setMaximumSize(UIHelper.WINDOW_SIZE);
@@ -70,27 +50,21 @@ class BakaPanel extends JPanel {
      *
      * @param session is the logic module we are retrieving the new information from
      */
-    protected void setContents(LinkedList<Task> tasks) {
-
-        int height;
-
-        if (tasks.size() > 7) {
-            height = 7;
-        } else {
-            height = tasks.size();
-        }
-
-        height *= 100;
+    protected void refreshContents(LinkedList<Task> tasks) {
 
          _contents.removeAll();
          _contents.updateContents(tasks);
-         //_contents.validate();
-         //_contents.repaint();
 
-         _scrollFrame.setPreferredSize(new Dimension(634, height));
-         _scrollFrame.revalidate();
-         _scrollFrame.repaint();
+         _bakaScrollPane.setComponentSizeBasedOnHeight(_contents.getSize().height);
+         _bakaScrollPane.revalidate();
+         _bakaScrollPane.repaint();
 
+         SwingUtilities.invokeLater(new Runnable() {
+             @Override
+            public void run() {
+                 _bakaScrollPane.getVerticalScrollBar().setValue(0);
+             }
+          });
     }
 
     /**
@@ -136,7 +110,7 @@ class BakaPanel extends JPanel {
         layout.insets = new Insets(0, 2 * UIHelper.BORDER,
                 2 * UIHelper.BORDER, 2 * UIHelper.BORDER);
         //this.add(_contents, layout);
-        this.add(_scrollFrame, layout);
+        this.add(_bakaScrollPane, layout);
     }
 
     /**
