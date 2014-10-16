@@ -63,6 +63,7 @@ public class Database implements DatabaseInterface {
     private boolean _removeDone;
 
     private Database(String fileName) {
+        assert (_database == null);
         try {
             BakaLogger.setup();
         } catch (SecurityException | IOException ex) {
