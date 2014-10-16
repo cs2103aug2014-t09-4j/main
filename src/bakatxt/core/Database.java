@@ -277,7 +277,6 @@ public class Database implements DatabaseInterface {
     @Override
     public boolean setDone(Task task, boolean isDone) {
         LOGGER.info("done status change initialized");
-        assert (isExist(task));
         delete(task);
         task.setDone(isDone);
         return add(task);
