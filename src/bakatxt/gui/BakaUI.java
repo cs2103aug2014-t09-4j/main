@@ -51,7 +51,6 @@ public class BakaUI extends JFrame {
         });
     }
 
-    // TODO remove our dependency for this method
     /**
      * This method listens for input from the GUI and does the following when
      * the
@@ -62,11 +61,7 @@ public class BakaUI extends JFrame {
      * to input new commands)
      * 2. Passes the input to the logic module to process it
      * 3. Lastly, updates the contents of the GUI to fit the command
-     *
-     * @deprecated use the getInput and updateUI methods instead at the logic
-     *             module
      */
-    @Deprecated
     public static void processInput() {
 
         Input input = _bakaPanel.getInput();
@@ -79,13 +74,6 @@ public class BakaUI extends JFrame {
                 updateUI(_bakaProcessor.getAllTasks());
             }
         });
-    }
-
-    /**
-     * @return the text in the input box
-     */
-    public static String getInputText() {
-        return _bakaPanel.getInput().getText();
     }
 
     /**
@@ -107,7 +95,6 @@ public class BakaUI extends JFrame {
     /**
      * This method draws the BakaPanel and sets the window as transparent and
      * centered.
-     *
      */
     private void initUI() {
         try {
@@ -126,6 +113,9 @@ public class BakaUI extends JFrame {
         setMouseActions();
     }
 
+    /**
+     * Allow mouse movement of window from any part of the window
+     */
     private static void setMouseActions() {
         MouseActions mouseActions = new MouseActions(_bakaPanel);
         _bakaPanel.addMouseListener(mouseActions);
