@@ -1,11 +1,10 @@
-//@author A0116538A
+// @author A0116538A
 
 package bakatxt.gui;
 
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
 import java.util.LinkedList;
 
 import javax.swing.JFrame;
@@ -14,8 +13,10 @@ import bakatxt.core.BakaProcessor;
 import bakatxt.core.Task;
 
 /**
- * BakaUI is the "main window" of the GUI for BakaTXT. Since we are doing a custom
- * window design, BakaUI is actually completely transparent. We will instead draw
+ * BakaUI is the "main window" of the GUI for BakaTXT. Since we are doing a
+ * custom
+ * window design, BakaUI is actually completely transparent. We will instead
+ * draw
  * a BakaPanel that fills the BakaUI window, and treat it as our actual window.
  *
  */
@@ -26,7 +27,8 @@ public class BakaUI extends JFrame {
     private static BakaProcessor _bakaProcessor;
 
     /**
-     * @param thisSession refers to the logic module we are interacting with
+     * @param thisSession
+     *            refers to the logic module we are interacting with
      */
     private BakaUI(BakaProcessor bakaProcessor) {
         _bakaProcessor = bakaProcessor;
@@ -47,17 +49,20 @@ public class BakaUI extends JFrame {
         });
     }
 
-    //TODO remove our dependency for this method
+    // TODO remove our dependency for this method
     /**
-     * This method listens for input from the GUI and does the following when the
+     * This method listens for input from the GUI and does the following when
+     * the
      * return key is pressed:
      *
-     * 1. Highlight all the text in the input box (to make it trivial for the user
-     *    to input new commands)
+     * 1. Highlight all the text in the input box (to make it trivial for the
+     * user
+     * to input new commands)
      * 2. Passes the input to the logic module to process it
      * 3. Lastly, updates the contents of the GUI to fit the command
      *
-     * @deprecated use the getInput and updateUI methods instead at the logic module
+     * @deprecated use the getInput and updateUI methods instead at the logic
+     *             module
      */
     @Deprecated
     public static void processInput() {
@@ -68,18 +73,14 @@ public class BakaUI extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 input.selectAll();
-                try {
-                    _bakaProcessor.executeCommand(input.getText());
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
+                _bakaProcessor.executeCommand(input.getText());
                 updateUI(_bakaProcessor.getAllTasks());
             }
         });
     }
 
     /**
-     *@return the text in the input box
+     * @return the text in the input box
      */
     public static String getInputText() {
         return _bakaPanel.getInput().getText();
@@ -90,7 +91,7 @@ public class BakaUI extends JFrame {
      */
     public static void updateUI(LinkedList<Task> tasks) {
 
-        assert(tasks != null) : "tasks must not be null";
+        assert (tasks != null) : "tasks must not be null";
 
         _bakaPanel.refreshContents(tasks);
         _bakaUI.pack();
@@ -100,8 +101,10 @@ public class BakaUI extends JFrame {
     protected static BakaUI getWindow() {
         return _bakaUI;
     }
+
     /**
-     * This method draws the BakaPanel and sets the window as transparent, centered,
+     * This method draws the BakaPanel and sets the window as transparent,
+     * centered,
      * unmovable, and always on top.
      *
      */

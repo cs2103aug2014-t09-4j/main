@@ -14,16 +14,16 @@ public interface DatabaseInterface {
 
     public boolean add(Task task);
 
-    public boolean delete(Task task) throws IOException;
+    public boolean delete(Task task);
 
-    public boolean setDone(Task task, boolean isDone) throws IOException;
+    public boolean setDone(Task task, boolean isDone);
 
     public boolean setFloating(Task task, boolean isFloating)
             throws IOException;
 
-    public void close() throws IOException;
+    public void close();
 
-    public void removeDone() throws IOException;
+    public void removeDone();
 
     public LinkedList<Task> getTaskWithTitle(String title);
 
