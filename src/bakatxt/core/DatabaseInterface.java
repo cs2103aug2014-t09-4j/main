@@ -10,8 +10,6 @@ public interface DatabaseInterface {
 
     public String getFileName();
 
-    public Task getPrevious();
-
     public boolean add(Task task);
 
     public boolean delete(Task task);
