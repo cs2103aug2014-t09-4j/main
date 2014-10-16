@@ -15,7 +15,7 @@ public class BakaParserTest {
 
     @Before
     public void setUp() throws Exception {
-        _parser = BakaParser.getInstance();
+        _parser = new BakaParser();
     }
 
     @Test

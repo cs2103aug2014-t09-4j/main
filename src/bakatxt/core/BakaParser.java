@@ -41,7 +41,6 @@ public class BakaParser implements BakaParserInterface {
     private static final String DISABLE_PARSING_REGEX = "(([0-2]\\d[0-5]\\d)|(\\d{1,2}))[^h]";
     private static final String DISABLE_FAKE_TIME_REGEX = "\\D+\\d";
 
-    private static BakaParser _parser = null;
     private static boolean _isDate;
     private static boolean _isTime;
     private static boolean _isVenue;
@@ -59,18 +58,11 @@ public class BakaParser implements BakaParserInterface {
     private static String _inputThatCantParse2;
     private static String _inputThatCantParse3;
 
-    private BakaParser() {
+    public BakaParser() {
         _isDate = false;
         _isTime = false;
         _isVenue = false;
         _isDescription = false;
-    }
-
-    public static BakaParser getInstance() {
-        if (_parser == null) {
-            _parser = new BakaParser();
-        }
-        return _parser;
     }
 
     @Override

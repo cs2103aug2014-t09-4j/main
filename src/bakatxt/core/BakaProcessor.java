@@ -18,7 +18,7 @@ public class BakaProcessor implements BakaProcessorInterface {
 
     public BakaProcessor() {
         _database = Database.getInstance();
-        _parser = BakaParser.getInstance();
+        _parser = new BakaParser();
         _displayTasks = _database.getAllTasks();
     }
 
