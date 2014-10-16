@@ -13,7 +13,7 @@ public class BakaProcessor implements BakaProcessorInterface {
     private static LinkedList<Task> _displayTasks;
 
     enum CommandType {
-        ADD, DELETE, DISPLAY, CLEAR, DEFAULT, EDIT, EXIT
+        ADD, DELETE, SHOW, DISPLAY, CLEAR, DEFAULT, REMOVE, EDIT, EXIT
     }
 
     public BakaProcessor() {
@@ -99,9 +99,13 @@ public class BakaProcessor implements BakaProcessorInterface {
                 output = addTask(input, output);
                 break;
 
+            case REMOVE :
+
             case DELETE :
                 deleteTask(input);
                 break;
+
+            case SHOW :
 
             case DISPLAY :
                 displayTask();
@@ -119,6 +123,8 @@ public class BakaProcessor implements BakaProcessorInterface {
                 break;
 
             case DEFAULT :
+                output = addTask(input, output);
+                break;
             default :
                 break;
         }
