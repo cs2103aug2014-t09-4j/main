@@ -133,7 +133,7 @@ public class BakaParserTest {
         String input = "add cut hair tomorrow";
         Task output = _parser.add(input);
         Task expected = new Task("cut hair");
-        expected.setDate("2014-10-16");
+        expected.setDate("2014-10-17");
         assertEquals(expected, output);
     }
 
@@ -142,7 +142,7 @@ public class BakaParserTest {
         String input = "add dinner tonight";
         Task output = _parser.add(input);
         Task expected = new Task("dinner");
-        expected.setDate("2014-10-15");
+        expected.setDate("2014-10-16");
         expected.setTime("1900");
         assertEquals(expected, output);
     }
@@ -162,7 +162,7 @@ public class BakaParserTest {
         String input = "add lunch at noon";
         Task output = _parser.add(input);
         Task expected = new Task("lunch");
-        expected.setDate("2014-10-15");
+        expected.setDate("2014-10-16");
         expected.setTime("1200");
         assertEquals(expected, output);
     }

@@ -215,89 +215,91 @@ public class BakaParser implements BakaParserInterface {
         String newDate;
         String[] dateFragment;
 
-        try {
-            for (int i = 0; i < temp.length; i++) {
-                String messageFragment = temp[i];
-                String originalFragment = temp[i];
-                // dd/MM/YY or dd/MM/YYYY or dd/MM
-                if (messageFragment.matches(DATE_FORMAT_DDMMYYYY_REGEX)
-                        || messageFragment.matches(DATE_FORMAT_DDMMYY_REGEX)
-                        || messageFragment.matches(DATE_FORMAT_DDMM_REGEX)) {
+        for (int i = 0; i < temp.length; i++) {
+            String messageFragment = temp[i];
+            String originalFragment = temp[i];
+            // dd/MM/YY or dd/MM/YYYY or dd/MM
+            if (messageFragment.matches(DATE_FORMAT_DDMMYYYY_REGEX)
+                    || messageFragment.matches(DATE_FORMAT_DDMMYY_REGEX)
+                    || messageFragment.matches(DATE_FORMAT_DDMM_REGEX)) {
 
-                    // dd/MM
-                    if (messageFragment.length() <= 5
-                            && messageFragment.length() > 2) {
-                        messageFragment = messageFragment + STRING_DASH
-                                + STRING_YEAR;
-                    }
-
-                    dateFragment = messageFragment
-                            .split(DATE_FORMAT_DIVIDER_REGEX);
-                    if (dateFragment[2].length() == 2) {
-                        dateFragment[2] = STRING_YEAR_FRAG + dateFragment[2];
-                    }
-                    newDate = dateFragment[2] + STRING_DASH + dateFragment[1]
-                            + STRING_DASH + dateFragment[0];
-
-                    input = input.replace(originalFragment, newDate);
-                    _inputDateThatCantParse = originalFragment;
+                // dd/MM
+                if (messageFragment.length() <= 5
+                        && messageFragment.length() > 2) {
+                    messageFragment = messageFragment + STRING_DASH
+                            + STRING_YEAR;
                 }
 
-                if (input.contains(STRING_TMR)) {
-                    _inputDateThatCantParse = STRING_TMR;
+                dateFragment = messageFragment.split(DATE_FORMAT_DIVIDER_REGEX);
+                if (dateFragment[2].length() == 2) {
+                    dateFragment[2] = STRING_YEAR_FRAG + dateFragment[2];
                 }
-                if (input.contains(STRING_TODAY)) {
-                    _inputDateThatCantParse = STRING_TODAY;
-                }
+                newDate = dateFragment[2] + STRING_DASH + dateFragment[1]
+                        + STRING_DASH + dateFragment[0];
 
-                if (messageFragment.matches(DISABLE_NUMBER_REGEX)) {
-                    _inputThatCantParse1 = originalFragment;
-                    input = input.replace(originalFragment, STRING_SPACE);
-                }
-                if (messageFragment.matches(DISABLE_PARSING_REGEX)) {
-                    _inputThatCantParse2 = originalFragment;
-                    input = input.replace(originalFragment, STRING_SPACE);
-                }
-                if (messageFragment.matches(DISABLE_FAKE_TIME_REGEX)) {
-                    _inputThatCantParse3 = originalFragment;
-                    input = input.replace(originalFragment, STRING_SPACE);
-                }
+                input = input.replace(originalFragment, newDate);
+                _inputDateThatCantParse = originalFragment;
             }
 
-            List<DateGroup> dateGroup = parser.parse(input);
+            if (input.contains(STRING_TMR)) {
+                _inputDateThatCantParse = STRING_TMR;
+            }
+            if (input.contains(STRING_TODAY)) {
+                _inputDateThatCantParse = STRING_TODAY;
+            }
+
+            if (messageFragment.matches(DISABLE_NUMBER_REGEX)) {
+                _inputThatCantParse1 = originalFragment;
+                input = input.replace(originalFragment, STRING_SPACE);
+            }
+            if (messageFragment.matches(DISABLE_PARSING_REGEX)) {
+                _inputThatCantParse2 = originalFragment;
+                input = input.replace(originalFragment, STRING_SPACE);
+            }
+            if (messageFragment.matches(DISABLE_FAKE_TIME_REGEX)) {
+                _inputThatCantParse3 = originalFragment;
+                input = input.replace(originalFragment, STRING_SPACE);
+            }
+        }
+
+        List<DateGroup> dateGroup = parser.parse(input);
+        if (dateGroup.size() > 0) {
             Date date = dateGroup.get(0).getDates().get(0);
             _inputDate = dateGroup.get(0).getText();
+
             SimpleDateFormat DATE_FORMAT = new SimpleDateFormat(
                     DATE_FORMAT_STANDARD);
             String output = DATE_FORMAT.format(date);
 
             _date = output;
-        } catch (Exception ex) {
+        } else {
             _date = null;
         }
     }
 
     private static void identifyTime(String input) {
-        try {
-            if (_inputDateThatCantParse != null) {
-                input = input.replace(_inputDateThatCantParse, STRING_SPACE);
-            }
-            if (_inputThatCantParse1 != null) {
-                input = input.replace(_inputThatCantParse1, STRING_SPACE);
-            }
-            if (_inputThatCantParse2 != null) {
-                input = input.replace(_inputThatCantParse2, STRING_SPACE);
-            }
-            if (_inputThatCantParse3 != null) {
-                input = input.replace(_inputThatCantParse3, STRING_SPACE);
-            }
+        Parser parser = new Parser();
 
-            if (input.contains(STRING_TONIGHT)) {
-                input = input.replace(STRING_TONIGHT, STRING_TONIGHT_TIME);
-            }
+        if (_inputDateThatCantParse != null) {
+            input = input.replace(_inputDateThatCantParse, STRING_SPACE);
+        }
+        if (_inputThatCantParse1 != null) {
+            input = input.replace(_inputThatCantParse1, STRING_SPACE);
+        }
+        if (_inputThatCantParse2 != null) {
+            input = input.replace(_inputThatCantParse2, STRING_SPACE);
+        }
+        if (_inputThatCantParse3 != null) {
+            input = input.replace(_inputThatCantParse3, STRING_SPACE);
+        }
 
-            Parser parser = new Parser();
-            List<DateGroup> dateGroup = parser.parse(input);
+        if (input.contains(STRING_TONIGHT)) {
+            input = input.replace(STRING_TONIGHT, STRING_TONIGHT_TIME);
+        }
+
+        List<DateGroup> dateGroup = parser.parse(input);
+        if (dateGroup.size() > 0) {
+
             Date timeStart = null;
             Date timeEnd = null;
             String output;
@@ -308,9 +310,11 @@ public class BakaParser implements BakaParserInterface {
                 timeStart = dateGroup.get(0).getDates().get(0);
                 timeEnd = dateGroup.get(0).getDates().get(1);
             }
+
             _inputTime = dateGroup.get(0).getText();
             SimpleDateFormat TIME_FORMAT = new SimpleDateFormat("HHmm");
             String outputStart = TIME_FORMAT.format(timeStart);
+
             if (timeEnd != null) {
                 String outputEnd = TIME_FORMAT.format(timeEnd);
                 output = outputStart + " - " + outputEnd;
@@ -319,7 +323,7 @@ public class BakaParser implements BakaParserInterface {
             }
 
             _time = output;
-        } catch (Exception ex) {
+        } else {
             _time = null;
         }
     }
