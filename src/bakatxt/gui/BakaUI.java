@@ -2,7 +2,9 @@
 
 package bakatxt.gui;
 
+import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.LinkedList;
@@ -103,9 +105,8 @@ public class BakaUI extends JFrame {
     }
 
     /**
-     * This method draws the BakaPanel and sets the window as transparent,
-     * centered,
-     * unmovable, and always on top.
+     * This method draws the BakaPanel and sets the window as transparent and
+     * centered.
      *
      */
     private void initUI() {
@@ -118,13 +119,24 @@ public class BakaUI extends JFrame {
         setBackground(UIHelper.TRANSPARENT);
         setContentPane(_bakaPanel);
         pack();
-        setLocationRelativeTo(null); // centers the window on screen
+        setWindowLocation();
         setAlwaysOnTop(false);
         setTitle("Baka TX");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setMouseActions();
+    }
 
+    private static void setMouseActions() {
         MouseActions mouseActions = new MouseActions(_bakaPanel);
         _bakaPanel.addMouseListener(mouseActions);
         _bakaPanel.addMouseMotionListener(mouseActions);
+    }
+
+    /**
+     * Set the window position to a quarter below the top of the screen
+     */
+    private static void setWindowLocation() {
+        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+        _bakaUI.setLocation(dim.width/2-_bakaUI.getSize().width/2, dim.height/4);
     }
 }
