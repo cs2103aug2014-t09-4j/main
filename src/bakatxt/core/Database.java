@@ -131,7 +131,7 @@ public class Database implements DatabaseInterface {
     }
 
     private void addTaskToMap(Task task) {
-        LOGGER.info("add to bakaMap");
+        LOGGER.fine("add to bakaMap");
         String key = task.getKey();
 
         if (!_bakaMap.containsKey(key)) {
