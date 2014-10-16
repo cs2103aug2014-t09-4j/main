@@ -1,0 +1,1342 @@
+<!DOCTYPE html><html>
+
+<head>
+<meta charset="utf-8">
+<title>BakaTxt</title>
+<link href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic|Ubuntu:300,400,700,300italic|Anonymous+Pro:400,400italic,700' rel='stylesheet' type='text/css'>
+<style type="text/css">
+body {
+  font-family: Ubuntu, Helvetica, arial, sans-serif;
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 1.6;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  background-color: white;
+  padding: 30px; }
+
+body > *:first-child {
+  margin-top: 0 !important; }
+body > *:last-child {
+  margin-bottom: 0 !important; }
+
+a {
+  color: #4183C4; }
+a.absent {
+  color: #cc0000; }
+a.anchor {
+  display: block;
+  padding-left: 30px;
+  margin-left: -30px;
+  cursor: pointer;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0; }
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 20px 0 10px;
+  padding: 0;
+  font-family: Lato, Helvetica Neue, Helvetica, arial, sans-serif;
+  font-weight: bold;
+  -webkit-font-smoothing: antialiased;
+  cursor: text;
+  position: relative; }
+
+h1:hover a.anchor, h2:hover a.anchor, h3:hover a.anchor, h4:hover a.anchor, h5:hover a.anchor, h6:hover a.anchor {
+  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA09pVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNiAoMTMuMCAyMDEyMDMwNS5tLjQxNSAyMDEyLzAzLzA1OjIxOjAwOjAwKSAgKE1hY2ludG9zaCkiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6OUM2NjlDQjI4ODBGMTFFMTg1ODlEODNERDJBRjUwQTQiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6OUM2NjlDQjM4ODBGMTFFMTg1ODlEODNERDJBRjUwQTQiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo5QzY2OUNCMDg4MEYxMUUxODU4OUQ4M0REMkFGNTBBNCIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo5QzY2OUNCMTg4MEYxMUUxODU4OUQ4M0REMkFGNTBBNCIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PsQhXeAAAABfSURBVHjaYvz//z8DJYCRUgMYQAbAMBQIAvEqkBQWXI6sHqwHiwG70TTBxGaiWwjCTGgOUgJiF1J8wMRAIUA34B4Q76HUBelAfJYSA0CuMIEaRP8wGIkGMA54bgQIMACAmkXJi0hKJQAAAABJRU5ErkJggg==) no-repeat 10px center;
+  text-decoration: none; }
+
+h1 tt, h1 code {
+  font-size: inherit; }
+
+h2 tt, h2 code {
+  font-size: inherit; }
+
+h3 tt, h3 code {
+  font-size: inherit; }
+
+h4 tt, h4 code {
+  font-size: inherit; }
+
+h5 tt, h5 code {
+  font-size: inherit; }
+
+h6 tt, h6 code {
+  font-size: inherit; }
+
+h1 {
+  font-size: 28px;
+  color: black; }
+
+h2 {
+  font-size: 24px;
+  border-bottom: 1px solid #cccccc;
+  color: black; }
+
+h3 {
+  font-size: 18px; }
+
+h4 {
+  font-size: 16px; }
+
+h5 {
+  font-size: 14px; }
+
+h6 {
+  color: #777777;
+  font-size: 14px; }
+
+p, blockquote, ol, dl, li, table, pre {
+  margin: 15px 0; }
+
+hr {
+  background: transparent url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAAECAYAAACtBE5DAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6OENDRjNBN0E2NTZBMTFFMEI3QjRBODM4NzJDMjlGNDgiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6OENDRjNBN0I2NTZBMTFFMEI3QjRBODM4NzJDMjlGNDgiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo4Q0NGM0E3ODY1NkExMUUwQjdCNEE4Mzg3MkMyOUY0OCIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo4Q0NGM0E3OTY1NkExMUUwQjdCNEE4Mzg3MkMyOUY0OCIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PqqezsUAAAAfSURBVHjaYmRABcYwBiM2QSA4y4hNEKYDQxAEAAIMAHNGAzhkPOlYAAAAAElFTkSuQmCC) repeat-x 0 0;
+  border: 0 none;
+  color: #cccccc;
+  height: 4px;
+  padding: 0;
+}
+
+body > h2:first-child {
+  margin-top: 0;
+  padding-top: 0; }
+body > h1:first-child {
+  margin-top: 0;
+  padding-top: 0; }
+  body > h1:first-child + h2 {
+    margin-top: 0;
+    padding-top: 0; }
+body > h3:first-child, body > h4:first-child, body > h5:first-child, body > h6:first-child {
+  margin-top: 0;
+  padding-top: 0; }
+
+a:first-child h1, a:first-child h2, a:first-child h3, a:first-child h4, a:first-child h5, a:first-child h6 {
+  margin-top: 0;
+  padding-top: 0; }
+
+h1 p, h2 p, h3 p, h4 p, h5 p, h6 p {
+  margin-top: 0; }
+
+li p.first {
+  display: inline-block; }
+li {
+  margin: 0; }
+ul, ol {
+  padding-left: 30px; }
+
+ul :first-child, ol :first-child {
+  margin-top: 0; }
+
+dl {
+  padding: 0; }
+  dl dt {
+    font-size: 14px;
+    font-weight: bold;
+    font-style: italic;
+    padding: 0;
+    margin: 15px 0 5px; }
+    dl dt:first-child {
+      padding: 0; }
+    dl dt > :first-child {
+      margin-top: 0; }
+    dl dt > :last-child {
+      margin-bottom: 0; }
+  dl dd {
+    margin: 0 0 15px;
+    padding: 0 15px; }
+    dl dd > :first-child {
+      margin-top: 0; }
+    dl dd > :last-child {
+      margin-bottom: 0; }
+
+blockquote {
+  border-left: 4px solid #dddddd;
+  padding: 0 15px;
+  color: #777777; }
+  blockquote > :first-child {
+    margin-top: 0; }
+  blockquote > :last-child {
+    margin-bottom: 0; }
+
+table {
+  padding: 0;border-collapse: collapse; }
+  table tr {
+    border-top: 1px solid #cccccc;
+    background-color: white;
+    margin: 0;
+    padding: 0; }
+    table tr:nth-child(2n) {
+      background-color: #f8f8f8; }
+    table tr th {
+      font-weight: bold;
+      border: 1px solid #cccccc;
+      margin: 0;
+      padding: 6px 13px; }
+    table tr td {
+      border: 1px solid #cccccc;
+      margin: 0;
+      padding: 6px 13px; }
+    table tr th :first-child, table tr td :first-child {
+      margin-top: 0; }
+    table tr th :last-child, table tr td :last-child {
+      margin-bottom: 0; }
+
+img {
+  max-width: 100%; }
+
+span.frame {
+  display: block;
+  overflow: hidden; }
+  span.frame > span {
+    border: 1px solid #dddddd;
+    display: block;
+    float: left;
+    overflow: hidden;
+    margin: 13px 0 0;
+    padding: 7px;
+    width: auto; }
+  span.frame span img {
+    display: block;
+    float: left; }
+  span.frame span span {
+    clear: both;
+    color: #333333;
+    display: block;
+    padding: 5px 0 0; }
+span.align-center {
+  display: block;
+  overflow: hidden;
+  clear: both; }
+  span.align-center > span {
+    display: block;
+    overflow: hidden;
+    margin: 13px auto 0;
+    text-align: center; }
+  span.align-center span img {
+    margin: 0 auto;
+    text-align: center; }
+span.align-right {
+  display: block;
+  overflow: hidden;
+  clear: both; }
+  span.align-right > span {
+    display: block;
+    overflow: hidden;
+    margin: 13px 0 0;
+    text-align: right; }
+  span.align-right span img {
+    margin: 0;
+    text-align: right; }
+span.float-left {
+  display: block;
+  margin-right: 13px;
+  overflow: hidden;
+  float: left; }
+  span.float-left span {
+    margin: 13px 0 0; }
+span.float-right {
+  display: block;
+  margin-left: 13px;
+  overflow: hidden;
+  float: right; }
+  span.float-right > span {
+    display: block;
+    overflow: hidden;
+    margin: 13px auto 0;
+    text-align: right; }
+
+code, tt {
+  margin: 0 2px;
+  padding: 0 5px;
+  border: 1px solid #eaeaea;
+  background-color: #f8f8f8;
+  border-radius: 3px;
+  font-family: "Anonymous Pro" }
+
+pre code {
+  margin: 0;
+  padding: 0;
+  white-space: pre-wrap;
+  border: none;
+  background: transparent; }
+
+.highlight pre {
+  background-color: #f8f8f8;
+  border: 1px solid #cccccc;
+  font-size: 13px;
+  line-height: 19px;
+  overflow: auto;
+  padding: 6px 10px;
+  border-radius: 3px; }
+
+pre {
+  background-color: #f8f8f8;
+  border: 1px solid #cccccc;
+  font-size: 13px;
+  line-height: 19px;
+  overflow: auto;
+  padding: 6px 10px;
+  border-radius: 3px; }
+  pre code, pre tt {
+    background-color: transparent;
+    border: none; }
+
+kbd {
+background-color: #e7e7e7;
+background-image: linear-gradient(#fefefe, #e7e7e7);
+background-repeat: repeat-x;
+display: inline-block;
+padding: 3px 5px;
+font: 11px "Anonymous Pro", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+line-height: 10px;
+color: #000;
+border: 1px solid #cfcfcf;
+border-radius: 2px; }
+
+sup {
+    font-size: 0.83em;
+    vertical-align: super;
+    line-height: 0;
+}
+* {
+	-webkit-print-color-adjust: exact;
+}
+@media screen and (min-width: 914px) {
+    body {
+        width: 854px;
+        margin:0 auto;
+    }
+}
+@media print {
+	table, pre {
+		page-break-inside: avoid;
+	}
+	pre {
+		word-wrap: break-word;
+	}
+}
+
+.language-java {
+  white-space: pre-wrap; }
+</style>
+<style type="text/css">
+/**
+ * prism.js Custom-theme
+ * Based on dabblet (http://dabblet.com)
+ * @author Lea Verou
+ */
+
+code[class*="language-"],
+pre[class*="language-"] {
+	color: black;
+	text-shadow: 0 1px white;
+	font-family: "Anonymous Pro", Consolas, Monaco, 'Andale Mono', monospace;
+	direction: ltr;
+	text-align: left;
+	white-space: pre-wrap;
+	word-spacing: normal;
+	word-break: normal;
+	line-height: 1.5;
+
+	-moz-tab-size: 4;
+	-o-tab-size: 4;
+	tab-size: 4;
+
+	-webkit-hyphens: none;
+	-moz-hyphens: none;
+	-ms-hyphens: none;
+	hyphens: none;
+}
+
+pre[class*="language-"]::-moz-selection, pre[class*="language-"] ::-moz-selection,
+code[class*="language-"]::-moz-selection, code[class*="language-"] ::-moz-selection {
+	text-shadow: none;
+	background: #b3d4fc;
+}
+
+pre[class*="language-"]::selection, pre[class*="language-"] ::selection,
+code[class*="language-"]::selection, code[class*="language-"] ::selection {
+	text-shadow: none;
+	background: #b3d4fc;
+}
+
+@media print {
+	code[class*="language-"],
+	pre[class*="language-"] {
+		text-shadow: none;
+	}
+}
+
+/* Code blocks */
+pre[class*="language-"] {
+	padding: 1em;
+	margin: .5em 0;
+	overflow: auto;
+}
+
+:not(pre) > code[class*="language-"],
+pre[class*="language-"] {
+	background: #f5f2f0;
+}
+
+/* Inline code */
+:not(pre) > code[class*="language-"] {
+	padding: .1em;
+	border-radius: .3em;
+}
+
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+	color: slategray;
+}
+
+.token.punctuation {
+	color: #999;
+}
+
+.namespace {
+	opacity: .7;
+}
+
+.token.property,
+.token.tag,
+.token.boolean,
+.token.number,
+.token.constant,
+.token.symbol,
+.token.deleted {
+	color: #905;
+}
+
+.token.selector,
+.token.attr-name,
+.token.string,
+.token.char,
+.token.builtin,
+.token.inserted {
+	color: #690;
+}
+
+.token.operator,
+.token.entity,
+.token.url,
+.language-css .token.string,
+.style .token.string {
+	color: #a67f59;
+	background: hsla(0, 0%, 100%, .5);
+}
+
+.token.atrule,
+.token.attr-value,
+.token.keyword {
+	color: #07a;
+}
+
+.token.function {
+	color: #DD4A68;
+}
+
+.token.regex,
+.token.important,
+.token.variable {
+	color: #e90;
+}
+
+.token.important {
+	font-weight: bold;
+}
+
+.token.entity {
+	cursor: help;
+}
+</style>
+</head>
+<body>
+<h2>Contents</h2>
+
+<ul>
+<li>1. <a href="#user">User Guide</a></li>
+<li>2. <a href="#developer">Developer Guide</a>
+
+<ul>
+<li>2.1 <a href="#intro">Introduction</a>
+
+<ul>
+<li>2.1.1 <a href="#audience">Audience</a></li>
+<li>2.1.2 <a href="#principles">Principles</a></li>
+</ul></li>
+<li>2.2 <a href="#design">Design</a>
+
+<ul>
+<li>2.2.1 <a href="#architecture">Architecture</a></li>
+<li>2.2.2 <a href="#design-api">API</a></li>
+<li>2.2.3 <a href="#sequence">Sequence Diagrams</a></li>
+</ul></li>
+<li>2.3 <a href="#ui">UI</a>
+
+<ul>
+<li>2.3.1 <a href="#input">Input</a></li>
+<li>2.3.2 <a href="#content">Content</a></li>
+<li>2.3.3 <a href="#feedback">Feedback Mechanisms</a></li>
+<li>2.3.4 <a href="#ui-other">Other Components</a></li>
+</ul></li>
+<li>2.4 <a href="#logic">Logic</a>
+
+<ul>
+<li>2.4.1 <a href="#execute">Executing Commands</a></li>
+</ul></li>
+<li>2.5 <a href="#parser">Parser</a>
+
+<ul>
+<li>2.5.1 <a href="#date">Date Parsing</a></li>
+<li>2.5.2 <a href="#parse-sequence">Parse Sequence</a></li>
+<li>2.5.3 <a href="#package-task">Task Packaging</a></li>
+</ul></li>
+<li>2.6 <a href="#database">Database</a>
+
+<ul>
+<li>2.6.1 <a href="#singleton">Singleton</a></li>
+<li>2.6.2 <a href="#hm-ll">HashMap / LinkedList</a></li>
+<li>2.6.3 <a href="#sort">Sort</a></li>
+<li>2.6.4 <a href="#read-write">Read / Write</a></li>
+</ul></li>
+<li>2.7 <a href="#task">Task</a>
+
+<ul>
+<li>2.7.1 <a href="#output">Output</a></li>
+<li>2.7.2 <a href="#tags">Tags</a></li>
+</ul></li>
+<li>2.8 <a href="#storage">Storage File</a></li>
+</ul></li>
+<li>3. <a href="#acknowledgements">Acknowledgements</a></li>
+<li>4. <a href="#appendix">Appendixes</a>
+
+<ul>
+<li>4.1 <a href="#user-stories">Appendix A: User Stories</a>
+
+<ul>
+<li>4.1.1 <a href="#stories-likely">Likely</a></li>
+<li>4.1.2 <a href="#stories-unlikely">Unlikely</a></li>
+</ul></li>
+<li>4.2 <a href="#product-survey">Appendix B: Product Survey</a>
+
+<ul>
+<li>4.2.1 <a href="#notational-velocity">Notational Velocity</a></li>
+<li>4.2.2 <a href="#rtm">Remember The Milk</a></li>
+<li>4.2.3 <a href="#g-cal">Google Calendar</a></li>
+<li>4.2.4 <a href="#osx-reminders">Mac OSX Reminders</a></li>
+<li>4.2.5 <a href="#osx-cal">Max OSX Calendar</a></li>
+</ul></li>
+<li>4.3 <a href="#api">Appendix C: API of <em>BakaTxt</em></a></li>
+<li>4.4 <a href="#example-storage-file">Appendix D: Example of Storage File</a></li>
+</ul></li>
+</ul>
+
+<p><a name="user"></a></p>
+
+<h2>1. User Guide</h2>
+
+<ol>
+<li><p>When you first start <em>BakaTxt</em>, you will see a prompt asking if you would like the program to be started with Windows. This will only be shown on the first time you run the program.<br>
+<sup><strong>Note</strong>: You can change your choice in the Options menu.</sup></p></li>
+<li><p>You will also be prompted to select a key combination to bind with <em>BakaTxt</em>. This will also be shown on the first time you run <em>BakaTxt</em> and it enables you to quickly access it. The default key combination will be <kbd>CTRL + SHIFT + L</kbd>.<br>
+<sup><strong>Note</strong>: You can change your choice in the Options menu.</sup></p></li>
+<li><p>You can add new items into the list with the following command format:<br>
+<code>add &lt;title&gt; &lt;date&gt; &lt;time&gt; @&lt;venue&gt; --&lt;description&gt;</code><br>
+<sup><strong>Note</strong>: All commands are to be entered without the angle brackets.</sup><br>
+You can add overlapping tasks. This is intentionally done to allow you to manage your tasks hassle-free. 
+A <em>title</em> is essential and the other details are optional. There must also be a ‘@’ before the <em>venue</em> and ‘--’ before the <em>description</em>. The positions of <em>title</em> and <em>description</em> are fixed while positions of the <em>date</em>, <em>time</em> and <em>venue</em> are interchangeable.<br>
+In addition, there is a range of syntax for both <em>date</em> and <em>time</em> inputs.  </p>
+
+<ol>
+<li>The supported formats for the <em>date</em> inputs are:
+
+<ol>
+<li>3/2/2014, 3/2/14, 3/2</li>
+<li>today, tomorrow, next thursday, next month, next year</li>
+</ol></li>
+<li>The supported formats for the <em>time</em> inputs are:
+
+<ol>
+<li>10pm, 7am</li>
+<li>12:59, 23:59, 06:00 hours</li>
+<li>noon (12pm), afternoon (12pm), midnight (12am)<br>
+As for a <em>time</em> duration, the supported formats are to include  ‘-’ or ‘to’ between the two timings. For example, 10am to 12pm.</li>
+</ol></li>
+</ol></li>
+<li><p>You can delete existing items from the list with the following command format:<br>
+<code>delete &lt;title&gt;</code><br>
+A numbered list of tasks containing the same title will be displayed. You can then choose the index to delete with the following command format: <code>&lt;index&gt;</code><br>
+As for multiple deletes, you can enter a few index with a space in between. For example, using the command: <code>1 4 6</code> will delete tasks with index 1, 4 and 6.</p></li>
+<li><p>You can edit existing items from the list with the following command format:<br>
+<code>edit &lt;title&gt;</code><br>
+Similar to the delete function, a numbered list of tasks containing the same title will be displayed. You can then choose the index to edit with the follow command format: <code>&lt;index&gt;</code><br>
+After choosing the task to edit, the existing <em>title</em> will appear in the text box. You can edit the <em>title</em> or press enter to move on to the next detail. It will be in the following order: <em>title</em>, <em>time</em>, <em>date</em>, <em>venue</em> and lastly, <em>description</em>.</p></li>
+<li><p>You can view existing items from the list with the following command format:<br>
+<code>display &lt;day/week/month&gt;</code><br>
+The details (<code>day</code>, <code>week</code>, <code>month</code>) after display represents the current day, week or month when the command is entered. To display all tasks, you can just enter <code>display</code>.<br>
+In addition, floating tasks will be displayed first, followed by all day tasks. The remaining tasks will be displayed according to the dates. Within the same day, the tasks will be displayed according to the time.</p></li>
+<li><p>On the Graphic User Interface, the following command format will close the program: <code>exit</code></p></li>
+<li><p>Thank you for using <em>BakaTxt</em>. </p></li>
+</ol>
+
+<p><a name="developer"></a></p>
+
+<h2>2. Developer Guide</h2>
+
+<p><a name="intro"></a></p>
+
+<h3>2.1 Introduction</h3>
+
+<p>Welcome to the developer guide for <em>BakaTxt</em>. <em>BakaTxt</em> is a Java-based to-do manager that allows the user to easily manage their daily tasks. In this guide, you will gain an overview of the basics of development for <em>BakaTxt</em>.</p>
+
+<p><a name="audience"></a></p>
+
+<h4>2.1.1 Audience</h4>
+
+<p>This guide is designed for developers with basic knowledge of Java, including the Swing components, as well as object-oriented programming concepts.</p>
+
+<p><a name="principles"></a></p>
+
+<h4>2.1.2 Principles</h4>
+
+<p><em>BakaTxt</em> is designed with simplicity in mind. It is specifically made simple to use, for both developers and the users. The program is intentionally coded with common basic Java API to ensure better developer compatibility. Further information will be discussed in the following chapters.</p>
+
+<hr>
+
+<p><a name="design"></a></p>
+
+<h3>2.2 Design</h3>
+
+<p><a name="architecture"></a></p>
+
+<h4>2.2.1 Architecture</h4>
+
+<p>Following a top-down development approach, you will be first introduced to the architecture of <em>BakaTxt</em>. This architecture will form the basis of implementation of <em>BakaTxt</em>.</p>
+
+<p><sup>Fig.1. Architecture of <em>BakaTxt</em>.</sup></p>
+
+<p><a name="design-api"></a></p>
+
+<h4>2.2.2 API</h4>
+
+<p>A detailed set of public API for the various components of <em>BakaTxt</em> is available in Appendix C. The API is designed in tandem with the architecture to allow for easy extensibility of the features of the <code>Database</code>. You should be able to add further features to <em>BakaTxt</em> by basing your feature designs around the available API.</p>
+
+<p><a name="sequence"></a></p>
+
+<h4>2.2.3 Sequence Diagrams</h4>
+
+<p><sup>Fig.2. A sequence diagram depicting the initiation of <em>BakaTxt</em>.</sup></p>
+
+<p><sup>Fig.3. A sequence diagram depicting the adding of a <code>Task</code>.</sup></p>
+
+<hr>
+
+<p><a name="ui"></a></p>
+
+<h3>2.3 UI</h3>
+
+<p>The UI of <em>BakaTxt</em> is mainly made up of many custom drawn <code>JPanel</code>s inside a transparent <code>JFrame</code>. The <code>JFrame</code> is extended by the <code>BakaUI</code> class, which has  a <code>BakaPanel</code> <code>JPanel</code> that holds all of the other drawn objects.  There are 3 main components to the UI: the input, the content, and the feedback mechanisms (to be implemented).  </p>
+
+<p><a name="input"></a></p>
+
+<h4>2.3.1 Input</h4>
+
+<p>The input, located at the very top of the UI, is the main point of interaction from the User to <em>BakaTxt</em>. </p>
+
+<p>Getting the input (as a <code>String</code>) can be done from the <code>BakaUI</code> class by calling <code>getInput();</code>.  <code>getInput();</code> uses an <code>ActionListener()</code>, which, when activated, should highlight the text in the <code>Input</code>box as well as return the String within the <code>Input</code>.</p>
+
+<p><a name="content"></a></p>
+
+<h4>2.3.2 Content</h4>
+
+<p>The content is the main body of <em>BakaTxt</em>. It mainly comprises of two parts, the date and the tasks for that date.</p>
+
+<p>The date is currently just a simple <code>JTextArea</code> with formatting. A <code>FormattedText</code> class extends the <code>JTextArea</code> to simplify matters. Simply call the <code>FormattedText</code> constructor to draw the date. Like so: </p>
+
+<pre><code class="language-java">new FormattedText(date, UIHelper.FORMAT_DATE);
+</code></pre>
+
+<p>Where <code>date</code> is the date in <code>String</code> form, and <code>UIHelper.FORMAT_DATE</code> specifies the properties of the text, such as it&#39;s color and size. </p>
+
+<p>The tasks are placed in <code>TaskBox</code>es, which also in turn use the <code>FormattedText</code> class to style it&#39;s contents. There are a few types of <code>TaskBox</code>es, namely, <code>FirstTaskBox</code>, <code>MiddleTaskBox</code>, <code>FinalTaskBox</code> and <code>OnlyTaskBox</code>.  Each of these <code>TaskBox</code>es dictate the look and style of the box wherein the task is shown to the User. <code>FirstTaskBox</code> is to be used when that task is the first task of the day, but is not the only task the User has for the day. <code>MiddleTaskBox</code> is to be used when that task neither the first nor the last task of the day. <code>FinalTaskBox</code> is to be used when that task is the last task of the day, but is not the only task the User has for the day. Lastly, <code>OnlyTaskBox</code> is to be used when the User only has a single task for the day.</p>
+
+<p>All of these <code>TaskBox</code>es can easily be drawn, for example:</p>
+
+<pre><code class="language-java">new FinalTaskBox(task, backgroundColor);
+</code></pre>
+
+<p><sup><strong>Note</strong>: you must specify the type of <code>TaskBox</code>, you are not allowed to create a <code>TaskBox</code> object as it is an abstract class.</sup></p>
+
+<p>You need to pass the <code>TaskBox</code> object a <code>Task</code>, as well as a <code>Color</code>. In <em>BakaTxt</em>, the <code>Color</code>s are alternating to distinguish between tasks without being overly fancy.</p>
+
+<p><a name="feedback"></a></p>
+
+<h4>2.3.3 Feedback Mechanisms</h4>
+
+<p>Feedback mechanisms are methods for us to tell the User what the program has done or is unable to do. It&#39;s purpose is to help the User ensure that he/she has inputed their commands correctly.</p>
+
+<p>There are currently two proposed feedback mechanisms to be implemented. </p>
+
+<p>Firstly, the <code>Input</code> Box will be made to shake left and right in quick succession to signify that the user has made an error. The main purpose of this is to grab the User&#39;s attention. The User may then correct his/her input to rectify the error.</p>
+
+<p>Secondly, in order to inform the User of the type of error he/she has made, there will be a string of text just below the <code>Input</code> Box. This string is a way for <em>BakaTxt</em> to communicate with the User in order to aid him/her in the usage of <em>BakaTxt</em>.</p>
+
+<p><a name="ui-other"></a></p>
+
+<h4>2.3.4 Other components</h4>
+
+<p>Apart from the aforementioned classes, there are a few other helper classes used in the GUI.</p>
+
+<p>The <code>MouseActions</code> class allows the User to move the <em>BakaTxt</em> window with the mouse from any part of the window. This is important since we have a non-standard UI, i.e., <em>BakaTxt</em> lacks a titlebar from which mouse movement is usually performed from.</p>
+
+<p>The <code>UIHelper</code> class contains helper methods and variables that are used by many classes in the UI.</p>
+
+<hr>
+
+<p><a name="logic"></a></p>
+
+<h3>2.4 Logic</h3>
+
+<p>The logic of <em>BakaTxt</em> serves as the main component of the <em>BakaTxt</em>, where it interacts with the user through Command Line Interface, Graphic User Interface and also with <code>Parser</code> and <code>Database</code>. </p>
+
+<p><code>BakaTxtMain</code> is a very simple class. The class mainly takes in a string of input from the user through the UI. The String of input will be passed to the <code>executeCommand</code> method to process the command. </p>
+
+<p>First, import <code>BakaUI</code> to the class:</p>
+
+<pre><code class="language-java">import bakatxt.gui.BakaUI;
+</code></pre>
+
+<p>Simply call the instance of the linked classes by doing: </p>
+
+<pre><code class="language-java">private static BakaParser _parser;
+private static Database _database;
+_parser = BakaParser.getInstance();
+_database = Database.getInstance();
+</code></pre>
+
+<p><a name="execute"></a></p>
+
+<h4>2.4.1 Executing Commands</h4>
+
+<p>The <code>executeCommand</code> is a public operation handled by <code>enum</code> and <code>switch</code> respectively. Generally <code>enums</code> are preferred over define as they are type-safe and more easily discoverable. Defines are harder to locate and can have complex behaviour. Define the types of commands in the <code>enum</code>:</p>
+
+<pre><code class="language-java">enum CommandType {
+    ADD, DELETE, DISPLAY, CLEAR, DEFAULT, EDIT, EXIT
+}
+</code></pre>
+
+<p>Using <code>switch</code> statements, you are able to process the different command types with the help of the parser to identify the first word of the <code>String</code> input. You can add in or modify the existing command types in the <code>executeCommand</code> function by adding a new case or changing the logic of the functions in the different cases.</p>
+
+<pre><code class="language-java">public static String executeCommand(String input) {
+    String command = _parser.getCommand(input);
+    CommandType commandType;
+    String output = null;
+    switch (commandType) {
+        case ADD :
+            output = addTask(input, output);
+            break;
+
+        case DELETE :
+            deleteTask(input);
+            break;
+
+        case DISPLAY :
+            displayTask();
+            break;
+
+        case CLEAR :
+            clearTask();
+            break;
+
+        case EDIT :
+            editTask(input);
+            break;
+
+        case EXIT : 
+            exitProg();
+            break; 
+
+        case DEFAULT :
+        default :   
+            break;
+    }
+    return output;
+}
+</code></pre>
+
+<hr>
+
+<p><a name="parser"></a></p>
+
+<h3>2.5 Parser</h3>
+
+<p><code>BakaParser</code> is the main parsing module of <em>BakaTxt</em>. It is responsible for parsing all the inputs from the user, such as getting command word from user inputs. </p>
+
+<p><a name="date"></a></p>
+
+<h4>2.5.1 Date Parsing</h4>
+
+<p>Currently, the parsing of date and time is done by the Natty Library (http://natty.joestelmach.com). However, as the library follows the American date syntax, some parsing has to be done manually using regex before any Natty usage is possible. The following code shows how the regex is used:</p>
+
+<pre><code class="language-java">private static final String DATE_FORMAT_DDMMYY_REGEX = &quot;(0?[12]?[0-9]|3[01])[/-](0?[1-9]|1[012])[/-](\\d\\d)&quot;;
+private static final String DATE_FORMAT_DDMMYYYY_REGEX = &quot;(0?[12]?[0-9]|3[01])[/-](0?[1-9]|1[012])[/-]((19|2[01])\\d\\d)&quot;;
+private static final String DATE_FORMAT_DDMM_REGEX = &quot;(0?[12]?[0-9]|3[01])[/-](0?[1-9]|1[012])&quot;;
+</code></pre>
+
+<p>The strings matching the regex is then passed into the parser in the format suitable for parsing.</p>
+
+<p><a name="parse-sequence"></a></p>
+
+<h4>2.5.2 Parse Sequence</h4>
+
+<p><code>BakaParser</code> first identifies the description according to the double dash delimiter (“--”), followed by the time and date using the library, then the venue according to the at delimiter (“@”) and lastly the title. </p>
+
+<p>The position of the description is fixed, hence it is identified first. Time and date is identified next as the positions of date, time and venue are not fixed. After identifying both date and time, venue is parsed next. Any string remaining following the at delimiter (“@”) will be identified as a venue. The title is the last to be identified as it can contain more than a word.  Common prepositions are also removed from the end of the title to account for user inputs such as “add lunch at 1pm”.</p>
+
+<p><a name="package-task"></a></p>
+
+<h4>2.5.3 Task Packaging</h4>
+
+<p><code>BakaParser</code> extracts all of the information and packages them into a Task file. </p>
+
+<pre><code class="language-java">Task task = new Task(_title);
+task.setDate(_date);
+task.setTime(_time);
+task.setVenue(_venue);
+task.setDescription(_description);
+</code></pre>
+
+<hr>
+
+<p><a name="database"></a></p>
+
+<h3>2.6 Database</h3>
+
+<p>The <code>Database</code> is the main driver between the logic and the text storage file. It handles reading and writing operations with the storage file. These operations are made available to you in the APIs for <em>BakaTxt</em>. </p>
+
+<p><a name="singleton"></a></p>
+
+<h4>2.6.1 Singleton</h4>
+
+<p><code>Database</code> is a singleton class, which is called by invoking the static method - <code>getInstance()</code>. This allows for various classes to share the same instance of the <code>Database</code>, allowing memory to be allocated efficiently.</p>
+
+<p><a name="hm-ll"></a></p>
+
+<h4>2.6.2 HashMap / LinkedList</h4>
+
+<p>Information is read from the text storage file and stored in a <code>HashMap&lt;String, LinkedList&lt;Task&gt;&gt;</code>. This allows information to be retrieved easily in O(n) time for the specific type of tasks. The combined use of <code>HashMap</code> and <code>LinkedList</code> is to ensure that <em>BakaTxt</em> is able to handle a large volume of tasks without suffering huge performance degradation.</p>
+
+<p><a name="sort"></a></p>
+
+<h4>2.6.3 Sort</h4>
+
+<p>The tasks are sorted based on their keys (dates) in the <code>Database</code>. Keeping to <em>BakaTxt</em>’s aim of simplicity, the sorting is handled by a simple <code>Collections.sort()</code> call to the keys. The follow code snippet shows the sorting mechanism of <code>Database</code>.</p>
+
+<pre><code class="language-java">private void sort() {
+  _sortedKeys = new TreeSet&lt;String&gt;(_bakaMap.keySet());
+  for (Map.Entry&lt;String, LinkedList&lt;Task&gt;&gt; entry : 
+       _bakaMap.entrySet()) {
+    LinkedList&lt;Task&gt; today = entry.getValue();
+    Collections.sort(today);
+  }
+}
+</code></pre>
+
+<p><a name="read-write"></a></p>
+
+<h4>2.6.4 Read / Write</h4>
+
+<p>The read and write operations are handled by <code>BufferedReader</code> and <code>BufferedWriter</code> respectively. This is to allow more efficient IO operations as compared to traditional <code>FileReader</code> and <code>FileWriter</code>. The tasks are read from the storage files and wrapped by the <code>Task</code> class into a <code>Task</code> instance.</p>
+
+<hr>
+
+<p><a name="task"></a></p>
+
+<h3>2.7 Task</h3>
+
+<p>The Task class is the main wrapper class for information in <em>BakaTxt</em>. Each instance contains the vital information of a specific task, as defined by the attributes of the Task class.</p>
+
+<pre><code class="language-java">private String _title;
+private String _date;
+private String _time;
+private String _venue;
+private String _description; 
+private boolean _isFloating;
+private boolean _isDone;
+private boolean _isDeleted;
+</code></pre>
+
+<p>As defined in the API (refer to Appendix C), there are public methods to manipulate the information within the <code>Task</code> instance. </p>
+
+<p><a name="output"></a></p>
+
+<h4>2.7.1 Output</h4>
+
+<p>The <code>Task</code> class also contains 2 different forms of <code>toString()</code>. <code>toDisplayString()</code> formats the <code>Task</code> instance to a more user friendly format for displaying in the CLI, whereas <code>toString()</code> is utilized by the <code>Database</code> class to store the information of the task efficiently in the storage file. The 2 outputs below shows the difference between the 2 different output formats.</p>
+
+<table>
+    <thead>
+        <th width="50%">
+            <code>toDisplayString()</code>
+        </th>
+        <th width="50%">
+            <code>toString()</code>
+        </th>
+    </thead>
+    <tr>
+        <td>
+            <code>[TITLE] New Task</code>
+        </td>
+        <td rowspan="7">
+            <code>[5000 2014-05-02 2230] [TITLE] New Task [DATE] 2014-05-02 [TIME] 2230 [VENUE] null [DONE] true [FLOATING] false [DELETED] false [DESCRIPTION] null</code>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <code>[DATE] 2014-05-02</code>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <code>[TIME] 2230</code>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <code>[VENUE] null</code>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <code>[DESCRIPTION] null</code>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <code>[DONE] true</code>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <code>[FLOATING] false</code>
+        </td>
+    </tr>
+</table>
+
+<p><a name="tags"></a></p>
+
+<h4>2.7.2 Tags</h4>
+
+<p>Each <code>Task</code> contains a tag that it is associated with when stored in the storage file. The tags serve as a marker for sorting and identifying the various kinds of tasks. The list below shows the different tags that can be assigned. The tags are enclosed by square brackets at the start of a task output (<code>toString()</code>).</p>
+
+<ul>
+<li><code>0000</code> : Floating Task</li>
+<li><code>5000</code> : Done Task</li>
+<li><code>9999</code> : Deleted Task</li>
+<li><code>&lt;date&gt; &lt;time&gt;</code> : Scheduled Task</li>
+</ul>
+
+<hr>
+
+<p><a name="storage"></a></p>
+
+<h3>2.8 Storage File</h3>
+
+<p>The storage file is designed from ground up to be simple and readable. It has the serve the purpose of efficiency as well as readability for the users. You are able to get any form of information from the storage file using the Database class. If there is any manual edit in the storage file, these edits will be reflected after <em>BakaTxt</em> is restarted.</p>
+
+<p>An example of the storage file is included in Appendix D.</p>
+
+<p><a name="acknowledgements"></a></p>
+
+<h2>3. Acknowledgments</h2>
+
+<ol>
+<li><a href="https://github.com/joestelmach/natty">Natty: Natural Language Date Parser</a></li>
+</ol>
+
+<p><a name="appendix"></a></p>
+
+<h2>4. Appendixes</h2>
+
+<p><a name="user-stories"></a></p>
+
+<h3>4.1 Appendix A: User stories. As a user, I…</h3>
+
+<p><a name="stories-likely"></a></p>
+
+<h4>4.1.1 Likely</h4>
+
+<table><thead>
+<tr>
+<th>ID</th>
+<th>I can...(functionality)</th>
+<th>so that I...(i.e., value)</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>commands</td>
+<td>use a few variations of the command format</td>
+<td>have the flexibility of interacting with the application</td>
+</tr>
+<tr>
+<td>undoAction</td>
+<td>undo most recent action</td>
+<td>make quick changes to my workflow</td>
+</tr>
+<tr>
+<td>addTasks</td>
+<td>add timed tasks, deadline tasks and tasks with floating tasks</td>
+<td>have a single versatile scheduling list</td>
+</tr>
+<tr>
+<td>autoComplete</td>
+<td>use the auto-complete function</td>
+<td>can have faster access to the tasks instead of typing out the whole command</td>
+</tr>
+<tr>
+<td>searchTasks</td>
+<td>search for tasks</td>
+<td>can edit or delete tasks easily</td>
+</tr>
+<tr>
+<td>addNotes</td>
+<td>add notes to tasks</td>
+<td>can append more information to the task</td>
+</tr>
+<tr>
+<td>tickTasks</td>
+<td>tick tasks that are completed</td>
+<td>can see which tasks are completed</td>
+</tr>
+<tr>
+<td>addFloating</td>
+<td>add all-day tasks or tasks with no deadlines</td>
+<td>can add a range of tasks to the list</td>
+</tr>
+<tr>
+<td>viewType</td>
+<td>view the list in different formats like days/months</td>
+<td>can easily view the tasks</td>
+</tr>
+<tr>
+<td>notCompleted</td>
+<td>be notified that there are uncompleted tasks after the deadline</td>
+<td>can choose to reschedule or delete the task</td>
+</tr>
+<tr>
+<td>notifyTask</td>
+<td>be notified if an added task clashes with other tasks</td>
+<td>can be sure that there will not be any clash of events in my schedule</td>
+</tr>
+<tr>
+<td>sortPreferences</td>
+<td>manually sort the tasks according to my preferences</td>
+<td>can plan my tasks around my schedule</td>
+</tr>
+<tr>
+<td>snoozeTask</td>
+<td>snooze an upcoming or urgent task</td>
+<td>will not forget about it</td>
+</tr>
+</tbody></table>
+
+<p><a name="stories-unlikely"></a></p>
+
+<h4>4.1.2 Unlikely</h4>
+
+<table><thead>
+<tr>
+<th>ID</th>
+<th>I can...(functionality)</th>
+<th>so that I...(i.e., value)</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>viewCountdown</td>
+<td>see the countdown for tasks with deadlines</td>
+<td>can be reminded of the urgent upcoming tasks</td>
+</tr>
+<tr>
+<td>markTask</td>
+<td>mark the task with my account username</td>
+<td>can differentiate the ownership of tasks in a shared list</td>
+</tr>
+<tr>
+<td>setRecurring</td>
+<td>set recurring tasks on a daily/weekly/fornightly basis</td>
+<td>can avoid adding repetitive tasks repeatedly</td>
+</tr>
+<tr>
+<td>autoDelete</td>
+<td>schedule a task to auto-delete upon deadline</td>
+<td>do not have to manually delete the task</td>
+</tr>
+<tr>
+<td>prioritizeTask</td>
+<td>signify the importance of the tasks</td>
+<td>can determine the more urgent tasks to do</td>
+</tr>
+<tr>
+<td>colorEntries</td>
+<td>see color coded entries</td>
+<td>can verify tasks easily</td>
+</tr>
+<tr>
+<td>removeAllContaining</td>
+<td>remove tasks containing a certain string in one pass</td>
+<td>can avoid doing multiple deletes</td>
+</tr>
+</tbody></table>
+
+<p><a name="product-survey"></a></p>
+
+<h3>4.2 Appendix B: Product Survey</h3>
+
+<p><a name="notational-velocity"></a></p>
+
+<h4>4.2.1 Notational Velocity</h4>
+
+<p><strong>Documented by</strong>: Eng De Sheng</p>
+
+<p><strong>Strengths</strong>:</p>
+
+<ul>
+<li>[x] Able to issue commands through keyboard</li>
+<li>[x] ‘one-shot’ approach: able to type in commands in one line</li>
+<li>[x] Able to capture to-do items without a specific deadline</li>
+<li>[x] No need for Internet connectivity</li>
+<li>[x] Able to start with a shortcut key</li>
+<li>[x] Power Search</li>
+<li>[x] Mouse gestures not required, strictly optional</li>
+<li>[x] Able to start application with a shortcut key</li>
+</ul>
+
+<p><strong>Weaknesses</strong>:</p>
+
+<ul>
+<li>[ ] No tracking of to-do items on list</li>
+<li>[ ] No scheduling features of any form</li>
+<li>[ ] Unable to archive done to-do items</li>
+</ul>
+
+<p><a name="rtm"></a></p>
+
+<h4>4.2.2 Remember The Milk (RTM)</h4>
+
+<p><strong>Documented by</strong>: Eng De Sheng</p>
+
+<p><strong>Strengths</strong>:</p>
+
+<ul>
+<li>[x] Tracks to-do items</li>
+<li>[x] Helps user to decide what and when to-do items</li>
+<li>[x] Able to schedule to-do items before or after a specific time</li>
+<li>[x] Able to capture to-do items without a specific deadline</li>
+<li>[x] No need for Internet connectivity</li>
+<li>[x] Able to find a suitable slot to schedule a to-do item</li>
+<li>[x] Able to archive a to-do item</li>
+<li>[x] Able to postpone a to-do item</li>
+<li>[x] Easy way to block and release multiple time slots for tentative to-do items</li>
+</ul>
+
+<p><strong>Weaknesses</strong>:</p>
+
+<ul>
+<li>[ ] Unable to start application with a shortcut key</li>
+<li>[ ] Unable to type in commands in one line</li>
+<li>[ ] Unable to issue commands with keyboard</li>
+<li>[ ] Mouse gestures are required</li>
+</ul>
+
+<p><a name="g-cal"></a></p>
+
+<h4>4.2.3 Google Calendar</h4>
+
+<p><strong>Documented by</strong>: Cheryl Kee</p>
+
+<p><strong>Strengths</strong>:</p>
+
+<ul>
+<li>[x] Able to track to do items</li>
+<li>[x] Allows the user to view when are the free slots to add items</li>
+<li>[x] Able to display to do items that need to be done before a specific time and without a specific date</li>
+<li>[x] Able to add an item with details in one line</li>
+<li>[x] Able to mark an item as done</li>
+<li>[x] Able to decide what to do item to do next</li>
+</ul>
+
+<p><strong>Weaknesses</strong>:</p>
+
+<ul>
+<li>[ ] Unable to issue commands using keyboard</li>
+<li>[ ] Needs internet connectivity </li>
+<li>[ ] Unable to postpone an item</li>
+<li>[ ] Unable to block multiple slots when confirming the time for an item</li>
+<li>[ ] Unable to start application with a shortcut key</li>
+</ul>
+
+<p><a name="osx-reminders"></a></p>
+
+<h4>4.2.4 Mac OSX Reminders</h4>
+
+<p><strong>Documented by</strong>: Gil Ki Hyun</p>
+
+<p><strong>Strengths</strong>:</p>
+
+<ul>
+<li>[x] Simple GUI</li>
+<li>[x] Under a page, you can add list of things to do by its titles</li>
+<li>[x] Able to specify a date to be completed by</li>
+<li>[x] There is a function to remind the user on a particular time, or at a particular location</li>
+<li>[x] The user can set the priority of the task from low to high and setting it to a low will add a ! mark in front of the task list and three ! mark for high one.</li>
+<li>[x] The user also can add additional information under the notes, which will be added below the title.</li>
+<li>[x] Once a user sets a due date for the task, you are able to view using the calender function to check each day.</li>
+<li>[x] Able to sort by due date, priority, creation date or the title</li>
+</ul>
+
+<p><strong>Weaknesses</strong>:</p>
+
+<ul>
+<li>[ ] Firstly, it depends too much on the mouse</li>
+<li>[ ] Must manually delete the task by deleting the title (can be a little troublesome)</li>
+</ul>
+
+<p><a name="osx-cal"></a></p>
+
+<h4>4.2.5 Mac OSX Calendar</h4>
+
+<p><strong>Documented by</strong>: Bjorn Lim</p>
+
+<p><strong>Strengths</strong>:</p>
+
+<ul>
+<li>[x] Very clean and simple</li>
+<li>[x] Easily able to see what is happening at what time</li>
+<li>[x] Able to see what is currently happening</li>
+<li>[x] Can set recurring events</li>
+<li>[x] No need internet connectivity</li>
+<li>[x] Can see daily/weekly/monthly etc view</li>
+<li>[x] Multiple events at the same time</li>
+</ul>
+
+<p><strong>Weaknesses</strong>:</p>
+
+<ul>
+<li>[ ] Not keyboard friendly at all</li>
+<li>[ ] Cannot set deadlines</li>
+<li>[ ] Only one type of entry allowed, “events”</li>
+</ul>
+
+<p><a name="api"></a></p>
+
+<h3>4.3 Appendix C : API of <em>BakaTxt</em></h3>
+
+<table>
+    <thead>
+        <th>
+            class
+        </th>
+        <th>
+            API
+        </th>
+    </thead>
+    <tr>
+        <td>
+            <code>BakaTxtMain</code>
+        </td>
+        <td>
+            <code>executeCommand(String) : String</code><br />
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <code>BakaParser</code>
+        </td>
+        <td>
+            <code>getCommand(String) : String</code><br />
+            <code>add(String) : Task</code><br />
+            <code>getString(String) : String</code><br />
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <code>Database</code>
+        </td>
+        <td>
+            <code>setFile(String) : String</code><br />
+            <code>getFileName(): String</code><br />
+            <code>add(Task) : boolean</code><br />
+            <code>delete(Task) : boolean</code><br />
+            <code>setDone(Task, boolean) : boolean</code><br />
+            <code>setFloating(Task, boolean) : boolean</code><br />
+            <code>getTaskWithTitle(String) : LinkedList<Task></code><br />
+            <code>getTaskWithDate(String) : LinkedList<Task></code><br />
+            <code>getAllTasks() : LinkedList<Task></code><br />
+            <code>getAllUndoneTasks() : LinkedList<Task></code><br />
+            <code>remove</code><br />
+            <code>close() : void</code><br />
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <code>Task</code>
+        </td>
+        <td>
+            <code>getTitle() : String</code><br />
+            <code>getDate() : String</code><br />
+            <code>getVenue() : String</code><br />
+            <code>getDescription() : String</code><br />
+            <code>setTitle(String) : String</code><br />
+            <code>setDate(String) : String</code><br />
+            <code>setTime(String) : String</code><br />
+            <code>setVenue(String) : String</code><br />
+            <code>isDone() : boolean</code><br />
+            <code>isFloating() : boolean</code><br />
+            <code>isDeleted() : boolean</code><br />
+            <code>setDone(boolean) : void</code><br />
+            <code>setDeleted(boolean) : void</code><br />
+            <code>setFloating(boolean) : void</code><br />
+            <code>toDisplayString() : String</code><br />
+            <code>getKey() : String</code><br />
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <code>BakaUI</code>
+        </td>
+        <td>
+            <code>StartGui() : void</code><br />
+            <code>processInput() : void</code><br />
+            <code>getInput() : String</code><br />
+            <code>updateUI() : void</code><br />
+        </td>
+    </tr>
+</table>
+
+<p><a name="example-storage-file"></a></p>
+
+<h3>4.4 Appendix D : Example of Storage File</h3>
+
+<pre><code>[-] BakaTxt Human-Readable Human-Fixable Database
+[-] alpha v0.0
+[-] Each task has to be in the same line
+
+[2014-10-14 0900] [TITLE] this is a task [DATE] 2014-10-14 [TIME] 0900 [VENUE] computing [DONE] false [FLOATING] false [DELETED] false [DESCRIPTION] descriptions! 
+</code></pre>
+
+<script type="text/javascript">
+self="undefined"!=typeof window?window:"undefined"!=typeof WorkerGlobalScope&&self instanceof WorkerGlobalScope?self:{};var Prism=function(){var e=/\blang(?:uage)?-(?!\*)(\w+)\b/i,t=self.Prism={util:{encode:function(e){return e instanceof n?new n(e.type,t.util.encode(e.content),e.alias):"Array"===t.util.type(e)?e.map(t.util.encode):e.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/\u00a0/g," ")},type:function(e){return Object.prototype.toString.call(e).match(/\[object (\w+)\]/)[1]},clone:function(e){var n=t.util.type(e);switch(n){case"Object":var a={};for(var r in e)e.hasOwnProperty(r)&&(a[r]=t.util.clone(e[r]));return a;case"Array":return e.slice()}return e}},languages:{extend:function(e,n){var a=t.util.clone(t.languages[e]);for(var r in n)a[r]=n[r];return a},insertBefore:function(e,n,a,r){r=r||t.languages;var i=r[e],l={};for(var o in i)if(i.hasOwnProperty(o)){if(o==n)for(var s in a)a.hasOwnProperty(s)&&(l[s]=a[s]);l[o]=i[o]}return r[e]=l},DFS:function(e,n){for(var a in e)n.call(e,a,e[a]),"Object"===t.util.type(e)&&t.languages.DFS(e[a],n)}},highlightAll:function(e,n){for(var a,r=document.querySelectorAll('code[class*="language-"], [class*="language-"] code, code[class*="lang-"], [class*="lang-"] code'),i=0;a=r[i++];)t.highlightElement(a,e===!0,n)},highlightElement:function(a,r,i){for(var l,o,s=a;s&&!e.test(s.className);)s=s.parentNode;if(s&&(l=(s.className.match(e)||[,""])[1],o=t.languages[l]),o){a.className=a.className.replace(e,"").replace(/\s+/g," ")+" language-"+l,s=a.parentNode,/pre/i.test(s.nodeName)&&(s.className=s.className.replace(e,"").replace(/\s+/g," ")+" language-"+l);var c=a.textContent;if(c){var g={element:a,language:l,grammar:o,code:c};if(t.hooks.run("before-highlight",g),r&&self.Worker){var u=new Worker(t.filename);u.onmessage=function(e){g.highlightedCode=n.stringify(JSON.parse(e.data),l),t.hooks.run("before-insert",g),g.element.innerHTML=g.highlightedCode,i&&i.call(g.element),t.hooks.run("after-highlight",g)},u.postMessage(JSON.stringify({language:g.language,code:g.code}))}else g.highlightedCode=t.highlight(g.code,g.grammar,g.language),t.hooks.run("before-insert",g),g.element.innerHTML=g.highlightedCode,i&&i.call(a),t.hooks.run("after-highlight",g)}}},highlight:function(e,a,r){var i=t.tokenize(e,a);return n.stringify(t.util.encode(i),r)},tokenize:function(e,n){var a=t.Token,r=[e],i=n.rest;if(i){for(var l in i)n[l]=i[l];delete n.rest}e:for(var l in n)if(n.hasOwnProperty(l)&&n[l]){var o=n[l];o="Array"===t.util.type(o)?o:[o];for(var s=0;s<o.length;++s){var c=o[s],g=c.inside,u=!!c.lookbehind,f=0,h=c.alias;c=c.pattern||c;for(var p=0;p<r.length;p++){var d=r[p];if(r.length>e.length)break e;if(!(d instanceof a)){c.lastIndex=0;var m=c.exec(d);if(m){u&&(f=m[1].length);var y=m.index-1+f,m=m[0].slice(f),v=m.length,k=y+v,b=d.slice(0,y+1),w=d.slice(k+1),N=[p,1];b&&N.push(b);var O=new a(l,g?t.tokenize(m,g):m,h);N.push(O),w&&N.push(w),Array.prototype.splice.apply(r,N)}}}}}return r},hooks:{all:{},add:function(e,n){var a=t.hooks.all;a[e]=a[e]||[],a[e].push(n)},run:function(e,n){var a=t.hooks.all[e];if(a&&a.length)for(var r,i=0;r=a[i++];)r(n)}}},n=t.Token=function(e,t,n){this.type=e,this.content=t,this.alias=n};if(n.stringify=function(e,a,r){if("string"==typeof e)return e;if("[object Array]"==Object.prototype.toString.call(e))return e.map(function(t){return n.stringify(t,a,e)}).join("");var i={type:e.type,content:n.stringify(e.content,a,r),tag:"span",classes:["token",e.type],attributes:{},language:a,parent:r};if("comment"==i.type&&(i.attributes.spellcheck="true"),e.alias){var l="Array"===t.util.type(e.alias)?e.alias:[e.alias];Array.prototype.push.apply(i.classes,l)}t.hooks.run("wrap",i);var o="";for(var s in i.attributes)o+=s+'="'+(i.attributes[s]||"")+'"';return"<"+i.tag+' class="'+i.classes.join(" ")+'" '+o+">"+i.content+"</"+i.tag+">"},!self.document)return self.addEventListener?(self.addEventListener("message",function(e){var n=JSON.parse(e.data),a=n.language,r=n.code;self.postMessage(JSON.stringify(t.util.encode(t.tokenize(r,t.languages[a])))),self.close()},!1),self.Prism):self.Prism;var a=document.getElementsByTagName("script");return a=a[a.length-1],a&&(t.filename=a.src,document.addEventListener&&!a.hasAttribute("data-manual")&&document.addEventListener("DOMContentLoaded",t.highlightAll)),self.Prism}();"undefined"!=typeof module&&module.exports&&(module.exports=Prism);
+</script>
+<script type="text/javascript">
+Prism.languages.clike={comment:[{pattern:/(^|[^\\])\/\*[\w\W]*?\*\//g,lookbehind:!0},{pattern:/(^|[^\\:])\/\/.*?(\r?\n|$)/g,lookbehind:!0}],string:/("|')(\\?.)*?\1/g,"class-name":{pattern:/((?:(?:class|interface|extends|implements|trait|instanceof|new)\s+)|(?:catch\s+\())[a-z0-9_\.\\]+/gi,lookbehind:!0,inside:{punctuation:/(\.|\\)/}},keyword:/\b(if|else|while|do|for|return|in|instanceof|function|new|try|throw|catch|finally|null|break|continue)\b/g,"boolean":/\b(true|false)\b/g,"function":{pattern:/[a-z0-9_]+\(/gi,inside:{punctuation:/\(/}},number:/\b-?(0x[\dA-Fa-f]+|\d*\.?\d+([Ee]-?\d+)?)\b/g,operator:/[-+]{1,2}|!|<=?|>=?|={1,3}|&{1,2}|\|?\||\?|\*|\/|\~|\^|\%/g,ignore:/&(lt|gt|amp);/gi,punctuation:/[{}[\];(),.:]/g};
+</script>
+<script type="text/javascript">
+Prism.languages.java=Prism.languages.extend("clike",{keyword:/\b(abstract|continue|for|new|switch|assert|default|goto|package|synchronized|boolean|do|if|private|this|break|double|implements|protected|throw|byte|else|import|public|throws|case|enum|instanceof|return|transient|catch|extends|int|short|try|char|final|interface|static|void|class|finally|long|strictfp|volatile|const|float|native|super|while)\b/g,number:/\b0b[01]+\b|\b0x[\da-f]*\.?[\da-fp\-]+\b|\b\d*\.?\d+[e]?[\d]*[df]\b|\W\d*\.?\d+\b/gi,operator:{pattern:/(^|[^\.])(?:\+=|\+\+?|-=|--?|!=?|<{1,2}=?|>{1,3}=?|==?|&=|&&?|\|=|\|\|?|\?|\*=?|\/=?|%=?|\^=?|:|~)/gm,lookbehind:!0}});
+</script>
+</body>
+
+</html>
