@@ -5,7 +5,7 @@ import java.util.LinkedList;
 
 import bakatxt.gui.BakaUI;
 
-public class BakaProcessor implements BakaProcessorInterface {
+public class BakaProcessor {
 
     private static Database _database;
     private static BakaParser _parser;
