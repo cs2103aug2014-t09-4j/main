@@ -18,7 +18,7 @@ public class DatabaseTest {
 
     @Before
     public void setUp() throws Exception {
-        database = new Database("mytestfile.txt");
+        database = Database.getInstance();
         Task task = new Task("beforeTask");
         database.add(task);
     }
