@@ -18,6 +18,8 @@ public class BakaTxtMain {
 
     public static void main(String[] args) {
 
+        BakaTxtMain thisSession = new BakaTxtMain();
+
         if (GraphicsEnvironment.isHeadless()) {
             while (true) {
                 String input = _sc.nextLine();
