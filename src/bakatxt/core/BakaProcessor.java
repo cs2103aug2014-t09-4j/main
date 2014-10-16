@@ -22,10 +22,10 @@ public class BakaProcessor implements BakaProcessorInterface {
     }
 
     @Override
-    public String addTask(String input, String output) {
+    public String addTask(String input) {
         Task toAdd = _parser.add(input);
         _database.add(toAdd);
-        output = toAdd.toDisplayString();
+        String output = toAdd.toDisplayString();
         _displayTasks = _database.getAllTasks();
 
         return output;
@@ -95,7 +95,7 @@ public class BakaProcessor implements BakaProcessorInterface {
         switch (commandType) {
 
             case ADD :
-                output = addTask(input, output);
+                output = addTask(input);
                 break;
 
             case REMOVE :
@@ -122,8 +122,9 @@ public class BakaProcessor implements BakaProcessorInterface {
                 break;
 
             case DEFAULT :
-                output = addTask(input, output);
+                output = addTask(input);
                 break;
+
             default :
                 break;
         }
