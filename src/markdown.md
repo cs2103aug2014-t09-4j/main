@@ -264,7 +264,8 @@ enum CommandType {
 ```
 Using `switch` statements, you are able to process the different command types with the help of the parser to identify the first word of the `String` input. You can add in or modify the existing command types in the `executeCommand` function by adding a new case or changing the logic of the functions in the different cases.
 ```java
-public static String executeCommand(String input)```
+public static String executeCommand(String input)
+```
 
 ---
 <a name="parser"></a>

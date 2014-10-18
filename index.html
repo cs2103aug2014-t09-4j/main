@@ -797,20 +797,24 @@ _database = Database.getInstance();
 
 <p>Using <code>switch</code> statements, you are able to process the different command types with the help of the parser to identify the first word of the <code>String</code> input. You can add in or modify the existing command types in the <code>executeCommand</code> function by adding a new case or changing the logic of the functions in the different cases.</p>
 
-<pre><code class="language-java">public static String executeCommand(String input)```
+<pre><code class="language-java">public static String executeCommand(String input)
+</code></pre>
 
----
-&lt;a name=&quot;parser&quot;&gt;&lt;/a&gt;
-### 2.5 Parser
+<hr>
 
-`BakaParser` is the main parsing module of *BakaTxt*. It is responsible for parsing all the inputs from the User, such as getting command word from User inputs. 
+<p><a name="parser"></a></p>
 
-&lt;a name=&quot;date&quot;&gt;&lt;/a&gt;
-#### 2.5.1 Date Parsing
+<h3>2.5 Parser</h3>
 
-Currently, the parsing of date and time is done by the Natty Library (http://natty.joestelmach.com). However, as the library follows the American date syntax, some parsing has to be done manually using regex before any Natty usage is possible. The following code shows how the regex is used:
-```java
-private static final String DATE_FORMAT_DDMMYY_REGEX = &quot;(0?[12]?[0-9]|3[01])[/-](0?[1-9]|1[012])[/-](\\d\\d)&quot;;
+<p><code>BakaParser</code> is the main parsing module of <em>BakaTxt</em>. It is responsible for parsing all the inputs from the User, such as getting command word from User inputs. </p>
+
+<p><a name="date"></a></p>
+
+<h4>2.5.1 Date Parsing</h4>
+
+<p>Currently, the parsing of date and time is done by the Natty Library (http://natty.joestelmach.com). However, as the library follows the American date syntax, some parsing has to be done manually using regex before any Natty usage is possible. The following code shows how the regex is used:</p>
+
+<pre><code class="language-java">private static final String DATE_FORMAT_DDMMYY_REGEX = &quot;(0?[12]?[0-9]|3[01])[/-](0?[1-9]|1[012])[/-](\\d\\d)&quot;;
 private static final String DATE_FORMAT_DDMMYYYY_REGEX = &quot;(0?[12]?[0-9]|3[01])[/-](0?[1-9]|1[012])[/-]((19|2[01])\\d\\d)&quot;;
 private static final String DATE_FORMAT_DDMM_REGEX = &quot;(0?[12]?[0-9]|3[01])[/-](0?[1-9]|1[012])&quot;;
 </code></pre>
