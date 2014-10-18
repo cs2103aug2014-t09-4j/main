@@ -550,16 +550,17 @@ Supervisor: <strong>Nirandika Wanigasekara</strong> | Extra feature: <strong>GUI
 <li>2.6 <a href="#database">Database</a>
 
 <ul>
-<li>2.6.1 <a href="#singleton">Singleton</a></li>
-<li>2.6.2 <a href="#hm-ll">HashMap / LinkedList</a></li>
-<li>2.6.3 <a href="#sort">Sort</a></li>
-<li>2.6.4 <a href="#read-write">Read / Write</a></li>
+<li>2.6.1 <a href="#singleton">Pattern Usage: Singleton</a></li>
+<li>2.6.2 <a href="#memory">Handling of Information in Memory</a></li>
+<li>2.6.3 <a href="#sort">Sorting Sequence of Tasks</a></li>
+<li>2.6.4 <a href="#read-write">Read / Write to Text File</a></li>
 </ul></li>
 <li>2.7 <a href="#task">Task</a>
 
 <ul>
 <li>2.7.1 <a href="#output">Output</a></li>
 <li>2.7.2 <a href="#tags">Tags</a></li>
+<li>2.7.3 <a href="#using-task">Using the Task Class</a></li>
 </ul></li>
 <li>2.8 <a href="#storage">Storage File</a></li>
 </ul></li>
@@ -833,7 +834,7 @@ private static final String DATE_FORMAT_DDMM_REGEX = &quot;(0?[12]?[0-9]|3[01])[
 
 <h4>2.5.3 Task Packaging</h4>
 
-<p><code>BakaParser</code> extracts all of the information and packages them into a Task file. </p>
+<p><code>BakaParser</code> extracts all of the information and packages them into a <code>Task</code> instance for the database. </p>
 
 <pre><code class="language-java">Task task = new Task(_title);
 task.setDate(_date);
@@ -852,19 +853,19 @@ task.setDescription(_description);
 
 <p><a name="singleton"></a></p>
 
-<h4>2.6.1 Singleton</h4>
+<h4>2.6.1 Pattern Usage: Singleton</h4>
 
-<p><code>Database</code> is a singleton class, which is called by invoking the static method - <code>getInstance()</code>. This allows for various classes to share the same instance of the <code>Database</code>, allowing memory to be allocated efficiently.</p>
+<p><code>Database</code> uses a Singleton pattern, which is called by invoking the static method - <code>getInstance()</code>. This allows for various classes to share the same instance of the <code>Database</code>, allowing memory to be allocated efficiently.</p>
 
-<p><a name="hm-ll"></a></p>
+<p><a name="memory"></a></p>
 
-<h4>2.6.2 HashMap / LinkedList</h4>
+<h4>2.6.2 Handling of Information in Memory</h4>
 
 <p>Information is read from the text storage file and stored in a <code>HashMap&lt;String, LinkedList&lt;Task&gt;&gt;</code>. This allows information to be retrieved easily in O(n) time for the specific type of tasks. The combined use of <code>HashMap</code> and <code>LinkedList</code> is to ensure that <em>BakaTxt</em> is able to handle a large volume of tasks without suffering huge performance degradation.</p>
 
 <p><a name="sort"></a></p>
 
-<h4>2.6.3 Sort</h4>
+<h4>2.6.3 Sorting Sequence of Tasks</h4>
 
 <p>The tasks are sorted based on their keys (dates) in the <code>Database</code>. Keeping to <em>BakaTxt</em>’s aim of simplicity, the sorting is handled by a simple <code>Collections.sort()</code> call to the keys. The follow code snippet shows the sorting mechanism of <code>Database</code>.</p>
 
@@ -880,7 +881,7 @@ task.setDescription(_description);
 
 <p><a name="read-write"></a></p>
 
-<h4>2.6.4 Read / Write</h4>
+<h4>2.6.4 Read / Write to Text File</h4>
 
 <p>The read and write operations are handled by <code>BufferedReader</code> and <code>BufferedWriter</code> respectively. This is to allow more efficient IO operations as compared to traditional <code>FileReader</code> and <code>FileWriter</code>. The tasks are read from the storage files and wrapped by the <code>Task</code> class into a <code>Task</code> instance.</p>
 
@@ -971,6 +972,30 @@ private boolean _isDeleted;
 <li><code>9999</code> : Deleted Task</li>
 <li><code>&lt;date&gt; &lt;time&gt;</code> : Scheduled Task</li>
 </ul>
+
+<p><a name="using-task"></a></p>
+
+<h4>2.7.3 Using the Task Class</h4>
+
+<p>A Task instance can be created using one of the following constructors</p>
+
+<table><thead>
+<tr>
+<th>Constructor</th>
+<th>description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>Task()</code></td>
+<td>This will create an empty <code>Task</code> instance. Information can be added using the <code>Task</code> API as shown in <a href="#api">Appendix C</a>.</td>
+</tr>
+<tr>
+<td><code>Task(String title)</code></td>
+<td>This will create an instance of a floating <code>Task</code> with only the title specified. Further information can be added using the <code>Task</code> API (<a href="#api">Appendix C</a>) as well.</td>
+</tr>
+</tbody></table>
+
+<p>An example of packing information into a Task instance can be seen in <a href="#package-task">section 2.5.3</a>.</p>
 
 <hr>
 

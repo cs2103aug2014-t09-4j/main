@@ -59,13 +59,14 @@ Supervisor: <strong>Nirandika Wanigasekara</strong> | Extra feature: <strong>GUI
         - 2.5.2 [Parse Sequence](#parse-sequence)
         - 2.5.3 [Task Packaging](#package-task)
     - 2.6 [Database](#database)
-        - 2.6.1 [Singleton](#singleton)
-        - 2.6.2 [HashMap / LinkedList](#hm-ll)
-        - 2.6.3 [Sort](#sort)
-        - 2.6.4 [Read / Write](#read-write)
+        - 2.6.1 [Pattern Usage: Singleton](#singleton)
+        - 2.6.2 [Handling of Information in Memory](#memory)
+        - 2.6.3 [Sorting Sequence of Tasks](#sort)
+        - 2.6.4 [Read / Write to Text File](#read-write)
     - 2.7 [Task](#task)
         - 2.7.1 [Output](#output)
         - 2.7.2 [Tags](#tags)
+        - 2.7.3 [Using the Task Class](#using-task)
     - 2.8 [Storage File](#storage)
 - 3. [Acknowledgements](#acknowledgements)
 - 4. [Appendixes](#appendix)
@@ -294,7 +295,7 @@ The position of the description is fixed, hence it is identified first. Time and
 <a name="package-task"></a>
 #### 2.5.3 Task Packaging
 
-`BakaParser` extracts all of the information and packages them into a Task file. 
+`BakaParser` extracts all of the information and packages them into a `Task` instance for the database. 
 ```java
 Task task = new Task(_title);
 task.setDate(_date);
@@ -310,17 +311,17 @@ task.setDescription(_description);
 The `Database` is the main driver between the logic and the text storage file. It handles reading and writing operations with the storage file. These operations are made available to you in the APIs for *BakaTxt*. 
 
 <a name="singleton"></a>
-#### 2.6.1 Singleton
+#### 2.6.1 Pattern Usage: Singleton
 
-`Database` is a singleton class, which is called by invoking the static method - `getInstance()`. This allows for various classes to share the same instance of the `Database`, allowing memory to be allocated efficiently.
+`Database` uses a Singleton pattern, which is called by invoking the static method - `getInstance()`. This allows for various classes to share the same instance of the `Database`, allowing memory to be allocated efficiently.
 
-<a name="hm-ll"></a>
-#### 2.6.2 HashMap / LinkedList
+<a name="memory"></a>
+#### 2.6.2 Handling of Information in Memory
 
 Information is read from the text storage file and stored in a `HashMap<String, LinkedList<Task>>`. This allows information to be retrieved easily in O(n) time for the specific type of tasks. The combined use of `HashMap` and `LinkedList` is to ensure that *BakaTxt* is able to handle a large volume of tasks without suffering huge performance degradation.
 
 <a name="sort"></a>
-#### 2.6.3 Sort
+#### 2.6.3 Sorting Sequence of Tasks
 
 The tasks are sorted based on their keys (dates) in the `Database`. Keeping to *BakaTxt*’s aim of simplicity, the sorting is handled by a simple `Collections.sort()` call to the keys. The follow code snippet shows the sorting mechanism of `Database`.
 
@@ -335,7 +336,7 @@ private void sort() {
 }
 ```
 <a name="read-write"></a>
-#### 2.6.4 Read / Write
+#### 2.6.4 Read / Write to Text File
 
 The read and write operations are handled by `BufferedReader` and `BufferedWriter` respectively. This is to allow more efficient IO operations as compared to traditional `FileReader` and `FileWriter`. The tasks are read from the storage files and wrapped by the `Task` class into a `Task` instance.
 
@@ -418,6 +419,17 @@ Each `Task` contains a tag that it is associated with when stored in the storage
 * `5000` : Done Task
 * `9999` : Deleted Task
 * `<date> <time>` : Scheduled Task
+
+<a name="using-task"></a>
+#### 2.7.3 Using the Task Class
+A Task instance can be created using one of the following constructors
+
+Constructor | description
+--- | ---
+`Task()` | This will create an empty `Task` instance. Information can be added using the `Task` API as shown in [Appendix C](#api). 
+`Task(String title)` | This will create an instance of a floating `Task` with only the title specified. Further information can be added using the `Task` API ([Appendix C](#api)) as well.
+
+An example of packing information into a Task instance can be seen in [section 2.5.3](#package-task).
 
 ---
 <a name="storage"></a>
