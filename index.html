@@ -2,7 +2,7 @@
 
 <head>
 <meta charset="utf-8">
-<title>BakaTxt</title>
+<title>[t09-4j][v0.2]</title>
 <link href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic|Ubuntu:300,400,700,300italic|Anonymous+Pro:400,400italic,700' rel='stylesheet' type='text/css'>
 <style type="text/css">
 div.page-break {
@@ -71,22 +71,22 @@ h6 tt, h6 code {
   font-size: inherit; }
 
 h1 {
-  font-size: 28px;
+  font-size: 32px;
   color: black; }
 
 h2 {
-  font-size: 24px;
+  font-size: 28px;
   border-bottom: 1px solid #cccccc;
   color: black; }
 
 h3 {
-  font-size: 18px; }
+  font-size: 24px; }
 
 h4 {
-  font-size: 16px; }
+  font-size: 20px; }
 
 h5 {
-  font-size: 14px; }
+  font-size: 16px; }
 
 h6 {
   color: #777777;
@@ -189,6 +189,7 @@ table {
       margin-bottom: 0; }
 
 img {
+  width: 100%;
   max-width: 100%; }
 
 span.frame {
@@ -325,6 +326,12 @@ sup {
 
 .language-java {
   white-space: pre-wrap; }
+
+.centered {
+  text-align: center; }
+
+.no-bold {
+  font-weight: normal;  }
 </style>
 <style type="text/css">
 /**
@@ -461,6 +468,45 @@ pre[class*="language-"] {
 </style>
 </head>
 <body>
+<div class="centered">
+<h1>BakaTxt</h1>
+Supervisor: <strong>Nirandika Wanigasekara</strong> | Extra feature: <strong>GUI</strong>
+<table>
+    <thead>
+        <th width="25%">
+            <img src="http://i.imgur.com/Qjk8utY.jpg" />
+            Gil Ki Hyun
+        </th>
+        <th width="25%">
+            <img src="http://i.imgur.com/E15JFc6.png" />
+            Cheryl Kee
+        </th>
+        <th width="25%">
+            <img src="http://i.imgur.com/ik3Gzjq.jpg" />
+            Bjorn Lim
+        </th>
+        <th width="25%">
+            <img src="http://i.imgur.com/oyf6x54.jpg" />
+            Eng De Sheng
+        </th>
+    </thead>
+        <th>
+            <div class="no-bold">Team lead, Deliverables and deadlines</div>
+        </th>
+        <th>
+            <div class="no-bold">Scheduling and Tracking, Documentation</div>
+        </th>
+        <th>
+            <div class="no-bold">Testing, Tool X expert</div>
+        </th>
+        <th>
+            <div class="no-bold">Code Quality, Integration, Debugging</div>
+        </th>
+</table>
+</div>
+
+<div class="page-break"></div>
+
 <h2>Contents</h2>
 
 <ul>
@@ -606,7 +652,7 @@ In addition, floating tasks will be displayed first, followed by all day tasks. 
 
 <h3>2.1 Introduction</h3>
 
-<p>Welcome to the developer guide for <em>BakaTxt</em>. <em>BakaTxt</em> is a Java-based to-do manager that allows the user to easily manage their daily tasks. In this guide, you will gain an overview of the basics of development for <em>BakaTxt</em>.</p>
+<p>Welcome to the developer guide for <em>BakaTxt</em>. <em>BakaTxt</em> is a Java-based to-do manager that allows the User to easily manage their daily tasks. In this guide, you will gain an overview of the basics of development for <em>BakaTxt</em>.</p>
 
 <p><a name="audience"></a></p>
 
@@ -618,7 +664,7 @@ In addition, floating tasks will be displayed first, followed by all day tasks. 
 
 <h4>2.1.2 Principles</h4>
 
-<p><em>BakaTxt</em> is designed with simplicity in mind. It is specifically made simple to use, for both developers and the users. The program is intentionally coded with common basic Java API to ensure better developer compatibility. Further information will be discussed in the following chapters.</p>
+<p><em>BakaTxt</em> is designed with simplicity in mind. It is specifically made simple to use, for both developers and the Users. The program is intentionally coded with common basic Java API to ensure better developer compatibility. Further information will be discussed in the following chapters.</p>
 
 <hr>
 
@@ -658,13 +704,18 @@ In addition, floating tasks will be displayed first, followed by all day tasks. 
 
 <p>The UI of <em>BakaTxt</em> is mainly made up of many custom drawn <code>JPanel</code>s inside a transparent <code>JFrame</code>. The <code>JFrame</code> is extended by the <code>BakaUI</code> class, which has  a <code>BakaPanel</code> <code>JPanel</code> that holds all of the other drawn objects.  There are 3 main components to the UI: the input, the content, and the feedback mechanisms (to be implemented).  </p>
 
+<p>If you want to update the contents within with new tasks, call the following method from the <code>BakaUI</code> class:</p>
+
+<pre><code class="language-java">public static void updateUI(LinkedList&lt;Task&gt; tasks)
+</code></pre>
+
 <p><a name="input"></a></p>
 
 <h4>2.3.1 Input</h4>
 
 <p>The input, located at the very top of the UI, is the main point of interaction from the User to <em>BakaTxt</em>. </p>
 
-<p>Getting the input (as a <code>String</code>) can be done from the <code>BakaUI</code> class by calling <code>getInput();</code>.  <code>getInput();</code> uses an <code>ActionListener()</code>, which, when activated, should highlight the text in the <code>Input</code>box as well as return the String within the <code>Input</code>.</p>
+<p>Getting the input (as a <code>String</code>) is done from the <code>BakaUI</code> class by the method <code>processInput();</code>.  <code>processInput();</code> uses an <code>ActionListener()</code>, which, when activated, should highlight the text in the <code>Input</code>box as well as call another method to process the logic requrired for that string.</p>
 
 <p><a name="content"></a></p>
 
@@ -679,14 +730,12 @@ In addition, floating tasks will be displayed first, followed by all day tasks. 
 
 <p>Where <code>date</code> is the date in <code>String</code> form, and <code>UIHelper.FORMAT_DATE</code> specifies the properties of the text, such as it&#39;s color and size. </p>
 
-<p>The tasks are placed in <code>TaskBox</code>es, which also in turn use the <code>FormattedText</code> class to style it&#39;s contents. There are a few types of <code>TaskBox</code>es, namely, <code>FirstTaskBox</code>, <code>MiddleTaskBox</code>, <code>FinalTaskBox</code> and <code>OnlyTaskBox</code>.  Each of these <code>TaskBox</code>es dictate the look and style of the box wherein the task is shown to the User. <code>FirstTaskBox</code> is to be used when that task is the first task of the day, but is not the only task the User has for the day. <code>MiddleTaskBox</code> is to be used when that task neither the first nor the last task of the day. <code>FinalTaskBox</code> is to be used when that task is the last task of the day, but is not the only task the User has for the day. Lastly, <code>OnlyTaskBox</code> is to be used when the User only has a single task for the day.</p>
+<p>The tasks are placed in <code>TaskBox</code>es, which also in turn use the <code>FormattedText</code> class to style it&#39;s contents. <code>TaskBox</code> follows an abstraction occurance pattern, there are a few types of <code>TaskBox</code>es, namely, <code>FirstTaskBox</code>, <code>MiddleTaskBox</code>, <code>FinalTaskBox</code> and <code>OnlyTaskBox</code>.  Each of these <code>TaskBox</code>es dictate the look and style of the box wherein the task is shown to the User. <code>FirstTaskBox</code> is to be used when that task is the first task of the day, but is not the only task the User has for the day. <code>MiddleTaskBox</code> is to be used when that task neither the first nor the last task of the day. <code>FinalTaskBox</code> is to be used when that task is the last task of the day, but is not the only task the User has for the day. Lastly, <code>OnlyTaskBox</code> is to be used when the User only has a single task for the day.</p>
 
 <p>All of these <code>TaskBox</code>es can easily be drawn, for example:</p>
 
 <pre><code class="language-java">new FinalTaskBox(task, backgroundColor);
 </code></pre>
-
-<p><sup><strong>Note</strong>: you must specify the type of <code>TaskBox</code>, you are not allowed to create a <code>TaskBox</code> object as it is an abstract class.</sup></p>
 
 <p>You need to pass the <code>TaskBox</code> object a <code>Task</code>, as well as a <code>Color</code>. In <em>BakaTxt</em>, the <code>Color</code>s are alternating to distinguish between tasks without being overly fancy.</p>
 
@@ -698,7 +747,7 @@ In addition, floating tasks will be displayed first, followed by all day tasks. 
 
 <p>There are currently two proposed feedback mechanisms to be implemented. </p>
 
-<p>Firstly, the <code>Input</code> Box will be made to shake left and right in quick succession to signify that the user has made an error. The main purpose of this is to grab the User&#39;s attention. The User may then correct his/her input to rectify the error.</p>
+<p>Firstly, the <code>Input</code> Box will be made to shake left and right in quick succession to signify that the User has made an error. The main purpose of this is to grab the User&#39;s attention. The User may then correct his/her input to rectify the error.</p>
 
 <p>Secondly, in order to inform the User of the type of error he/she has made, there will be a string of text just below the <code>Input</code> Box. This string is a way for <em>BakaTxt</em> to communicate with the User in order to aid him/her in the usage of <em>BakaTxt</em>.</p>
 
@@ -718,9 +767,9 @@ In addition, floating tasks will be displayed first, followed by all day tasks. 
 
 <h3>2.4 Logic</h3>
 
-<p>The logic of <em>BakaTxt</em> serves as the main component of the <em>BakaTxt</em>, where it interacts with the user through Command Line Interface, Graphic User Interface and also with <code>Parser</code> and <code>Database</code>. </p>
+<p>The logic of <em>BakaTxt</em> serves as the main component of the <em>BakaTxt</em>, where it interacts with the User through Command Line Interface, Graphic User Interface and also with <code>Parser</code> and <code>Database</code>. </p>
 
-<p><code>BakaTxtMain</code> is a very simple class. The class mainly takes in a string of input from the user through the UI. The String of input will be passed to the <code>executeCommand</code> method to process the command. </p>
+<p><code>BakaTxtMain</code> is a very simple class. The class mainly takes in a string of input from the User through the UI. The String of input will be passed to the <code>executeCommand</code> method to process the command. </p>
 
 <p>First, import <code>BakaUI</code> to the class:</p>
 
@@ -739,7 +788,7 @@ _database = Database.getInstance();
 
 <h4>2.4.1 Executing Commands</h4>
 
-<p>The <code>executeCommand</code> is a public operation handled by <code>enum</code> and <code>switch</code> respectively. Generally <code>enums</code> are preferred over define as they are type-safe and more easily discoverable. Defines are harder to locate and can have complex behaviour. Define the types of commands in the <code>enum</code>:</p>
+<p>The <code>executeCommand</code> is a public operation handled by <code>enum</code> and <code>switch</code> respectively. Define the types of commands in the <code>enum</code>:</p>
 
 <pre><code class="language-java">enum CommandType {
     ADD, DELETE, DISPLAY, CLEAR, DEFAULT, EDIT, EXIT
@@ -748,58 +797,20 @@ _database = Database.getInstance();
 
 <p>Using <code>switch</code> statements, you are able to process the different command types with the help of the parser to identify the first word of the <code>String</code> input. You can add in or modify the existing command types in the <code>executeCommand</code> function by adding a new case or changing the logic of the functions in the different cases.</p>
 
-<pre><code class="language-java">public static String executeCommand(String input) {
-    String command = _parser.getCommand(input);
-    CommandType commandType;
-    String output = null;
-    switch (commandType) {
-        case ADD :
-            output = addTask(input, output);
-            break;
+<pre><code class="language-java">public static String executeCommand(String input)```
 
-        case DELETE :
-            deleteTask(input);
-            break;
+---
+&lt;a name=&quot;parser&quot;&gt;&lt;/a&gt;
+### 2.5 Parser
 
-        case DISPLAY :
-            displayTask();
-            break;
+`BakaParser` is the main parsing module of *BakaTxt*. It is responsible for parsing all the inputs from the User, such as getting command word from User inputs. 
 
-        case CLEAR :
-            clearTask();
-            break;
+&lt;a name=&quot;date&quot;&gt;&lt;/a&gt;
+#### 2.5.1 Date Parsing
 
-        case EDIT :
-            editTask(input);
-            break;
-
-        case EXIT : 
-            exitProg();
-            break; 
-
-        case DEFAULT :
-        default :   
-            break;
-    }
-    return output;
-}
-</code></pre>
-
-<hr>
-
-<p><a name="parser"></a></p>
-
-<h3>2.5 Parser</h3>
-
-<p><code>BakaParser</code> is the main parsing module of <em>BakaTxt</em>. It is responsible for parsing all the inputs from the user, such as getting command word from user inputs. </p>
-
-<p><a name="date"></a></p>
-
-<h4>2.5.1 Date Parsing</h4>
-
-<p>Currently, the parsing of date and time is done by the Natty Library (http://natty.joestelmach.com). However, as the library follows the American date syntax, some parsing has to be done manually using regex before any Natty usage is possible. The following code shows how the regex is used:</p>
-
-<pre><code class="language-java">private static final String DATE_FORMAT_DDMMYY_REGEX = &quot;(0?[12]?[0-9]|3[01])[/-](0?[1-9]|1[012])[/-](\\d\\d)&quot;;
+Currently, the parsing of date and time is done by the Natty Library (http://natty.joestelmach.com). However, as the library follows the American date syntax, some parsing has to be done manually using regex before any Natty usage is possible. The following code shows how the regex is used:
+```java
+private static final String DATE_FORMAT_DDMMYY_REGEX = &quot;(0?[12]?[0-9]|3[01])[/-](0?[1-9]|1[012])[/-](\\d\\d)&quot;;
 private static final String DATE_FORMAT_DDMMYYYY_REGEX = &quot;(0?[12]?[0-9]|3[01])[/-](0?[1-9]|1[012])[/-]((19|2[01])\\d\\d)&quot;;
 private static final String DATE_FORMAT_DDMM_REGEX = &quot;(0?[12]?[0-9]|3[01])[/-](0?[1-9]|1[012])&quot;;
 </code></pre>
@@ -812,7 +823,7 @@ private static final String DATE_FORMAT_DDMM_REGEX = &quot;(0?[12]?[0-9]|3[01])[
 
 <p><code>BakaParser</code> first identifies the description according to the double dash delimiter (“--”), followed by the time and date using the library, then the venue according to the at delimiter (“@”) and lastly the title. </p>
 
-<p>The position of the description is fixed, hence it is identified first. Time and date is identified next as the positions of date, time and venue are not fixed. After identifying both date and time, venue is parsed next. Any string remaining following the at delimiter (“@”) will be identified as a venue. The title is the last to be identified as it can contain more than a word.  Common prepositions are also removed from the end of the title to account for user inputs such as “add lunch at 1pm”.</p>
+<p>The position of the description is fixed, hence it is identified first. Time and date is identified next as the positions of date, time and venue are not fixed. After identifying both date and time, venue is parsed next. Any string remaining following the at delimiter (“@”) will be identified as a venue. The title is the last to be identified as it can contain more than a word.  Common prepositions are also removed from the end of the title to account for User inputs such as “add lunch at 1pm”.</p>
 
 <p><a name="package-task"></a></p>
 
@@ -893,7 +904,7 @@ private boolean _isDeleted;
 
 <h4>2.7.1 Output</h4>
 
-<p>The <code>Task</code> class also contains 2 different forms of <code>toString()</code>. <code>toDisplayString()</code> formats the <code>Task</code> instance to a more user friendly format for displaying in the CLI, whereas <code>toString()</code> is utilized by the <code>Database</code> class to store the information of the task efficiently in the storage file. The 2 outputs below shows the difference between the 2 different output formats.</p>
+<p>The <code>Task</code> class also contains 2 different forms of <code>toString()</code>. <code>toDisplayString()</code> formats the <code>Task</code> instance to a more User friendly format for displaying in the CLI, whereas <code>toString()</code> is utilized by the <code>Database</code> class to store the information of the task efficiently in the storage file. The 2 outputs below shows the difference between the 2 different output formats.</p>
 
 <table>
     <thead>
@@ -963,7 +974,7 @@ private boolean _isDeleted;
 
 <h3>2.8 Storage File</h3>
 
-<p>The storage file is designed from ground up to be simple and readable. It has the serve the purpose of efficiency as well as readability for the users. You are able to get any form of information from the storage file using the Database class. If there is any manual edit in the storage file, these edits will be reflected after <em>BakaTxt</em> is restarted.</p>
+<p>The storage file is designed from ground up to be simple and readable. It has the serve the purpose of efficiency as well as readability for the Users. You are able to get any form of information from the storage file using the Database class. If there is any manual edit in the storage file, these edits will be reflected after <em>BakaTxt</em> is restarted.</p>
 
 <p>An example of the storage file is included in Appendix D.</p>
 
@@ -985,7 +996,7 @@ private boolean _isDeleted;
 
 <p><a name="user-stories"></a></p>
 
-<h3>4.1 Appendix A: User stories. As a user, I…</h3>
+<h3>4.1 Appendix A: User stories. As a User, I…</h3>
 
 <p><a name="stories-likely"></a></p>
 
@@ -1065,6 +1076,8 @@ private boolean _isDeleted;
 </tr>
 </tbody></table>
 
+<div class="page-break"></div>
+
 <p><a name="stories-unlikely"></a></p>
 
 <h4>4.1.2 Unlikely</h4>
@@ -1128,22 +1141,22 @@ private boolean _isDeleted;
 <p><strong>Strengths</strong>:</p>
 
 <ul>
-<li>[x] Able to issue commands through keyboard</li>
-<li>[x] ‘one-shot’ approach: able to type in commands in one line</li>
-<li>[x] Able to capture to-do items without a specific deadline</li>
-<li>[x] No need for Internet connectivity</li>
-<li>[x] Able to start with a shortcut key</li>
-<li>[x] Power Search</li>
-<li>[x] Mouse gestures not required, strictly optional</li>
-<li>[x] Able to start application with a shortcut key</li>
+<li>Able to issue commands through keyboard</li>
+<li>‘one-shot’ approach: able to type in commands in one line</li>
+<li>Able to capture to-do items without a specific deadline</li>
+<li>No need for Internet connectivity</li>
+<li>Able to start with a shortcut key</li>
+<li>Power Search</li>
+<li>Mouse gestures not required, strictly optional</li>
+<li>Able to start application with a shortcut key</li>
 </ul>
 
 <p><strong>Weaknesses</strong>:</p>
 
 <ul>
-<li>[ ] No tracking of to-do items on list</li>
-<li>[ ] No scheduling features of any form</li>
-<li>[ ] Unable to archive done to-do items</li>
+<li>No tracking of to-do items on list</li>
+<li>No scheduling features of any form</li>
+<li>Unable to archive done to-do items</li>
 </ul>
 
 <p><a name="rtm"></a></p>
@@ -1155,24 +1168,24 @@ private boolean _isDeleted;
 <p><strong>Strengths</strong>:</p>
 
 <ul>
-<li>[x] Tracks to-do items</li>
-<li>[x] Helps user to decide what and when to-do items</li>
-<li>[x] Able to schedule to-do items before or after a specific time</li>
-<li>[x] Able to capture to-do items without a specific deadline</li>
-<li>[x] No need for Internet connectivity</li>
-<li>[x] Able to find a suitable slot to schedule a to-do item</li>
-<li>[x] Able to archive a to-do item</li>
-<li>[x] Able to postpone a to-do item</li>
-<li>[x] Easy way to block and release multiple time slots for tentative to-do items</li>
+<li>Tracks to-do items</li>
+<li>Helps User to decide what and when to-do items</li>
+<li>Able to schedule to-do items before or after a specific time</li>
+<li>Able to capture to-do items without a specific deadline</li>
+<li>No need for Internet connectivity</li>
+<li>Able to find a suitable slot to schedule a to-do item</li>
+<li>Able to archive a to-do item</li>
+<li>Able to postpone a to-do item</li>
+<li>Easy way to block and release multiple time slots for tentative to-do items</li>
 </ul>
 
 <p><strong>Weaknesses</strong>:</p>
 
 <ul>
-<li>[ ] Unable to start application with a shortcut key</li>
-<li>[ ] Unable to type in commands in one line</li>
-<li>[ ] Unable to issue commands with keyboard</li>
-<li>[ ] Mouse gestures are required</li>
+<li>Unable to start application with a shortcut key</li>
+<li>Unable to type in commands in one line</li>
+<li>Unable to issue commands with keyboard</li>
+<li>Mouse gestures are required</li>
 </ul>
 
 <p><a name="g-cal"></a></p>
@@ -1184,22 +1197,22 @@ private boolean _isDeleted;
 <p><strong>Strengths</strong>:</p>
 
 <ul>
-<li>[x] Able to track to do items</li>
-<li>[x] Allows the user to view when are the free slots to add items</li>
-<li>[x] Able to display to do items that need to be done before a specific time and without a specific date</li>
-<li>[x] Able to add an item with details in one line</li>
-<li>[x] Able to mark an item as done</li>
-<li>[x] Able to decide what to do item to do next</li>
+<li>Able to track to do items</li>
+<li>Allows the User to view when are the free slots to add items</li>
+<li>Able to display to do items that need to be done before a specific time and without a specific date</li>
+<li>Able to add an item with details in one line</li>
+<li>Able to mark an item as done</li>
+<li>Able to decide what to do item to do next</li>
 </ul>
 
 <p><strong>Weaknesses</strong>:</p>
 
 <ul>
-<li>[ ] Unable to issue commands using keyboard</li>
-<li>[ ] Needs internet connectivity </li>
-<li>[ ] Unable to postpone an item</li>
-<li>[ ] Unable to block multiple slots when confirming the time for an item</li>
-<li>[ ] Unable to start application with a shortcut key</li>
+<li>Unable to issue commands using keyboard</li>
+<li>Needs internet connectivity </li>
+<li>Unable to postpone an item</li>
+<li>Unable to block multiple slots when confirming the time for an item</li>
+<li>Unable to start application with a shortcut key</li>
 </ul>
 
 <p><a name="osx-reminders"></a></p>
@@ -1211,21 +1224,21 @@ private boolean _isDeleted;
 <p><strong>Strengths</strong>:</p>
 
 <ul>
-<li>[x] Simple GUI</li>
-<li>[x] Under a page, you can add list of things to do by its titles</li>
-<li>[x] Able to specify a date to be completed by</li>
-<li>[x] There is a function to remind the user on a particular time, or at a particular location</li>
-<li>[x] The user can set the priority of the task from low to high and setting it to a low will add a ! mark in front of the task list and three ! mark for high one.</li>
-<li>[x] The user also can add additional information under the notes, which will be added below the title.</li>
-<li>[x] Once a user sets a due date for the task, you are able to view using the calender function to check each day.</li>
-<li>[x] Able to sort by due date, priority, creation date or the title</li>
+<li>Simple GUI</li>
+<li>Under a page, you can add list of things to do by its titles</li>
+<li>Able to specify a date to be completed by</li>
+<li>There is a function to remind the User on a particular time, or at a particular location</li>
+<li>The User can set the priority of the task from low to high and setting it to a low will add a ! mark in front of the task list and three ! mark for high one.</li>
+<li>The User also can add additional information under the notes, which will be added below the title.</li>
+<li>Once a User sets a due date for the task, you are able to view using the calender function to check each day.</li>
+<li>Able to sort by due date, priority, creation date or the title</li>
 </ul>
 
 <p><strong>Weaknesses</strong>:</p>
 
 <ul>
-<li>[ ] Firstly, it depends too much on the mouse</li>
-<li>[ ] Must manually delete the task by deleting the title (can be a little troublesome)</li>
+<li>Firstly, it depends too much on the mouse</li>
+<li>Must manually delete the task by deleting the title (can be a little troublesome)</li>
 </ul>
 
 <p><a name="osx-cal"></a></p>
@@ -1237,21 +1250,21 @@ private boolean _isDeleted;
 <p><strong>Strengths</strong>:</p>
 
 <ul>
-<li>[x] Very clean and simple</li>
-<li>[x] Easily able to see what is happening at what time</li>
-<li>[x] Able to see what is currently happening</li>
-<li>[x] Can set recurring events</li>
-<li>[x] No need internet connectivity</li>
-<li>[x] Can see daily/weekly/monthly etc view</li>
-<li>[x] Multiple events at the same time</li>
+<li>Very clean and simple</li>
+<li>Easily able to see what is happening at what time</li>
+<li>Able to see what is currently happening</li>
+<li>Can set recurring events</li>
+<li>No need internet connectivity</li>
+<li>Can see daily/weekly/monthly etc view</li>
+<li>Multiple events at the same time</li>
 </ul>
 
 <p><strong>Weaknesses</strong>:</p>
 
 <ul>
-<li>[ ] Not keyboard friendly at all</li>
-<li>[ ] Cannot set deadlines</li>
-<li>[ ] Only one type of entry allowed, “events”</li>
+<li>Not keyboard friendly at all</li>
+<li>Cannot set deadlines</li>
+<li>Only one type of entry allowed, “events”</li>
 </ul>
 
 <div class="page-break"></div>
