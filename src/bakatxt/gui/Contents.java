@@ -40,8 +40,7 @@ class Contents extends JPanel {
     }
 
     /**
-     * Draw the alert message and check if tasks is empty, displaying the appropriate
-     * events.
+     * Check if tasks is empty, displaying the appropriate events.
      *
      * @param tasks is all the tasks in the LinkedList<Task> we need to add
      */
