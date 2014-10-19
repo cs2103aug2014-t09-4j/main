@@ -25,7 +25,7 @@ public class ReverseAction implements ReverseActionInterface {
     public boolean undo() {
         // TODO Auto-generated method stub
         boolean status = false;
-        if (undoStack.peek() != null) {
+        if (!undoStack.isEmpty()) {
             UserInput action = undoStack.pop();
             status = action.undo();
             if (!status) {
@@ -41,7 +41,7 @@ public class ReverseAction implements ReverseActionInterface {
     public boolean redo() {
         // TODO Auto-generated method stub
         boolean status = false;
-        if (redoStack.peek() != null) {
+        if (!redoStack.isEmpty()) {
             UserInput action = redoStack.pop();
             status = action.execute();
             if (!status) {
