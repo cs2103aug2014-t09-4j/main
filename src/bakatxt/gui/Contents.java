@@ -3,7 +3,6 @@
 package bakatxt.gui;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.util.LinkedList;
 
@@ -34,7 +33,6 @@ class Contents extends JPanel {
         setOpaque(false);
         setBackground(UIHelper.TRANSPARENT);
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        setAlignmentX(Component.CENTER_ALIGNMENT);
         LinkedList<Task> tempTasks = tasks;
         updateContents(tempTasks);
     }
@@ -146,7 +144,6 @@ class Contents extends JPanel {
      * @param alertMessage is the message to put in the layout specified
      */
     private void setDateAndDay(FormattedText dateAndDay) {
-        setAlignmentX(Component.RIGHT_ALIGNMENT);
         this.add(dateAndDay);
     }
 
@@ -154,7 +151,6 @@ class Contents extends JPanel {
      * @param task is the message to put in the layout specified
      */
     private void setEvents(TaskBox task) {
-        setAlignmentX(Component.CENTER_ALIGNMENT);
         setTaskBoxSize(task);
         this.add(task);
     }
