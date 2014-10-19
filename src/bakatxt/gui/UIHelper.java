@@ -25,6 +25,8 @@ class UIHelper {
     protected static final int WINDOW_ROUNDNESS = 20;
     protected static final int BORDER = 4; // leave as half of actual border
 
+    protected static final Point INPUT_LOCATION = new Point(BORDER * 2, BORDER * 2);
+
     /* to be implemented?
     protected static final List<String> SUGGESTIONS_MAIN = new ArrayList<>(asList(
             "add", "display", "delete", "exit"));

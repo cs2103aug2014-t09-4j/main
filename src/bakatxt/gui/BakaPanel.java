@@ -62,11 +62,9 @@ class BakaPanel extends JPanel {
         // TODO set alert message to the specific alert
          _alertMessage.updateContents(MESSAGE_WELCOME);
 
-         System.out.println(tasks.size());
          _contents.removeAll();
          _contents.updateContents(tasks);
 
-         System.out.println(_contents.getSize().height);
          _bakaScrollPane.setComponentSizeBasedOnHeight(_contents.getSize().height);
          _bakaScrollPane.revalidate();
          _bakaScrollPane.repaint();
@@ -157,7 +155,7 @@ class BakaPanel extends JPanel {
     protected void shakeInputBox(final boolean isBadInput) {
 
         if(isBadInput) {
-            final Point initialLocation = _input.getLocation();
+            final Point initialLocation = UIHelper.INPUT_LOCATION;
             final int movementDelay = 20;
             final int iterations = 8;
 
