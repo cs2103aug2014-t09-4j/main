@@ -7,18 +7,21 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.RenderingHints;
+import java.awt.Toolkit;
 import java.awt.geom.RoundRectangle2D;
 
 //TODO comments
 
 class UIHelper {
-
-    protected static final double WINDOW_RATIO = 1.25; // Y:X
-    protected static final int WINDOW_SCALE = 650;
-    protected static final int WINDOW_X = WINDOW_SCALE;
-    protected static final int WINDOW_Y = (int)(WINDOW_RATIO * WINDOW_SCALE);
+    protected static final Dimension SCREEN_SIZE = Toolkit.getDefaultToolkit().getScreenSize();
+    protected static final int WINDOW_OFFSET_TOP = SCREEN_SIZE.height/6;
+    protected static final int WINDOW_X = 650;
+    protected static final int WINDOW_Y = SCREEN_SIZE.height - 2 * WINDOW_OFFSET_TOP;
     protected static final Dimension WINDOW_SIZE = new Dimension(WINDOW_X, WINDOW_Y);
+    protected static final Point WINDOW_LOCATION = new Point(
+            SCREEN_SIZE.width / 2 - WINDOW_X / 2, WINDOW_OFFSET_TOP);
     protected static final int WINDOW_ROUNDNESS = 20;
     protected static final int BORDER = 4; // leave as half of actual border
 

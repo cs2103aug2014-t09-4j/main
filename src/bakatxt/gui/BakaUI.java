@@ -2,9 +2,7 @@
 
 package bakatxt.gui;
 
-import java.awt.Dimension;
 import java.awt.EventQueue;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.LinkedList;
@@ -46,6 +44,7 @@ public class BakaUI extends JFrame {
             public void run() {
                 _bakaUI = new BakaUI(bakaProcessor);
                 _bakaUI.setVisible(true);
+                _bakaUI.setLocation(UIHelper.WINDOW_LOCATION);
                 processInput();
             }
         });
@@ -71,6 +70,8 @@ public class BakaUI extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 input.selectAll();
                 _bakaProcessor.executeCommand(input.getText());
+                // TODO only shake when there is an error
+                _bakaPanel.shakeInputBox(true);
                 updateUI(_bakaProcessor.getAllTasks());
             }
         });
@@ -85,7 +86,7 @@ public class BakaUI extends JFrame {
 
         _bakaPanel.refreshContents(tasks);
         _bakaUI.pack();
-        _bakaUI.setLocationRelativeTo(null);
+        _bakaUI.setLocation(UIHelper.WINDOW_LOCATION);
     }
 
     protected static BakaUI getWindow() {
@@ -106,7 +107,6 @@ public class BakaUI extends JFrame {
         setBackground(UIHelper.TRANSPARENT);
         setContentPane(_bakaPanel);
         pack();
-        setWindowLocation();
         setAlwaysOnTop(false);
         setTitle("Baka TX");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -120,13 +120,5 @@ public class BakaUI extends JFrame {
         MouseActions mouseActions = new MouseActions(_bakaPanel);
         _bakaPanel.addMouseListener(mouseActions);
         _bakaPanel.addMouseMotionListener(mouseActions);
-    }
-
-    /**
-     * Set the window position to a quarter below the top of the screen
-     */
-    private static void setWindowLocation() {
-        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-        _bakaUI.setLocation(dim.width/2-_bakaUI.getSize().width/2, dim.height/4);
     }
 }
