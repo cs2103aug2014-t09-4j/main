@@ -39,12 +39,12 @@ public class BakaUI extends JFrame {
      * This method initializes the GUI and updates it when necessary
      */
     public static void startGui(BakaProcessor bakaProcessor) {
+        _bakaUI = new BakaUI(bakaProcessor);
+        _bakaUI.setVisible(true);
+        _bakaUI.setLocation(UIHelper.WINDOW_LOCATION);
         EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
-                _bakaUI = new BakaUI(bakaProcessor);
-                _bakaUI.setVisible(true);
-                _bakaUI.setLocation(UIHelper.WINDOW_LOCATION);
                 processInput();
             }
         });
