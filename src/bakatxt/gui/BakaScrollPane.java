@@ -9,7 +9,6 @@ import javax.swing.JScrollPane;
 
 class BakaScrollPane extends JScrollPane {
 
-    private static final int MAX_HEIGHT = 768;
     private static final int WIDTH = UIHelper.WINDOW_X - 4 * UIHelper.BORDER;
 
     public BakaScrollPane(JComponent contained, int initialHeight) {
@@ -31,8 +30,8 @@ class BakaScrollPane extends JScrollPane {
 
         assert (height > 0) : "height of pane must not be less than zero";
 
-        if (height > MAX_HEIGHT) {
-            height = MAX_HEIGHT;
+        if (height > UIHelper.WINDOW_Y) {
+            height = UIHelper.WINDOW_Y;
         }
         this.setPreferredSize(new Dimension(WIDTH, height));
     }
