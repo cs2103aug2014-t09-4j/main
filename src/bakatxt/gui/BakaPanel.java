@@ -158,7 +158,7 @@ class BakaPanel extends JPanel {
 
         if(isBadInput) {
             final Point point = _input.getLocation();
-            final int delay = 30;
+            final int delay = 20;
             final int iterations = 8;
 
             Runnable r = new Runnable() {
