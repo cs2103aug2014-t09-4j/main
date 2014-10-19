@@ -34,50 +34,42 @@ public class UserInput implements UserInputInterface {
     }
 
     @Override
-    public void execute() {
+    public boolean execute() {
         switch (_command) {
             case "ADD" :
-                add(_task);
-                break;
+                return add(_task);
             case "DELETE" :
-                delete(_task);
-                break;
+                return delete(_task);
             case "EDIT" :
-                delete(_task);
-                add(_edited);
-                break;
+                return (delete(_task) & add(_edited));
             case "FLOATING" :
                 setFloat(_task, _flag);
-                break;
+                return true;
             case "DONE" :
                 setDone(_task, _flag);
-                break;
+                return true;
             default :
-                break;
+                return false;
         }
     }
 
     @Override
-    public void undo() {
+    public boolean undo() {
         switch (_command) {
             case "ADD" :
-                delete(_task);
-                break;
+                return delete(_task);
             case "DELETE" :
-                add(_task);
-                break;
+                return add(_task);
             case "EDIT" :
-                delete(_edited);
-                add(_task);
-                break;
+                return (delete(_edited) & add(_task));
             case "FLOATING" :
                 setFloat(_task, !_flag);
-                break;
+                return true;
             case "DONE" :
                 setDone(_task, !_flag);
-                break;
+                return true;
             default :
-                break;
+                return false;
         }
     }
 
@@ -89,12 +81,12 @@ public class UserInput implements UserInputInterface {
         _database.setFloating(task, flag);
     }
 
-    private void delete(Task task) {
-        _database.delete(task);
+    private boolean delete(Task task) {
+        return _database.delete(task);
     }
 
-    private void add(Task task) {
-        _database.add(task);
+    private boolean add(Task task) {
+        return _database.add(task);
     }
 
     @Override

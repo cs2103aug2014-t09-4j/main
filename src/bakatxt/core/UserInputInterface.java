@@ -1,13 +1,12 @@
 package bakatxt.core;
 
-import java.io.IOException;
 import java.util.LinkedList;
 
 public interface UserInputInterface {
 
-    public void execute() throws IOException;
+    public boolean execute();
 
-    public void undo() throws IOException;
+    public boolean undo();
 
     String commandString();
 
