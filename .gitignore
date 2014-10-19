@@ -2,6 +2,7 @@
 
 ### Project Specific ###
 mytestfile.txt
+Baka.log*
 
 ### Eclipse ###
 *.pydevproject
@@ -73,4 +74,3 @@ Icon
 Network Trash Folder
 Temporary Items
 .apdisk
-*.log
