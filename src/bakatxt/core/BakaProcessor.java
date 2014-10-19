@@ -5,7 +5,7 @@ import java.util.LinkedList;
 
 import bakatxt.gui.BakaUI;
 
-public class BakaProcessor implements BakaProcessorInterface {
+public class BakaProcessor {
 
     private static Database _database;
     private static BakaParser _parser;
@@ -21,7 +21,6 @@ public class BakaProcessor implements BakaProcessorInterface {
         _displayTasks = _database.getAllTasks();
     }
 
-    @Override
     public String addTask(String input) {
         Task toAdd = _parser.add(input);
         _database.add(toAdd);
@@ -31,7 +30,6 @@ public class BakaProcessor implements BakaProcessorInterface {
         return output;
     }
 
-    @Override
     public void deleteTask(String input) {
         String content = _parser.getString(input).trim();
         ArrayList<Integer> listOfIndex = _parser.getIndexList(content);
@@ -45,23 +43,19 @@ public class BakaProcessor implements BakaProcessorInterface {
 
     }
 
-    @Override
     public void displayTask() {
         _displayTasks = _database.getAllTasks();
     }
 
-    @Override
     public LinkedList<Task> getAllTasks() {
         return _displayTasks;
     }
 
-    @Override
     public void clearTask() {
         _database.clear();
         _displayTasks = _database.getAllTasks();
     }
 
-    @Override
     public void editTask(String input) {
         String index = _parser.getString(input).trim();
         int trueIndex = Integer.valueOf(index.trim());
@@ -73,13 +67,11 @@ public class BakaProcessor implements BakaProcessorInterface {
         _displayTasks = _database.getAllTasks();
     }
 
-    @Override
     public void exitProg() {
         _database.close();
         System.exit(0);
     }
 
-    @Override
     public String executeCommand(String input) {
 
         String command = _parser.getCommand(input);
@@ -91,21 +83,29 @@ public class BakaProcessor implements BakaProcessorInterface {
             commandType = CommandType.DEFAULT;
         }
 
-        String output = null;
+        UserInput inputCmd = null;
+        Task task = null;
         switch (commandType) {
 
             case ADD :
-                output = addTask(input);
+                // output = addTask(input);
+                task = _parser.add(input);
+                inputCmd = new UserInput(command, task);
                 break;
 
             case REMOVE :
-
             case DELETE :
-                deleteTask(input);
+                // deleteTask(input);
+                String content = _parser.getString(input).trim();
+                ArrayList<Integer> listOfIndex = _parser.getIndexList(content);
+                for (int i = 0; i < listOfIndex.size(); i++) {
+                    int trueIndex = listOfIndex.get(i);
+                    task = _displayTasks.get(trueIndex - 1);
+                }
+                inputCmd = new UserInput(command, task);
                 break;
 
             case SHOW :
-
             case DISPLAY :
                 displayTask();
                 break;
@@ -115,20 +115,34 @@ public class BakaProcessor implements BakaProcessorInterface {
                 break;
 
             case EDIT :
-                editTask(input);
+                // editTask(input);
+                String index = _parser.getString(input).trim();
+                int trueIndex = Integer.valueOf(index.trim());
+                _displayTasks = _database.getAllTasks();
+                task = _displayTasks.get(trueIndex - 1);
+                Task toEdit = _parser.add("add" + BakaUI.getInputText());
+                inputCmd = new UserInput(command, task, toEdit);
                 break;
 
             case EXIT :
                 break;
 
             case DEFAULT :
-                output = addTask(input);
+                // addTask(input);
+                task = _parser.add("add " + input);
+                inputCmd = new UserInput("add", task);
+                inputCmd.execute();
                 break;
 
             default :
                 break;
         }
-        return output;
+        if (inputCmd != null) {
+            inputCmd.execute();
+            _displayTasks = inputCmd.getDisplayTasks();
+            return inputCmd.commandString();
+        }
+        _displayTasks = _database.getAllTasks();
+        return null;
     }
-
 }
