@@ -157,33 +157,44 @@ class BakaPanel extends JPanel {
     protected void shakeInputBox(final boolean isBadInput) {
 
         if(isBadInput) {
-            final Point point = _input.getLocation();
-            final int delay = 20;
+            final Point initialLocation = _input.getLocation();
+            final int movementDelay = 20;
             final int iterations = 8;
 
             Runnable r = new Runnable() {
-
                 @Override
                 public void run() {
                     for (int i = 0; i < iterations; i++) {
-                        try {
-                            moveBox(new Point(point.x + (iterations - i), point.y));
-                            Thread.sleep(delay);
-                            moveBox(point);
-                            Thread.sleep(delay);
-                            moveBox(new Point(point.x - (iterations - i), point.y));
-                            Thread.sleep(delay);
-                            moveBox(point);
-                            Thread.sleep(delay);
-                        } catch (InterruptedException ex) {
-                            ex.printStackTrace();
-                        }
+                        shakeOneIteration(initialLocation, movementDelay, iterations - i);
                     }
                 }
             };
-
             Thread t = new Thread(r);
             t.start();
+        }
+    }
+
+    /**
+     * Shake the component right, then back to initial, then left, then back to initial
+     * again.
+     *
+     * @param initialLocation is the initial location of the component to be shaked
+     * @param movementDelay is the delay between shakes
+     * @param xMovement is the amount to move the component by
+     */
+    private static void shakeOneIteration(final Point initialLocation,
+            final int movementDelay, int xMovement) {
+        try {
+            moveBox(new Point(initialLocation.x + xMovement, initialLocation.y));
+            Thread.sleep(movementDelay);
+            moveBox(initialLocation);
+            Thread.sleep(movementDelay);
+            moveBox(new Point(initialLocation.x - xMovement, initialLocation.y));
+            Thread.sleep(movementDelay);
+            moveBox(initialLocation);
+            Thread.sleep(movementDelay);
+        } catch (InterruptedException ex) {
+            ex.printStackTrace();
         }
     }
 
