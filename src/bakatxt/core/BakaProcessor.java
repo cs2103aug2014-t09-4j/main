@@ -3,13 +3,12 @@ package bakatxt.core;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
-import bakatxt.gui.BakaUI;
-
 public class BakaProcessor {
 
     private static Database _database;
     private static BakaParser _parser;
     private static LinkedList<Task> _displayTasks;
+    private static ReverseAction ra = new ReverseAction();
 
     enum CommandType {
         ADD, DELETE, SHOW, DISPLAY, CLEAR, DEFAULT, REMOVE, EDIT, EXIT
@@ -62,7 +61,7 @@ public class BakaProcessor {
         _displayTasks = _database.getAllTasks();
         Task target = _displayTasks.get(trueIndex - 1);
         _database.delete(target);
-        Task toAdd = _parser.add("add" + BakaUI.getInputText());
+        Task toAdd = _parser.add("add");
         _database.add(toAdd);
         _displayTasks = _database.getAllTasks();
     }
@@ -91,6 +90,8 @@ public class BakaProcessor {
                 // output = addTask(input);
                 task = _parser.add(input);
                 inputCmd = new UserInput(command, task);
+                ra.execute(inputCmd);
+                _database.getAllTasks();
                 break;
 
             case REMOVE :
@@ -101,8 +102,10 @@ public class BakaProcessor {
                 for (int i = 0; i < listOfIndex.size(); i++) {
                     int trueIndex = listOfIndex.get(i);
                     task = _displayTasks.get(trueIndex - 1);
+                    inputCmd = new UserInput(command, task);
+                    ra.execute(inputCmd);
                 }
-                inputCmd = new UserInput(command, task);
+
                 break;
 
             case SHOW :
@@ -120,8 +123,11 @@ public class BakaProcessor {
                 int trueIndex = Integer.valueOf(index.trim());
                 _displayTasks = _database.getAllTasks();
                 task = _displayTasks.get(trueIndex - 1);
-                Task toEdit = _parser.add("add" + BakaUI.getInputText());
+                // temporarily set it to null
+                String newContent = null;
+                Task toEdit = _parser.add("add" + newContent);
                 inputCmd = new UserInput(command, task, toEdit);
+                ra.execute(inputCmd);
                 break;
 
             case EXIT :
@@ -131,17 +137,13 @@ public class BakaProcessor {
                 // addTask(input);
                 task = _parser.add("add " + input);
                 inputCmd = new UserInput("add", task);
-                inputCmd.execute();
+                ra.execute(inputCmd);
                 break;
 
             default :
                 break;
         }
-        if (inputCmd != null) {
-            inputCmd.execute();
-            _displayTasks = inputCmd.getDisplayTasks();
-            return inputCmd.commandString();
-        }
+
         _displayTasks = _database.getAllTasks();
         return null;
     }
