@@ -6,6 +6,7 @@ import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.Point;
 import java.util.LinkedList;
 
 import javax.swing.JPanel;
@@ -61,9 +62,11 @@ class BakaPanel extends JPanel {
         // TODO set alert message to the specific alert
          _alertMessage.updateContents(MESSAGE_WELCOME);
 
+         System.out.println(tasks.size());
          _contents.removeAll();
          _contents.updateContents(tasks);
 
+         System.out.println(_contents.getSize().height);
          _bakaScrollPane.setComponentSizeBasedOnHeight(_contents.getSize().height);
          _bakaScrollPane.revalidate();
          _bakaScrollPane.repaint();
@@ -144,6 +147,58 @@ class BakaPanel extends JPanel {
     private static FormattedText setAlertMessageText (String message) {
         return new FormattedText(message, UIHelper.PRESET_TYPE_DEFAULT,
                 UIHelper.PRESET_SIZE_DEFAULT, UIHelper.PRESET_COLOR_ALERT);
+    }
+
+    /**
+     * Shake the input box when an error in input is detected
+     *
+     * @param isBadInput is the boolean that decides whether or not to shake the box
+     */
+    protected void shakeInputBox(final boolean isBadInput) {
+
+        if(isBadInput) {
+            final Point point = _input.getLocation();
+            final int delay = 30;
+            final int iterations = 8;
+
+            Runnable r = new Runnable() {
+
+                @Override
+                public void run() {
+                    for (int i = 0; i < iterations; i++) {
+                        try {
+                            moveBox(new Point(point.x + (iterations - i), point.y));
+                            Thread.sleep(delay);
+                            moveBox(point);
+                            Thread.sleep(delay);
+                            moveBox(new Point(point.x - (iterations - i), point.y));
+                            Thread.sleep(delay);
+                            moveBox(point);
+                            Thread.sleep(delay);
+                        } catch (InterruptedException ex) {
+                            ex.printStackTrace();
+                        }
+                    }
+                }
+            };
+
+            Thread t = new Thread(r);
+            t.start();
+        }
+    }
+
+    /**
+     * Moves the input box to the set location
+     *
+     * @param p is the Point to move the box to
+     */
+    private static void moveBox(final Point p) {
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                _input.setLocation(p);
+            }
+        });
     }
 
     /**
