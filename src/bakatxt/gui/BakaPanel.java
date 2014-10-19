@@ -65,7 +65,7 @@ class BakaPanel extends JPanel {
          _contents.removeAll();
          _contents.updateContents(tasks);
 
-         _bakaScrollPane.setComponentSizeBasedOnHeight(_contents.getSize().height);
+         _bakaScrollPane.setComponentSizeBasedOnHeight(_contents.getPreferredSize().height);
          _bakaScrollPane.revalidate();
          _bakaScrollPane.repaint();
 
