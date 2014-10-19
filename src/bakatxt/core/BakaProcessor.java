@@ -150,6 +150,8 @@ public class BakaProcessor {
                 break;
 
             case EXIT :
+                _database.close();
+                System.exit(0);
                 break;
 
             case DEFAULT :
