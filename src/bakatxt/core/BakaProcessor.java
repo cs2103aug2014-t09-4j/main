@@ -11,7 +11,17 @@ public class BakaProcessor {
     private static ReverseAction ra = new ReverseAction();
 
     enum CommandType {
-        ADD, DELETE, SHOW, DISPLAY, CLEAR, DEFAULT, REMOVE, EDIT, EXIT
+        ADD,
+        DELETE,
+        SHOW,
+        DISPLAY,
+        CLEAR,
+        DEFAULT,
+        REMOVE,
+        EDIT,
+        UNDO,
+        REDO,
+        EXIT
     }
 
     public BakaProcessor() {
@@ -129,6 +139,14 @@ public class BakaProcessor {
                 Task toEdit = _parser.add("add" + newContent);
                 inputCmd = new UserInput(command, task, toEdit);
                 ra.execute(inputCmd);
+                break;
+
+            case UNDO :
+                ra.undo();
+                break;
+
+            case REDO :
+                ra.redo();
                 break;
 
             case EXIT :
