@@ -101,6 +101,7 @@ public class BakaProcessor {
                 ArrayList<Integer> listOfIndex = _parser.getIndexList(content);
                 for (int i = 0; i < listOfIndex.size(); i++) {
                     int trueIndex = listOfIndex.get(i);
+                    _displayTasks = _database.getAllTasks();
                     task = _displayTasks.get(trueIndex - 1);
                     inputCmd = new UserInput(command, task);
                     ra.execute(inputCmd);
