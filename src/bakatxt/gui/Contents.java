@@ -67,7 +67,7 @@ class Contents extends JPanel {
 
             currentDate = tasks.peek().getDate();
 
-            setDateAndDay(setDayAndDateText(currentDate), y);
+            setDateAndDay(setDayAndDateText(currentDate));
             offset++;
             y = addCurrentEvents(getAllTasksInOneDate(tasks), y + 1, offset);
         }
@@ -113,20 +113,20 @@ class Contents extends JPanel {
         assert(offset > 0) : "offset must be at least 1";
 
         if (tasks.size() == 1) {
-            setEvents(new OnlyTaskBox(tasks.pop(), y - offset, alternatingColors()), y);
+            setEvents(new OnlyTaskBox(tasks.pop(), y - offset, alternatingColors()));
             y++;
 
         } else {
-            setEvents(new FirstTaskBox(tasks.pop(), y - offset, alternatingColors()), y);
+            setEvents(new FirstTaskBox(tasks.pop(), y - offset, alternatingColors()));
             y++;
             while(true) {
 
                 if (tasks.size() == 1) {
-                    setEvents(new FinalTaskBox(tasks.pop(), y - offset, alternatingColors()), y);
+                    setEvents(new FinalTaskBox(tasks.pop(), y - offset, alternatingColors()));
                     y++;
                     break;
                 }
-                setEvents(new MiddleTaskBox(tasks.pop(), y - offset, alternatingColors()), y);
+                setEvents(new MiddleTaskBox(tasks.pop(), y - offset, alternatingColors()));
                 y++;
             }
         }
@@ -144,18 +144,16 @@ class Contents extends JPanel {
 
     /**
      * @param alertMessage is the message to put in the layout specified
-     * @param y is the vertical order whereby it is placed
      */
-    private void setDateAndDay(FormattedText dateAndDay, int y) {
+    private void setDateAndDay(FormattedText dateAndDay) {
         setAlignmentX(Component.RIGHT_ALIGNMENT);
         this.add(dateAndDay);
     }
 
     /**
      * @param task is the message to put in the layout specified
-     * @param y is the vertical order whereby it is placed
      */
-    private void setEvents(TaskBox task, int y) {
+    private void setEvents(TaskBox task) {
         setAlignmentX(Component.CENTER_ALIGNMENT);
         setTaskBoxSize(task);
         this.add(task);
