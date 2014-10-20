@@ -3,12 +3,19 @@
 package bakatxt.gui;
 
 import static java.awt.event.KeyEvent.*;
+import static org.junit.Assert.assertEquals;
 
 import java.awt.AWTException;
 import java.awt.Robot;
 import java.awt.event.InputEvent;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import bakatxt.core.BakaProcessor;
@@ -17,15 +24,33 @@ public class UITest {
 
     private static Robot bot;
 
+    private static final Path TEST_FILE_INITIALIZE =
+            new File("./src/bakatxt/test/.UItestfile").toPath();
+    private static final Path TEST_FILE = new File("./mytestfile.txt").toPath();
+    private static final Path TEST_FILE_SAVE = new File("./mytestfile.txt.bak").toPath();
+
+    @BeforeClass
+    public static void oneTimeSetUp() throws Exception {
+        saveOldFile();
+    }
+
+    @AfterClass
+    public static void oneTimeTearDown() throws Exception {
+        restoreTestFile();
+    }
+
     @Before
-    public void setUp() throws Exception {
+    public void SetUp() throws Exception {
         BakaUI.startGui(new BakaProcessor());
         bot = new Robot();
+        initializeTestFile();
+        mouseToInputBox();
     }
 
     //TODO
     @Test
     public void testTaskDisplay() throws AWTException {
+        inputThisString("display");
     }
 
     //TODO
@@ -43,13 +68,39 @@ public class UITest {
     public void testTaskEdit() throws AWTException {
     }
 
+    @Test
+    public void testMaxProgramHeight() throws AWTException {
+        inputThisString("display");
+        final int iterations = UIHelper.SCREEN_SIZE.height / 100;
+        for (int i = 0; i < iterations; i++) {
+            inputThisString("add some task");
+        }
+        assertEquals("Max content height cannot be more than as specified by UIHelper",
+                UIHelper.WINDOW_Y, BakaUI.getPanel().getScrollPane().getHeight());
+    }
+
+    private static void saveOldFile() throws IOException {
+        Files.deleteIfExists(TEST_FILE_SAVE);
+        Files.copy(TEST_FILE, TEST_FILE_SAVE);
+    }
+
+    private static void initializeTestFile() throws IOException {
+        Files.deleteIfExists(TEST_FILE);
+        Files.copy(TEST_FILE_INITIALIZE, TEST_FILE);
+    }
+
+    private static void restoreTestFile() throws IOException {
+        Files.deleteIfExists(TEST_FILE);
+        Files.copy(TEST_FILE_SAVE, TEST_FILE);
+        Files.deleteIfExists(TEST_FILE_SAVE);
+    }
+
     /**
      * moves the cursor to the input box and simulate a keyboard typing the string s
      *
      * @param s is the string to be typed
      */
     private static void inputThisString(String s) {
-        mouseToInputBox();
         typeThis(s);
         waitAWhile();
         enter();
@@ -69,7 +120,7 @@ public class UITest {
      * Tells the process to wait waitTime milliseconds
      */
     private static void waitAWhile() {
-        final int waitTime = 100;
+        final int waitTime = 50;
         try{
             Thread.sleep(waitTime);
         } catch (InterruptedException e) {

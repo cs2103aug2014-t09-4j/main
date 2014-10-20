@@ -93,6 +93,10 @@ public class BakaUI extends JFrame {
         return _bakaUI;
     }
 
+    protected static BakaPanel getPanel() {
+        return _bakaPanel;
+    }
+
     /**
      * This method draws the BakaPanel and sets the window as transparent and
      * centered.

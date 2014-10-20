@@ -52,6 +52,10 @@ class BakaPanel extends JPanel {
         return _input;
     }
 
+    protected BakaScrollPane getScrollPane() {
+        return _bakaScrollPane;
+    }
+
     /**
      * This method refreshes what is displayed on the GUI
      *
