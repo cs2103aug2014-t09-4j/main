@@ -10,6 +10,10 @@ public class BakaProcessor {
     private static LinkedList<Task> _displayTasks;
     private static ReverseAction ra = new ReverseAction();
 
+    private static Integer editStage = 0;
+    private static Task originalTask;
+    private static Task editTask;
+
     enum CommandType {
         ADD,
         DELETE,
@@ -59,7 +63,6 @@ public class BakaProcessor {
         switch (commandType) {
 
             case ADD :
-                // output = addTask(input);
                 task = _parser.add(input);
                 inputCmd = new UserInput(command, task);
                 ra.execute(inputCmd);
@@ -90,16 +93,69 @@ public class BakaProcessor {
                 break;
 
             case EDIT :
-                // editTask(input);
-                String index = _parser.getString(input).trim();
-                int trueIndex = Integer.valueOf(index.trim());
-                _displayTasks = _database.getAllTasks();
-                task = _displayTasks.get(trueIndex - 1);
-                // temporarily set it to null
-                String newContent = null;
-                Task toEdit = _parser.add("add" + newContent);
-                inputCmd = new UserInput(command, task, toEdit);
-                ra.execute(inputCmd);
+                if (editStage == 0) {
+                    editStage = 5;
+                    String index = _parser.getString(input).trim();
+                    int trueIndex = Integer.valueOf(index.trim()) - 1;
+                    _displayTasks = _database.getAllTasks();
+                    editTask = _displayTasks.get(trueIndex);
+                    originalTask = new Task(editTask);
+                } else {
+                    input = _parser.getString(input);
+                    switch (editStage) {
+                        case 5 :
+                            if (input.trim().isEmpty()) {
+                                editTask.setTitle(originalTask.getTitle());
+                            } else {
+                                editTask.setTitle(input);
+                            }
+                            break;
+                        case 4 :
+                            if (input.trim().isEmpty()) {
+                                editTask.setVenue(originalTask.getVenue());
+                            } else {
+                                editTask.setVenue(input);
+                            }
+                            break;
+                        case 3 :
+                            if (input.trim().isEmpty()) {
+                                editTask.setDate(originalTask.getDate());
+                            } else {
+                                editTask.setDate(input);
+                            }
+                            break;
+                        case 2 :
+                            if (input.trim().isEmpty()) {
+                                editTask.setTime(originalTask.getTime());
+                            } else {
+                                editTask.setTime(input);
+                            }
+                            break;
+                        case 1 :
+                            if (input.trim().isEmpty()) {
+                                editTask.setDescription(originalTask
+                                        .getDescription());
+                            } else {
+                                editTask.setDescription(input);
+                            }
+                            inputCmd = new UserInput(command, originalTask,
+                                    editTask);
+                            ra.execute(inputCmd);
+                            break;
+                        default :
+                            break;
+                    }
+                    editStage--;
+                }
+                // String index = _parser.getString(input).trim();
+                // int trueIndex = Integer.valueOf(index.trim());
+                // _displayTasks = _database.getAllTasks();
+                // task = _displayTasks.get(trueIndex - 1);
+                // // temporarily set it to null
+                // String newContent = null;
+                // Task toEdit = _parser.add("add" + newContent);
+                // inputCmd = new UserInput(command, task, toEdit);
+                // ra.execute(inputCmd);
                 break;
 
             case UNDO :
@@ -116,9 +172,13 @@ public class BakaProcessor {
                 break;
 
             case DEFAULT :
-                task = _parser.add("add " + input);
-                inputCmd = new UserInput("add", task);
-                ra.execute(inputCmd);
+                if (editStage > 0) {
+                    executeCommand("edit " + input);
+                } else {
+                    task = _parser.add("add " + input);
+                    inputCmd = new UserInput("add", task);
+                    ra.execute(inputCmd);
+                }
                 break;
 
             default :
