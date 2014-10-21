@@ -61,6 +61,7 @@ public class Database implements DatabaseInterface {
     private HashMap<String, LinkedList<Task>> _bakaMap;
     private TreeSet<String> _sortedKeys;
     private boolean _removeDone;
+    private boolean _removeDeleted;
 
     private Database(String fileName) {
         assert (_database == null);
@@ -91,6 +92,7 @@ public class Database implements DatabaseInterface {
     private void initializeVariables() {
         updateMemory();
         _removeDone = false;
+        _removeDeleted = true;
     }
 
     private void initializeFilePath(String fileName) {
