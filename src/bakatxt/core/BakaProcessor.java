@@ -73,9 +73,9 @@ public class BakaProcessor {
             case DELETE :
                 String content = _parser.getString(input).trim();
                 ArrayList<Integer> listOfIndex = _parser.getIndexList(content);
+                _displayTasks = _database.getAllTasks();
                 for (int i = 0; i < listOfIndex.size(); i++) {
                     int trueIndex = listOfIndex.get(i);
-                    _displayTasks = _database.getAllTasks();
                     task = _displayTasks.get(trueIndex - 1);
                     inputCmd = new UserInput(command, task);
                     ra.execute(inputCmd);
