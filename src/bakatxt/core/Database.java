@@ -172,9 +172,22 @@ public class Database implements DatabaseInterface {
     @Override
     public boolean add(Task task) {
         LOGGER.info("add task initialized");
-        task.setDeleted(false);
-        addTaskToMap(task);
-        return dirtyWrite(task.toString());
+        Task toAdd = new Task(task);
+        toAdd.setDeleted(false);
+        if (isExisting(toAdd)) {
+            return false;
+        }
+        addTaskToMap(toAdd);
+        return dirtyWrite(toAdd.toString());
+    }
+
+    private boolean isExisting(Task task) {
+        String key = task.getKey();
+        LinkedList<Task> target = _bakaMap.get(key);
+        if (target == null || !target.contains(task)) {
+            return false;
+        }
+        return true;
     }
 
     @Override
