@@ -51,6 +51,10 @@ public class Task implements TaskInterface, Comparable<Task> {
         _isDeleted = false;
     }
 
+    public Task(Task task) {
+        this(task.toString());
+    }
+
     public Task(String input) {
         List<String> tokenizedInput = Arrays.asList(input.split("\\s+"));
         if (!tokenizedInput.contains(TAG_TITLE)) {
