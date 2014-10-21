@@ -41,8 +41,8 @@ public class TaskTest {
         task.setDeleted(true);
 
         String output = task.toString();
-        String expected = "[9999 5000 0000 2014-05-02 2230] [TITLE] New Task "
-                + "[DATE] 2014-05-02 [TIME] 2230 [VENUE] null "
+        String expected = "[9999 5000 0000 null null] [TITLE] New Task "
+                + "[DATE] null [TIME] null [VENUE] null "
                 + "[DONE] true [FLOATING] true " + "[DELETED] true "
                 + "[DESCRIPTION] null ";
         System.out.println(output);
