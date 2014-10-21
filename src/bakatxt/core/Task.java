@@ -171,7 +171,7 @@ public class Task implements TaskInterface, Comparable<Task> {
 
     @Override
     public String setDate(String input) {
-        if (input == null) {
+        if (input == null || input.equals("null")) {
             _date = null;
         } else {
             _date = input.trim();
@@ -182,8 +182,9 @@ public class Task implements TaskInterface, Comparable<Task> {
 
     @Override
     public String setTime(String input) {
-        if (input == null) {
+        if (input == null || input.equals("null")) {
             _time = null;
+            _isFloating = true;
         } else {
             _time = input.trim();
             _isFloating = false;
@@ -193,7 +194,7 @@ public class Task implements TaskInterface, Comparable<Task> {
 
     @Override
     public String setVenue(String input) {
-        if (input == null) {
+        if (input == null || input.equals("null")) {
             _venue = null;
         } else {
             _venue = input.trim();
@@ -203,7 +204,7 @@ public class Task implements TaskInterface, Comparable<Task> {
 
     @Override
     public String setDescription(String input) {
-        if (input == null) {
+        if (input == null || input.equals("null")) {
             _description = null;
         } else {
             _description = input.trim();
