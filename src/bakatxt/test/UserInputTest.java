@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.LinkedList;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -23,6 +24,11 @@ public class UserInputTest {
     public void setUp() throws Exception {
         _parser = new BakaParser();
         _database = Database.getInstance();
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        _database.close();
     }
 
     @Test
@@ -80,6 +86,6 @@ public class UserInputTest {
 
         command.undo();
         tasks = _database.getAllUndoneTasks();
-        // assertTrue(tasks.contains(dummy));
+        assertTrue(tasks.contains(dummy));
     }
 }
