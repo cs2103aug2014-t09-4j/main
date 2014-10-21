@@ -235,7 +235,9 @@ public class Database implements DatabaseInterface {
         try {
             sort();
             for (String key : _sortedKeys) {
-                if (key.contains(TAG_DONE) && _removeDone) {
+                if (_removeDone && key.contains(TAG_DONE)) {
+                    continue;
+                } else if (_removeDeleted && key.contains(TAG_DELETED)) {
                     continue;
                 }
                 LinkedList<Task> listToWrite = _bakaMap.get(key);
