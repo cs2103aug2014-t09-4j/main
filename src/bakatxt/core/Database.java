@@ -193,17 +193,24 @@ public class Database implements DatabaseInterface {
     @Override
     public boolean delete(Task task) {
         LOGGER.info("delete task initialized");
+
+        updateFile();
+        updateMemory();
+
         String key = task.getKey();
         LinkedList<Task> target = _bakaMap.get(key);
         if (target == null) {
             return false;
         }
+
         boolean isRemoved = target.remove(task);
+        System.out.println(_bakaMap);
         if (isRemoved) {
             task.setDeleted(true);
             addTaskToMap(task);
             dirtyWrite(task.toString());
-            updateFile();
+            // NOTE: the status of task in _bakaMap is under a deleted tag, but
+            // delete flag is false
             task.setDeleted(false);
         }
         return isRemoved;
