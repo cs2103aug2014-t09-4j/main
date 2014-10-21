@@ -41,7 +41,9 @@ public class UserInput implements UserInputInterface {
             case "DELETE" :
                 return delete(_task);
             case "EDIT" :
-                return (delete(_task) & add(_edited));
+                delete(_edited);
+                delete(_task);
+                return add(_edited);
             case "FLOATING" :
                 setFloat(_task, _flag);
                 return true;
