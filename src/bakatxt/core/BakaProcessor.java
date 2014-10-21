@@ -30,28 +30,6 @@ public class BakaProcessor {
         _displayTasks = _database.getAllTasks();
     }
 
-    public String addTask(String input) {
-        Task toAdd = _parser.add(input);
-        _database.add(toAdd);
-        String output = toAdd.toDisplayString();
-        _displayTasks = _database.getAllTasks();
-
-        return output;
-    }
-
-    public void deleteTask(String input) {
-        String content = _parser.getString(input).trim();
-        ArrayList<Integer> listOfIndex = _parser.getIndexList(content);
-        for (int i = 0; i < listOfIndex.size(); i++) {
-            int trueIndex = listOfIndex.get(i);
-            Task target = _displayTasks.get(trueIndex - 1);
-            _database.delete(target);
-        }
-
-        _displayTasks = _database.getAllTasks();
-
-    }
-
     public void displayTask() {
         _displayTasks = _database.getAllTasks();
     }
@@ -63,22 +41,6 @@ public class BakaProcessor {
     public void clearTask() {
         _database.clear();
         _displayTasks = _database.getAllTasks();
-    }
-
-    public void editTask(String input) {
-        String index = _parser.getString(input).trim();
-        int trueIndex = Integer.valueOf(index.trim());
-        _displayTasks = _database.getAllTasks();
-        Task target = _displayTasks.get(trueIndex - 1);
-        _database.delete(target);
-        Task toAdd = _parser.add("add");
-        _database.add(toAdd);
-        _displayTasks = _database.getAllTasks();
-    }
-
-    public void exitProg() {
-        _database.close();
-        System.exit(0);
     }
 
     public String executeCommand(String input) {
@@ -106,7 +68,6 @@ public class BakaProcessor {
 
             case REMOVE :
             case DELETE :
-                // deleteTask(input);
                 String content = _parser.getString(input).trim();
                 ArrayList<Integer> listOfIndex = _parser.getIndexList(content);
                 for (int i = 0; i < listOfIndex.size(); i++) {
@@ -155,7 +116,6 @@ public class BakaProcessor {
                 break;
 
             case DEFAULT :
-                // addTask(input);
                 task = _parser.add("add " + input);
                 inputCmd = new UserInput("add", task);
                 ra.execute(inputCmd);
