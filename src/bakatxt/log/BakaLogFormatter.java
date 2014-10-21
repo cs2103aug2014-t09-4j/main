@@ -24,7 +24,7 @@ public class BakaLogFormatter extends Formatter {
         output.append(record.getSourceClassName());
         output.append(SPACE);
         output.append(record.getSourceMethodName());
-        output.append("\t");
+        output.append(LINE_SEPARATOR + "\t");
         output.append(record.getLevel());
         output.append(COLON + SPACE);
         output.append(formatMessage(record));
