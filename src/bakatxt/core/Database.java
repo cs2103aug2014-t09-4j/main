@@ -203,10 +203,10 @@ public class Database implements DatabaseInterface {
             task.setDeleted(true);
             addTaskToMap(task);
             dirtyWrite(task.toString());
-        } else {
-            return isRemoved;
+            updateFile();
+            task.setDeleted(false);
         }
-        return updateFile();
+        return isRemoved;
     }
 
     @Override
