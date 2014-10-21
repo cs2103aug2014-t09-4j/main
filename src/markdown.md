@@ -1,3 +1,5 @@
+<link href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic|Ubuntu:300,400,700,300italic|Anonymous+Pro:400,400italic,700' rel='stylesheet' type='text/css'>
+
 <div class="centered">
 <h1>BakaTxt</h1>
 Supervisor: <strong>Nirandika Wanigasekara</strong> | Extra feature: <strong>GUI</strong>
@@ -153,6 +155,7 @@ This guide is designed for developers with basic knowledge of Java, including th
 *BakaTxt* is designed with simplicity in mind. It is specifically made simple to use, for both developers and the Users. The program is intentionally coded with common basic Java API to ensure better developer compatibility. Further information will be discussed in the following chapters.
 
 ---
+
 <a name="design"></a>
 ### 2.2 Design
 
@@ -178,6 +181,7 @@ A detailed set of public API for the various components of *BakaTxt* is availabl
 <sup>Fig.3. A sequence diagram depicting the adding of a `Task`.</sup>
 
 ---
+
 <a name="ui"></a>
 ### 2.3 UI
 
@@ -236,6 +240,7 @@ The `MouseActions` class allows the User to move the *BakaTxt* window with the m
 The `UIHelper` class contains helper methods and variables that are used by many classes in the UI.
 
 ---
+
 <a name="logic"></a>
 ### 2.4 Logic
 
@@ -269,6 +274,7 @@ public static String executeCommand(String input)
 ```
 
 ---
+
 <a name="parser"></a>
 ### 2.5 Parser
 
@@ -303,8 +309,8 @@ task.setTime(_time);
 task.setVenue(_venue);
 task.setDescription(_description);
 ```
-
 ---
+
 <a name="database"></a>
 ### 2.6 Database
 
@@ -341,6 +347,7 @@ private void sort() {
 The read and write operations are handled by `BufferedReader` and `BufferedWriter` respectively. This is to allow more efficient IO operations as compared to traditional `FileReader` and `FileWriter`. The tasks are read from the storage files and wrapped by the `Task` class into a `Task` instance.
 
 ---
+
 <a name="task"></a>
 ### 2.7 Task
 
@@ -432,6 +439,7 @@ Constructor | description
 An example of packing information into a Task instance can be seen in [section 2.5.3](#package-task).
 
 ---
+
 <a name="storage"></a>
 ### 2.8 Storage File
 
