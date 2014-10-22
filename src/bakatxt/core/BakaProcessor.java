@@ -3,6 +3,8 @@ package bakatxt.core;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
+import bakatxt.gui.BakaUI;
+
 public class BakaProcessor {
 
     private static Database _database;
@@ -64,7 +66,7 @@ public class BakaProcessor {
                 if (editStage > 0) {
                     executeCommand("edit " + input);
                 } else {
-                addTask(input, command);
+                    addTask(input, command);
                 }
                 break;
 
@@ -73,7 +75,7 @@ public class BakaProcessor {
                 if (editStage > 0) {
                     executeCommand("edit " + input);
                 } else {
-                deleteTask(input, command);
+                    deleteTask(input, command);
                 }
                 break;
 
@@ -82,7 +84,7 @@ public class BakaProcessor {
                 if (editStage > 0) {
                     executeCommand("edit " + input);
                 } else {
-                displayTask();
+                    displayTask();
                 }
                 break;
 
@@ -90,7 +92,7 @@ public class BakaProcessor {
                 if (editStage > 0) {
                     executeCommand("edit " + input);
                 } else {
-                clearTask();
+                    clearTask();
                 }
                 break;
 
@@ -102,7 +104,7 @@ public class BakaProcessor {
                 if (editStage > 0) {
                     executeCommand("edit " + input);
                 } else {
-                ra.undo();
+                    ra.undo();
                 }
                 break;
 
@@ -110,7 +112,7 @@ public class BakaProcessor {
                 if (editStage > 0) {
                     executeCommand("edit " + input);
                 } else {
-                ra.redo();
+                    ra.redo();
                 }
                 break;
 
@@ -118,8 +120,8 @@ public class BakaProcessor {
                 if (editStage > 0) {
                     executeCommand("edit " + input);
                 } else {
-                _database.close();
-                System.exit(0);
+                    _database.close();
+                    System.exit(0);
                 }
                 break;
 
@@ -149,6 +151,7 @@ public class BakaProcessor {
 
     private void editTask(String input, String command) {
         UserInput inputCmd;
+        String nextStagePrompt;
         if (editStage == 0) {
             editStage = 5;
             String index = _parser.getString(input).trim();
@@ -156,6 +159,8 @@ public class BakaProcessor {
             _displayTasks = _database.getAllTasks();
             editTask = _displayTasks.get(trueIndex);
             originalTask = new Task(editTask);
+
+            BakaUI.setInputBoxText("Edit Title? : " + editTask.getTitle());
         } else {
             input = _parser.getString(input);
             switch (editStage) {
@@ -163,36 +168,75 @@ public class BakaProcessor {
                     if (input.trim().isEmpty()) {
                         editTask.setTitle(originalTask.getTitle());
                     } else {
+                        input = input.replace("Title? : ", "").trim();
                         editTask.setTitle(input);
                     }
+
+                    nextStagePrompt = editTask.getVenue();
+                    if (nextStagePrompt.equals("null")) {
+                        nextStagePrompt = "Add a venue?";
+                    } else {
+                        nextStagePrompt = "Edit Venue? : " + nextStagePrompt;
+                    }
+                    BakaUI.setInputBoxText(nextStagePrompt);
                     break;
                 case 4 :
-                    if (input.trim().isEmpty()) {
-                        editTask.setVenue(originalTask.getVenue());
+                    if (input.equals("Add a venue?")) {
+                        input = null;
                     } else {
-                        editTask.setVenue(input);
+                        input = input.replace("Venue? : ", "").trim();
                     }
+                    editTask.setVenue(input);
+
+                    nextStagePrompt = editTask.getDate();
+                    if (nextStagePrompt.equals("null")) {
+                        nextStagePrompt = "Add a date?";
+                    } else {
+                        nextStagePrompt = "Edit Date? : " + nextStagePrompt;
+                    }
+                    BakaUI.setInputBoxText(nextStagePrompt);
                     break;
                 case 3 :
-                    if (input.trim().isEmpty()) {
-                        editTask.setDate(originalTask.getDate());
+                    if (input.equals("Add a date?")) {
+                        input = null;
                     } else {
-                        editTask.setDate(input);
+                        input = input.replace("Date? : ", "").trim();
                     }
+                    editTask.setDate(input);
+
+                    nextStagePrompt = editTask.getTime();
+                    if (nextStagePrompt.equals("null")) {
+                        nextStagePrompt = "Add a time?";
+                    } else {
+                        nextStagePrompt = "Edit Time? : " + nextStagePrompt;
+                    }
+                    BakaUI.setInputBoxText(nextStagePrompt);
                     break;
                 case 2 :
-                    if (input.trim().isEmpty()) {
-                        editTask.setTime(originalTask.getTime());
+                    if (input.equals("Add a time?")) {
+                        input = null;
                     } else {
-                        editTask.setTime(input);
+                        input = input.replace("Time? : ", "").trim();
                     }
+                    editTask.setTime(input);
+
+                    nextStagePrompt = editTask.getDescription();
+                    if (nextStagePrompt == null) {
+                        nextStagePrompt = "Add description?";
+                    } else {
+                        nextStagePrompt = "Edit Description? : "
+                                + nextStagePrompt;
+                    }
+                    BakaUI.setInputBoxText(nextStagePrompt);
                     break;
                 case 1 :
-                    if (input.trim().isEmpty()) {
-                        editTask.setDescription(originalTask.getDescription());
+                    if (input.equals("Add description?")) {
+                        input = null;
                     } else {
-                        editTask.setDescription(input);
+                        input = input.replace("Description? : ", "").trim();
                     }
+                    editTask.setDescription(input);
+
                     inputCmd = new UserInput(command, originalTask, editTask);
                     ra.execute(inputCmd);
                     break;
