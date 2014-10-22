@@ -368,13 +368,17 @@ public class BakaParser implements BakaParserInterface {
 
     @Override
     public String getDate(String input) {
-        identifyDate(input);
+        if (input != null) {
+            identifyDate(input);
+        }
         return _date;
     }
 
     @Override
     public String getTime(String input) {
-        identifyTime(input);
+        if (input != null) {
+            identifyTime(input);
+        }
         return _time;
     }
 }
