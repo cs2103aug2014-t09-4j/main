@@ -40,7 +40,7 @@ public class UITest {
     }
 
     @Before
-    public void SetUp() throws Exception {
+    public void setUp() throws Exception {
         BakaUI.startGui(new BakaProcessor());
         bot = new Robot();
         initializeTestFile();
@@ -69,7 +69,7 @@ public class UITest {
     }
 
     @Test
-    public void testMaxProgramHeight() throws AWTException {
+    public void testHeightOfUIElements() throws AWTException {
         inputThisString("display");
         final int iterations = UIHelper.SCREEN_SIZE.height / 100;
         for (int i = 0; i < iterations; i++) {
@@ -354,7 +354,7 @@ public class UITest {
                 typingThisChar(VK_SPACE);
                 break;
             default :
-                throw new IllegalArgumentException("Cannot type character " + character);
+                throw new IllegalArgumentException("Cannot type: " + character);
         }
     }
 
