@@ -54,6 +54,11 @@ public class BakaProcessor {
         String command = _parser.getCommand(input);
         CommandType commandType;
 
+        /*
+         * The command word will be stored as a string and it will get
+         * CommandType value but will return DEFAULT if a wrong command is
+         * entered
+         */
         try {
             commandType = CommandType.valueOf(command);
         } catch (IllegalArgumentException e) {
@@ -138,6 +143,10 @@ public class BakaProcessor {
     }
 
     private void addTaskWithNoCommandWord(String input) {
+        /*
+         * Special case when the user doesn't enter any command words, it will
+         * automatically add the content in
+         */
         UserInput inputCmd;
         Task task;
         if (editStage > 0) {
