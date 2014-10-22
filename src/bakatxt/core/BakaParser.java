@@ -365,4 +365,16 @@ public class BakaParser implements BakaParserInterface {
         }
         return list;
     }
+
+    @Override
+    public String getDate(String input) {
+        identifyDate(input);
+        return _date;
+    }
+
+    @Override
+    public String getTime(String input) {
+        identifyTime(input);
+        return _time;
+    }
 }

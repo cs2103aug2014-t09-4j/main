@@ -12,4 +12,8 @@ public interface BakaParserInterface {
     public String getString(String input);
 
     public ArrayList<Integer> getIndexList(String input);
+
+    public String getDate(String input);
+
+    public String getTime(String input);
 }

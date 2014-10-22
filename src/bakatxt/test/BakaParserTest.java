@@ -494,4 +494,92 @@ public class BakaParserTest {
         expected.add(2);
         assertEquals(expected, output);
     }
+
+    @Test
+    public void testGetDate1() {
+        String input = "24/5";
+        String output = _parser.getDate(input);
+        String expected = "2014-05-24";
+        assertEquals(expected, output);
+    }
+
+    @Test
+    public void testGetDate2() {
+        String input = "tomorrow";
+        String output = _parser.getDate(input);
+        String expected = "2014-10-23";
+        assertEquals(expected, output);
+    }
+
+    @Test
+    public void testGetDate3() {
+        String input = "tonight";
+        String output = _parser.getDate(input);
+        String expected = "2014-10-22";
+        assertEquals(expected, output);
+    }
+
+    @Test
+    public void testGetDate4() {
+        String input = "2-5";
+        String output = _parser.getDate(input);
+        String expected = "2014-05-02";
+        assertEquals(expected, output);
+    }
+
+    @Test
+    public void testGetDate5() {
+        String input = "24/5/2014";
+        String output = _parser.getDate(input);
+        String expected = "2014-05-24";
+        assertEquals(expected, output);
+    }
+
+    @Test
+    public void testGetTime1() {
+        String input = "9pm";
+        String output = _parser.getTime(input);
+        String expected = "2100";
+        assertEquals(expected, output);
+    }
+
+    @Test
+    public void testGetTime2() {
+        String input = "5:15";
+        String output = _parser.getTime(input);
+        String expected = "0515";
+        assertEquals(expected, output);
+    }
+
+    @Test
+    public void testGetTime3() {
+        String input = "tonight";
+        String output = _parser.getTime(input);
+        String expected = "1900";
+        assertEquals(expected, output);
+    }
+
+    @Test
+    public void testGetTime4() {
+        String input = "noon";
+        String output = _parser.getTime(input);
+        String expected = "1200";
+        assertEquals(expected, output);
+    }
+
+    @Test
+    public void testGetTime5() {
+        String input = "0900h";
+        String output = _parser.getTime(input);
+        String expected = "0900";
+        assertEquals(expected, output);
+    }
+
+    @Test
+    public void testGetTime6() {
+        String input = "7am";
+        String output = _parser.getTime(input);
+        String expected = "0700";
+        assertEquals(expected, output);
+    }
 }
