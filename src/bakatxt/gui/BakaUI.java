@@ -91,6 +91,7 @@ public class BakaUI extends JFrame {
 
     public static void setInputBoxText(String s) {
         _bakaPanel.setInputBoxText(s);
+        _bakaPanel.getInput().selectAll();
     }
 
     protected static BakaUI getWindow() {
