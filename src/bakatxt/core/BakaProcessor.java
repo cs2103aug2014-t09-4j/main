@@ -7,6 +7,8 @@ import bakatxt.gui.BakaUI;
 
 public class BakaProcessor {
 
+    private static final String ALERT_EDIT = "Edit Mode: ";
+
     private static Database _database;
     private static BakaParser _parser;
     private static LinkedList<Task> _displayTasks;
@@ -161,7 +163,8 @@ public class BakaProcessor {
             editTask = _displayTasks.get(trueIndex);
             originalTask = new Task(editTask);
 
-            BakaUI.setInputBoxText("Edit Title? : " + editTask.getTitle());
+            BakaUI.setInputBoxText(editTask.getTitle());
+            BakaUI.setAlertMessageText(ALERT_EDIT + "TITLE");
         } else {
             input = _parser.getString(input);
             switch (editStage) {
@@ -169,39 +172,33 @@ public class BakaProcessor {
                     if (input.trim().isEmpty()) {
                         editTask.setTitle(originalTask.getTitle());
                     } else {
-                        input = input.replace("Title? : ", "").trim();
                         editTask.setTitle(input);
                     }
 
                     nextStagePrompt = editTask.getVenue();
                     if (nextStagePrompt.equals("null")) {
                         nextStagePrompt = "Add a venue?";
-                    } else {
-                        nextStagePrompt = "Edit Venue? : " + nextStagePrompt;
                     }
                     BakaUI.setInputBoxText(nextStagePrompt);
+                    BakaUI.setAlertMessageText(ALERT_EDIT + "VENUE");
                     break;
                 case 4 :
                     if (input.equals("Add a venue?")) {
                         input = null;
-                    } else {
-                        input = input.replace("Venue? : ", "").trim();
                     }
                     editTask.setVenue(input);
 
                     nextStagePrompt = editTask.getDate();
                     if (nextStagePrompt.equals("null")) {
                         nextStagePrompt = "Add a date?";
-                    } else {
-                        nextStagePrompt = "Edit Date? : " + nextStagePrompt;
                     }
                     BakaUI.setInputBoxText(nextStagePrompt);
+                    BakaUI.setAlertMessageText(ALERT_EDIT + "DATE");
+
                     break;
                 case 3 :
                     if (input.equals("Add a date?")) {
                         input = null;
-                    } else {
-                        input = input.replace("Date? : ", "").trim();
                     }
                     parsedDateTime = _parser.getDate(input);
                     editTask.setDate(parsedDateTime);
@@ -209,16 +206,13 @@ public class BakaProcessor {
                     nextStagePrompt = editTask.getTime();
                     if (nextStagePrompt.equals("null")) {
                         nextStagePrompt = "Add a time?";
-                    } else {
-                        nextStagePrompt = "Edit Time? : " + nextStagePrompt;
                     }
                     BakaUI.setInputBoxText(nextStagePrompt);
+                    BakaUI.setAlertMessageText(ALERT_EDIT + "TIME");
                     break;
                 case 2 :
                     if (input.equals("Add a time?")) {
                         input = null;
-                    } else {
-                        input = input.replace("Time? : ", "").trim();
                     }
                     parsedDateTime = _parser.getTime(input);
                     editTask.setTime(parsedDateTime);
@@ -226,17 +220,13 @@ public class BakaProcessor {
                     nextStagePrompt = editTask.getDescription();
                     if (nextStagePrompt == null) {
                         nextStagePrompt = "Add description?";
-                    } else {
-                        nextStagePrompt = "Edit Description? : "
-                                + nextStagePrompt;
                     }
                     BakaUI.setInputBoxText(nextStagePrompt);
+                    BakaUI.setAlertMessageText(ALERT_EDIT + "DESCRIPTION");
                     break;
                 case 1 :
                     if (input.equals("Add description?")) {
                         input = null;
-                    } else {
-                        input = input.replace("Description? : ", "").trim();
                     }
                     editTask.setDescription(input);
 
@@ -244,6 +234,7 @@ public class BakaProcessor {
                     ra.execute(inputCmd);
                     nextStagePrompt = "";
                     BakaUI.setInputBoxText(nextStagePrompt);
+                    BakaUI.setAlertMessageText("Welcome to BakaTXT! For help please type help in the box above");
                     break;
                 default :
                     break;
