@@ -52,6 +52,10 @@ class BakaPanel extends JPanel {
         return _input;
     }
 
+    protected void setInputBoxText(String s) {
+        _input.setText(s);
+    }
+
     protected BakaScrollPane getScrollPane() {
         return _bakaScrollPane;
     }

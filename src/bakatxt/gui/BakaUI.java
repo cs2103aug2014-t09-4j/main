@@ -89,6 +89,10 @@ public class BakaUI extends JFrame {
         _bakaUI.setLocation(UIHelper.WINDOW_LOCATION);
     }
 
+    public static void setInputBoxText(String s) {
+        _bakaPanel.setInputBoxText(s);
+    }
+
     protected static BakaUI getWindow() {
         return _bakaUI;
     }
