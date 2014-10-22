@@ -175,78 +175,105 @@ public class BakaProcessor {
             input = _parser.getString(input);
             switch (editStage) {
                 case 5 :
-                    if (input.trim().isEmpty()) {
-                        editTask.setTitle(originalTask.getTitle());
-                    } else {
-                        editTask.setTitle(input);
-                    }
-
-                    nextStagePrompt = editTask.getVenue();
-                    if (nextStagePrompt.equals("null")) {
-                        nextStagePrompt = "Add a venue?";
-                    }
-                    BakaUI.setInputBoxText(nextStagePrompt);
-                    BakaUI.setAlertMessageText(ALERT_EDIT + "VENUE");
+                    editTitle(input);
                     break;
                 case 4 :
-                    if (input.equals("Add a venue?")) {
-                        input = null;
-                    }
-                    editTask.setVenue(input);
-
-                    nextStagePrompt = editTask.getDate();
-                    if (nextStagePrompt.equals("null")) {
-                        nextStagePrompt = "Add a date?";
-                    }
-                    BakaUI.setInputBoxText(nextStagePrompt);
-                    BakaUI.setAlertMessageText(ALERT_EDIT + "DATE");
-
+                    editVenue(input);
                     break;
                 case 3 :
-                    if (input.equals("Add a date?")) {
-                        input = null;
-                    }
-                    parsedDateTime = _parser.getDate(input);
-                    editTask.setDate(parsedDateTime);
-
-                    nextStagePrompt = editTask.getTime();
-                    if (nextStagePrompt.equals("null")) {
-                        nextStagePrompt = "Add a time?";
-                    }
-                    BakaUI.setInputBoxText(nextStagePrompt);
-                    BakaUI.setAlertMessageText(ALERT_EDIT + "TIME");
+                    editDate(input);
                     break;
                 case 2 :
-                    if (input.equals("Add a time?")) {
-                        input = null;
-                    }
-                    parsedDateTime = _parser.getTime(input);
-                    editTask.setTime(parsedDateTime);
-
-                    nextStagePrompt = editTask.getDescription();
-                    if (nextStagePrompt == null) {
-                        nextStagePrompt = "Add description?";
-                    }
-                    BakaUI.setInputBoxText(nextStagePrompt);
-                    BakaUI.setAlertMessageText(ALERT_EDIT + "DESCRIPTION");
+                    editTime(input);
                     break;
                 case 1 :
-                    if (input.equals("Add description?")) {
-                        input = null;
-                    }
-                    editTask.setDescription(input);
-
-                    inputCmd = new UserInput(command, originalTask, editTask);
-                    ra.execute(inputCmd);
-                    nextStagePrompt = "";
-                    BakaUI.setInputBoxText(nextStagePrompt);
-                    BakaUI.setAlertMessageText("Welcome to BakaTXT! For help please type help in the box above");
+                    editDescription(input, command);
                     break;
                 default :
                     break;
             }
             editStage--;
         }
+    }
+
+    private void editDescription(String input, String command) {
+        UserInput inputCmd;
+        String nextStagePrompt;
+        if (input.equals("Add description?")) {
+            input = null;
+        }
+        editTask.setDescription(input);
+
+        inputCmd = new UserInput(command, originalTask, editTask);
+        ra.execute(inputCmd);
+        nextStagePrompt = "";
+        BakaUI.setInputBoxText(nextStagePrompt);
+        BakaUI.setAlertMessageText("Welcome to BakaTXT! For help please type help in the box above");
+    }
+
+    private void editTime(String input) {
+        String nextStagePrompt;
+        String parsedDateTime;
+        if (input.equals("Add a time?")) {
+            input = null;
+        }
+        parsedDateTime = _parser.getTime(input);
+        editTask.setTime(parsedDateTime);
+
+        nextStagePrompt = editTask.getDescription();
+        if (nextStagePrompt == null) {
+            nextStagePrompt = "Add description?";
+        }
+        BakaUI.setInputBoxText(nextStagePrompt);
+        BakaUI.setAlertMessageText(ALERT_EDIT + "DESCRIPTION");
+    }
+
+    private void editDate(String input) {
+        String nextStagePrompt;
+        String parsedDateTime;
+        if (input.equals("Add a date?")) {
+            input = null;
+        }
+        parsedDateTime = _parser.getDate(input);
+        editTask.setDate(parsedDateTime);
+
+        nextStagePrompt = editTask.getTime();
+        if (nextStagePrompt.equals("null")) {
+            nextStagePrompt = "Add a time?";
+        }
+        BakaUI.setInputBoxText(nextStagePrompt);
+        BakaUI.setAlertMessageText(ALERT_EDIT + "TIME");
+    }
+
+    private void editVenue(String input) {
+        String nextStagePrompt;
+        if (input.equals("Add a venue?")) {
+            input = null;
+        }
+        editTask.setVenue(input);
+
+        nextStagePrompt = editTask.getDate();
+        if (nextStagePrompt.equals("null")) {
+            nextStagePrompt = "Add a date?";
+        }
+        BakaUI.setInputBoxText(nextStagePrompt);
+        BakaUI.setAlertMessageText(ALERT_EDIT + "DATE");
+    }
+
+    private void editTitle(String input) {
+        String nextStagePrompt;
+        if (input.trim().isEmpty()) {
+            editTask.setTitle(originalTask.getTitle());
+        } else {
+            editTask.setTitle(input);
+        }
+
+        nextStagePrompt = editTask.getVenue();
+        if (nextStagePrompt.equals("null")) {
+            nextStagePrompt = "Add a venue?";
+        }
+        BakaUI.setInputBoxText(nextStagePrompt);
+        BakaUI.setAlertMessageText(ALERT_EDIT + "VENUE");
     }
 
     private void deleteTask(String input, String command) {
