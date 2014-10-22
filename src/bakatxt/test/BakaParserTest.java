@@ -19,6 +19,15 @@ public class BakaParserTest {
     }
 
     @Test
+    public void testNoTitle() {
+        String input = "add 5/4";
+        Task output = _parser.add(input);
+        Task expected = new Task("");
+        expected.setDate("2014-04-05");
+        assertEquals(expected, output);
+    }
+
+    @Test
     public void testInputCase() {
         String input = "adD HELLO testinG @ scHOOl";
         Task output = _parser.add(input);
@@ -129,11 +138,20 @@ public class BakaParserTest {
     }
 
     @Test
+    public void testAddDateToday() {
+        String input = "add do nothing today";
+        Task output = _parser.add(input);
+        Task expected = new Task("do nothing");
+        expected.setDate("2014-10-22");
+        assertEquals(expected, output);
+    }
+
+    @Test
     public void testAddDateTmr() {
         String input = "add cut hair tomorrow";
         Task output = _parser.add(input);
         Task expected = new Task("cut hair");
-        expected.setDate("2014-10-17");
+        expected.setDate("2014-10-23");
         assertEquals(expected, output);
     }
 
@@ -142,7 +160,7 @@ public class BakaParserTest {
         String input = "add dinner tonight";
         Task output = _parser.add(input);
         Task expected = new Task("dinner");
-        expected.setDate("2014-10-16");
+        expected.setDate("2014-10-22");
         expected.setTime("1900");
         assertEquals(expected, output);
     }
@@ -162,7 +180,7 @@ public class BakaParserTest {
         String input = "add lunch at noon";
         Task output = _parser.add(input);
         Task expected = new Task("lunch");
-        expected.setDate("2014-10-16");
+        expected.setDate("2014-10-22");
         expected.setTime("1200");
         assertEquals(expected, output);
     }
@@ -420,6 +438,22 @@ public class BakaParserTest {
     }
 
     @Test
+    public void testGetString() {
+        String input = "add testing 123";
+        String output = _parser.getString(input);
+        String expected = "testing 123";
+        assertEquals(expected, output);
+    }
+
+    @Test
+    public void testGetCommand() {
+        String input = "add testing 123";
+        String output = _parser.getCommand(input);
+        String expected = "ADD";
+        assertEquals(expected, output);
+    }
+
+    @Test
     public void testIndexRange1() {
         String input = "3 to 10";
         ArrayList<Integer> output = _parser.getIndexList(input);
@@ -430,6 +464,7 @@ public class BakaParserTest {
         assertEquals(expected, output);
     }
 
+    @Test
     public void testIndexRange2() {
         String input = "1-20";
         ArrayList<Integer> output = _parser.getIndexList(input);
@@ -437,6 +472,17 @@ public class BakaParserTest {
         for (int i = 1; i < 21; i++) {
             expected.add(i);
         }
+        assertEquals(expected, output);
+    }
+
+    @Test
+    public void testIndexRange3() {
+        String input = "3, 6, 10";
+        ArrayList<Integer> output = _parser.getIndexList(input);
+        ArrayList<Integer> expected = new ArrayList<Integer>();
+        expected.add(3);
+        expected.add(6);
+        expected.add(10);
         assertEquals(expected, output);
     }
 

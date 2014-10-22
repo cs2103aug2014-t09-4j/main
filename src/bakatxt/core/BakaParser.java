@@ -324,7 +324,7 @@ public class BakaParser implements BakaParserInterface {
     public String getString(String input) {
         // remove first word (command) and return the rest of the input
         int index = input.indexOf(STRING_SPACE);
-        input = input.substring(index);
+        input = input.substring(index).trim();
         return input;
     }
 
