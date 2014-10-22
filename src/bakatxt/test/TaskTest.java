@@ -15,7 +15,8 @@ public class TaskTest {
 
     @Before
     public void setUp() throws Exception {
-        task = new Task("New Task");
+        task = new Task();
+        task.setTitle("New Task");
     }
 
     @Test
@@ -28,7 +29,7 @@ public class TaskTest {
                 + "\t[DESCRIPTION] null \n" + "\t[DONE] true \n"
                 + "\t[FLOATING] false \n\n";
         String output = task.toDisplayString();
-        System.out.println(output);
+        // System.out.println(output);
         assertEquals(expected, output);
     }
 
@@ -45,7 +46,7 @@ public class TaskTest {
                 + "[DATE] null [TIME] null [VENUE] null "
                 + "[DONE] true [FLOATING] true " + "[DELETED] true "
                 + "[DESCRIPTION] null ";
-        System.out.println(output);
+        // System.out.println(output);
         assertEquals(expected, output);
     }
 
@@ -57,5 +58,19 @@ public class TaskTest {
         assertFalse(task.isFloating());
         assertEquals("null", task.getVenue());
         assertEquals(databaseStr, task.toString());
+    }
+
+    // This is an equivalence partition test case for task creation
+    @Test
+    public void testInvalidDatabaseString() {
+        String fake = "[TITLE] fakeee";
+        Task task = new Task(fake);
+        assertEquals(null, task.getTitle());
+        String real = "[9999 5000 0000 null null] [TITLE] New Task "
+                + "[DATE] null [TIME] null [VENUE] null "
+                + "[DONE] true [FLOATING] true " + "[DELETED] true "
+                + "[DESCRIPTION] null ";
+        task = new Task(real);
+        assertEquals(task.toString(), real);
     }
 }
