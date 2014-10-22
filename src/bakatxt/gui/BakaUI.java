@@ -94,6 +94,10 @@ public class BakaUI extends JFrame {
         _bakaPanel.getInput().selectAll();
     }
 
+    public static void setAlertMessageText(String s) {
+        _bakaPanel.updateAlertMessageText(s);
+    }
+
     protected static BakaUI getWindow() {
         return _bakaUI;
     }
