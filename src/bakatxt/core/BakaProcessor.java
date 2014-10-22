@@ -58,27 +58,40 @@ public class BakaProcessor {
             commandType = CommandType.DEFAULT;
         }
 
-        UserInput inputCmd = null;
-        Task task = null;
         switch (commandType) {
 
             case ADD :
+                if (editStage > 0) {
+                    executeCommand("edit " + input);
+                } else {
                 addTask(input, command);
+                }
                 break;
 
             case REMOVE :
             case DELETE :
+                if (editStage > 0) {
+                    executeCommand("edit " + input);
+                } else {
                 deleteTask(input, command);
-
+                }
                 break;
 
             case SHOW :
             case DISPLAY :
+                if (editStage > 0) {
+                    executeCommand("edit " + input);
+                } else {
                 displayTask();
+                }
                 break;
 
             case CLEAR :
+                if (editStage > 0) {
+                    executeCommand("edit " + input);
+                } else {
                 clearTask();
+                }
                 break;
 
             case EDIT :
@@ -86,16 +99,28 @@ public class BakaProcessor {
                 break;
 
             case UNDO :
+                if (editStage > 0) {
+                    executeCommand("edit " + input);
+                } else {
                 ra.undo();
+                }
                 break;
 
             case REDO :
+                if (editStage > 0) {
+                    executeCommand("edit " + input);
+                } else {
                 ra.redo();
+                }
                 break;
 
             case EXIT :
+                if (editStage > 0) {
+                    executeCommand("edit " + input);
+                } else {
                 _database.close();
                 System.exit(0);
+                }
                 break;
 
             case DEFAULT :
