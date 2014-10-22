@@ -71,9 +71,6 @@ class BakaPanel extends JPanel {
      */
     protected void refreshContents(LinkedList<Task> tasks) {
 
-        // TODO set alert message to the specific alert
-         _alertMessage.updateContents(MESSAGE_WELCOME);
-
          _contents.removeAll();
          _contents.updateContents(tasks);
 
