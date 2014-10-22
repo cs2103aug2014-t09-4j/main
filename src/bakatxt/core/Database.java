@@ -400,6 +400,7 @@ public class Database implements DatabaseInterface {
 
     @Override
     public void clear() {
+        sort();
         for (String key : _sortedKeys) {
             if (!key.contains(TAG_DELETED)) {
                 for (Task task : _bakaMap.get(key)) {
