@@ -19,12 +19,16 @@ public class DatabaseTest {
     @Before
     public void setUp() throws Exception {
         database = Database.getInstance();
+        database.setFile("aloha.txt");
+        System.out.println(database.getFileName());
         Task task = new Task("beforeTask");
         database.add(task);
     }
 
     @After
     public void tearDown() {
+        System.out.println(database);
+        database.clear();
         database.close();
     }
 
@@ -38,35 +42,47 @@ public class DatabaseTest {
 
     @Test
     public void testAddAndDeleteTask() {
-        Task task = new Task("helloWorld!");
+        Task task = new Task("add test!");
         task.setDate("2014-05-02");
         task.setTime("2230");
-        task.setDone(true);
-        assertTrue(database.add(task));
-        assertTrue(database.delete(task));
+
+        database.add(task);
+        LinkedList<Task> tasks = database.getAllTasks();
+        assertTrue(tasks.contains(task));
+
+        database.delete(task);
+        tasks = database.getAllTasks();
+        assertFalse(tasks.contains(task));
     }
 
     @Test
-    public void testDeleteTaskFalse() {
-        Task task = new Task("helloWorld!    ");
+    public void testDeleteTaskDontExist() {
+        Task task = new Task("delete test!");
         task.setDate("2014-05-02");
         task.setTime("2230");
-        task.setDone(true);
         assertFalse(database.delete(task));
     }
 
     @Test
     public void testSetTaskDone() {
-        Task task = new Task("set done!");
+        Task task = new Task("set done test!");
         database.add(task);
-        assertTrue(database.setDone(task, true));
+        database.setDone(task, true);
+        task.setDone(true);
+        LinkedList<Task> tasks = database.getAllTasks();
+        assertTrue(tasks.contains(task));
     }
 
     @Test
-    public void testAddFloating() {
-        Task task = new Task("This is floating!");
+    public void testSetFloating() {
+        Task task = new Task("set floating test!");
+        task.setDate("2014-05-02");
+        task.setTime("2230");
+        database.add(task);
+        database.setFloating(task, true);
         task.setFloating(true);
-        assertTrue(database.add(task));
+        LinkedList<Task> tasks = database.getAllTasks();
+        assertTrue(tasks.contains(task));
     }
 
     @Test
@@ -93,19 +109,46 @@ public class DatabaseTest {
         assertTrue(result.contains(task3));
     }
 
-    // @Test
-    // public void testDatabaseOverflow() {
-    // for (int year = 2014; year < 3014; year++) {
-    // for (int month = 1; month <= 12; month++) {
-    // for (int day = 1; day <= 31; day++) {
-    // String date = year
-    // + ((month < 10) ? "-0" + month : "-" + month)
-    // + ((day < 10) ? "-0" + day : "-" + day);
-    // Task task = new Task(date);
-    // task.setDate(date);
-    // database.add(task);
-    // }
-    // }
-    // }
-    // }
+    @Test
+    public void testDatabaseOverflow() {
+        for (int year = 2014; year < 3014; year++) {
+            for (int month = 1; month <= 12; month++) {
+                for (int day = 1; day <= 31; day++) {
+                    String date = year
+                            + ((month < 10) ? "-0" + month : "-" + month)
+                            + ((day < 10) ? "-0" + day : "-" + day);
+                    Task task = new Task(date);
+                    task.setDate(date);
+                    database.add(task);
+                }
+            }
+        }
+    }
+
+    @Test
+    public void testRemoveDone() {
+        Task task = new Task("remove done test!");
+        task.setDone(true);
+
+        database.add(task);
+        database.removeDone();
+        LinkedList<Task> tasks = database.getAllTasks();
+        assertFalse(tasks.contains(task));
+    }
+
+    @Test
+    public void testGetTaskWithTitle() {
+        Task task = new Task("title");
+        database.add(task);
+        LinkedList<Task> tasks = database.getTaskWithTitle("title");
+        assertTrue(tasks.contains(task));
+    }
+
+    // This is a equivalence test case for adding tasks
+    @Test
+    public void testIsExisting() {
+        Task task = new Task("title");
+        assertTrue(database.add(task));
+        assertFalse(database.add(task));
+    }
 }
