@@ -3,7 +3,10 @@
 package bakatxt.gui;
 
 import static java.awt.event.KeyEvent.*;
-import static org.junit.Assert.assertEquals;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
 
 import java.awt.AWTException;
 import java.awt.Robot;
@@ -13,6 +16,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -20,18 +24,37 @@ import org.junit.Test;
 
 import bakatxt.core.BakaProcessor;
 
+@SuppressWarnings("boxing")
 public class UITest {
 
-    private static Robot bot;
+    // Bot will help us automate typing & mouse movement
+    private static Robot _bot;
 
+    // places to store and backup our test files
     private static final Path TEST_FILE_INITIALIZE =
             new File("./src/bakatxt/test/.UItestfile").toPath();
     private static final Path TEST_FILE = new File("./mytestfile.txt").toPath();
     private static final Path TEST_FILE_SAVE = new File("./mytestfile.txt.bak").toPath();
 
+    private static final String ADD = "add ";
+    private static final String DELETE = "delete ";
+    private static final String EDIT = "edit ";
+    private static final String DISPLAY = "display ";
+
+    private static final int WAIT_SHORT = 25;
+    private static final int WAIT_MEDIUM = 200;
+    private static final int WAIT_LONG = 2000;
+
+    // some sample strings
+    private static final String SAMPLE_FOX = "the quick brown fox jumps over "
+                                          + "the lazy dog 1234567890";
+    private static final String SAMPLE_ZOMBIES = "PAINFUL ZOMBIES QUICKLY WATCH A"
+                                                + "JINXED GRAVEYARD";
+
     @BeforeClass
     public static void oneTimeSetUp() throws Exception {
         saveOldFile();
+        initializeTestFile();
     }
 
     @AfterClass
@@ -42,15 +65,20 @@ public class UITest {
     @Before
     public void setUp() throws Exception {
         BakaUI.startGui(new BakaProcessor());
-        bot = new Robot();
+        _bot = new Robot();
         initializeTestFile();
         mouseToInputBox();
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        waitAWhile(WAIT_LONG);
     }
 
     //TODO
     @Test
     public void testTaskDisplay() throws AWTException {
-        inputThisString("display");
+        inputThisString(DISPLAY);
     }
 
     //TODO
@@ -68,15 +96,77 @@ public class UITest {
     public void testTaskEdit() throws AWTException {
     }
 
+    /**
+     * This method tests to make sure that the UI conforms to the correct size
+     * at any point
+     * @throws AWTException
+     */
     @Test
-    public void testHeightOfUIElements() throws AWTException {
+    public void testSizeOfUIElements() throws AWTException {
+        testMinHeightOfUIElements();
+        testMaxHeightOfUIElements();
+        testUnchangedWidth();
+    }
+
+    /**
+     * Ensure that the program is actually visible
+     * @throws AWTException
+     */
+    private static void testMinHeightOfUIElements() throws AWTException {
+        assertThat(BakaUI.getPanel().getHeight(), is(greaterThan(0)));
+    }
+
+
+    /**
+     * Ensure that the program height is not too long
+     * @throws AWTException
+     */
+    private static void testMaxHeightOfUIElements() throws AWTException {
         inputThisString("display");
         final int iterations = UIHelper.SCREEN_SIZE.height / 100;
         for (int i = 0; i < iterations; i++) {
-            inputThisString("add some task");
+            inputThisString(ADD + "some task" + i);
+            waitAWhile(WAIT_MEDIUM);
         }
-        assertEquals("Max content height cannot be more than as specified by UIHelper",
-                UIHelper.WINDOW_Y, BakaUI.getPanel().getScrollPane().getHeight());
+        assertThat(getScrollPaneHeight(), is(equalTo(UIHelper.WINDOW_Y)));
+    }
+
+    /**
+     * Ensure that the width of the program does not change
+     * @throws AWTException
+     */
+    private static void testUnchangedWidth() throws AWTException {
+        inputThisString(ADD + SAMPLE_FOX);
+        waitAWhile(WAIT_LONG);
+        assertThat(BakaUI.getPanel().getWidth(), is(equalTo(UIHelper.WINDOW_X)));
+    }
+
+    /**
+     * Tests to make sure that the locations of the elements do not move to an
+     * unspecified location
+     * @throws AWTException
+     */
+    @Test
+    public void testLocationOfUIElements() throws AWTException {
+        testLocationOfInputBox();
+    }
+
+    /**
+     * the input box moves about a lot, hence, we need to ensure that it does not
+     * move out of position
+     */
+    private static void testLocationOfInputBox() {
+        inputThisString(DISPLAY);
+        for (int i = 0; i < 100; i++) {
+            enter();
+        }
+        waitAWhile(WAIT_LONG);
+        assertThat(BakaUI.getPanel().getInput().getLocation(), is(equalTo(UIHelper.INPUT_LOCATION)));
+    }
+
+
+    private static int getScrollPaneHeight() {
+        return BakaUI.getPanel().getScrollPane().getHeight();
     }
 
     private static void saveOldFile() throws IOException {
@@ -102,7 +192,7 @@ public class UITest {
      */
     private static void inputThisString(String s) {
         typeThis(s);
-        waitAWhile();
+        waitAWhile(WAIT_SHORT);
         enter();
     }
 
@@ -110,17 +200,17 @@ public class UITest {
      * moves the cursor to the BakaTxt input box and clicks it
      */
     private static void mouseToInputBox() {
-        bot.mouseMove(UIHelper.WINDOW_LOCATION.x + 20,UIHelper.WINDOW_LOCATION.y + 20);
-        bot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
-        waitAWhile();
-        bot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
+        _bot.mouseMove(UIHelper.WINDOW_LOCATION.x + 20,UIHelper.WINDOW_LOCATION.y + 20);
+        _bot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
+        waitAWhile(WAIT_SHORT);
+        _bot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
     }
 
     /**
      * Tells the process to wait waitTime milliseconds
+     * @param waitTime is the time in miliseconds to wait
      */
-    private static void waitAWhile() {
-        final int waitTime = 50;
+    private static void waitAWhile(final int waitTime) {
         try{
             Thread.sleep(waitTime);
         } catch (InterruptedException e) {
@@ -142,7 +232,7 @@ public class UITest {
         for (int i = 0; i < toBeTyped.length(); i++) {
             char character = toBeTyped.charAt(i);
             typeThisChar(character);
-            waitAWhile();
+            waitAWhile(WAIT_SHORT);
         }
     }
 
@@ -365,11 +455,11 @@ public class UITest {
      */
     private static void typingThisChar(int... keyCodes) {
         for (int i = 0; i < keyCodes.length; i++) {
-            bot.keyPress(keyCodes[i]);
+            _bot.keyPress(keyCodes[i]);
         }
-        waitAWhile();
+        waitAWhile(WAIT_SHORT);
         for (int i = 0; i < keyCodes.length; i++) {
-            bot.keyRelease(keyCodes[i]);
+            _bot.keyRelease(keyCodes[i]);
         }
     }
 }
