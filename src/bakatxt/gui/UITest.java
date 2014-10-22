@@ -104,6 +104,7 @@ public class UITest {
     @Test
     public void testSizeOfUIElements() throws AWTException {
         testMinHeightOfUIElements();
+        // boundary case for the positive partition
         testMaxHeightOfUIElements();
         testUnchangedWidth();
     }
