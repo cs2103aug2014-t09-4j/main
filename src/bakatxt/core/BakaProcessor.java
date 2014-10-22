@@ -83,15 +83,6 @@ public class BakaProcessor {
 
             case EDIT :
                 editTask(input, command);
-                // String index = _parser.getString(input).trim();
-                // int trueIndex = Integer.valueOf(index.trim());
-                // _displayTasks = _database.getAllTasks();
-                // task = _displayTasks.get(trueIndex - 1);
-                // // temporarily set it to null
-                // String newContent = null;
-                // Task toEdit = _parser.add("add" + newContent);
-                // inputCmd = new UserInput(command, task, toEdit);
-                // ra.execute(inputCmd);
                 break;
 
             case UNDO :
