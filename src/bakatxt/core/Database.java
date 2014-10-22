@@ -172,6 +172,9 @@ public class Database implements DatabaseInterface {
     @Override
     public boolean add(Task task) {
         LOGGER.info("add task initialized");
+        if (task.getTitle().isEmpty()) {
+            return false;
+        }
         Task toAdd = new Task(task);
         toAdd.setDeleted(false);
         if (isExisting(toAdd)) {
