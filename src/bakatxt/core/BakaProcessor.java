@@ -152,6 +152,7 @@ public class BakaProcessor {
     private void editTask(String input, String command) {
         UserInput inputCmd;
         String nextStagePrompt;
+        String parsedDateTime;
         if (editStage == 0) {
             editStage = 5;
             String index = _parser.getString(input).trim();
@@ -202,7 +203,8 @@ public class BakaProcessor {
                     } else {
                         input = input.replace("Date? : ", "").trim();
                     }
-                    editTask.setDate(input);
+                    parsedDateTime = _parser.getDate(input);
+                    editTask.setDate(parsedDateTime);
 
                     nextStagePrompt = editTask.getTime();
                     if (nextStagePrompt.equals("null")) {
@@ -218,7 +220,8 @@ public class BakaProcessor {
                     } else {
                         input = input.replace("Time? : ", "").trim();
                     }
-                    editTask.setTime(input);
+                    parsedDateTime = _parser.getTime(input);
+                    editTask.setTime(parsedDateTime);
 
                     nextStagePrompt = editTask.getDescription();
                     if (nextStagePrompt == null) {
