@@ -69,6 +69,7 @@ public class Task implements TaskInterface, Comparable<Task> {
         } else if (isValidTaskString(input)) {
             // TODO fix semi corrupted tasks
             initializeFromDatabaseString(tokenizedInput);
+            updateFloatingStatus();
         }
     }
 
@@ -175,20 +176,31 @@ public class Task implements TaskInterface, Comparable<Task> {
             _date = null;
         } else {
             _date = input.trim();
+        }
+        updateFloatingStatus();
+        return _date;
+    }
+
+    private void updateFloatingStatus() {
+        if (_date == null || _date.equals("null")) {
+            if (_time == null || _time.equals("null")) {
+                _isFloating = true;
+            } else {
+                _isFloating = false;
+            }
+        } else {
             _isFloating = false;
         }
-        return _date;
     }
 
     @Override
     public String setTime(String input) {
         if (input == null || input.equals("null")) {
             _time = null;
-            _isFloating = true;
         } else {
             _time = input.trim();
-            _isFloating = false;
         }
+        updateFloatingStatus();
         return _time;
     }
 
