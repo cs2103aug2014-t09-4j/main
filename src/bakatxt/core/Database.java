@@ -204,7 +204,6 @@ public class Database implements DatabaseInterface {
         }
 
         boolean isRemoved = target.remove(task);
-        System.out.println(_bakaMap);
         if (isRemoved) {
             task.setDeleted(true);
             addTaskToMap(task);
