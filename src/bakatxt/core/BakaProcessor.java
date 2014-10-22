@@ -239,6 +239,8 @@ public class BakaProcessor {
 
                     inputCmd = new UserInput(command, originalTask, editTask);
                     ra.execute(inputCmd);
+                    nextStagePrompt = "";
+                    BakaUI.setInputBoxText(nextStagePrompt);
                     break;
                 default :
                     break;
