@@ -78,7 +78,7 @@ public class BakaBot extends Robot {
     }
 
     /**
-     * Call this in the @Before method in your JUnit test. Pauses for 2 seconds
+     * Call this in the @After method in your JUnit test. Pauses for 2 seconds
      * between each test to prevent interference between each test.
      */
     public static void botTearDown() {
