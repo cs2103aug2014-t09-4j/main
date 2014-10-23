@@ -111,24 +111,24 @@ class Contents extends JPanel {
 
         if (tasks.size() == 1) {
             setEvents(new OnlyTaskBox(tasks.pop(), taskNumber, alternatingColors(taskNumber)));
-            y++;
+            taskNumber++;
 
         } else {
             setEvents(new FirstTaskBox(tasks.pop(), taskNumber, alternatingColors(taskNumber)));
-            y++;
+            taskNumber++;
             while(true) {
 
                 if (tasks.size() == 1) {
                     setEvents(new FinalTaskBox(tasks.pop(), taskNumber, alternatingColors(taskNumber)));
-                    y++;
+                    taskNumber++;
                     break;
                 }
                 setEvents(new MiddleTaskBox(tasks.pop(), taskNumber, alternatingColors(taskNumber)));
-                y++;
+                taskNumber++;
             }
         }
 
-    return y;
+    return taskNumber + offset;
     }
 
     private static Color alternatingColors(int taskNumber) {
