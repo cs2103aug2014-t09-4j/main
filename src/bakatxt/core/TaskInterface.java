@@ -9,6 +9,8 @@ public interface TaskInterface {
 
     public String getTime();
 
+    public String getEndTime();
+
     public String getVenue();
 
     public String getDescription();
@@ -18,6 +20,8 @@ public interface TaskInterface {
     public String setDate(String input);
 
     public String setTime(String input);
+
+    public String setEndTime(String input);
 
     public String setVenue(String input);
 

@@ -10,10 +10,6 @@ import com.joestelmach.natty.Parser;
 
 public class BakaParser implements BakaParserInterface {
 
-    // private static final String MESSAGE_ADD_NO_TITLE =
-    // "Invalid add command, please add a title!";
-    // private static final String MESSAGE_EMPTY_FILE = "The file is empty!";
-
     private static final String STRING_EMPTY = "";
     private static final String STRING_SPACE = " ";
     private static final String STRING_ADD = "@";
@@ -49,6 +45,7 @@ public class BakaParser implements BakaParserInterface {
     private static String _title;
     private static String _date;
     private static String _time;
+    private static String _endTime;
     private static String _venue;
     private static String _description;
     private static String _inputDate;
@@ -67,6 +64,7 @@ public class BakaParser implements BakaParserInterface {
 
     @Override
     public Task add(String str) {
+        resetDetails();
         String firstWord = getFirstWord(str);
         if (firstWord.toLowerCase().equals("add")) {
             str = str.replaceFirst(firstWord, STRING_EMPTY).trim();
@@ -107,7 +105,15 @@ public class BakaParser implements BakaParserInterface {
 
         Task task = new Task(_title);
         task.setDate(_date);
+        if (_time != null) {
+            String[] part = _time.split(STRING_DASH);
+            _time = part[0].trim();
+            if (part.length > 1) {
+                _endTime = part[1].trim();
+            }
+        }
         task.setTime(_time);
+        task.setEndTime(_endTime);
         task.setVenue(_venue);
         task.setDescription(_description);
         if (!_isDate && !_isTime) {
@@ -126,6 +132,7 @@ public class BakaParser implements BakaParserInterface {
     private static void resetDetails() {
         _date = null;
         _time = null;
+        _endTime = null;
         _venue = null;
         _description = null;
     }
@@ -309,7 +316,8 @@ public class BakaParser implements BakaParserInterface {
 
             if (timeEnd != null) {
                 String outputEnd = TIME_FORMAT.format(timeEnd);
-                output = outputStart + " - " + outputEnd;
+                output = outputStart + STRING_SPACE + STRING_DASH
+                        + STRING_SPACE + outputEnd;
             } else {
                 output = outputStart;
             }

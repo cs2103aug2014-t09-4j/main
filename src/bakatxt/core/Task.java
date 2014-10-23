@@ -15,6 +15,7 @@ public class Task implements TaskInterface, Comparable<Task> {
     private static final String TAG_TITLE = TAG_OPEN + "TITLE" + TAG_CLOSE;
     private static final String TAG_DATE = TAG_OPEN + "DATE" + TAG_CLOSE;
     private static final String TAG_TIME = TAG_OPEN + "TIME" + TAG_CLOSE;
+    private static final String TAG_ENDTIME = TAG_OPEN + "ENDTIME" + TAG_CLOSE;
     private static final String TAG_VENUE = TAG_OPEN + "VENUE" + TAG_CLOSE;
     private static final String TAG_DESCRIPTION = TAG_OPEN + "DESCRIPTION"
             + TAG_CLOSE;
@@ -34,6 +35,7 @@ public class Task implements TaskInterface, Comparable<Task> {
     private String _title;
     private String _date;
     private String _time;
+    private String _endTime;
     private String _venue;
     private String _description; // TODO allow line breaks for description
     private boolean _isFloating;
@@ -44,6 +46,7 @@ public class Task implements TaskInterface, Comparable<Task> {
         _title = null;
         _date = null;
         _time = null;
+        _endTime = null;
         _venue = null;
         _description = null;
         _isDone = false;
@@ -61,6 +64,7 @@ public class Task implements TaskInterface, Comparable<Task> {
             _title = input;
             _date = null;
             _time = null;
+            _endTime = null;
             _venue = null;
             _description = null;
             _isDone = false;
@@ -78,6 +82,7 @@ public class Task implements TaskInterface, Comparable<Task> {
         headers.add(TAG_TITLE);
         headers.add(TAG_DATE);
         headers.add(TAG_TIME);
+        headers.add(TAG_ENDTIME);
         headers.add(TAG_VENUE);
         headers.add(TAG_DONE);
         headers.add(TAG_FLOATING);
@@ -104,6 +109,7 @@ public class Task implements TaskInterface, Comparable<Task> {
 
         int dateIndex = tokenizedInput.indexOf(TAG_DATE) + 1;
         int timeIndex = tokenizedInput.indexOf(TAG_TIME) + 1;
+        int endTimeIndex = tokenizedInput.indexOf(TAG_ENDTIME) + 1;
         int venueIndex = tokenizedInput.indexOf(TAG_VENUE) + 1;
         int doneIndex = tokenizedInput.indexOf(TAG_DONE) + 1;
         int deletedIndex = tokenizedInput.indexOf(TAG_DELETED) + 1;
@@ -111,6 +117,7 @@ public class Task implements TaskInterface, Comparable<Task> {
 
         _date = tokenizedInput.get(dateIndex);
         _time = tokenizedInput.get(timeIndex);
+        _endTime = tokenizedInput.get(endTimeIndex);
 
         for (int i = venueIndex; i < doneIndex - 1; i++) {
             if (_venue == null) {
@@ -152,6 +159,11 @@ public class Task implements TaskInterface, Comparable<Task> {
     @Override
     public String getTime() {
         return _time;
+    }
+
+    @Override
+    public String getEndTime() {
+        return _endTime;
     }
 
     @Override
@@ -205,6 +217,21 @@ public class Task implements TaskInterface, Comparable<Task> {
     }
 
     @Override
+    public String setEndTime(String input) {
+        if (input == null || input.equals("null")) {
+            _endTime = null;
+        } else {
+            if (_time == null) {
+                _time = input.trim();
+                _endTime = null;
+            } else {
+                _endTime = input.trim();
+            }
+        }
+        return _endTime;
+    }
+
+    @Override
     public String setVenue(String input) {
         if (input == null || input.equals("null")) {
             _venue = null;
@@ -237,6 +264,8 @@ public class Task implements TaskInterface, Comparable<Task> {
                 + LINE_SEPARATOR);
         task.append(TAG_TAB + TAG_DATE + SPACE + _date + SPACE + LINE_SEPARATOR);
         task.append(TAG_TAB + TAG_TIME + SPACE + _time + SPACE + LINE_SEPARATOR);
+        task.append(TAG_TAB + TAG_ENDTIME + SPACE + _endTime + SPACE
+                + LINE_SEPARATOR);
         task.append(TAG_TAB + TAG_VENUE + SPACE + _venue + SPACE
                 + LINE_SEPARATOR);
         task.append(TAG_TAB + TAG_DESCRIPTION + SPACE + _description + SPACE
@@ -271,6 +300,7 @@ public class Task implements TaskInterface, Comparable<Task> {
         task.append(TAG_TITLE + SPACE + _title + SPACE);
         task.append(TAG_DATE + SPACE + _date + SPACE);
         task.append(TAG_TIME + SPACE + _time + SPACE);
+        task.append(TAG_ENDTIME + SPACE + _endTime + SPACE);
         task.append(TAG_VENUE + SPACE + _venue + SPACE);
         task.append(TAG_DONE + SPACE + _isDone + SPACE);
         task.append(TAG_FLOATING + SPACE + _isFloating + SPACE);
@@ -299,7 +329,7 @@ public class Task implements TaskInterface, Comparable<Task> {
     public void setFloating(boolean isFloating) {
         _isFloating = isFloating;
         if (_isFloating) {
-            _date = _time = TAG_NULL;
+            _date = _time = _endTime = TAG_NULL;
         }
     }
 
