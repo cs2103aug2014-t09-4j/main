@@ -22,8 +22,6 @@ import bakatxt.core.Task;
 // TODO comments
 class Contents extends JPanel {
 
-    private static boolean _isEven = true;
-
     private static final String MESSAGE_EMPTY = "null";
 
     private static final int DATE_AND_TASKS_START_POSITION = 1;
@@ -109,22 +107,23 @@ class Contents extends JPanel {
 
         assert(y > 0) : "y must be greater than zero";
         assert(offset > 0) : "offset must be at least 1";
+        int taskNumber = y - offset;
 
         if (tasks.size() == 1) {
-            setEvents(new OnlyTaskBox(tasks.pop(), y - offset, alternatingColors()));
+            setEvents(new OnlyTaskBox(tasks.pop(), taskNumber, alternatingColors(taskNumber)));
             y++;
 
         } else {
-            setEvents(new FirstTaskBox(tasks.pop(), y - offset, alternatingColors()));
+            setEvents(new FirstTaskBox(tasks.pop(), taskNumber, alternatingColors(taskNumber)));
             y++;
             while(true) {
 
                 if (tasks.size() == 1) {
-                    setEvents(new FinalTaskBox(tasks.pop(), y - offset, alternatingColors()));
+                    setEvents(new FinalTaskBox(tasks.pop(), taskNumber, alternatingColors(taskNumber)));
                     y++;
                     break;
                 }
-                setEvents(new MiddleTaskBox(tasks.pop(), y - offset, alternatingColors()));
+                setEvents(new MiddleTaskBox(tasks.pop(), taskNumber, alternatingColors(taskNumber)));
                 y++;
             }
         }
@@ -132,9 +131,8 @@ class Contents extends JPanel {
     return y;
     }
 
-    private static Color alternatingColors() {
-        _isEven = !_isEven;
-        if (_isEven) {
+    private static Color alternatingColors(int taskNumber) {
+        if (taskNumber % 2 == 0) {
             return UIHelper.GRAY_BLACK;
         }
         return UIHelper.GRAY_DARK;
