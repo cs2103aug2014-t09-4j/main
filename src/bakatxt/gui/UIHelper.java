@@ -14,18 +14,18 @@ import java.awt.geom.RoundRectangle2D;
 
 //TODO comments
 
-class UIHelper {
-    protected static final Dimension SCREEN_SIZE = Toolkit.getDefaultToolkit().getScreenSize();
-    protected static final int WINDOW_OFFSET_TOP = SCREEN_SIZE.height/6;
-    protected static final int WINDOW_X = 650;
-    protected static final int WINDOW_Y = SCREEN_SIZE.height - 2 * WINDOW_OFFSET_TOP;
-    protected static final Dimension WINDOW_SIZE = new Dimension(WINDOW_X, WINDOW_Y);
-    protected static final Point WINDOW_LOCATION = new Point(
+public class UIHelper {
+    public static final Dimension SCREEN_SIZE = Toolkit.getDefaultToolkit().getScreenSize();
+    public static final int WINDOW_OFFSET_TOP = SCREEN_SIZE.height/6;
+    public static final int WINDOW_X = 650;
+    public static final int WINDOW_Y = SCREEN_SIZE.height - 2 * WINDOW_OFFSET_TOP;
+    public static final Dimension WINDOW_SIZE = new Dimension(WINDOW_X, WINDOW_Y);
+    public static final Point WINDOW_LOCATION = new Point(
             SCREEN_SIZE.width / 2 - WINDOW_X / 2, WINDOW_OFFSET_TOP);
     protected static final int WINDOW_ROUNDNESS = 20;
     protected static final int BORDER = 4; // leave as half of actual border
 
-    protected static final Point INPUT_LOCATION = new Point(BORDER * 2, BORDER * 2);
+    public static final Point INPUT_LOCATION = new Point(BORDER * 2, BORDER * 2);
 
     /* to be implemented?
     protected static final List<String> SUGGESTIONS_MAIN = new ArrayList<>(asList(
