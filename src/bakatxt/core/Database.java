@@ -224,6 +224,8 @@ public class Database implements DatabaseInterface {
             // delete flag is false
             task.setDeleted(false);
         }
+
+        updateFile();
         return isRemoved;
     }
 
