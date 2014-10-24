@@ -1,24 +1,23 @@
-// @author A0116538A
+//@author A0116538A
 
 package bakatxt.gui;
 
+import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.LinkedList;
 
 import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
 
 import bakatxt.core.BakaProcessor;
 import bakatxt.core.Task;
 
 /**
- * BakaUI is the "main window" of the GUI for BakaTXT. Since we are doing a
- * custom
- * window design, BakaUI is actually completely transparent. We will instead
- * draw
+ * BakaUI is the "main window" of the GUI for BakaTXT. Since we are doing a custom
+ * window design, BakaUI is actually completely transparent. We will instead draw
  * a BakaPanel that fills the BakaUI window, and treat it as our actual window.
- *
  */
 public class BakaUI extends JFrame {
 
@@ -28,7 +27,7 @@ public class BakaUI extends JFrame {
 
     /**
      * @param thisSession
-     *            refers to the logic module we are interacting with
+     *        refers to the logic module we are interacting with
      */
     private BakaUI(BakaProcessor bakaProcessor) {
         _bakaProcessor = bakaProcessor;
@@ -51,12 +50,10 @@ public class BakaUI extends JFrame {
     }
 
     /**
-     * This method listens for input from the GUI and does the following when
-     * the
+     * This method listens for input from the GUI and does the following when the
      * return key is pressed:
      *
-     * 1. Highlight all the text in the input box (to make it trivial for the
-     * user
+     * 1. Highlight all the text in the input box (to make it trivial for the user
      * to input new commands)
      * 2. Passes the input to the logic module to process it
      * 3. Lastly, updates the contents of the GUI to fit the command
@@ -85,8 +82,16 @@ public class BakaUI extends JFrame {
         assert (tasks != null) : "tasks must not be null";
 
         _bakaPanel.refreshContents(tasks);
-        _bakaUI.pack();
         _bakaUI.setLocation(UIHelper.WINDOW_LOCATION);
+
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                _bakaUI.setPreferredSize(new Dimension(UIHelper.WINDOW_X,
+                        _bakaPanel.getPreferredSize().height));
+                _bakaUI.pack();
+            }
+        });
     }
 
     public static void setInputBoxText(String s) {

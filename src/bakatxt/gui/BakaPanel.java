@@ -1,4 +1,4 @@
-// @author A0116538A
+//@author A0116538A
 
 package bakatxt.gui;
 
@@ -16,16 +16,12 @@ import bakatxt.core.Task;
 import bakatxt.international.BakaTongue;
 
 /**
- * This class is used as the actual window (i.e, what the user perceives as a
- * window)
- * for BakaTXT. Apart from that, it also draws the input box and the rest of the
- * content.
- *
+ * This class is used as the actual window (i.e, what the user perceives as a window)
+ * for BakaTXT. Apart from that, it also draws the input box and the rest of the content.
  */
 class BakaPanel extends JPanel {
 
-    // TODO should not need to print this, rather, take the thing to be printed
-    // from logic
+    // TODO should not need to print this, rather, take the thing to be printed from logic
     private static final String MESSAGE_WELCOME = BakaTongue
             .getString("MESSAGE_WELCOME");
 
@@ -71,8 +67,8 @@ class BakaPanel extends JPanel {
     /**
      * This method refreshes what is displayed on the GUI
      *
-     * @param session
-     *            is the logic module we are retrieving the new information from
+     * @param tasks
+     *        the tasks we are putting on the GUI
      */
     protected void refreshContents(LinkedList<Task> tasks) {
 
@@ -93,8 +89,7 @@ class BakaPanel extends JPanel {
     }
 
     /**
-     * This method dictates the area where the input box and the content is
-     * allowed
+     * This method dictates the area where the input box and the content is allowed
      * to be
      */
     private void addComponentsToPane() {
@@ -109,13 +104,13 @@ class BakaPanel extends JPanel {
      * Tell the GridBag where to draw the input box
      *
      * @param layout
-     *            is the GridBag which is being drawn on
+     *        the GridBag which is being drawn on
      */
     private void setInputBox(GridBagConstraints layout) {
         layout.fill = GridBagConstraints.BOTH;
         layout.anchor = GridBagConstraints.FIRST_LINE_START;
         layout.weightx = 1.0;
-        layout.weighty = 0.05;
+        layout.weighty = 0.0;
         layout.gridx = 0;
         layout.gridy = 0;
         layout.insets = new Insets(2 * UIHelper.BORDER, 2 * UIHelper.BORDER,
@@ -125,13 +120,13 @@ class BakaPanel extends JPanel {
 
     /**
      * @param alertMessage
-     *            is the message to put in the layout specified
+     *        the message to put in the layout specified
      */
     private void setAlertMessage(GridBagConstraints layout) {
         layout.fill = GridBagConstraints.NONE;
         layout.anchor = GridBagConstraints.PAGE_START;
         layout.weightx = 0.0;
-        layout.weighty = 0.01;
+        layout.weighty = 0.0;
         layout.gridx = 0;
         layout.gridy = 1;
         layout.gridheight = 1;
@@ -140,11 +135,10 @@ class BakaPanel extends JPanel {
     }
 
     /**
-     * Tell the GridBag where to draw the BakaScrollPane containing the content
-     * box
+     * Tell the GridBag where to draw the BakaScrollPane containing the content box
      *
      * @param layout
-     *            is the GridBag which is being drawn on
+     *        is the GridBag which is being drawn on
      */
     private void setContent(GridBagConstraints layout) {
         layout.fill = GridBagConstraints.BOTH;
@@ -160,7 +154,7 @@ class BakaPanel extends JPanel {
 
     /**
      * @param message
-     *            is the string to style
+     *        is the string to style
      * @return a alert message FormattedText with the string
      */
     private static FormattedText setAlertMessageText(String message) {
@@ -172,7 +166,7 @@ class BakaPanel extends JPanel {
      * Shake the input box when an error in input is detected
      *
      * @param isBadInput
-     *            is the boolean that decides whether or not to shake the box
+     *        is the boolean that decides whether or not to shake the box
      */
     protected void shakeInputBox(final boolean isBadInput) {
 
@@ -196,16 +190,15 @@ class BakaPanel extends JPanel {
     }
 
     /**
-     * Shake the component right, then back to initial, then left, then back to
-     * initial
+     * Shake the component right, then back to initial, then left, then back to initial
      * again.
      *
      * @param initialLocation
-     *            is the initial location of the component to be shaked
+     *        is the initial location of the component to be shaked
      * @param movementDelay
-     *            is the delay between shakes
+     *        is the delay between shakes
      * @param xMovement
-     *            is the amount to move the component by
+     *        is the amount to move the component by
      */
     private static void shakeOneIteration(final Point initialLocation,
             final int movementDelay, int xMovement) {
@@ -227,7 +220,7 @@ class BakaPanel extends JPanel {
      * Moves the input box to the set location
      *
      * @param p
-     *            is the Point to move the box to
+     *        is the Point to move the box to
      */
     private static void moveBox(final Point p) {
         SwingUtilities.invokeLater(new Runnable() {
