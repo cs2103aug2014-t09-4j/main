@@ -53,6 +53,8 @@ public class BakaProcessor {
 
     public String executeCommand(String input) {
 
+        input = BakaTongue.toEnglish(input);
+
         String command = _parser.getCommand(input);
         CommandType commandType;
 
@@ -180,7 +182,8 @@ public class BakaProcessor {
             originalTask = new Task(editTask);
 
             BakaUI.setInputBoxText(editTask.getTitle());
-            BakaUI.setAlertMessageText(ALERT_EDIT + "TITLE");
+            BakaUI.setAlertMessageText(BakaTongue.getString("ALERT_EDIT_MODE")
+                    + BakaTongue.getString("ALERT_EDIT_TITLE"));
         } else {
             input = _parser.getString(input);
             switch (editStage) {
@@ -209,7 +212,7 @@ public class BakaProcessor {
     private void editDescription(String input, String command) {
         UserInput inputCmd;
         String nextStagePrompt;
-        if (input.equals("Add description?")) {
+        if (input.equals(BakaTongue.getString("USER_PROMPT_DESCRIPTION"))) {
             input = null;
         }
         editTask.setDescription(input);
@@ -218,13 +221,13 @@ public class BakaProcessor {
         ra.execute(inputCmd);
         nextStagePrompt = "";
         BakaUI.setInputBoxText(nextStagePrompt);
-        BakaUI.setAlertMessageText("Welcome to BakaTXT! For help please type help in the box above");
+        BakaUI.setAlertMessageText(BakaTongue.getString("MESSAGE_WELCOME"));
     }
 
     private void editTime(String input) {
         String nextStagePrompt;
         String parsedDateTime;
-        if (input.equals("Add a time?")) {
+        if (input.equals(BakaTongue.getString("USER_PROMPT_TIME"))) {
             input = null;
         }
         parsedDateTime = _parser.getTime(input);
@@ -232,16 +235,17 @@ public class BakaProcessor {
 
         nextStagePrompt = editTask.getDescription();
         if (nextStagePrompt == null) {
-            nextStagePrompt = "Add description?";
+            nextStagePrompt = BakaTongue.getString("USER_PROMPT_DESCRIPTION");
         }
         BakaUI.setInputBoxText(nextStagePrompt);
-        BakaUI.setAlertMessageText(ALERT_EDIT + "DESCRIPTION");
+        BakaUI.setAlertMessageText(BakaTongue.getString("ALERT_EDIT_MODE")
+                + BakaTongue.getString("ALERT_EDIT_DESCRIPTION"));
     }
 
     private void editDate(String input) {
         String nextStagePrompt;
         String parsedDateTime;
-        if (input.equals("Add a date?")) {
+        if (input.equals(BakaTongue.getString("USER_PROMPT_DATE"))) {
             input = null;
         }
         parsedDateTime = _parser.getDate(input);
@@ -249,25 +253,27 @@ public class BakaProcessor {
 
         nextStagePrompt = editTask.getTime();
         if (nextStagePrompt.equals("null")) {
-            nextStagePrompt = "Add a time?";
+            nextStagePrompt = BakaTongue.getString("USER_PROMPT_TIME");
         }
         BakaUI.setInputBoxText(nextStagePrompt);
-        BakaUI.setAlertMessageText(ALERT_EDIT + "TIME");
+        BakaUI.setAlertMessageText(BakaTongue.getString("ALERT_EDIT_MODE")
+                + BakaTongue.getString("ALERT_EDIT_TIME"));
     }
 
     private void editVenue(String input) {
         String nextStagePrompt;
-        if (input.equals("Add a venue?")) {
+        if (input.equals(BakaTongue.getString("USER_PROMPT_VENUE"))) {
             input = null;
         }
         editTask.setVenue(input);
 
         nextStagePrompt = editTask.getDate();
         if (nextStagePrompt.equals("null")) {
-            nextStagePrompt = "Add a date?";
+            nextStagePrompt = BakaTongue.getString("USER_PROMPT_DATE");
         }
         BakaUI.setInputBoxText(nextStagePrompt);
-        BakaUI.setAlertMessageText(ALERT_EDIT + "DATE");
+        BakaUI.setAlertMessageText(BakaTongue.getString("ALERT_EDIT_MODE")
+                + BakaTongue.getString("ALERT_EDIT_DATE"));
     }
 
     private void editTitle(String input) {
@@ -280,10 +286,11 @@ public class BakaProcessor {
 
         nextStagePrompt = editTask.getVenue();
         if (nextStagePrompt.equals("null")) {
-            nextStagePrompt = "Add a venue?";
+            nextStagePrompt = BakaTongue.getString("USER_PROMPT_VENUE");
         }
         BakaUI.setInputBoxText(nextStagePrompt);
-        BakaUI.setAlertMessageText(ALERT_EDIT + "VENUE");
+        BakaUI.setAlertMessageText(BakaTongue.getString("ALERT_EDIT_MODE")
+                + BakaTongue.getString("ALERT_EDIT_VENUE"));
     }
 
     private void deleteTask(String input, String command) {
