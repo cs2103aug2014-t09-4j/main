@@ -34,6 +34,9 @@ public class BakaTongue {
             case "chinese" :
                 currentLocale = new Locale("zh", "CN");
                 break;
+            case "korean" :
+                currentLocale = new Locale("ko", "KR");
+                break;
             default :
                 currentLocale = new Locale("en", "US");
         }
