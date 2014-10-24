@@ -435,7 +435,8 @@ public class Database implements DatabaseInterface {
 
     @Override
     public void updateLocale(String locale) {
-        _localeString = locale;
+        LOGGER.info("locale write initialized");
+        _localeString = locale.trim();
         dirtyWrite(FILE_LOCALE + SPACE + _localeString);
     }
 }
