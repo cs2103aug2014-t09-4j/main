@@ -32,4 +32,6 @@ public interface DatabaseInterface {
     public LinkedList<Task> getAllUndoneTasks();
 
     public void clear() throws IOException;
+
+    public void updateLocale(String locale);
 }

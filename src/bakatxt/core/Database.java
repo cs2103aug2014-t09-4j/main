@@ -18,6 +18,7 @@ import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import bakatxt.international.BakaTongue;
 import bakatxt.log.BakaLogger;
 
 public class Database implements DatabaseInterface {
@@ -42,6 +43,8 @@ public class Database implements DatabaseInterface {
     private static final String FILE_WARNING = FILE_COMMENT
             + "Each task has to be in the same line";
 
+    private static final String FILE_LOCALE = TAG_OPEN + "LOCALE" + TAG_CLOSE;
+
     private static final String TAG_DELETED = "9999";
     private static final String TAG_DONE = "5000";
     private static final String TAG_FLOATING = "0000";
@@ -62,6 +65,7 @@ public class Database implements DatabaseInterface {
     private TreeSet<String> _sortedKeys;
     private boolean _removeDone;
     private boolean _removeDeleted;
+    private String _localeString;
 
     private Database(String fileName) {
         assert (_database == null);
@@ -90,6 +94,7 @@ public class Database implements DatabaseInterface {
     }
 
     private void initializeVariables() {
+        _localeString = null;
         updateMemory();
         _removeDone = false;
         _removeDeleted = true;
@@ -117,6 +122,10 @@ public class Database implements DatabaseInterface {
             while ((line = inputStream.readLine()) != null) {
                 if (line.isEmpty()) {
                     continue;
+                } else if (line.contains(FILE_LOCALE) && line.contains("_")) {
+                    _localeString = line.substring(line.indexOf(TAG_CLOSE) + 1);
+                    String[] localeArgs = _localeString.split("_");
+                    BakaTongue.setLanguage(localeArgs[0], localeArgs[1]);
                 } else if (line.contains(TAG_DONE) && _removeDone) {
                     Task doneTask = new Task(line);
                     doneTask.setDeleted(true);
@@ -235,8 +244,18 @@ public class Database implements DatabaseInterface {
         LOGGER.info("update file initialized");
         // tempCreation();
         resetFile();
+        writeLocale();
         writeFileComments();
         return writeLinesToFile();
+    }
+
+    private void writeLocale() {
+        try {
+            _outputStream.write(FILE_LOCALE + SPACE + _localeString);
+            _outputStream.newLine();
+        } catch (IOException ex) {
+            LOGGER.severe("unable to write to file!");
+        }
     }
 
     private void writeFileComments() {
@@ -412,4 +431,9 @@ public class Database implements DatabaseInterface {
         updateMemory();
     }
 
+    @Override
+    public void updateLocale(String locale) {
+        _localeString = locale;
+        dirtyWrite(FILE_LOCALE + SPACE + _localeString);
+    }
 }
