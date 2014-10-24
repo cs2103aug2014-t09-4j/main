@@ -4,10 +4,9 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 
 import bakatxt.gui.BakaUI;
+import bakatxt.international.BakaTongue;
 
 public class BakaProcessor {
-
-    private static final String ALERT_EDIT = "Edit Mode: ";
 
     private static Database _database;
     private static BakaParser _parser;
@@ -29,6 +28,7 @@ public class BakaProcessor {
         EDIT,
         UNDO,
         REDO,
+        LANGUAGE,
         EXIT
     }
 
@@ -120,6 +120,16 @@ public class BakaProcessor {
                     executeCommand("edit " + input);
                 } else {
                     ra.redo();
+                }
+                break;
+
+            case LANGUAGE :
+                if (editStage > 0) {
+                    executeCommand("edit " + input);
+                } else {
+                    BakaTongue.setLanguage(_parser.getString(input));
+                    BakaUI.setAlertMessageText(BakaTongue
+                            .getString("MESSAGE_WELCOME"));
                 }
                 break;
 
