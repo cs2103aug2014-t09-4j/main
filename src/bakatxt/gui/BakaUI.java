@@ -94,19 +94,37 @@ public class BakaUI extends JFrame {
         });
     }
 
+    /**
+     * Set the text within the input box
+     *
+     * @param s
+     *        the string to be put in the input box
+     */
     public static void setInputBoxText(String s) {
         _bakaPanel.setInputBoxText(s);
         _bakaPanel.getInput().selectAll();
     }
 
+    /**
+     * Set the text in the alert message box
+     *
+     * @param s
+     *        the string to put in the alert message box
+     */
     public static void setAlertMessageText(String s) {
         _bakaPanel.updateAlertMessageText(s);
     }
 
+    /**
+     * @return the JFrame window
+     */
     protected static BakaUI getWindow() {
         return _bakaUI;
     }
 
+    /**
+     * @return the Jpanel with all the content
+     */
     protected static BakaPanel getPanel() {
         return _bakaPanel;
     }
@@ -133,7 +151,10 @@ public class BakaUI extends JFrame {
 
     /**
      * Allow mouse movement of window from any part of the window
+     * @deprecated
+     * TODO remove by 0.5
      */
+    @Deprecated
     private static void setMouseActions() {
         MouseActions mouseActions = new MouseActions(_bakaPanel);
         _bakaPanel.addMouseListener(mouseActions);
