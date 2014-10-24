@@ -66,11 +66,12 @@ public class BakaTongue {
             String english = resTarget.getString(key) + SPACE;
 
             if (key.contains("COMMAND")) {
-
                 if (isAcceptable(input, international)
                         && isSameCommand(input, international)) {
                     input = input.replace(international, english);
                 }
+            } else if (key.contains("USER_PROMPT")) {
+                continue;
             } else {
                 input = input.replace(international, english);
             }
