@@ -1,4 +1,4 @@
-//@author A0116538A
+// @author A0116538A
 
 package bakatxt.gui;
 
@@ -10,6 +10,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 
 import bakatxt.core.Task;
+import bakatxt.international.BakaTongue;
 
 /**
  * This class does the following:
@@ -59,7 +60,7 @@ class Contents extends JPanel {
         int y = DATE_AND_TASKS_START_POSITION;
         int offset = 0;
 
-        while(tasks.peek() != null) {
+        while (tasks.peek() != null) {
 
             currentDate = tasks.peek().getDate();
 
@@ -81,7 +82,7 @@ class Contents extends JPanel {
         LinkedList<Task> seperateTasksByDate = new LinkedList<Task>();
         String currentDate = tasks.peek().getDate();
 
-        while(isSameDate(tasks, currentDate)) {
+        while (isSameDate(tasks, currentDate)) {
             seperateTasksByDate.add(tasks.poll());
         }
 
@@ -105,30 +106,34 @@ class Contents extends JPanel {
 
     private int addCurrentEvents(LinkedList<Task> tasks, int y, int offset) {
 
-        assert(y > 0) : "y must be greater than zero";
-        assert(offset > 0) : "offset must be at least 1";
+        assert (y > 0) : "y must be greater than zero";
+        assert (offset > 0) : "offset must be at least 1";
         int taskNumber = y - offset;
 
         if (tasks.size() == 1) {
-            setEvents(new OnlyTaskBox(tasks.pop(), taskNumber, alternatingColors(taskNumber)));
-            y++;
+            setEvents(new OnlyTaskBox(tasks.pop(), taskNumber,
+                    alternatingColors(taskNumber)));
+            taskNumber++;
 
         } else {
-            setEvents(new FirstTaskBox(tasks.pop(), taskNumber, alternatingColors(taskNumber)));
-            y++;
-            while(true) {
+            setEvents(new FirstTaskBox(tasks.pop(), taskNumber,
+                    alternatingColors(taskNumber)));
+            taskNumber++;
+            while (true) {
 
                 if (tasks.size() == 1) {
-                    setEvents(new FinalTaskBox(tasks.pop(), taskNumber, alternatingColors(taskNumber)));
-                    y++;
+                    setEvents(new FinalTaskBox(tasks.pop(), taskNumber,
+                            alternatingColors(taskNumber)));
+                    taskNumber++;
                     break;
                 }
-                setEvents(new MiddleTaskBox(tasks.pop(), taskNumber, alternatingColors(taskNumber)));
-                y++;
+                setEvents(new MiddleTaskBox(tasks.pop(), taskNumber,
+                        alternatingColors(taskNumber)));
+                taskNumber++;
             }
         }
 
-    return y;
+        return taskNumber + offset;
     }
 
     private static Color alternatingColors(int taskNumber) {
@@ -153,7 +158,7 @@ class Contents extends JPanel {
         this.add(task);
     }
 
-    //TODO probably a better method to do this
+    // TODO probably a better method to do this
     private void setNoEvents() {
         FormattedText task = new FormattedText("You have no events!", UIHelper.PRESET_TYPE_TITLE,
                 UIHelper.PRESET_SIZE_TITLE, UIHelper.PRESET_COLOR_TITLE);
@@ -170,10 +175,10 @@ class Contents extends JPanel {
      * @param dayAndDate is the string to style
      * @return a day and date FormattedText with the string
      */
-    private static FormattedText setDayAndDateText (String dayAndDate) {
+    private static FormattedText setDayAndDateText(String dayAndDate) {
 
         if (dayAndDate.equals(MESSAGE_EMPTY)) {
-            dayAndDate = "Floating";
+            dayAndDate = BakaTongue.getString("MESSAGE_FLOATING");
         }
 
         return new FormattedText(dayAndDate, UIHelper.PRESET_TYPE_DATE,
