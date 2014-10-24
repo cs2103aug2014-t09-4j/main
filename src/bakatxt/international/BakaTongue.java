@@ -28,6 +28,10 @@ public class BakaTongue {
 
     public static void setLanguage(String language) {
         switch (language.toLowerCase().trim()) {
+            case "wah lao" :
+            case "singlish" :
+                currentLocale = new Locale("en", "SG");
+                break;
             case "english" :
                 currentLocale = new Locale("en", "US");
                 break;
