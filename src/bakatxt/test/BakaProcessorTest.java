@@ -24,7 +24,7 @@ public class BakaProcessorTest {
         String input = "add lunch";
         String command = _parser.getCommand(input);
         CommandType commandType = CommandType.valueOf(command);
-        assertEquals("ADD", commandType);
+        assertEquals("ADD", commandType.toString());
     }
 
     @Test
@@ -32,7 +32,7 @@ public class BakaProcessorTest {
         String input = "delete 3";
         String command = _parser.getCommand(input);
         CommandType commandType = CommandType.valueOf(command);
-        assertEquals("DELETE", commandType);
+        assertEquals("DELETE", commandType.toString());
     }
 
     @Test
@@ -52,7 +52,7 @@ public class BakaProcessorTest {
         } catch (IllegalArgumentException e) {
             commandType = CommandType.DEFAULT;
         }
-        assertEquals("DEFAULT", commandType);
+        assertEquals("DEFAULT", commandType.toString());
 
     }
 }
