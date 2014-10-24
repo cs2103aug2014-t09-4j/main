@@ -217,12 +217,10 @@ public class Database implements DatabaseInterface {
 
         boolean isRemoved = target.remove(task);
         if (isRemoved) {
-            task.setDeleted(true);
-            addTaskToMap(task);
-            dirtyWrite(task.toString());
-            // NOTE: the status of task in _bakaMap is under a deleted tag, but
-            // delete flag is false
-            task.setDeleted(false);
+            Task toDelete = new Task(task);
+            toDelete.setDeleted(true);
+            addTaskToMap(toDelete);
+            dirtyWrite(toDelete.toString());
         }
 
         updateFile();
