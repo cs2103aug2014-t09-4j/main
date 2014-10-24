@@ -62,16 +62,14 @@ abstract class TaskBox extends JPanel {
     // TODO make locationText a different color
     private void setTaskAndLocation(GridBagConstraints layout, String taskText,
             String locationText) {
-        FormattedText task;
-        if (locationText.equals("null")) {
-            task = new FormattedText(taskText, UIHelper.PRESET_TYPE_TITLE,
-                    UIHelper.PRESET_SIZE_TITLE, UIHelper.PRESET_COLOR_TITLE,
-                    IS_LINE_WRAP);
+        if (locationText == null || locationText.equals("null")) {
+            locationText = "";
         } else {
-            task = new FormattedText(taskText + AT + locationText,
-                    UIHelper.PRESET_TYPE_TITLE, UIHelper.PRESET_SIZE_TITLE,
-                    UIHelper.PRESET_COLOR_TITLE, IS_LINE_WRAP);
+            locationText = AT + locationText;
         }
+        FormattedText task = new FormattedText(taskText, UIHelper.PRESET_TYPE_TITLE,
+                UIHelper.PRESET_SIZE_TITLE, UIHelper.PRESET_COLOR_TITLE,
+                IS_LINE_WRAP);
         layout.fill = GridBagConstraints.HORIZONTAL;
         layout.anchor = GridBagConstraints.LINE_START;
         layout.weightx = 0.01;
@@ -102,6 +100,10 @@ abstract class TaskBox extends JPanel {
     }
 
     private void setTimeStart(GridBagConstraints layout, String startTimeText) {
+
+        if (startTimeText == null || startTimeText.equals(null)) {
+            startTimeText = "";
+        }
         FormattedText time = new FormattedText(startTimeText,
                 UIHelper.PRESET_TYPE_DATE, UIHelper.PRESET_SIZE_DATE,
                 UIHelper.PRESET_COLOR_DATE);

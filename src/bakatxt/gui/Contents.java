@@ -178,7 +178,7 @@ class Contents extends JPanel {
      */
     private static FormattedText setDayAndDateText(String dayAndDate) {
 
-        if (dayAndDate.equals(MESSAGE_EMPTY)) {
+        if (dayAndDate == null || dayAndDate.equals(MESSAGE_EMPTY)) {
             dayAndDate = BakaTongue.getString("MESSAGE_FLOATING");
         }
 
