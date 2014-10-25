@@ -211,7 +211,7 @@ public class BakaProcessor {
         String nextStagePrompt;
         String parsedDateTime;
         if (editStage == 0) {
-            editStage = 5;
+            editStage = 6;
             String index = _parser.getString(input).trim();
             int trueIndex = Integer.valueOf(index.trim()) - 1;
             _displayTasks = _database.getAllTasks();
@@ -224,17 +224,20 @@ public class BakaProcessor {
         } else {
             input = _parser.getString(input);
             switch (editStage) {
-                case 5 :
+                case 6 :
                     editTitle(input);
                     break;
-                case 4 :
+                case 5 :
                     editVenue(input);
                     break;
-                case 3 :
+                case 4 :
                     editDate(input);
                     break;
+                case 3 :
+                    editStartTime(input);
+                    break;
                 case 2 :
-                    editTime(input);
+                    editEndTime(input);
                     break;
                 case 1 :
                     editDescription(input, command);
@@ -261,14 +264,33 @@ public class BakaProcessor {
         BakaUI.setAlertMessageText(BakaTongue.getString("MESSAGE_WELCOME"));
     }
 
-    private void editTime(String input) {
+    private void editStartTime(String input) {
         String nextStagePrompt;
         String parsedDateTime;
-        if (input.equals(BakaTongue.getString("USER_PROMPT_TIME"))) {
+        if (input.equals(BakaTongue.getString("USER_PROMPT_START_TIME"))) {
             input = null;
         }
         parsedDateTime = _parser.getTime(input);
         editTask.setTime(parsedDateTime);
+
+        nextStagePrompt = editTask.getTime();
+        if (nextStagePrompt == null) {
+            nextStagePrompt = BakaTongue.getString("USER_PROMPT_END_TIME");
+        }
+        BakaUI.setInputBoxText(nextStagePrompt);
+        BakaUI.setAlertMessageText(BakaTongue.getString("ALERT_EDIT_MODE")
+                + BakaTongue.getString("ALERT_EDIT_END_TIME"));
+    }
+
+    private void editEndTime(String input) {
+
+        String nextStagePrompt;
+        String parsedDateTime;
+        if (input.equals(BakaTongue.getString("USER_PROMPT_END_TIME"))) {
+            input = null;
+        }
+        parsedDateTime = _parser.getTime(input);
+        editTask.setEndTime(parsedDateTime);
 
         nextStagePrompt = editTask.getDescription();
         if (nextStagePrompt == null) {
@@ -290,11 +312,11 @@ public class BakaProcessor {
 
         nextStagePrompt = editTask.getTime();
         if (nextStagePrompt.equals(STRING_NULL)) {
-            nextStagePrompt = BakaTongue.getString("USER_PROMPT_TIME");
+            nextStagePrompt = BakaTongue.getString("USER_PROMPT_START_TIME");
         }
         BakaUI.setInputBoxText(nextStagePrompt);
         BakaUI.setAlertMessageText(BakaTongue.getString("ALERT_EDIT_MODE")
-                + BakaTongue.getString("ALERT_EDIT_TIME"));
+                + BakaTongue.getString("ALERT_EDIT_START_TIME"));
     }
 
     private void editVenue(String input) {
