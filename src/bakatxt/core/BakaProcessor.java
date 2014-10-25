@@ -53,13 +53,12 @@ public class BakaProcessor {
         input = input.trim();
         if (input.contains(SPACE)) {
             String content = _parser.getString(input);
-            if (content.equals("day")) {
-                String currentDate = _parser.getDate("today").trim();
-                _displayTasks = _database.getTasksWithDate(currentDate);
-            } else if (content.equals("week")) {
+
+            if (content.equals("week")) {
                 // TODO
             } else {
-                _displayTasks = _database.getAllUndoneTasks();
+                String currentDate = _parser.getDate(content).trim();
+                _displayTasks = _database.getTasksWithDate(currentDate);
             }
         } else {
             _displayTasks = _database.getAllUndoneTasks();
