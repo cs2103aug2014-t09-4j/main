@@ -25,6 +25,7 @@ public class BakaProcessor {
     private static boolean _choosingLanguage = false;
 
     enum CommandType {
+        HELP,
         ADD,
         DELETE,
         SHOW,
@@ -91,6 +92,9 @@ public class BakaProcessor {
         }
 
         switch (commandType) {
+            case HELP :
+                showHelp();
+                return;
 
             case ADD :
                 addTask(input, command);
@@ -140,6 +144,20 @@ public class BakaProcessor {
         }
 
         displayTask();
+    }
+
+    private void showHelp() {
+        _displayTasks = new LinkedList<Task>();
+        for (CommandType c : CommandType.values()) {
+            String cmd = c.toString();
+            if (cmd.equals("DEFAULT") || cmd.equals("HELP")) {
+                continue;
+            }
+            String languageKey = "COMMAND_" + cmd;
+            Task command = new Task(BakaTongue.getString(languageKey));
+            command.setDate(BakaTongue.getString("COMMAND_HELP"));
+            _displayTasks.add(command);
+        }
     }
 
     private void languageSelector(String input) {
