@@ -99,9 +99,15 @@ class Contents extends JPanel {
      *         is empty.
      */
     private static boolean isSameDate(LinkedList<Task> tasks, String currentDate) {
+
         if (tasks.peek() == null) {
             return false;
         }
+
+        if (currentDate == null && tasks.peek().getDate() == null) {
+            return true;
+        }
+
         return tasks.peek().getDate().equals(currentDate);
     }
 
