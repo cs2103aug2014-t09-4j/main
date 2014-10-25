@@ -55,7 +55,7 @@ public class BakaProcessor {
             String content = _parser.getString(input);
 
             if (content.equals("week")) {
-                // TODO
+                _displayTasks = _database.getWeekTasks();
             } else {
                 String currentDate = _parser.getDate(content).trim();
                 _displayTasks = _database.getTasksWithDate(currentDate);
