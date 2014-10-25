@@ -1,3 +1,4 @@
+//@author A0116320Y
 package bakatxt.core;
 
 import java.io.BufferedReader;
@@ -80,6 +81,12 @@ public class Database implements DatabaseInterface {
         }
     }
 
+    /**
+     * Returns a single shared instance of Database to enable reading and
+     * writing to the storage text file.
+     * 
+     * @return a singleton instance of Database
+     */
     public static Database getInstance() {
         if (_database == null) {
             _database = new Database("mytestfile.txt");
@@ -159,6 +166,11 @@ public class Database implements DatabaseInterface {
         return output;
     }
 
+    /**
+     * Returns the relative file name of the storage file where IO is done.
+     * 
+     * @return <code>String</code> of the text file
+     */
     @Override
     public String getFileName() {
         return _userFile.toString();
@@ -178,6 +190,15 @@ public class Database implements DatabaseInterface {
         return lineOne;
     }
 
+    /**
+     * Returns a boolean to specify if a task is added.
+     * Adds a non-deleted unique task to the HashMap in the memory and writes a
+     * copy of the task into the storage file.
+     * 
+     * @param task
+     *            a specific task to add
+     * @return <code>true</code> if task is written to the storage file
+     */
     @Override
     public boolean add(Task task) {
         LOGGER.info("add task initialized");
@@ -202,6 +223,15 @@ public class Database implements DatabaseInterface {
         return true;
     }
 
+    /**
+     * Returns a boolean to specify if a task is deleted.
+     * Deletes a task from the HashMap in the memory and refreshes the storage
+     * file with the existing copy in the memory.
+     * 
+     * @param task
+     *            a specific task to delete
+     * @return <code>true</code> if task is deleted from the memory
+     */
     @Override
     public boolean delete(Task task) {
         LOGGER.info("delete task initialized");
@@ -227,6 +257,11 @@ public class Database implements DatabaseInterface {
         return isRemoved;
     }
 
+    /**
+     * Writes the content of the HashMap into the storage file. Storage file is
+     * created if it does not exists. Closes BufferedWriter stream and set the
+     * Database instance to null. Activity logging is also stopped.
+     */
     @Override
     public void close() {
         LOGGER.info("end Database initialized");
@@ -319,6 +354,20 @@ public class Database implements DatabaseInterface {
         LOGGER.info("Temp creation completed");
     }
 
+    /**
+     * Sets a specific task's done status based on the specified boolean. This
+     * is implemented by deleting the original copy of the task from the memory
+     * and storage file, before adding an updated copy back to memory and
+     * storage file.
+     * 
+     * @param task
+     *            a task to change the status
+     * @param isDone
+     *            a boolean to specify the status of the task to be set
+     * 
+     * @return <code>true</code> if the updated task is written to the storage
+     *         file
+     */
     @Override
     public boolean setDone(Task task, boolean isDone) {
         LOGGER.info("done status change initialized");
@@ -327,6 +376,18 @@ public class Database implements DatabaseInterface {
         return add(task);
     }
 
+    /**
+     * Returns a <code>LinkedList</code> containing all the non-deleted tasks in
+     * the memory with titles containing the specified string.
+     * 
+     * The list is sorted with the floating tasks first in alphabetical order
+     * followed by tasks with dates in chronological order.
+     * 
+     * @param title
+     *            full or partial <code>String</code> of a title
+     * @return <code>LinkedList</code> containing all the existing tasks with
+     *         the title containing the <code>String</code> input
+     */
     @Override
     public LinkedList<Task> getTaskWithTitle(String title) {
         LinkedList<Task> result = new LinkedList<Task>();
@@ -346,6 +407,18 @@ public class Database implements DatabaseInterface {
         return result;
     }
 
+    /**
+     * Returns a <code>LinkedList</code> containing all the non-deleted tasks in
+     * the memory with the specified date.
+     * 
+     * The list is sorted in chronological order.
+     * 
+     * @param key
+     *            <code>String</code> containing the date
+     * 
+     * @return <code>LinkedList</code> containing all the tasks in specified
+     *         date or floating tasks if specified date is <code>null</code>
+     */
     @Override
     public LinkedList<Task> getTasksWithDate(String key) {
         LinkedList<Task> result = new LinkedList<Task>();
@@ -362,6 +435,14 @@ public class Database implements DatabaseInterface {
         return result;
     }
 
+    /**
+     * Returns a <code>LinkedList</code> containing all the non-deleted tasks in
+     * the memory.
+     * The list is sorted with the floating tasks first in alphabetical order
+     * followed by tasks with dates in chronological order.
+     * 
+     * @return <code>LinkedList</code> containing all the existing tasks
+     */
     @Override
     public LinkedList<Task> getAllTasks() {
         LinkedList<Task> all = new LinkedList<Task>();
@@ -375,6 +456,14 @@ public class Database implements DatabaseInterface {
         return all;
     }
 
+    /**
+     * Returns a <code>LinkedList</code> containing all the undone tasks in
+     * the memory.
+     * The list is sorted with the floating tasks first in alphabetical order
+     * followed by tasks with dates in chronological order.
+     * 
+     * @return <code>LinkedList</code> containing all the undone tasks
+     */
     @Override
     public LinkedList<Task> getAllUndoneTasks() {
         LinkedList<Task> undone = new LinkedList<Task>();
@@ -388,6 +477,20 @@ public class Database implements DatabaseInterface {
         return undone;
     }
 
+    /**
+     * Sets a specific task's floating status based on the specified boolean.
+     * This is implemented by deleting the original task from the memory
+     * and storage file, before adding an updated copy back to memory and
+     * storage file.
+     * 
+     * @param task
+     *            a task to change the status
+     * @param isDone
+     *            a boolean to specify the status of the task to be set
+     * 
+     * @return <code>true</code> if the updated task is written to the storage
+     *         file
+     */
     @Override
     public boolean setFloating(Task task, boolean isFloating) {
         LOGGER.info("set floating status initialized");
@@ -408,6 +511,12 @@ public class Database implements DatabaseInterface {
         }
     }
 
+    /**
+     * Removes tasks that are done from the memory and the storage file. This
+     * method is not persistent. Subsequent tasks that are marked as done are
+     * still kept in the storage file and memory until this method is called
+     * again.
+     */
     @Override
     public void removeDone() {
         LOGGER.info("delete done initialized");
@@ -431,6 +540,13 @@ public class Database implements DatabaseInterface {
         updateMemory();
     }
 
+    /**
+     * Writes the current locale used by <code>BakaTxt</code> into the storage
+     * file to enable persistence
+     * 
+     * @param locale
+     *            current locale used
+     */
     @Override
     public void updateLocale(String locale) {
         LOGGER.info("locale write initialized");
