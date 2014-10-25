@@ -59,10 +59,10 @@ public class BakaProcessor {
             } else if (content.equals("week")) {
                 // TODO
             } else {
-                _displayTasks = _database.getAllTasks();
+                _displayTasks = _database.getAllUndoneTasks();
             }
         } else {
-            _displayTasks = _database.getAllTasks();
+            _displayTasks = _database.getAllUndoneTasks();
         }
 
     }
