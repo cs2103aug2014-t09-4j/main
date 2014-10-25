@@ -55,7 +55,6 @@ public class BakaProcessor {
             if (content.equals("day")) {
                 String currentDate = _parser.getDate("today").trim();
                 _displayTasks = _database.getTasksWithDate(currentDate);
-                System.out.println("aloha");
             } else if (content.equals("week")) {
                 // TODO
             } else {

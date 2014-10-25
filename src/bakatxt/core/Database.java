@@ -430,7 +430,7 @@ public class Database implements DatabaseInterface {
                 }
             }
         } else if (_bakaMap.containsKey(key)) {
-            result = _bakaMap.get(key);
+            result.addAll(_bakaMap.get(key));
         }
         return result;
     }
