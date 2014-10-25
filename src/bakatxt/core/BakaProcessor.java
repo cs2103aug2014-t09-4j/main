@@ -47,7 +47,7 @@ public class BakaProcessor {
         _ra = new ReverseAction();
     }
 
-    public void displayTask() {
+    private void displayTask() {
         _displayTasks = _database.getAllTasks();
     }
 
@@ -55,7 +55,7 @@ public class BakaProcessor {
         return _displayTasks;
     }
 
-    public void clearTask() {
+    private void clearTask() {
         _database.clear();
         _displayTasks = _database.getAllTasks();
     }
