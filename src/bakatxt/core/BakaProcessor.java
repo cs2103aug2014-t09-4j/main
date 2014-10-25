@@ -22,6 +22,8 @@ public class BakaProcessor {
     private static Task originalTask;
     private static Task editTask;
 
+    private static boolean _choosingLanguage = false;
+
     enum CommandType {
         ADD,
         DELETE,
@@ -59,6 +61,13 @@ public class BakaProcessor {
 
     public void executeCommand(String input) {
 
+        if (_choosingLanguage) {
+            BakaTongue.setLanguage(input);
+            BakaUI.setAlertMessageText(BakaTongue.getString("MESSAGE_WELCOME"));
+            _choosingLanguage = false;
+            input = "display";
+        }
+
         input = BakaTongue.toEnglish(input);
 
         String command = _parser.getCommand(input);
@@ -84,21 +93,21 @@ public class BakaProcessor {
         switch (commandType) {
 
             case ADD :
-                    addTask(input, command);
+                addTask(input, command);
                 break;
 
             case REMOVE :
             case DELETE :
-                    deleteTask(input, command);
+                deleteTask(input, command);
                 break;
 
             case SHOW :
             case DISPLAY :
-                    displayTask();
+                displayTask();
                 break;
 
             case CLEAR :
-                    clearTask();
+                clearTask();
                 break;
 
             case EDIT :
@@ -114,18 +123,12 @@ public class BakaProcessor {
                 break;
 
             case LANGUAGE :
-                if (editStage > 0) {
-                    executeCommand("edit " + input);
-                } else {
-                    BakaTongue.setLanguage(_parser.getString(input));
-                    BakaUI.setAlertMessageText(BakaTongue
-                            .getString("MESSAGE_WELCOME"));
-                }
-                break;
+                languageSelector(input);
+                return;
 
             case EXIT :
-                    _database.close();
-                    System.exit(0);
+                _database.close();
+                System.exit(0);
                 break;
 
             case DEFAULT :
@@ -138,8 +141,19 @@ public class BakaProcessor {
 
         displayTask();
     }
-        _displayTasks = _database.getAllTasks();
-        return null;
+
+    private void languageSelector(String input) {
+        input = input.trim();
+        if (input.contains(SPACE)) {
+            BakaTongue.setLanguage(_parser.getString(input));
+            BakaUI.setAlertMessageText(BakaTongue.getString("MESSAGE_WELCOME"));
+            _displayTasks = _database.getAllTasks();
+        } else {
+            _choosingLanguage = true;
+            _displayTasks = BakaTongue.languageChoices();
+            BakaUI.setAlertMessageText(BakaTongue
+                    .getString("MESSAGE_LANGUAGE_CHOICE"));
+        }
     }
 
     private void addTaskWithNoCommandWord(String input) {

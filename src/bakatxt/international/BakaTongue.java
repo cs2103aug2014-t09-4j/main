@@ -1,15 +1,20 @@
 package bakatxt.international;
 
+import java.util.LinkedList;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import java.util.Set;
 
 import bakatxt.core.Database;
+import bakatxt.core.Task;
 
 public class BakaTongue {
     private static final String BUNDLE_NAME = "bakatxt.international.BakaLanguage";
     private static final String SPACE = " ";
+    private static final String HEADER = "LANGUAGE";
+
+    private static final String[] LANGUAGES = { "English", "中文", "한국어" };
 
     private static Locale currentLocale = new Locale("en", "US");
     private static ResourceBundle resBundle = ResourceBundle.getBundle(
@@ -28,20 +33,23 @@ public class BakaTongue {
 
     public static void setLanguage(String language) {
         switch (language.toLowerCase().trim()) {
-            case "wah lao" :
-            case "singlish" :
-                currentLocale = new Locale("en", "SG");
-                break;
             case "english" :
+            case "1" :
                 currentLocale = new Locale("en", "US");
                 break;
             case "中文" :
             case "chinese" :
+            case "2" :
                 currentLocale = new Locale("zh", "CN");
                 break;
             case "한국어" :
             case "korean" :
+            case "3" :
                 currentLocale = new Locale("ko", "KR");
+                break;
+            case "wah lao" :
+            case "singlish" :
+                currentLocale = new Locale("en", "SG");
                 break;
             case "hodor" :
                 currentLocale = new Locale("zz", "ZZ");
@@ -90,5 +98,15 @@ public class BakaTongue {
 
     private static boolean isAcceptable(String input, String international) {
         return input.length() >= international.length();
+    }
+
+    public static LinkedList<Task> languageChoices() {
+        LinkedList<Task> choices = new LinkedList<Task>();
+        for (int i=0; i<LANGUAGES.length; i++) {
+            Task language = new Task(LANGUAGES[i]);
+            language.setDate(HEADER);
+            choices.add(language);
+        }
+        return choices;
     }
 }
