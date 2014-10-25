@@ -25,7 +25,8 @@ public class TaskTest {
         task.setTime("2230");
         task.setDone(true);
         String expected = "\t[TITLE] New Task \n" + "\t[DATE] 2014-05-02 \n"
-                + "\t[TIME] 2230 \n" + "\t[VENUE] null \n"
+                + "\t[TIME] 2230 \n" + "\t[ENDTIME] null \n"
+                + "\t[VENUE] null \n"
                 + "\t[DESCRIPTION] null \n" + "\t[DONE] true \n"
                 + "\t[FLOATING] false \n\n";
         String output = task.toDisplayString();
@@ -43,7 +44,7 @@ public class TaskTest {
 
         String output = task.toString();
         String expected = "[9999 5000 0000 null null] [TITLE] New Task "
-                + "[DATE] null [TIME] null [VENUE] null "
+                + "[DATE] null [TIME] null [ENDTIME] null [VENUE] null "
                 + "[DONE] true [FLOATING] true " + "[DELETED] true "
                 + "[DESCRIPTION] null ";
         // System.out.println(output);
@@ -52,7 +53,7 @@ public class TaskTest {
 
     @Test
     public void testTaskFromDatabaseString() {
-        String databaseStr = "[9999 5000 2014-05-02 2230] [TITLE] New Task [DATE] 2014-05-02 [TIME] 2230 [VENUE] null [DONE] true [FLOATING] false [DELETED] true [DESCRIPTION] null ";
+        String databaseStr = "[9999 5000 2014-05-02 2230] [TITLE] New Task [DATE] 2014-05-02 [TIME] 2230 [ENDTIME] null [VENUE] null [DONE] true [FLOATING] false [DELETED] true [DESCRIPTION] null ";
         Task task = new Task(databaseStr);
         assertTrue(task.isDone());
         assertFalse(task.isFloating());
@@ -67,7 +68,7 @@ public class TaskTest {
         Task task = new Task(fake);
         assertEquals(null, task.getTitle());
         String real = "[9999 5000 0000 null null] [TITLE] New Task "
-                + "[DATE] null [TIME] null [VENUE] null "
+                + "[DATE] null [TIME] null [ENDTIME] null [VENUE] null "
                 + "[DONE] true [FLOATING] true " + "[DELETED] true "
                 + "[DESCRIPTION] null ";
         task = new Task(real);
