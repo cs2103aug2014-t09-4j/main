@@ -125,6 +125,7 @@ public class Database implements DatabaseInterface {
     private void updateMemory() {
         LOGGER.info("bakaMap update initialized");
         _bakaMap = new HashMap<String, LinkedList<Task>>();
+        String today = _parser.getDate("today");
         try (BufferedReader inputStream = Files.newBufferedReader(_userFile,
                 CHARSET_DEFAULT)) {
             String line;
@@ -132,15 +133,12 @@ public class Database implements DatabaseInterface {
                 if (line.isEmpty()) {
                     continue;
                 } else if (line.contains(FILE_LOCALE) && line.contains("_")) {
-                    _localeString = line.substring(line.indexOf(TAG_CLOSE) + 1);
-                    String[] localeArgs = _localeString.split("_");
-                    BakaTongue.setLanguage(localeArgs[0], localeArgs[1]);
+                    updateLanguage(line);
                 } else if (line.contains(TAG_DONE) && _removeDone) {
-                    Task doneTask = new Task(line);
-                    doneTask.setDeleted(true);
-                    addTaskToMap(doneTask);
+                    deleteDoneTask(line);
                 } else if (line.contains(TAG_TITLE)) {
                     Task task = new Task(line);
+                    setOverdueToFloating(today, task);
                     addTaskToMap(task);
                 }
             }
@@ -150,10 +148,33 @@ public class Database implements DatabaseInterface {
         }
     }
 
+    private void setOverdueToFloating(String today, Task task) {
+        String taskDate = task.getDate();
+        if (!taskDate.equals("null")) {
+            if (today.compareTo(taskDate) > 0) {
+                task.setFloating(true);
+            }
+        }
+    }
+
+    private void deleteDoneTask(String line) {
+        Task doneTask = new Task(line);
+        doneTask.setDeleted(true);
+        addTaskToMap(doneTask);
+    }
+
+    private void updateLanguage(String line) {
+        _localeString = line.substring(line.indexOf(TAG_CLOSE) + 1);
+        String[] localeArgs = _localeString.split("_");
+        BakaTongue.setLanguage(localeArgs[0], localeArgs[1]);
+    }
+
     private void addTaskToMap(Task task) {
         LOGGER.fine("add to bakaMap");
         String key = task.getKey();
-
+        if (isExisting(task)) {
+            return;
+        }
         if (!_bakaMap.containsKey(key)) {
             _bakaMap.put(key, new LinkedList<Task>());
         }
