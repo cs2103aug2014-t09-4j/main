@@ -31,6 +31,8 @@ public interface DatabaseInterface {
 
     public LinkedList<Task> getAllUndoneTasks();
 
+    public LinkedList<Task> getWeekTasks();
+
     public void clear() throws IOException;
 
     public void updateLocale(String locale);

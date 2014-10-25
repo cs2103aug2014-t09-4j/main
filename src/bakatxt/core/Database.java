@@ -67,6 +67,7 @@ public class Database implements DatabaseInterface {
     private boolean _removeDone;
     private boolean _removeDeleted;
     private String _localeString;
+    private BakaParser _parser;
 
     private Database(String fileName) {
         assert (_database == null);
@@ -101,6 +102,7 @@ public class Database implements DatabaseInterface {
     }
 
     private void initializeVariables() {
+        _parser = new BakaParser();
         _localeString = null;
         updateMemory();
         _removeDone = false;
@@ -475,6 +477,36 @@ public class Database implements DatabaseInterface {
             }
         }
         return undone;
+    }
+
+    /**
+     * Returns a <code>LinkedList</code> containing all the undone tasks for the
+     * next 7 days, including today.
+     * 
+     * The list is sorted with the floating tasks first in alphabetical order
+     * followed by tasks with dates in chronological order.
+     * 
+     * @return <code>LinkedList</code> containing all the undone tasks in 7 days
+     */
+    @Override
+    public LinkedList<Task> getWeekTasks() {
+        LinkedList<Task> thisWeek = new LinkedList<Task>();
+
+        String today = _parser.getDate("today");
+        LinkedList<Task> day = _bakaMap.get(today);
+        if (day != null) {
+            thisWeek.addAll(day);
+        }
+
+        for (int i = 1; i < 7; i++) {
+            String date = _parser.getDate(i + " day");
+            day = _bakaMap.get(date);
+            if (day != null) {
+                thisWeek.addAll(day);
+            }
+        }
+
+        return thisWeek;
     }
 
     /**
