@@ -43,6 +43,7 @@ public class UIHelper {
     protected static final Color GRAY_LIGHT = new Color(100, 100, 100);
     protected static final Color GRAY_DARK = new Color(48, 48, 48);
     protected static final Color GRAY_BLACK = new Color(36, 36, 36);
+    protected static final Color GRAY_FLASH = new Color(125, 125, 125);
 
     protected static final Color PRESET_COLOR_DATE = new Color(253, 184, 19);
     protected static final Color PRESET_COLOR_ALERT = new Color(250, 250, 250);

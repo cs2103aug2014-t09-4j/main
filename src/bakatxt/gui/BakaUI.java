@@ -68,7 +68,7 @@ public class BakaUI extends JFrame {
                 input.selectAll();
                 _bakaProcessor.executeCommand(input.getText());
                 // TODO only shake when there is an error
-                _bakaPanel.shakeInputBox(true);
+                _bakaPanel.animateInputBox(true);
                 updateUI(_bakaProcessor.getAllTasks());
             }
         });

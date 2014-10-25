@@ -6,7 +6,6 @@ import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.Point;
 import java.util.LinkedList;
 
 import javax.swing.JPanel;
@@ -21,7 +20,6 @@ import bakatxt.international.BakaTongue;
  */
 class BakaPanel extends JPanel {
 
-    // TODO should not need to print this, rather, take the thing to be printed from logic
     private static final String MESSAGE_WELCOME = BakaTongue
             .getString("MESSAGE_WELCOME");
 
@@ -52,14 +50,29 @@ class BakaPanel extends JPanel {
         return _input;
     }
 
+    /**
+     * set the text in the input box
+     *
+     * @param s
+     *        is the string to be set
+     */
     protected void setInputBoxText(String s) {
         _input.setText(s);
     }
 
+    /**
+     * set the text in the alert box
+     *
+     * @param s
+     *        is the string to be set
+     */
     protected void updateAlertMessageText(String s) {
         _alertMessage.setText(s);
     }
 
+    /**
+     * @return the scrollpane
+     */
     protected BakaScrollPane getScrollPane() {
         return _bakaScrollPane;
     }
@@ -163,72 +176,26 @@ class BakaPanel extends JPanel {
     }
 
     /**
-     * Shake the input box when an error in input is detected
+     * Shake the input box when an error in input is detected, flash it if it is
+     * successful
      *
      * @param isBadInput
-     *        is the boolean that decides whether or not to shake the box
+     *        is the boolean that decides whether or not to shake the box or flash it
      */
-    protected void shakeInputBox(final boolean isBadInput) {
-
-        if (isBadInput) {
-            final Point initialLocation = UIHelper.INPUT_LOCATION;
-            final int movementDelay = 20;
-            final int iterations = 8;
-
-            Runnable r = new Runnable() {
-                @Override
-                public void run() {
-                    for (int i = 0; i < iterations; i++) {
-                        shakeOneIteration(initialLocation, movementDelay,
-                                iterations - i);
-                    }
-                }
-            };
-            Thread t = new Thread(r);
-            t.start();
-        }
-    }
-
-    /**
-     * Shake the component right, then back to initial, then left, then back to initial
-     * again.
-     *
-     * @param initialLocation
-     *        is the initial location of the component to be shaked
-     * @param movementDelay
-     *        is the delay between shakes
-     * @param xMovement
-     *        is the amount to move the component by
-     */
-    private static void shakeOneIteration(final Point initialLocation,
-            final int movementDelay, int xMovement) {
-        try {
-            moveBox(new Point(initialLocation.x + xMovement, initialLocation.y));
-            Thread.sleep(movementDelay);
-            moveBox(initialLocation);
-            Thread.sleep(movementDelay);
-            moveBox(new Point(initialLocation.x - xMovement, initialLocation.y));
-            Thread.sleep(movementDelay);
-            moveBox(initialLocation);
-            Thread.sleep(movementDelay);
-        } catch (InterruptedException ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    /**
-     * Moves the input box to the set location
-     *
-     * @param p
-     *        is the Point to move the box to
-     */
-    private static void moveBox(final Point p) {
-        SwingUtilities.invokeLater(new Runnable() {
+    protected void animateInputBox(final boolean isBadInput) {
+        Runnable r = new Runnable() {
             @Override
             public void run() {
-                _input.setLocation(p);
+                UIAnimator animate = new UIAnimator(_input);
+                if (isBadInput) {
+                    animate.shakeComponent(UIHelper.INPUT_LOCATION);
+                } else {
+                    animate.flashComponent();
+                }
             }
-        });
+        };
+        Thread t = new Thread(r);
+        t.start();
     }
 
     /**
