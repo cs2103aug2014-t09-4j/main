@@ -47,8 +47,22 @@ public class BakaProcessor {
         _ra = new ReverseAction();
     }
 
-    private void displayTask() {
-        _displayTasks = _database.getAllTasks();
+    private void displayTask(String input) {
+        input = input.trim();
+        if (input.contains(SPACE)) {
+            String content = _parser.getString(input);
+            if (content.equals("day")) {
+                String currentDate = _parser.getDate("today");
+                _database.getTasksWithDate(currentDate);
+            }
+
+            if (content.equals("week")) {
+                // TODO
+            } else {
+                _displayTasks = _database.getAllTasks();
+            }
+        }
+
     }
 
     public LinkedList<Task> getAllTasks() {
@@ -107,7 +121,7 @@ public class BakaProcessor {
 
             case SHOW :
             case DISPLAY :
-                displayTask();
+                displayTask(input);
                 break;
 
             case CLEAR :
@@ -143,7 +157,7 @@ public class BakaProcessor {
                 break;
         }
 
-        displayTask();
+        _displayTasks = _database.getAllTasks();
     }
 
     private void showHelp() {
