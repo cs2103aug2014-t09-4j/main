@@ -23,8 +23,9 @@ public class BakaTxtMain {
         if (GraphicsEnvironment.isHeadless()) {
             while (true) {
                 String input = _sc.nextLine();
-                String result = _processor.executeCommand(input);
-                System.out.println(result);
+                _processor.executeCommand(input);
+                // String result = _processor.executeCommand(input);
+                // System.out.println(result);
             }
         }
 

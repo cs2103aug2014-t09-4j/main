@@ -8,10 +8,15 @@ import bakatxt.international.BakaTongue;
 
 public class BakaProcessor {
 
+    private static String COMMAND_EDIT = "EDIT";
+    private static String COMMAND_ADD = "ADD";
+    private static String SPACE = " ";
+    private static String STRING_NULL = "null";
+
     private static Database _database;
     private static BakaParser _parser;
     private static LinkedList<Task> _displayTasks;
-    private static ReverseAction ra = new ReverseAction();
+    private static ReverseAction _ra;
 
     private static Integer editStage = 0;
     private static Task originalTask;
@@ -36,6 +41,7 @@ public class BakaProcessor {
         _database = Database.getInstance();
         _parser = new BakaParser();
         _displayTasks = _database.getAllTasks();
+        _ra = new ReverseAction();
     }
 
     public void displayTask() {
@@ -51,11 +57,17 @@ public class BakaProcessor {
         _displayTasks = _database.getAllTasks();
     }
 
-    public String executeCommand(String input) {
+    public void executeCommand(String input) {
 
         input = BakaTongue.toEnglish(input);
 
         String command = _parser.getCommand(input);
+
+        if (!command.equals(COMMAND_EDIT) && editStage > 0) {
+            executeCommand(COMMAND_EDIT + SPACE + input);
+            return;
+        }
+
         CommandType commandType;
 
         /*
@@ -72,37 +84,21 @@ public class BakaProcessor {
         switch (commandType) {
 
             case ADD :
-                if (editStage > 0) {
-                    executeCommand("edit " + input);
-                } else {
                     addTask(input, command);
-                }
                 break;
 
             case REMOVE :
             case DELETE :
-                if (editStage > 0) {
-                    executeCommand("edit " + input);
-                } else {
                     deleteTask(input, command);
-                }
                 break;
 
             case SHOW :
             case DISPLAY :
-                if (editStage > 0) {
-                    executeCommand("edit " + input);
-                } else {
                     displayTask();
-                }
                 break;
 
             case CLEAR :
-                if (editStage > 0) {
-                    executeCommand("edit " + input);
-                } else {
                     clearTask();
-                }
                 break;
 
             case EDIT :
@@ -110,19 +106,11 @@ public class BakaProcessor {
                 break;
 
             case UNDO :
-                if (editStage > 0) {
-                    executeCommand("edit " + input);
-                } else {
-                    ra.undo();
-                }
+                _ra.undo();
                 break;
 
             case REDO :
-                if (editStage > 0) {
-                    executeCommand("edit " + input);
-                } else {
-                    ra.redo();
-                }
+                _ra.redo();
                 break;
 
             case LANGUAGE :
@@ -136,12 +124,8 @@ public class BakaProcessor {
                 break;
 
             case EXIT :
-                if (editStage > 0) {
-                    executeCommand("edit " + input);
-                } else {
                     _database.close();
                     System.exit(0);
-                }
                 break;
 
             case DEFAULT :
@@ -152,21 +136,18 @@ public class BakaProcessor {
                 break;
         }
 
+        displayTask();
+    }
         _displayTasks = _database.getAllTasks();
         return null;
     }
 
     private void addTaskWithNoCommandWord(String input) {
-
         UserInput inputCmd;
         Task task;
-        if (editStage > 0) {
-            executeCommand("edit " + input);
-        } else {
-            task = _parser.add("add " + input);
-            inputCmd = new UserInput("add", task);
-            ra.execute(inputCmd);
-        }
+        task = _parser.add(COMMAND_ADD + SPACE + input);
+        inputCmd = new UserInput(COMMAND_ADD, task);
+        _ra.execute(inputCmd);
     }
 
     private void editTask(String input, String command) {
@@ -218,7 +199,7 @@ public class BakaProcessor {
         editTask.setDescription(input);
 
         inputCmd = new UserInput(command, originalTask, editTask);
-        ra.execute(inputCmd);
+        _ra.execute(inputCmd);
         nextStagePrompt = "";
         BakaUI.setInputBoxText(nextStagePrompt);
         BakaUI.setAlertMessageText(BakaTongue.getString("MESSAGE_WELCOME"));
@@ -252,7 +233,7 @@ public class BakaProcessor {
         editTask.setDate(parsedDateTime);
 
         nextStagePrompt = editTask.getTime();
-        if (nextStagePrompt.equals("null")) {
+        if (nextStagePrompt.equals(STRING_NULL)) {
             nextStagePrompt = BakaTongue.getString("USER_PROMPT_TIME");
         }
         BakaUI.setInputBoxText(nextStagePrompt);
@@ -268,7 +249,7 @@ public class BakaProcessor {
         editTask.setVenue(input);
 
         nextStagePrompt = editTask.getDate();
-        if (nextStagePrompt.equals("null")) {
+        if (nextStagePrompt.equals(STRING_NULL)) {
             nextStagePrompt = BakaTongue.getString("USER_PROMPT_DATE");
         }
         BakaUI.setInputBoxText(nextStagePrompt);
@@ -285,7 +266,7 @@ public class BakaProcessor {
         }
 
         nextStagePrompt = editTask.getVenue();
-        if (nextStagePrompt.equals("null")) {
+        if (nextStagePrompt.equals(STRING_NULL)) {
             nextStagePrompt = BakaTongue.getString("USER_PROMPT_VENUE");
         }
         BakaUI.setInputBoxText(nextStagePrompt);
@@ -303,7 +284,7 @@ public class BakaProcessor {
             int trueIndex = listOfIndex.get(i);
             task = _displayTasks.get(trueIndex - 1);
             inputCmd = new UserInput(command, task);
-            ra.execute(inputCmd);
+            _ra.execute(inputCmd);
         }
     }
 
@@ -312,7 +293,7 @@ public class BakaProcessor {
         Task task;
         task = _parser.add(input);
         inputCmd = new UserInput(command, task);
-        ra.execute(inputCmd);
+        _ra.execute(inputCmd);
         _database.getAllTasks();
     }
 }
