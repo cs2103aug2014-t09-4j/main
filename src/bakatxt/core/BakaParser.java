@@ -1,3 +1,4 @@
+//@author A0115160X
 package bakatxt.core;
 
 import java.text.SimpleDateFormat;
@@ -62,6 +63,15 @@ public class BakaParser implements BakaParserInterface {
         _isDescription = false;
     }
 
+
+    /**
+     * Takes in a String and parse it. First, the description will be
+     * identified, followed by the date, time, venue and title.
+     * 
+     * @param str
+     *            is the <code>String</code> containing the command and details
+     * @return task containing the parsed information
+     */
     @Override
     public Task add(String str) {
         resetDetails();
@@ -328,20 +338,39 @@ public class BakaParser implements BakaParserInterface {
         }
     }
 
+    /**
+     * @param input
+     *            a <code>String</code> that contains a command and details.
+     * @return <code>String</code> of details without the command.
+     */
     @Override
     public String getString(String input) {
-        // remove first word (command) and return the rest of the input
         int index = input.indexOf(STRING_SPACE);
         input = input.substring(index).trim();
         return input;
     }
 
+    /**
+     * @param input
+     *            a <code>String</code> that contains a command and details.
+     * @return <code>String</code> of the command without the details.
+     */
     @Override
     public String getCommand(String input) {
         String[] part = input.split(STRING_SPACE);
         return part[0].toUpperCase();
     }
 
+    /**
+     * Creates an <code>ArrayList</code> of <code>Integer</code> from the input
+     * <code>String</code>. When there is more than one index, the indices are
+     * identified by a comma, a space, a dash or "to".
+     * 
+     * @param input
+     *            a <code>String</code> containing the indices or a range of
+     *            indices.
+     * @return an <code>ArrayList</code> of the indices.
+     */
     @Override
     public ArrayList<Integer> getIndexList(String input) {
         input = input.trim();
@@ -374,6 +403,14 @@ public class BakaParser implements BakaParserInterface {
         return list;
     }
 
+    /**
+     * Takes in a String and parse the date.
+     * 
+     * @param input
+     *            a <code>String</code> containing a date.
+     * @return a <code>String</code> of the date in YYYY-MM-DD format or null
+     *         when the input cannot be parsed.
+     */
     @Override
     public String getDate(String input) {
         if (input != null) {
@@ -382,6 +419,14 @@ public class BakaParser implements BakaParserInterface {
         return _date;
     }
 
+    /**
+     * Takes in a String and parse the time.
+     * 
+     * @param input
+     *            a <code>String</code> containing a time.
+     * @return a <code>String</code> of the time in HHHH, 24 hours format or
+     *         null when the input cannot be parsed.
+     */
     @Override
     public String getTime(String input) {
         if (input != null) {
