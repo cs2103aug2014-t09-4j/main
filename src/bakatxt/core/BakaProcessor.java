@@ -37,6 +37,7 @@ public class BakaProcessor {
         UNDO,
         REDO,
         LANGUAGE,
+        SEARCH,
         EXIT
     }
 
@@ -52,17 +53,23 @@ public class BakaProcessor {
         if (input.contains(SPACE)) {
             String content = _parser.getString(input);
             if (content.equals("day")) {
-                String currentDate = _parser.getDate("today");
-                _database.getTasksWithDate(currentDate);
-            }
-
-            if (content.equals("week")) {
+                String currentDate = _parser.getDate("today").trim();
+                _displayTasks = _database.getTasksWithDate(currentDate);
+                System.out.println("aloha");
+            } else if (content.equals("week")) {
                 // TODO
             } else {
                 _displayTasks = _database.getAllTasks();
             }
+        } else {
+            _displayTasks = _database.getAllTasks();
         }
 
+    }
+
+    private void searchTask(String input) {
+        String title = _parser.getString(input).trim();
+        _displayTasks = _database.getTaskWithTitle(title);
     }
 
     public LinkedList<Task> getAllTasks() {
@@ -122,7 +129,7 @@ public class BakaProcessor {
             case SHOW :
             case DISPLAY :
                 displayTask(input);
-                break;
+                return;
 
             case CLEAR :
                 clearTask();
@@ -148,6 +155,10 @@ public class BakaProcessor {
                 _database.close();
                 System.exit(0);
                 break;
+
+            case SEARCH :
+                searchTask(input);
+                return;
 
             case DEFAULT :
                 addTaskWithNoCommandWord(input);
