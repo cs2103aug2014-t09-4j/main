@@ -431,16 +431,17 @@ public class Database implements DatabaseInterface {
     }
 
     /**
-     * Returns a <code>LinkedList</code> containing all the non-deleted tasks in
-     * the memory with the specified date.
+     * Returns a <code>LinkedList</code> containing all the undone non-deleted
+     * tasks in the memory with the specified date.
      * 
      * The list is sorted in chronological order.
      * 
      * @param key
      *            <code>String</code> containing the date
      * 
-     * @return <code>LinkedList</code> containing all the tasks in specified
-     *         date or floating tasks if specified date is <code>null</code>
+     * @return <code>LinkedList</code> containing all the undone tasks in
+     *         specified date or floating tasks if specified date is
+     *         <code>null</code>
      */
     @Override
     public LinkedList<Task> getTasksWithDate(String key) {
