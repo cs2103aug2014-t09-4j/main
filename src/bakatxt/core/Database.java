@@ -286,7 +286,7 @@ public class Database implements DatabaseInterface {
 
     private void writeLocale() {
         try {
-            _outputStream.write(FILE_LOCALE + SPACE + _localeString);
+            _outputStream.write(FILE_LOCALE + SPACE + _localeString.trim());
             _outputStream.newLine();
         } catch (IOException ex) {
             LOGGER.severe("unable to write to file!");
