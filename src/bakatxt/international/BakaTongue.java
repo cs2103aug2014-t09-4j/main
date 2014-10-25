@@ -76,9 +76,13 @@ public class BakaTongue {
             String international = resBundle.getString(key);
             String english = resTarget.getString(key) + SPACE;
 
+            int commandLength = international.length();
             if (key.contains("COMMAND")) {
-                if (isAcceptable(input, international)
-                        && isSameCommand(input, international)) {
+                if (isAcceptable(input, international, commandLength)
+                        && isSameCommand(input, international, commandLength)) {
+                    input = input.substring(0, commandLength).toUpperCase()
+                            + input.substring(commandLength);
+
                     input = input.replace(international, english);
                 }
             } else if (key.contains("USER_PROMPT")) {
@@ -87,16 +91,17 @@ public class BakaTongue {
                 input = input.replace(international, english);
             }
         }
-
         return input;
     }
 
-    private static boolean isSameCommand(String input, String international) {
-        int commandLength = international.length();
-        return input.substring(0, commandLength).equals(international);
+    private static boolean isSameCommand(String input, String international,
+            int commandLength) {
+        return input.substring(0, commandLength).toUpperCase()
+                .equals(international);
     }
 
-    private static boolean isAcceptable(String input, String international) {
+    private static boolean isAcceptable(String input, String international,
+            int commandLength) {
         return input.length() >= international.length();
     }
 
