@@ -161,7 +161,7 @@ public class BakaProcessor {
                 return;
 
             case DONE :
-                markDoneTask(input);
+                markDoneTask(input, command);
                 break;
 
             case DEFAULT :
@@ -371,15 +371,17 @@ public class BakaProcessor {
         }
     }
 
-    private void markDoneTask(String input) {
+    private void markDoneTask(String input, String command) {
         Task task;
+        UserInput inputCmd;
         String content = _parser.getString(input).trim();
         ArrayList<Integer> listOfIndex = _parser.getIndexList(content);
         _displayTasks = _database.getAllTasks();
         for (int i = 0; i < listOfIndex.size(); i++) {
             int trueIndex = listOfIndex.get(i);
             task = _displayTasks.get(trueIndex - 1);
-            task.setDone(true);
+            inputCmd = new UserInput(command, task, true);
+            _ra.execute(inputCmd);
         }
         _displayTasks = _database.getAllUndoneTasks();
     }
