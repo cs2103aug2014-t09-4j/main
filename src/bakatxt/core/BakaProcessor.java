@@ -273,7 +273,7 @@ public class BakaProcessor {
         parsedDateTime = _parser.getTime(input);
         editTask.setTime(parsedDateTime);
 
-        nextStagePrompt = editTask.getTime();
+        nextStagePrompt = editTask.getEndTime();
         if (nextStagePrompt == null) {
             nextStagePrompt = BakaTongue.getString("USER_PROMPT_END_TIME");
         }
