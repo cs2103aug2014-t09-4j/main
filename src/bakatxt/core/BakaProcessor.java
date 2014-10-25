@@ -38,6 +38,7 @@ public class BakaProcessor {
         REDO,
         LANGUAGE,
         SEARCH,
+        DONE,
         EXIT
     }
 
@@ -159,6 +160,10 @@ public class BakaProcessor {
                 searchTask(input);
                 return;
 
+            case DONE :
+                markDoneTask(input);
+                break;
+
             case DEFAULT :
                 addTaskWithNoCommandWord(input);
                 break;
@@ -167,7 +172,7 @@ public class BakaProcessor {
                 break;
         }
 
-        _displayTasks = _database.getAllTasks();
+        _displayTasks = _database.getAllUndoneTasks();
     }
 
     private void showHelp() {
@@ -364,6 +369,19 @@ public class BakaProcessor {
             inputCmd = new UserInput(command, task);
             _ra.execute(inputCmd);
         }
+    }
+
+    private void markDoneTask(String input) {
+        Task task;
+        String content = _parser.getString(input).trim();
+        ArrayList<Integer> listOfIndex = _parser.getIndexList(content);
+        _displayTasks = _database.getAllTasks();
+        for (int i = 0; i < listOfIndex.size(); i++) {
+            int trueIndex = listOfIndex.get(i);
+            task = _displayTasks.get(trueIndex - 1);
+            task.setDone(true);
+        }
+        _displayTasks = _database.getAllUndoneTasks();
     }
 
     private void addTask(String input, String command) {
