@@ -351,7 +351,7 @@ public class BakaBot extends Robot {
                 typingThisChar(VK_MINUS);
                 break;
             case '@' :
-                typingThisChar(VK_AT);
+                typingThisChar(VK_SHIFT, VK_2);
                 break;
             case '\n' :
                 typingThisChar(VK_ENTER);
