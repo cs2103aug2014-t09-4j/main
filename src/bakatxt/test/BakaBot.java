@@ -138,7 +138,9 @@ public class BakaBot extends Robot {
 
     private static void saveOldFile() throws IOException {
         Files.deleteIfExists(TEST_FILE_SAVE);
-        Files.copy(TEST_FILE, TEST_FILE_SAVE);
+        if(Files.exists(TEST_FILE)) {
+            Files.copy(TEST_FILE, TEST_FILE_SAVE);
+        }
     }
 
     private static void initializeTestFile() throws IOException {
@@ -148,7 +150,9 @@ public class BakaBot extends Robot {
 
     private static void restoreTestFile() throws IOException {
         Files.deleteIfExists(TEST_FILE);
-        Files.copy(TEST_FILE_SAVE, TEST_FILE);
+        if(Files.exists(TEST_FILE_SAVE)) {
+            Files.copy(TEST_FILE_SAVE, TEST_FILE);
+        }
         Files.deleteIfExists(TEST_FILE_SAVE);
     }
 
