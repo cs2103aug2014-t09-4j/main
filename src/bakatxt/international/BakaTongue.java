@@ -70,6 +70,11 @@ public class BakaTongue {
         Set<String> keys = resBundle.keySet();
 
         Locale target = new Locale("en", "US");
+
+        if (target.equals(currentLocale)) {
+            return input;
+        }
+
         ResourceBundle resTarget = ResourceBundle
                 .getBundle(BUNDLE_NAME, target);
         for (String key : keys) {
