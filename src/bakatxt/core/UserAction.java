@@ -2,34 +2,17 @@ package bakatxt.core;
 
 import java.util.LinkedList;
 
-public class UserInput implements UserInputInterface {
+public class UserAction implements UserActionInterface {
 
     private static final String SPACE = " ";
 
-    private Task _task;
-    private Task _edited;
-    private String _command;
-    private boolean _flag;
+    protected Task _task;
+    protected String _command;
     private Database _database;
 
-    public UserInput(String command, Task task, Task edited) {
+    public UserAction(String command, Task task) {
         _command = command.toUpperCase();
         _task = task;
-        _edited = edited;
-        _database = Database.getInstance();
-    }
-
-    public UserInput(String command, Task task) {
-        _command = command.toUpperCase();
-        _task = task;
-        _edited = null;
-        _database = Database.getInstance();
-    }
-
-    public UserInput(String command, Task task, boolean flag) {
-        _command = command.toUpperCase();
-        _task = task;
-        _flag = flag;
         _database = Database.getInstance();
     }
 
@@ -40,16 +23,6 @@ public class UserInput implements UserInputInterface {
                 return add(_task);
             case "DELETE" :
                 return delete(_task);
-            case "EDIT" :
-                delete(_edited);
-                delete(_task);
-                return add(_edited);
-            case "FLOATING" :
-                setFloat(_task, _flag);
-                return true;
-            case "DONE" :
-                setDone(_task, _flag);
-                return true;
             default :
                 return false;
         }
@@ -62,34 +35,24 @@ public class UserInput implements UserInputInterface {
                 return delete(_task);
             case "DELETE" :
                 return add(_task);
-            case "EDIT" :
-                boolean deleteEdited = delete(_edited);
-                boolean addOriginal = add(_task);
-                return deleteEdited && addOriginal;
-            case "FLOATING" :
-                setFloat(_task, !_flag);
-                return true;
-            case "DONE" :
-                setDone(_task, !_flag);
-                return true;
             default :
                 return false;
         }
     }
 
-    private void setDone(Task task, boolean flag) {
+    protected void setDone(Task task, boolean flag) {
         _database.setDone(task, flag);
     }
 
-    private void setFloat(Task task, boolean flag) {
+    protected void setFloat(Task task, boolean flag) {
         _database.setFloating(task, flag);
     }
 
-    private boolean delete(Task task) {
+    protected boolean delete(Task task) {
         return _database.delete(task);
     }
 
-    private boolean add(Task task) {
+    protected boolean add(Task task) {
         return _database.add(task);
     }
 

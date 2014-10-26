@@ -2,7 +2,7 @@ package bakatxt.core;
 
 import java.util.LinkedList;
 
-public interface UserInputInterface {
+public interface UserActionInterface {
 
     public boolean execute();
 
