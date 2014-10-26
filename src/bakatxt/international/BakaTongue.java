@@ -85,7 +85,7 @@ public class BakaTongue {
 
                     input = input.replace(international, english);
                 }
-            } else if (key.contains("USER_PROMPT")) {
+            } else if (key.contains("USER_PROMPT") || key.contains("ALERT")) {
                 continue;
             } else {
                 input = input.replace(international, english);
