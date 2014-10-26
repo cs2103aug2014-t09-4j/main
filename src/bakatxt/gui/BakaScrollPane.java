@@ -64,7 +64,6 @@ class BakaScrollPane extends JScrollPane {
      * Remove horizontal scrolling and set the vertical scrollbar to invisible
      */
     private void setScrollBars() {
-        verticalScrollBar.setVisible(false);
         verticalScrollBar.setOpaque(false);
         verticalScrollBar.setUI(new DisappearingScrollBar());
         setComponentZOrder(verticalScrollBar, 0);
@@ -123,9 +122,9 @@ class BakaScrollPane extends JScrollPane {
 
         @Override
         protected void paintThumb(Graphics g, JComponent c, Rectangle thumbBounds) {
-            int height = thumbBounds.height;
-            UIHelper.paintRoundedRectangle(g, UIHelper.SCROLLBAR, BAR_WIDTH,
-                                           height, BAR_ROUNDNESS);
+            UIHelper.paintRoundedRectangle(g, UIHelper.SCROLLBAR, thumbBounds.x,
+                                           thumbBounds.y, BAR_WIDTH,
+                                           thumbBounds.height, BAR_ROUNDNESS);
         }
 
         private static JButton invisibleButton() {

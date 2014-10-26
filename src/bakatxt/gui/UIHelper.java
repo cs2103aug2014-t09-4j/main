@@ -69,15 +69,17 @@ public class UIHelper {
 
     protected static void paintRoundedRectangle(Graphics g, Color background,
                                                 int width, int height) {
-        paintRoundedRectangle(g, background, width, height, WINDOW_ROUNDNESS);
+        paintRoundedRectangle(g, background, 0, 0, width, height, WINDOW_ROUNDNESS);
     }
 
     protected static void paintRoundedRectangle(Graphics g, Color background,
+                                                int startX, int startY,
                                                 int width, int height, int round) {
         Graphics2D g2d = (Graphics2D) g.create();
         g2d.setRenderingHints(UIHelper.antiAlias());
         g2d.setColor(background);
-        g2d.fill(new RoundRectangle2D.Double(0, 0, width, height, round, round));
+        g2d.fill(new RoundRectangle2D.Double(startX, startY, width, height,
+                                             round, round));
         g2d.dispose();
     }
 
