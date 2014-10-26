@@ -374,7 +374,9 @@ public class Database implements DatabaseInterface {
         // copy userFile into tempFile
         Path tempFile;
         try {
-            tempFile = Files.createTempFile("bakatxt", "old");
+            tempFile = Files.createTempFile(_userFile.toAbsolutePath()
+                    .getParent(), "Baka", ".archive.txt");
+            updateFile();
             Files.copy(_userFile, tempFile, StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException ex) {
             LOGGER.warning("Temp creation failed");
@@ -587,15 +589,8 @@ public class Database implements DatabaseInterface {
 
     @Override
     public void clear() {
-        sort();
-        for (String key : _sortedKeys) {
-            if (!key.contains(TAG_DELETED)) {
-                for (Task task : _bakaMap.get(key)) {
-                    task.setDeleted(true);
-                }
-            }
-        }
-        updateFile();
+        tempCreation();
+        resetFile();
         updateMemory();
     }
 
