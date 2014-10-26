@@ -91,6 +91,10 @@ public class BakaParser implements BakaParserInterface {
             str = str.replaceAll(STRING_CANT_PARSE, STRING_REPLACEMENT);
             _isExceptionString = true;
         }
+        
+        if (str.contains(STRING_ADD)) {
+            str = str.replace(STRING_ADD + STRING_SPACE, STRING_ADD);
+        }
 
         identifyDate(str);
         if (_date != null) {
@@ -107,10 +111,9 @@ public class BakaParser implements BakaParserInterface {
         }
 
         if (str.contains(STRING_ADD)) {
-            str = str.replace(STRING_ADD + STRING_SPACE, STRING_ADD);
             identifyVenue(str);
         }
-
+       
         identifyTitle(str);
 
         Task task = new Task(_title);
@@ -305,7 +308,6 @@ public class BakaParser implements BakaParserInterface {
         if (input.contains(STRING_TONIGHT)) {
             input = input.replace(STRING_TONIGHT, STRING_TONIGHT_TIME);
         }
-
         List<DateGroup> dateGroup = parser.parse(input);
         if (dateGroup.size() > 0) {
 
