@@ -174,17 +174,17 @@ public class Database implements DatabaseInterface {
         BakaTongue.setLanguage(localeArgs[0], localeArgs[1]);
     }
 
-    private void addTaskToMap(Task task) {
+    private boolean addTaskToMap(Task task) {
         LOGGER.fine("add to bakaMap");
         String key = task.getKey();
         if (isExisting(task)) {
-            return;
+            return false;
         }
         if (!_bakaMap.containsKey(key)) {
             _bakaMap.put(key, new LinkedList<Task>());
         }
         LinkedList<Task> target = _bakaMap.get(key);
-        target.add(task);
+        return target.add(task);
     }
 
     @Override
@@ -235,11 +235,11 @@ public class Database implements DatabaseInterface {
         }
         Task toAdd = new Task(task);
         toAdd.setDeleted(false);
-        if (isExisting(toAdd)) {
-            return false;
+        boolean isAdded = addTaskToMap(toAdd);
+        if (isAdded) {
+            dirtyWrite(toAdd.toString());
         }
-        addTaskToMap(toAdd);
-        return dirtyWrite(toAdd.toString());
+        return isAdded;
     }
 
     private boolean isExisting(Task task) {
