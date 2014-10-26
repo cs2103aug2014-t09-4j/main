@@ -363,6 +363,9 @@ public class BakaBot extends Robot {
             case ' ' :
                 typingThisChar(VK_SPACE);
                 break;
+            case ':' :
+                typingThisChar(VK_SHIFT, VK_SEMICOLON);
+                break;
             default :
                 throw new IllegalArgumentException("Cannot type: " + character);
         }
