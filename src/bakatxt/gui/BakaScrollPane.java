@@ -2,12 +2,17 @@
 
 package bakatxt.gui;
 
+import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Rectangle;
 
 import javax.swing.BorderFactory;
+import javax.swing.JButton;
 import javax.swing.JComponent;
-import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
+import javax.swing.ScrollPaneLayout;
+import javax.swing.plaf.basic.BasicScrollBarUI;
 
 /**
  * This class gives an invisible vertical scrollbar to a component when it's
@@ -17,6 +22,8 @@ import javax.swing.JScrollPane;
 class BakaScrollPane extends JScrollPane {
 
     private static final int WIDTH = UIHelper.WINDOW_X - 4 * UIHelper.BORDER;
+    private static final int BAR_WIDTH = 9;
+    private static final int BAR_ROUNDNESS = 9;
 
     public BakaScrollPane(JComponent component, int initialHeight) {
         super(component);
@@ -25,6 +32,8 @@ class BakaScrollPane extends JScrollPane {
         setViewportView(component);
         setInvisiblePane();
         setScrollBars();
+        setComponentZOrder(getViewport(), 1);
+        setViewBox();
     }
 
     /**
@@ -55,23 +64,78 @@ class BakaScrollPane extends JScrollPane {
      * Remove horizontal scrolling and set the vertical scrollbar to invisible
      */
     private void setScrollBars() {
-        setVerticalScrollBar(invisibleScrollBar());
-        setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+        verticalScrollBar.setVisible(false);
+        verticalScrollBar.setOpaque(false);
+        verticalScrollBar.setUI(new DisappearingScrollBar());
+        setComponentZOrder(verticalScrollBar, 0);
+        setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+
         setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
     }
 
     /**
-     * Use a 'hack' to have an invisible scrollbar
-     * @return an invisible vertical scrollbar
+     * Sets the location of the scrollbar.
+     * Expand the viewbox such that the scrollbar is within and not outside the
+     * box.
      */
-    private static JScrollBar invisibleScrollBar() {
-        JScrollBar invisibleScrollBar = new JScrollBar(JScrollBar.VERTICAL) {
-
+    private void setViewBox() {
+        setLayout(new ScrollPaneLayout() {
             @Override
-            public boolean isVisible() {
-              return true;
+            public void layoutContainer(Container parent) {
+                JScrollPane scrollPane = (JScrollPane)parent;
+
+                Rectangle viewBox = scrollPane.getBounds();
+                viewBox.x = 0;
+                viewBox.y = 0;
+
+                Rectangle scrollTrack = new Rectangle();
+                scrollTrack.width  = BAR_WIDTH;
+                scrollTrack.height = viewBox.height;
+                scrollTrack.x = viewBox.x + viewBox.width - scrollTrack.width;
+                scrollTrack.y = viewBox.y;
+
+                if(viewport != null) {
+                    viewport.setBounds(viewBox);
+                }
+                if(vsb != null) {
+                    vsb.setVisible(true);
+                    vsb.setBounds(scrollTrack);
+                }
             }
-          };
-          return invisibleScrollBar;
+        });
+    }
+
+    private static class DisappearingScrollBar extends BasicScrollBarUI {
+
+        @Override
+        protected JButton createDecreaseButton(int orientation) {
+            return invisibleButton();
+        }
+
+        @Override
+        protected JButton createIncreaseButton(int orientation) {
+            return invisibleButton();
+        }
+
+        @Override
+        protected void paintTrack(Graphics g, JComponent c, Rectangle trackBounds) {
+        }
+
+        @Override
+        protected void paintThumb(Graphics g, JComponent c, Rectangle thumbBounds) {
+            int height = thumbBounds.height;
+            UIHelper.paintRoundedRectangle(g, UIHelper.SCROLLBAR, BAR_WIDTH,
+                                           height, BAR_ROUNDNESS);
+        }
+
+        private static JButton invisibleButton() {
+            JButton invisibleButton = new JButton() {
+                @Override
+                public Dimension getPreferredSize() {
+                    return new Dimension(0, 0);
+                }
+            };
+            return invisibleButton;
+        }
     }
 }

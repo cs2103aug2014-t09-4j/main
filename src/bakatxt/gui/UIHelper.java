@@ -38,12 +38,15 @@ public class UIHelper {
             SUGGESTIONS_MAIN, SUGGESTIONS_ADD, SUGGESTIONS_DISPLAY);
     */
 
+    // TODO rename to better names
     protected static final Color TRANSPARENT = new Color(0, 0, 0, 0);
     protected static final Color GRAY_MEDIUM = new Color(66, 66, 66);
     protected static final Color GRAY_LIGHT = new Color(100, 100, 100);
     protected static final Color GRAY_DARK = new Color(48, 48, 48);
     protected static final Color GRAY_BLACK = new Color(36, 36, 36);
     protected static final Color GRAY_FLASH = new Color(125, 125, 125);
+
+    protected static final Color SCROLLBAR = new Color(0, 0, 0, 100);
 
     protected static final Color PRESET_COLOR_DATE = new Color(253, 184, 19);
     protected static final Color PRESET_COLOR_ALERT = new Color(250, 250, 250);
@@ -64,12 +67,17 @@ public class UIHelper {
     protected static final int PRESET_SIZE_DEFAULT = 12;
 
 
-    protected static void paintRoundedRectangle(Graphics g, Color background, int width, int height) {
+    protected static void paintRoundedRectangle(Graphics g, Color background,
+                                                int width, int height) {
+        paintRoundedRectangle(g, background, width, height, WINDOW_ROUNDNESS);
+    }
+
+    protected static void paintRoundedRectangle(Graphics g, Color background,
+                                                int width, int height, int round) {
         Graphics2D g2d = (Graphics2D) g.create();
         g2d.setRenderingHints(UIHelper.antiAlias());
         g2d.setColor(background);
-        g2d.fill(new RoundRectangle2D.Double(0, 0, width, height,
-                WINDOW_ROUNDNESS, WINDOW_ROUNDNESS));
+        g2d.fill(new RoundRectangle2D.Double(0, 0, width, height, round, round));
         g2d.dispose();
     }
 
