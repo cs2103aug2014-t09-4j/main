@@ -49,6 +49,8 @@ public class Database implements DatabaseInterface {
 
     private static final String FILE_LOCALE = TAG_OPEN + "LOCALE" + TAG_CLOSE;
 
+    private static final String DEFAULT_LOCALE = "en_US";
+
     private static final String TAG_DELETED = "9999";
     private static final String TAG_DONE = "5000";
     private static final String TAG_FLOATING = "0000";
@@ -106,7 +108,7 @@ public class Database implements DatabaseInterface {
 
     private void initializeVariables() {
         _parser = new BakaParser();
-        _localeString = null;
+        _localeString = DEFAULT_LOCALE;
         updateMemory();
         _removeDone = false;
         _removeDeleted = true;
