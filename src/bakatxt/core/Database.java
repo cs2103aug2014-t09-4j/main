@@ -30,6 +30,7 @@ public class Database implements DatabaseInterface {
 
     private static final String STRING_TODAY = "today";
     private static final String STRING_DAY = "day";
+    private static final String STRING_OVERDUE = "overdue since: ";
 
     private static final String MESSAGE_FILE_CHANGE = "File changed. Current filename is \"%1$s\".";
     private static final String MESSAGE_OUTPUT_FILENAME = "Filename: %1$s"
@@ -158,6 +159,13 @@ public class Database implements DatabaseInterface {
         String taskDate = task.getDate();
         if (!task.isDone() && !taskDate.equals("null")) {
             if (today.compareTo(taskDate) > 0) {
+                String newDescription = task.getDescription();
+                if (newDescription == null) {
+                    newDescription = new String();
+                }
+                newDescription = STRING_OVERDUE + TAG_OPEN + newDescription
+                        + TAG_CLOSE + SPACE;
+                task.setDescription(newDescription);
                 task.setFloating(true);
             }
         }
