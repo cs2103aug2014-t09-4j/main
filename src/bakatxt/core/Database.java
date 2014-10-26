@@ -153,9 +153,10 @@ public class Database implements DatabaseInterface {
         }
     }
 
+    @SuppressWarnings("static-method")
     private void setOverdueToFloating(String today, Task task) {
         String taskDate = task.getDate();
-        if (!taskDate.equals("null")) {
+        if (!task.isDone() && !taskDate.equals("null")) {
             if (today.compareTo(taskDate) > 0) {
                 task.setFloating(true);
             }
