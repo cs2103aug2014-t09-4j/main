@@ -40,7 +40,7 @@ abstract class TaskBox extends JPanel {
         setTaskAndLocation(layout, task.getTitle(), task.getVenue());
         setTimeStart(layout, task.getTime());
         setDescription(layout, task.getDescription());
-        setTimeEnd(layout);
+        setTimeEnd(layout, task.getEndTime());
     }
 
     private void setNumber(GridBagConstraints layout, int number) {
@@ -61,15 +61,11 @@ abstract class TaskBox extends JPanel {
 
     // TODO make locationText a different color
     private void setTaskAndLocation(GridBagConstraints layout, String taskText,
-            String locationText) {
-        if (locationText == null || locationText.equals("null")) {
-            locationText = "";
-        } else {
-            locationText = AT + locationText;
-        }
-        FormattedText task = new FormattedText(taskText, UIHelper.PRESET_TYPE_TITLE,
-                UIHelper.PRESET_SIZE_TITLE, UIHelper.PRESET_COLOR_TITLE,
-                IS_LINE_WRAP);
+                                    String locationText) {
+        locationText = removeNullValues(AT, locationText);
+        FormattedText task = new FormattedText(taskText + locationText,
+                UIHelper.PRESET_TYPE_TITLE, UIHelper.PRESET_SIZE_TITLE,
+                UIHelper.PRESET_COLOR_TITLE, IS_LINE_WRAP);
         layout.fill = GridBagConstraints.HORIZONTAL;
         layout.anchor = GridBagConstraints.LINE_START;
         layout.weightx = 0.01;
@@ -101,9 +97,7 @@ abstract class TaskBox extends JPanel {
 
     private void setTimeStart(GridBagConstraints layout, String startTimeText) {
 
-        if (startTimeText == null || startTimeText.equals(null)) {
-            startTimeText = "";
-        }
+        startTimeText = removeNullValues(startTimeText);
         FormattedText time = new FormattedText(startTimeText,
                 UIHelper.PRESET_TYPE_DATE, UIHelper.PRESET_SIZE_DATE,
                 UIHelper.PRESET_COLOR_DATE);
@@ -120,9 +114,10 @@ abstract class TaskBox extends JPanel {
         this.add(time, layout);
     }
 
-    private void setTimeEnd(GridBagConstraints layout) {
-        // TODO add end time once it has been implemented
-        FormattedText time = new FormattedText("<end time>",
+    private void setTimeEnd(GridBagConstraints layout, String endTimeText) {
+
+        endTimeText = removeNullValues(endTimeText);
+        FormattedText time = new FormattedText(endTimeText,
                 UIHelper.PRESET_TYPE_DATE, UIHelper.PRESET_SIZE_DATE,
                 UIHelper.PRESET_COLOR_DATE);
         layout.fill = GridBagConstraints.NONE;
@@ -136,6 +131,20 @@ abstract class TaskBox extends JPanel {
         layout.insets = new Insets(0, 0, 3 * UIHelper.BORDER,
                 2 * UIHelper.BORDER);
         this.add(time, layout);
+    }
+
+    private static String removeNullValues(String s) {
+        if (s == null || s.equals("null")) {
+            return "";
+        }
+        return s;
+    }
+
+    private static String removeNullValues(String prefix, String s) {
+        if (s == null || s.equals("null")) {
+            return "";
+        }
+        return prefix + s;
     }
 
     @Override

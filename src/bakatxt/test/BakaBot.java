@@ -23,8 +23,6 @@ import bakatxt.gui.UIHelper;
 public class BakaBot extends Robot {
 
     // places to store and backup our test files
-    private static final Path TEST_FILE_INITIALIZE =
-            new File("./src/bakatxt/test/.UItestfile").toPath();
     private static final Path TEST_FILE = new File("./mytestfile.txt").toPath();
     private static final Path TEST_FILE_SAVE = new File("./mytestfile.txt.bak").toPath();
 
@@ -145,7 +143,7 @@ public class BakaBot extends Robot {
 
     private static void initializeTestFile() throws IOException {
         Files.deleteIfExists(TEST_FILE);
-        Files.copy(TEST_FILE_INITIALIZE, TEST_FILE);
+        Files.createFile(TEST_FILE);
     }
 
     private static void restoreTestFile() throws IOException {

@@ -415,6 +415,8 @@ public class BakaParser implements BakaParserInterface {
     public String getDate(String input) {
         if (input != null) {
             identifyDate(input);
+        } else {
+            _date = null;
         }
         return _date;
     }
@@ -431,6 +433,8 @@ public class BakaParser implements BakaParserInterface {
     public String getTime(String input) {
         if (input != null) {
             identifyTime(input);
+        } else {
+            _time = null;
         }
         return _time;
     }
