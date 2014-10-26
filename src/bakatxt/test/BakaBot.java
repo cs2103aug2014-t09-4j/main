@@ -103,10 +103,6 @@ public class BakaBot extends Robot {
         mousePress(InputEvent.BUTTON1_DOWN_MASK);
         waitAWhile(WAIT_SHORT);
         mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
-        waitAWhile(WAIT_SHORT);
-        mousePress(InputEvent.BUTTON1_DOWN_MASK);
-        waitAWhile(WAIT_SHORT);
-        mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
     }
 
     /**
