@@ -76,8 +76,6 @@ public class BakaProcessor {
     }
 
     private void clearTask(String command) {
-        // _database.clear();
-        // _displayTasks = _database.getAllTasks();
         UserAction inputCmd;
         inputCmd = new UserClear(command);
         _ra.execute(inputCmd);
