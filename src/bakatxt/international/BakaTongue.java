@@ -78,7 +78,7 @@ public class BakaTongue {
 
             int commandLength = international.length();
             if (key.contains("COMMAND")) {
-                if (isAcceptable(input, international, commandLength)
+                if (isAcceptable(input, commandLength)
                         && isSameCommand(input, international, commandLength)) {
                     input = input.substring(0, commandLength).toUpperCase()
                             + input.substring(commandLength);
@@ -100,9 +100,8 @@ public class BakaTongue {
                 .equals(international);
     }
 
-    private static boolean isAcceptable(String input, String international,
-            int commandLength) {
-        return input.length() >= international.length();
+    private static boolean isAcceptable(String input, int commandLength) {
+        return input.length() >= commandLength;
     }
 
     public static LinkedList<Task> languageChoices() {
