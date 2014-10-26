@@ -28,6 +28,9 @@ public class Database implements DatabaseInterface {
             .getProperty("line.separator");
     private static final String SPACE = " ";
 
+    private static final String STRING_TODAY = "today";
+    private static final String STRING_DAY = "day";
+
     private static final String MESSAGE_FILE_CHANGE = "File changed. Current filename is \"%1$s\".";
     private static final String MESSAGE_OUTPUT_FILENAME = "Filename: %1$s"
             + LINE_SEPARATOR;
@@ -125,14 +128,14 @@ public class Database implements DatabaseInterface {
     private void updateMemory() {
         LOGGER.info("bakaMap update initialized");
         _bakaMap = new HashMap<String, LinkedList<Task>>();
-        String today = _parser.getDate("today");
+        String today = _parser.getDate(STRING_TODAY);
         try (BufferedReader inputStream = Files.newBufferedReader(_userFile,
                 CHARSET_DEFAULT)) {
             String line;
             while ((line = inputStream.readLine()) != null) {
                 if (line.isEmpty()) {
                     continue;
-                } else if (line.contains(FILE_LOCALE) && line.contains("_")) {
+                } else if (line.contains(FILE_LOCALE)) {
                     updateLanguage(line);
                 } else if (line.contains(TAG_DONE) && _removeDone) {
                     deleteDoneTask(line);
@@ -514,14 +517,14 @@ public class Database implements DatabaseInterface {
     public LinkedList<Task> getWeekTasks() {
         LinkedList<Task> thisWeek = new LinkedList<Task>();
 
-        String today = _parser.getDate("today");
+        String today = _parser.getDate(STRING_TODAY);
         LinkedList<Task> day = _bakaMap.get(today);
         if (day != null) {
             thisWeek.addAll(day);
         }
 
         for (int i = 1; i < 7; i++) {
-            String date = _parser.getDate(i + " day");
+            String date = _parser.getDate(i + SPACE + STRING_DAY);
             day = _bakaMap.get(date);
             if (day != null) {
                 thisWeek.addAll(day);
