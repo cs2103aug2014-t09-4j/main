@@ -203,10 +203,10 @@ public class BakaProcessor {
     }
 
     private void addTaskWithNoCommandWord(String input) {
-        UserInput inputCmd;
+        UserAction inputCmd;
         Task task;
         task = _parser.add(COMMAND_ADD + SPACE + input);
-        inputCmd = new UserInput(COMMAND_ADD, task);
+        inputCmd = new UserAction(COMMAND_ADD, task);
         _ra.execute(inputCmd);
     }
 
@@ -251,14 +251,14 @@ public class BakaProcessor {
     }
 
     private void editDescription(String input, String command) {
-        UserInput inputCmd;
+        UserAction inputCmd;
         String nextStagePrompt;
         if (input.equals(BakaTongue.getString("USER_PROMPT_DESCRIPTION"))) {
             input = null;
         }
         editTask.setDescription(input);
 
-        inputCmd = new UserInput(command, originalTask, editTask);
+        inputCmd = new UserEditTask(command, originalTask, editTask);
         _ra.execute(inputCmd);
         nextStagePrompt = "";
         BakaUI.setInputBoxText(nextStagePrompt);
@@ -354,7 +354,7 @@ public class BakaProcessor {
     }
 
     private void deleteTask(String input, String command) {
-        UserInput inputCmd;
+        UserAction inputCmd;
         Task task;
         String content = _parser.getString(input).trim();
         ArrayList<Integer> listOfIndex = _parser.getIndexList(content);
@@ -362,31 +362,31 @@ public class BakaProcessor {
         for (int i = 0; i < listOfIndex.size(); i++) {
             int trueIndex = listOfIndex.get(i);
             task = _displayTasks.get(trueIndex - 1);
-            inputCmd = new UserInput(command, task);
+            inputCmd = new UserAction(command, task);
             _ra.execute(inputCmd);
         }
     }
 
     private void markDoneTask(String input, String command) {
         Task task;
-        UserInput inputCmd;
+        UserAction inputCmd;
         String content = _parser.getString(input).trim();
         ArrayList<Integer> listOfIndex = _parser.getIndexList(content);
         _displayTasks = _database.getAllTasks();
         for (int i = 0; i < listOfIndex.size(); i++) {
             int trueIndex = listOfIndex.get(i);
             task = _displayTasks.get(trueIndex - 1);
-            inputCmd = new UserInput(command, task, true);
+            inputCmd = new UserEditStatus(command, task, true);
             _ra.execute(inputCmd);
         }
         _displayTasks = _database.getAllUndoneTasks();
     }
 
     private void addTask(String input, String command) {
-        UserInput inputCmd;
+        UserAction inputCmd;
         Task task;
         task = _parser.add(input);
-        inputCmd = new UserInput(command, task);
+        inputCmd = new UserAction(command, task);
         _ra.execute(inputCmd);
         _database.getAllTasks();
     }
