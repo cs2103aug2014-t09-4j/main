@@ -40,7 +40,7 @@ abstract class TaskBox extends JPanel {
         setTaskAndLocation(layout, task.getTitle(), task.getVenue());
         setTimeStart(layout, task.getTime());
         setDescription(layout, task.getDescription());
-        setTimeEnd(layout);
+        setTimeEnd(layout, task.getEndTime());
     }
 
     private void setNumber(GridBagConstraints layout, int number) {
@@ -114,9 +114,10 @@ abstract class TaskBox extends JPanel {
         this.add(time, layout);
     }
 
-    private void setTimeEnd(GridBagConstraints layout) {
+    private void setTimeEnd(GridBagConstraints layout, String endTimeText) {
 
-        FormattedText time = new FormattedText("<end time>",
+        endTimeText = removeNullValues(endTimeText);
+        FormattedText time = new FormattedText(endTimeText,
                 UIHelper.PRESET_TYPE_DATE, UIHelper.PRESET_SIZE_DATE,
                 UIHelper.PRESET_COLOR_DATE);
         layout.fill = GridBagConstraints.NONE;
