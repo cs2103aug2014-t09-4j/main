@@ -11,20 +11,11 @@ import bakatxt.core.BakaParser;
 import bakatxt.core.Task;
 
 public class BakaParserTest {
-    BakaParser _parser;
+    private static BakaParser _parser;
 
     @Before
     public void setUp() throws Exception {
         _parser = new BakaParser();
-    }
-
-    @Test
-    public void testNoTitle() {
-        String input = "add 5/4";
-        Task output = _parser.add(input);
-        Task expected = new Task("");
-        expected.setDate("2014-04-05");
-        assertEquals(expected, output);
     }
 
     @Test
@@ -51,14 +42,6 @@ public class BakaParserTest {
         Task expected = new Task("lunch with project members");
         assertEquals(expected, output);
     }
-
-    // @Test
-    // public void testAddNumberTitle() {
-    // String input = "add go to com 1 after class";
-    // Task output = _parser.add(input);
-    // Task expected = new Task("go to com 1 after class");
-    // assertEquals(expected, output);
-    // }
 
     @Test
     public void testAddLongNumberTitle() {
@@ -142,7 +125,7 @@ public class BakaParserTest {
         String input = "add do nothing today";
         Task output = _parser.add(input);
         Task expected = new Task("do nothing");
-        expected.setDate("2014-10-23");
+        expected.setDate(_parser.getDate("today"));
         assertEquals(expected, output);
     }
 
@@ -151,7 +134,7 @@ public class BakaParserTest {
         String input = "add cut hair tomorrow";
         Task output = _parser.add(input);
         Task expected = new Task("cut hair");
-        expected.setDate("2014-10-24");
+        expected.setDate(_parser.getDate("tomorrow"));
         assertEquals(expected, output);
     }
 
@@ -160,27 +143,17 @@ public class BakaParserTest {
         String input = "add dinner tonight";
         Task output = _parser.add(input);
         Task expected = new Task("dinner");
-        expected.setDate("2014-10-23");
+        expected.setDate(_parser.getDate("tonight"));
         expected.setTime("1900");
         assertEquals(expected, output);
     }
-
-    // @Test
-    // public void testAddDateAfternoon() {
-    // String input = "add tea time afternoon";
-    // Task output = _parser.add(input);
-    // Task expected = new Task("tea time");
-    // expected.setDate("2014-10-15");
-    // expected.setTime("1300");
-    // assertEquals(expected, output);
-    // }
 
     @Test
     public void testAddDateNoon() {
         String input = "add lunch at noon";
         Task output = _parser.add(input);
         Task expected = new Task("lunch");
-        expected.setDate("2014-10-23");
+        expected.setDate(_parser.getDate("noon"));
         expected.setTime("1200");
         assertEquals(expected, output);
     }
@@ -289,15 +262,77 @@ public class BakaParserTest {
         assertEquals(expected, output);
     }
 
-    // @Test
-    // public void testAddTimeDuration() {
-    // String input = "add class 6/11 1200h";
-    // Task output = _parser.add(input);
-    // Task expected = new Task("class");
-    // expected.setDate("2014-11-06");
-    // expected.setTime("1200");
-    // assertEquals(expected, output);
-    // }
+    @Test
+    public void testAddTimeDurationFormat1() {
+        String input = "add lunch buffet tomorrow 1pm to 3pm @town";
+        Task output = _parser.add(input);
+        Task expected = new Task("lunch buffet");
+        expected.setDate("2014-10-27");
+        expected.setTime("1300");
+        expected.setEndTime("1500");
+        expected.setVenue("town");
+        assertEquals(expected, output);
+    }
+
+    @Test
+    public void testAddTimeDurationFormat2() {
+        String input = "add google hangouts next week 9pm to 11pm @ home";
+        Task output = _parser.add(input);
+        Task expected = new Task("google hangouts");
+        expected.setDate("2014-11-02");
+        expected.setTime("2100");
+        expected.setEndTime("2300");
+        expected.setVenue("home");
+        assertEquals(expected, output);
+    }
+
+    @Test
+    public void testAddTimeDurationFormat3() {
+        String input = "add google hangouts tomorrow 1pm to 3pm @home";
+        Task output = _parser.add(input);
+        Task expected = new Task("google hangouts");
+        expected.setDate("2014-10-27");
+        expected.setTime("1300");
+        expected.setEndTime("1500");
+        expected.setVenue("home");
+        assertEquals(expected, output);
+    }
+
+    @Test
+    public void testAddTimeDurationFormat4() {
+        String input = "add google hangouts tomorrow @ home 1300hours to 3pm";
+        Task output = _parser.add(input);
+        Task expected = new Task("google hangouts");
+        expected.setDate("2014-10-27");
+        expected.setTime("1300");
+        expected.setEndTime("1500");
+        expected.setVenue("home");
+        assertEquals(expected, output);
+    }
+
+    @Test
+    public void testAddTimeDurationFormat5() {
+        String input = "add google hangouts @ home tomorrow 1300h to 15:00";
+        Task output = _parser.add(input);
+        Task expected = new Task("google hangouts");
+        expected.setDate("2014-10-27");
+        expected.setTime("1300");
+        expected.setEndTime("1500");
+        expected.setVenue("home");
+        assertEquals(expected, output);
+    }
+
+    @Test
+    public void testAddTimeDurationFormat6() {
+        String input = "add google hangouts 13:00 - 15:00 @home";
+        Task output = _parser.add(input);
+        Task expected = new Task("google hangouts");
+        expected.setDate("2014-10-26");
+        expected.setTime("1300");
+        expected.setEndTime("1500");
+        expected.setVenue("home");
+        assertEquals(expected, output);
+    }
 
     @Test
     public void testAddDateVenue() {
@@ -507,7 +542,7 @@ public class BakaParserTest {
     public void testGetDate2() {
         String input = "tomorrow";
         String output = _parser.getDate(input);
-        String expected = "2014-10-24";
+        String expected = "2014-10-27";
         assertEquals(expected, output);
     }
 
@@ -515,7 +550,7 @@ public class BakaParserTest {
     public void testGetDate3() {
         String input = "tonight";
         String output = _parser.getDate(input);
-        String expected = "2014-10-23";
+        String expected = "2014-10-26";
         assertEquals(expected, output);
     }
 
