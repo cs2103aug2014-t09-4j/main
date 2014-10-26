@@ -12,7 +12,9 @@ import org.junit.Test;
 import bakatxt.core.BakaParser;
 import bakatxt.core.Database;
 import bakatxt.core.Task;
-import bakatxt.core.UserInput;
+import bakatxt.core.UserAction;
+import bakatxt.core.UserEditTask;
+import bakatxt.core.UserEditStatus;
 
 public class UserInputTest {
 
@@ -34,7 +36,7 @@ public class UserInputTest {
     @Test
     public void testAdd() {
         dummy = _parser.add("add testAdd command ");
-        UserInput command = new UserInput("add", dummy);
+        UserAction command = new UserAction("add", dummy);
 
         command.execute();
         LinkedList<Task> tasks = _database.getAllTasks();
@@ -48,7 +50,7 @@ public class UserInputTest {
     @Test
     public void testDelete() {
         dummy = _parser.add("add testDelete command tonight");
-        UserInput command = new UserInput("delete", dummy);
+        UserAction command = new UserAction("delete", dummy);
 
         command.execute();
         LinkedList<Task> tasks = _database.getAllTasks();
@@ -63,7 +65,7 @@ public class UserInputTest {
     public void testEdit() {
         dummy = _parser.add("add editing1");
         Task edit = _parser.add("add editing2");
-        UserInput command = new UserInput("edit", dummy, edit);
+        UserAction command = new UserEditTask("edit", dummy, edit);
 
         command.execute();
         LinkedList<Task> tasks = _database.getAllTasks();
@@ -78,7 +80,7 @@ public class UserInputTest {
     public void testDone() {
         dummy = _parser.add("add done 1pm tomorrow");
         // _database.add(dummy);
-        UserInput command = new UserInput("done", dummy, true);
+        UserAction command = new UserEditStatus("done", dummy, true);
 
         command.execute();
         LinkedList<Task> tasks = _database.getAllUndoneTasks();

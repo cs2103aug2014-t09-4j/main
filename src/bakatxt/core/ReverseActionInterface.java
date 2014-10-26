@@ -2,7 +2,7 @@ package bakatxt.core;
 
 public interface ReverseActionInterface {
 
-    public boolean execute(UserInput input);
+    public boolean execute(UserAction input);
 
     public boolean undo();
 

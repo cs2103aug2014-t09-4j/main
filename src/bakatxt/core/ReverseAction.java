@@ -4,23 +4,23 @@ package bakatxt.core;
 import java.util.Stack;
 
 public class ReverseAction implements ReverseActionInterface {
-    private static Stack<UserInput> undoStack;
-    private static Stack<UserInput> redoStack;
+    private static Stack<UserAction> undoStack;
+    private static Stack<UserAction> redoStack;
 
     public ReverseAction() {
-        undoStack = new Stack<UserInput>();
-        redoStack = new Stack<UserInput>();
+        undoStack = new Stack<UserAction>();
+        redoStack = new Stack<UserAction>();
     }
 
     /**
      * Stores the executed command and task.
      * 
      * @param input
-     *            a UserInput that contains the execution methods
+     *            a UserAction that contains the execution methods
      * @return <code>true</code> if a command is executed
      */
     @Override
-    public boolean execute(UserInput input) {
+    public boolean execute(UserAction input) {
         boolean status = input.execute(); // execute command
         if (status) {
             undoStack.push(input);
@@ -37,7 +37,7 @@ public class ReverseAction implements ReverseActionInterface {
     public boolean undo() {
         boolean status = false;
         if (!undoStack.isEmpty()) {
-            UserInput action = undoStack.pop();
+            UserAction action = undoStack.pop();
             status = action.undo();
             if (!status) {
                 undoStack.push(action);
@@ -57,7 +57,7 @@ public class ReverseAction implements ReverseActionInterface {
     public boolean redo() {
         boolean status = false;
         if (!redoStack.isEmpty()) {
-            UserInput action = redoStack.pop();
+            UserAction action = redoStack.pop();
             status = action.execute();
             if (!status) {
                 redoStack.push(action);
