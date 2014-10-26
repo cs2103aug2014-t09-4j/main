@@ -44,11 +44,11 @@ class Contents extends JPanel {
      */
     protected void updateContents(LinkedList<Task> tasks) {
 
-        try {
+        //try {
             addTasksByDate(tasks);
-        } catch (NullPointerException e) {
-            setNoEvents();
-        }
+        //} catch (NullPointerException e) {
+        //    setNoEvents();
+        //}
     }
 
     /**
@@ -104,11 +104,15 @@ class Contents extends JPanel {
             return false;
         }
 
-        if (currentDate == null && tasks.peek().getDate() == null) {
-            return true;
-        }
+        String taskDate = tasks.peek().getDate();
 
-        return tasks.peek().getDate().equals(currentDate);
+        if (currentDate == null) {
+            currentDate = MESSAGE_EMPTY;
+        }
+        if (taskDate == null) {
+            taskDate = MESSAGE_EMPTY;
+        }
+        return taskDate.equals(currentDate);
     }
 
     private int addCurrentEvents(LinkedList<Task> tasks, int y, int offset) {
