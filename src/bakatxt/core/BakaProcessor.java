@@ -75,9 +75,13 @@ public class BakaProcessor {
         return _displayTasks;
     }
 
-    private void clearTask() {
-        _database.clear();
-        _displayTasks = _database.getAllTasks();
+    private void clearTask(String command) {
+        // _database.clear();
+        // _displayTasks = _database.getAllTasks();
+        UserAction inputCmd;
+        inputCmd = new UserClear(command);
+        _ra.execute(inputCmd);
+        _database.getAllTasks();
     }
 
     public void executeCommand(String input) {
@@ -131,7 +135,7 @@ public class BakaProcessor {
                 return;
 
             case CLEAR :
-                clearTask();
+                clearTask(command);
                 break;
 
             case EDIT :

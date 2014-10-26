@@ -8,7 +8,7 @@ public class UserAction implements UserActionInterface {
 
     protected Task _task;
     protected String _command;
-    private Database _database;
+    protected Database _database;
 
     public UserAction(String command, Task task) {
         _command = command.toUpperCase();
