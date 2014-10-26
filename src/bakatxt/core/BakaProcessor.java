@@ -275,7 +275,7 @@ public class BakaProcessor {
         editTask.setTime(parsedDateTime);
 
         nextStagePrompt = editTask.getEndTime();
-        if (nextStagePrompt == null) {
+        if (nextStagePrompt.equals(STRING_NULL)) {
             nextStagePrompt = BakaTongue.getString("USER_PROMPT_END_TIME");
         }
         BakaUI.setInputBoxText(nextStagePrompt);
@@ -294,7 +294,7 @@ public class BakaProcessor {
         editTask.setEndTime(parsedDateTime);
 
         nextStagePrompt = editTask.getDescription();
-        if (nextStagePrompt == null) {
+        if (nextStagePrompt == null || nextStagePrompt.trim().isEmpty()) {
             nextStagePrompt = BakaTongue.getString("USER_PROMPT_DESCRIPTION");
         }
         BakaUI.setInputBoxText(nextStagePrompt);
