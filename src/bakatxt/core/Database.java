@@ -163,8 +163,8 @@ public class Database implements DatabaseInterface {
                 if (newDescription == null) {
                     newDescription = new String();
                 }
-                newDescription = STRING_OVERDUE + TAG_OPEN + newDescription
-                        + TAG_CLOSE + SPACE;
+                newDescription = STRING_OVERDUE + TAG_OPEN + taskDate
+                        + TAG_CLOSE + SPACE + newDescription;
                 task.setDescription(newDescription);
                 task.setFloating(true);
             }
