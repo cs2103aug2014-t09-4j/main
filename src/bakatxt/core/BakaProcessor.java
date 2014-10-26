@@ -211,9 +211,6 @@ public class BakaProcessor {
     }
 
     private void editTask(String input, String command) {
-        UserInput inputCmd;
-        String nextStagePrompt;
-        String parsedDateTime;
         if (editStage == 0) {
             editStage = 6;
             String index = _parser.getString(input).trim();
