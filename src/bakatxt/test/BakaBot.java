@@ -98,7 +98,12 @@ public class BakaBot extends Robot {
      * moves the cursor to the BakaTxt input box and clicks it
      */
     public void mouseToInputBox() {
-        mouseMove(UIHelper.WINDOW_LOCATION.x + 20,UIHelper.WINDOW_LOCATION.y + 20);
+        mouseMove(UIHelper.WINDOW_LOCATION.x + 60,
+                UIHelper.WINDOW_LOCATION.y + 20);
+        mousePress(InputEvent.BUTTON1_DOWN_MASK);
+        waitAWhile(WAIT_SHORT);
+        mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
+        waitAWhile(WAIT_SHORT);
         mousePress(InputEvent.BUTTON1_DOWN_MASK);
         waitAWhile(WAIT_SHORT);
         mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
