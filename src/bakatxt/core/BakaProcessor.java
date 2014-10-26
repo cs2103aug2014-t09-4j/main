@@ -255,7 +255,8 @@ public class BakaProcessor {
     private void editDescription(String input, String command) {
         UserAction inputCmd;
         String nextStagePrompt;
-        if (input.equals(BakaTongue.getString("USER_PROMPT_DESCRIPTION"))) {
+        if (input.toLowerCase().equals(
+                BakaTongue.getString("USER_PROMPT_DESCRIPTION").toLowerCase())) {
             input = null;
         }
         editTask.setDescription(input);
@@ -270,7 +271,8 @@ public class BakaProcessor {
     private void editStartTime(String input) {
         String nextStagePrompt;
         String parsedDateTime;
-        if (input.equals(BakaTongue.getString("USER_PROMPT_START_TIME"))) {
+        if (input.toLowerCase().equals(
+                BakaTongue.getString("USER_PROMPT_START_TIME").toLowerCase())) {
             input = null;
         }
         parsedDateTime = _parser.getTime(input);
@@ -289,7 +291,8 @@ public class BakaProcessor {
 
         String nextStagePrompt;
         String parsedDateTime;
-        if (input.equals(BakaTongue.getString("USER_PROMPT_END_TIME"))) {
+        if (input.toLowerCase().equals(
+                BakaTongue.getString("USER_PROMPT_END_TIME").toLowerCase())) {
             input = null;
         }
         parsedDateTime = _parser.getTime(input);
@@ -307,7 +310,8 @@ public class BakaProcessor {
     private void editDate(String input) {
         String nextStagePrompt;
         String parsedDateTime;
-        if (input.equals(BakaTongue.getString("USER_PROMPT_DATE"))) {
+        if (input.toLowerCase().equals(
+                BakaTongue.getString("USER_PROMPT_DATE").toLowerCase())) {
             input = null;
         }
         parsedDateTime = _parser.getDate(input);
@@ -324,7 +328,8 @@ public class BakaProcessor {
 
     private void editVenue(String input) {
         String nextStagePrompt;
-        if (input.equals(BakaTongue.getString("USER_PROMPT_VENUE"))) {
+        if (input.toLowerCase().equals(
+                BakaTongue.getString("USER_PROMPT_VENUE").toLowerCase())) {
             input = null;
         }
         editTask.setVenue(input);
