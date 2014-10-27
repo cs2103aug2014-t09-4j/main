@@ -469,8 +469,11 @@ public class Database implements DatabaseInterface {
                     result.addAll(entry.getValue());
                 }
             }
-        } else if (_bakaMap.containsKey(key)) {
-            result.addAll(_bakaMap.get(key));
+        } else {
+            key = key.trim();
+            if (_bakaMap.containsKey(key)) {
+                result.addAll(_bakaMap.get(key));
+            }
         }
         return result;
     }
