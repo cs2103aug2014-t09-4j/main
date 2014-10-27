@@ -6,12 +6,17 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Rectangle;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.AdjustmentEvent;
+import java.awt.event.AdjustmentListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneLayout;
+import javax.swing.Timer;
 import javax.swing.plaf.basic.BasicScrollBarUI;
 
 /**
@@ -24,6 +29,9 @@ class BakaScrollPane extends JScrollPane {
     private static final int WIDTH = UIHelper.WINDOW_X - 4 * UIHelper.BORDER;
     private static final int BAR_WIDTH = 9;
     private static final int BAR_ROUNDNESS = 9;
+    private static final int VANISH_TIMER = 1000;
+
+    private Timer _timer;
 
     public BakaScrollPane(JComponent component, int initialHeight) {
         super(component);
@@ -34,6 +42,7 @@ class BakaScrollPane extends JScrollPane {
         setScrollBars();
         setComponentZOrder(getViewport(), 1);
         setViewBox();
+        setTimeout();
     }
 
     /**
@@ -66,6 +75,14 @@ class BakaScrollPane extends JScrollPane {
     private void setScrollBars() {
         verticalScrollBar.setOpaque(false);
         verticalScrollBar.setUI(new DisappearingScrollBar());
+        verticalScrollBar.addAdjustmentListener(new AdjustmentListener(){
+            @Override
+            public void adjustmentValueChanged(AdjustmentEvent e) {
+                verticalScrollBar.setUI(new DisappearingScrollBar());
+                _timer.stop();
+                _timer.start();
+            }
+        });
         setComponentZOrder(verticalScrollBar, 0);
         setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 
@@ -100,6 +117,16 @@ class BakaScrollPane extends JScrollPane {
                     vsb.setVisible(true);
                     vsb.setBounds(scrollTrack);
                 }
+            }
+        });
+    }
+
+    private void setTimeout() {
+        _timer = new Timer(VANISH_TIMER, new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                verticalScrollBar.setUI(null);
+                _timer.stop();
             }
         });
     }
