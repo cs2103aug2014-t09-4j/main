@@ -82,7 +82,7 @@ public class BakaProcessor {
         _database.getAllUndoneTasks();
     }
 
-    public void executeCommand(String input) {
+    public boolean executeCommand(String input) {
 
         if (_choosingLanguage) {
             BakaTongue.setLanguage(input);
@@ -97,7 +97,7 @@ public class BakaProcessor {
 
         if (!command.equals(COMMAND_EDIT) && editStage > 0) {
             executeCommand(COMMAND_EDIT + SPACE + input);
-            return;
+            return true;
         }
 
         CommandType commandType;
@@ -116,29 +116,26 @@ public class BakaProcessor {
         switch (commandType) {
             case HELP :
                 showHelp();
-                return;
+                return true;
 
             case ADD :
-                addTask(input, command);
-                break;
+                return addTask(input, command);
 
             case REMOVE :
             case DELETE :
-                deleteTask(input, command);
-                break;
+                return deleteTask(input, command);
 
             case SHOW :
             case DISPLAY :
                 displayTask(input);
-                return;
+                return true;
 
             case CLEAR :
                 clearTask(command);
                 break;
 
             case EDIT :
-                editTask(input, command);
-                break;
+                return editTask(input, command);
 
             case UNDO :
                 return undoTask();
@@ -148,30 +145,30 @@ public class BakaProcessor {
 
             case LANGUAGE :
                 languageSelector(input);
-                return;
+                return true;
 
             case EXIT :
                 _database.close();
                 System.exit(0);
-                break;
+                return true;
 
             case SEARCH :
                 searchTask(input);
-                return;
+                return true;
 
             case DONE :
-                markDoneTask(input, command);
-                break;
+                return markDoneTask(input, command);
 
             case DEFAULT :
-                addTaskWithNoCommandWord(input);
-                break;
+                return addTaskWithNoCommandWord(input);
 
             default :
-                break;
+                return false;
         }
 
         _displayTasks = _database.getAllUndoneTasks();
+        return true;
+    }
 
     private boolean undoTask() {
         boolean isSuccessful = _ra.undo();
@@ -213,20 +210,21 @@ public class BakaProcessor {
         }
     }
 
-    private void addTaskWithNoCommandWord(String input) {
+    private boolean addTaskWithNoCommandWord(String input) {
         UserAction inputCmd;
         Task task;
         task = _parser.add(COMMAND_ADD + SPACE + input);
         inputCmd = new UserAction(COMMAND_ADD, task);
-        _ra.execute(inputCmd);
+        boolean isSuccessful = _ra.execute(inputCmd);
+        return isSuccessful;
     }
 
-    private void editTask(String input, String command) {
+    private boolean editTask(String input, String command) {
         if (editStage == 0) {
             editStage = 6;
             String index = _parser.getString(input).trim();
             int trueIndex = Integer.valueOf(index.trim()) - 1;
-            _displayTasks = _database.getAllTasks();
+            _displayTasks = _database.getAllUndoneTasks();
             editTask = _displayTasks.get(trueIndex);
             originalTask = new Task(editTask);
 
@@ -259,9 +257,11 @@ public class BakaProcessor {
             }
             editStage--;
         }
+        return true;
+        // TODO DS HELP TO CHECK THIS ONE
     }
 
-    private void editDescription(String input, String command) {
+    private boolean editDescription(String input, String command) {
         UserAction inputCmd;
         String nextStagePrompt;
         if (input.toLowerCase().equals(
@@ -271,13 +271,14 @@ public class BakaProcessor {
         editTask.setDescription(input);
 
         inputCmd = new UserEditTask(command, originalTask, editTask);
-        _ra.execute(inputCmd);
+        boolean isSuccessful = _ra.execute(inputCmd);
         nextStagePrompt = "";
         BakaUI.setInputBoxText(nextStagePrompt);
         BakaUI.setAlertMessageText(BakaTongue.getString("MESSAGE_WELCOME"));
+        return isSuccessful;
     }
 
-    private void editStartTime(String input) {
+    private boolean editStartTime(String input) {
         String nextStagePrompt;
         String parsedDateTime;
         if (input.toLowerCase().equals(
@@ -294,9 +295,10 @@ public class BakaProcessor {
         BakaUI.setInputBoxText(nextStagePrompt);
         BakaUI.setAlertMessageText(BakaTongue.getString("ALERT_EDIT_MODE")
                 + BakaTongue.getString("ALERT_EDIT_END_TIME"));
+        return true;
     }
 
-    private void editEndTime(String input) {
+    private boolean editEndTime(String input) {
 
         String nextStagePrompt;
         String parsedDateTime;
@@ -314,9 +316,10 @@ public class BakaProcessor {
         BakaUI.setInputBoxText(nextStagePrompt);
         BakaUI.setAlertMessageText(BakaTongue.getString("ALERT_EDIT_MODE")
                 + BakaTongue.getString("ALERT_EDIT_DESCRIPTION"));
+        return true;
     }
 
-    private void editDate(String input) {
+    private boolean editDate(String input) {
         String nextStagePrompt;
         String parsedDateTime;
         if (input.toLowerCase().equals(
@@ -333,9 +336,10 @@ public class BakaProcessor {
         BakaUI.setInputBoxText(nextStagePrompt);
         BakaUI.setAlertMessageText(BakaTongue.getString("ALERT_EDIT_MODE")
                 + BakaTongue.getString("ALERT_EDIT_START_TIME"));
+        return true;
     }
 
-    private void editVenue(String input) {
+    private boolean editVenue(String input) {
         String nextStagePrompt;
         if (input.toLowerCase().equals(
                 BakaTongue.getString("USER_PROMPT_VENUE").toLowerCase())) {
@@ -350,9 +354,10 @@ public class BakaProcessor {
         BakaUI.setInputBoxText(nextStagePrompt);
         BakaUI.setAlertMessageText(BakaTongue.getString("ALERT_EDIT_MODE")
                 + BakaTongue.getString("ALERT_EDIT_DATE"));
+        return true;
     }
 
-    private void editTitle(String input) {
+    private boolean editTitle(String input) {
         String nextStagePrompt;
         if (input.trim().isEmpty()) {
             editTask.setTitle(originalTask.getTitle());
@@ -367,43 +372,53 @@ public class BakaProcessor {
         BakaUI.setInputBoxText(nextStagePrompt);
         BakaUI.setAlertMessageText(BakaTongue.getString("ALERT_EDIT_MODE")
                 + BakaTongue.getString("ALERT_EDIT_VENUE"));
+        return true;
     }
 
-    private void deleteTask(String input, String command) {
+    private boolean deleteTask(String input, String command) {
         UserAction inputCmd;
         Task task;
         String content = _parser.getString(input).trim();
         ArrayList<Integer> listOfIndex = _parser.getIndexList(content);
         _displayTasks = _database.getAllUndoneTasks();
+        boolean isSuccessful = true;
         for (int i = 0; i < listOfIndex.size(); i++) {
             int trueIndex = listOfIndex.get(i);
             task = _displayTasks.get(trueIndex - 1);
             inputCmd = new UserAction(command, task);
-            _ra.execute(inputCmd);
+            isSuccessful = isSuccessful && _ra.execute(inputCmd);
         }
+        _displayTasks = _database.getAllUndoneTasks();
+        return isSuccessful;
+
     }
 
-    private void markDoneTask(String input, String command) {
+    private boolean markDoneTask(String input, String command) {
         Task task;
         UserAction inputCmd;
         String content = _parser.getString(input).trim();
         ArrayList<Integer> listOfIndex = _parser.getIndexList(content);
         _displayTasks = _database.getAllUndoneTasks();
+        boolean isSuccessful = true;
         for (int i = 0; i < listOfIndex.size(); i++) {
             int trueIndex = listOfIndex.get(i);
             task = _displayTasks.get(trueIndex - 1);
             inputCmd = new UserEditStatus(command, task, true);
-            _ra.execute(inputCmd);
+            isSuccessful = isSuccessful && _ra.execute(inputCmd);
+
         }
         _displayTasks = _database.getAllUndoneTasks();
+        return isSuccessful;
     }
 
-    private void addTask(String input, String command) {
+    private boolean addTask(String input, String command) {
         UserAction inputCmd;
         Task task;
         task = _parser.add(input);
         inputCmd = new UserAction(command, task);
-        _ra.execute(inputCmd);
-        _database.getAllTasks();
+        boolean isSuccessful = _ra.execute(inputCmd);
+        _displayTasks = _database.getAllUndoneTasks();
+
+        return isSuccessful;
     }
 }
