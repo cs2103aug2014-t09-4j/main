@@ -45,7 +45,7 @@ public class BakaProcessor {
     public BakaProcessor() {
         _database = Database.getInstance();
         _parser = new BakaParser();
-        _displayTasks = _database.getAllTasks();
+        _displayTasks = _database.getAllUndoneTasks();
         _ra = new ReverseAction();
     }
 
@@ -79,7 +79,7 @@ public class BakaProcessor {
         UserAction inputCmd;
         inputCmd = new UserClear(command);
         _ra.execute(inputCmd);
-        _database.getAllTasks();
+        _database.getAllUndoneTasks();
     }
 
     public void executeCommand(String input) {
@@ -195,7 +195,7 @@ public class BakaProcessor {
         if (input.contains(SPACE)) {
             BakaTongue.setLanguage(_parser.getString(input));
             BakaUI.setAlertMessageText(BakaTongue.getString("MESSAGE_WELCOME"));
-            _displayTasks = _database.getAllTasks();
+            _displayTasks = _database.getAllUndoneTasks();
         } else {
             _choosingLanguage = true;
             _displayTasks = BakaTongue.languageChoices();
@@ -365,7 +365,7 @@ public class BakaProcessor {
         Task task;
         String content = _parser.getString(input).trim();
         ArrayList<Integer> listOfIndex = _parser.getIndexList(content);
-        _displayTasks = _database.getAllTasks();
+        _displayTasks = _database.getAllUndoneTasks();
         for (int i = 0; i < listOfIndex.size(); i++) {
             int trueIndex = listOfIndex.get(i);
             task = _displayTasks.get(trueIndex - 1);
@@ -379,7 +379,7 @@ public class BakaProcessor {
         UserAction inputCmd;
         String content = _parser.getString(input).trim();
         ArrayList<Integer> listOfIndex = _parser.getIndexList(content);
-        _displayTasks = _database.getAllTasks();
+        _displayTasks = _database.getAllUndoneTasks();
         for (int i = 0; i < listOfIndex.size(); i++) {
             int trueIndex = listOfIndex.get(i);
             task = _displayTasks.get(trueIndex - 1);
