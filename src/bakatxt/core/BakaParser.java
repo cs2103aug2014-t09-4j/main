@@ -56,10 +56,7 @@ public class BakaParser implements BakaParserInterface {
     private static ArrayList<String> _inputThatCantParse;
 
     public BakaParser() {
-        _isDate = false;
-        _isTime = false;
-        _isVenue = false;
-        _isDescription = false;
+        resetDetails();
     }
 
 
