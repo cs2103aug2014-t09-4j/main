@@ -141,12 +141,10 @@ public class BakaProcessor {
                 break;
 
             case UNDO :
-                _ra.undo();
-                break;
+                return undoTask();
 
             case REDO :
-                _ra.redo();
-                break;
+                return redoTask();
 
             case LANGUAGE :
                 languageSelector(input);
@@ -174,6 +172,17 @@ public class BakaProcessor {
         }
 
         _displayTasks = _database.getAllUndoneTasks();
+
+    private boolean undoTask() {
+        boolean isSuccessful = _ra.undo();
+        _displayTasks = _database.getAllUndoneTasks();
+        return isSuccessful;
+    }
+
+    private boolean redoTask() {
+        boolean isSuccessful = _ra.redo();
+        _displayTasks = _database.getAllUndoneTasks();
+        return isSuccessful;
     }
 
     private void showHelp() {
