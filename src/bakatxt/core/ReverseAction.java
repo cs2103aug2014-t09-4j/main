@@ -21,11 +21,11 @@ public class ReverseAction implements ReverseActionInterface {
      */
     @Override
     public boolean execute(UserAction input) {
-        boolean status = input.execute(); // execute command
-        if (status) {
+        boolean isSuccessful = input.execute(); // execute command
+        if (isSuccessful) {
             undoStack.push(input);
         }
-        return status;
+        return isSuccessful;
     }
 
     /**
@@ -35,17 +35,17 @@ public class ReverseAction implements ReverseActionInterface {
      */
     @Override
     public boolean undo() {
-        boolean status = false;
+        boolean isSuccessful = false;
         if (!undoStack.isEmpty()) {
             UserAction action = undoStack.pop();
-            status = action.undo();
-            if (!status) {
+            isSuccessful = action.undo();
+            if (!isSuccessful) {
                 undoStack.push(action);
             } else {
                 redoStack.push(action);
             }
         }
-        return status;
+        return isSuccessful;
     }
 
     /**
@@ -55,17 +55,17 @@ public class ReverseAction implements ReverseActionInterface {
      */
     @Override
     public boolean redo() {
-        boolean status = false;
+        boolean isSuccessful = false;
         if (!redoStack.isEmpty()) {
             UserAction action = redoStack.pop();
-            status = action.execute();
-            if (!status) {
+            isSuccessful = action.execute();
+            if (isSuccessful) {
                 redoStack.push(action);
             } else {
                 undoStack.push(action);
             }
         }
-        return status;
+        return isSuccessful;
     }
 
 }
