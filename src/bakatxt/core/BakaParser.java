@@ -36,7 +36,7 @@ public class BakaParser implements BakaParserInterface {
     private static final String DATE_FORMAT_STANDARD = "yyyy-MM-dd";
     private static final String DISABLE_NUMBER_REGEX = "\\d{3,}?";
     private static final String DISABLE_PARSING_REGEX = "(([0-2]\\d[0-5]\\d)|(\\d{1,2}))[^h]";
-    private static final String DISABLE_FAKE_TIME_REGEX = "\\D+\\d";
+    private static final String DISABLE_FAKE_TIME_REGEX = "\\D\\S+\\d";
 
     private static boolean _isDate;
     private static boolean _isTime;
