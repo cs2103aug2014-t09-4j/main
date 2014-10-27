@@ -220,6 +220,7 @@ public class BakaProcessor {
     }
 
     private boolean editTask(String input, String command) {
+        boolean isSuccessful = false;
         if (editStage == 0) {
             editStage = 6;
             String index = _parser.getString(input).trim();
@@ -231,34 +232,34 @@ public class BakaProcessor {
             BakaUI.setInputBoxText(editTask.getTitle());
             BakaUI.setAlertMessageText(BakaTongue.getString("ALERT_EDIT_MODE")
                     + BakaTongue.getString("ALERT_EDIT_TITLE"));
+            isSuccessful = true;
         } else {
             input = _parser.getString(input);
             switch (editStage) {
                 case 6 :
-                    editTitle(input);
+                    isSuccessful = editTitle(input);
                     break;
                 case 5 :
-                    editVenue(input);
+                    isSuccessful = editVenue(input);
                     break;
                 case 4 :
-                    editDate(input);
+                    isSuccessful = editDate(input);
                     break;
                 case 3 :
-                    editStartTime(input);
+                    isSuccessful = editStartTime(input);
                     break;
                 case 2 :
-                    editEndTime(input);
+                    isSuccessful = editEndTime(input);
                     break;
                 case 1 :
-                    editDescription(input, command);
+                    isSuccessful = editDescription(input, command);
                     break;
                 default :
                     break;
             }
             editStage--;
         }
-        return true;
-        // TODO DS HELP TO CHECK THIS ONE
+        return isSuccessful;
     }
 
     private boolean editDescription(String input, String command) {
@@ -418,7 +419,6 @@ public class BakaProcessor {
         inputCmd = new UserAction(command, task);
         boolean isSuccessful = _ra.execute(inputCmd);
         _displayTasks = _database.getAllUndoneTasks();
-
         return isSuccessful;
     }
 }
