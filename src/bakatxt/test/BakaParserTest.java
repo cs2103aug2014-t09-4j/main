@@ -224,7 +224,7 @@ public class BakaParserTest {
 
     @Test
     public void testAddTimeFormat1() {
-        String input = "add go shopping 7/3 2 pm";
+        String input = "add go shopping 7/3 2pm";
         Task output = _parser.add(input);
         Task expected = new Task("go shopping");
         expected.setDate("2014-03-07");

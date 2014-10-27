@@ -37,6 +37,7 @@ public class BakaParser implements BakaParserInterface {
     private static final String DISABLE_NUMBER_REGEX = "\\d{3,}?";
     private static final String DISABLE_PARSING_REGEX = "(([0-2]\\d[0-5]\\d)|(\\d{1,2}))[^h]";
     private static final String DISABLE_FAKE_TIME_REGEX = "\\D\\S+\\d";
+    private static final String DISABLE_FAKE_DIGIT_REGEX = "\\d{1,2}?";
 
     private static boolean _isDate;
     private static boolean _isTime;
@@ -260,7 +261,8 @@ public class BakaParser implements BakaParserInterface {
 
             if (messageFragment.matches(DISABLE_NUMBER_REGEX)
                     || messageFragment.matches(DISABLE_PARSING_REGEX)
-                    || messageFragment.matches(DISABLE_FAKE_TIME_REGEX)) {
+                    || messageFragment.matches(DISABLE_FAKE_TIME_REGEX)
+                    || messageFragment.matches(DISABLE_FAKE_DIGIT_REGEX)) {
                 _inputThatCantParse.add(originalFragment);
                 input = input.replace(originalFragment, STRING_SPACE);
             }
