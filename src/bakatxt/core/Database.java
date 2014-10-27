@@ -536,8 +536,10 @@ public class Database implements DatabaseInterface {
             thisWeek.addAll(day);
         }
 
-        for (int i = 1; i < 7; i++) {
-            String date = _parser.getDate(i + SPACE + STRING_DAY);
+        String[] intString = { "one", "two", "three", "four", "five", "six" };
+
+        for (int i = 0; i < 6; i++) {
+            String date = _parser.getDate(intString[i] + SPACE + STRING_DAY);
             day = _bakaMap.get(date);
             if (day != null) {
                 thisWeek.addAll(day);
