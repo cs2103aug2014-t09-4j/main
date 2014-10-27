@@ -76,6 +76,16 @@ public class BakaParserTest {
     }
 
     @Test
+    public void testAddTitleFormat4() {
+        String input = "add CS2101 OP2 Conference @Computing tomorrow";
+        Task output = _parser.add(input);
+        Task expected = new Task("CS2101 OP2 Conference");
+        expected.setDate(_parser.getDate("tomorrow"));
+        expected.setVenue("Computing");
+        assertEquals(expected, output);
+    }
+
+    @Test
     public void testAddVenue() {
         String input = "add discuss 2103t with members @school";
         Task output = _parser.add(input);
@@ -267,7 +277,7 @@ public class BakaParserTest {
         String input = "add lunch buffet tomorrow 1pm to 3pm @town";
         Task output = _parser.add(input);
         Task expected = new Task("lunch buffet");
-        expected.setDate("2014-10-27");
+        expected.setDate(_parser.getDate("tomorrow"));
         expected.setTime("1300");
         expected.setEndTime("1500");
         expected.setVenue("town");
@@ -279,7 +289,7 @@ public class BakaParserTest {
         String input = "add google hangouts next week 9pm to 11pm @ home";
         Task output = _parser.add(input);
         Task expected = new Task("google hangouts");
-        expected.setDate("2014-11-02");
+        expected.setDate(_parser.getDate("next week"));
         expected.setTime("2100");
         expected.setEndTime("2300");
         expected.setVenue("home");
@@ -291,7 +301,7 @@ public class BakaParserTest {
         String input = "add google hangouts tomorrow 1pm to 3pm @home";
         Task output = _parser.add(input);
         Task expected = new Task("google hangouts");
-        expected.setDate("2014-10-27");
+        expected.setDate(_parser.getDate("tomorrow"));
         expected.setTime("1300");
         expected.setEndTime("1500");
         expected.setVenue("home");
@@ -303,7 +313,7 @@ public class BakaParserTest {
         String input = "add google hangouts tomorrow @ home 1300hours to 3pm";
         Task output = _parser.add(input);
         Task expected = new Task("google hangouts");
-        expected.setDate("2014-10-27");
+        expected.setDate(_parser.getDate("tomorrow"));
         expected.setTime("1300");
         expected.setEndTime("1500");
         expected.setVenue("home");
@@ -315,7 +325,7 @@ public class BakaParserTest {
         String input = "add google hangouts @ home tomorrow 1300h to 15:00";
         Task output = _parser.add(input);
         Task expected = new Task("google hangouts");
-        expected.setDate("2014-10-27");
+        expected.setDate(_parser.getDate("tomorrow"));
         expected.setTime("1300");
         expected.setEndTime("1500");
         expected.setVenue("home");
@@ -327,7 +337,7 @@ public class BakaParserTest {
         String input = "add google hangouts 13:00 - 15:00 @home";
         Task output = _parser.add(input);
         Task expected = new Task("google hangouts");
-        expected.setDate("2014-10-26");
+        expected.setDate(_parser.getDate("today"));
         expected.setTime("1300");
         expected.setEndTime("1500");
         expected.setVenue("home");

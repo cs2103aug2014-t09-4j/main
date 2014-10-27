@@ -52,9 +52,7 @@ public class BakaParser implements BakaParserInterface {
     private static String _inputDate;
     private static String _inputTime;
     private static String _inputDateThatCantParse;
-    private static String _inputThatCantParse1;
-    private static String _inputThatCantParse2;
-    private static String _inputThatCantParse3;
+    private static ArrayList<String> _inputThatCantParse;
 
     public BakaParser() {
         _isDate = false;
@@ -132,7 +130,6 @@ public class BakaParser implements BakaParserInterface {
         if (!_isDate && !_isTime) {
             task.setFloating(true);
         }
-        resetDetails();
 
         return task;
     }
@@ -148,6 +145,7 @@ public class BakaParser implements BakaParserInterface {
         _endTime = null;
         _venue = null;
         _description = null;
+        _inputThatCantParse = new ArrayList<String>();
     }
 
     private static String replaceDateTimeDescription(String input) {
@@ -260,18 +258,13 @@ public class BakaParser implements BakaParserInterface {
                 _inputDateThatCantParse = STRING_TODAY;
             }
 
-            if (messageFragment.matches(DISABLE_NUMBER_REGEX)) {
-                _inputThatCantParse1 = originalFragment;
+            if (messageFragment.matches(DISABLE_NUMBER_REGEX)
+                    || messageFragment.matches(DISABLE_PARSING_REGEX)
+                    || messageFragment.matches(DISABLE_FAKE_TIME_REGEX)) {
+                _inputThatCantParse.add(originalFragment);
                 input = input.replace(originalFragment, STRING_SPACE);
             }
-            if (messageFragment.matches(DISABLE_PARSING_REGEX)) {
-                _inputThatCantParse2 = originalFragment;
-                input = input.replace(originalFragment, STRING_SPACE);
-            }
-            if (messageFragment.matches(DISABLE_FAKE_TIME_REGEX)) {
-                _inputThatCantParse3 = originalFragment;
-                input = input.replace(originalFragment, STRING_SPACE);
-            }
+
         }
 
         List<DateGroup> dateGroup = parser.parse(input);
@@ -295,14 +288,9 @@ public class BakaParser implements BakaParserInterface {
         if (_inputDateThatCantParse != null) {
             input = input.replace(_inputDateThatCantParse, STRING_SPACE);
         }
-        if (_inputThatCantParse1 != null) {
-            input = input.replace(_inputThatCantParse1, STRING_SPACE);
-        }
-        if (_inputThatCantParse2 != null) {
-            input = input.replace(_inputThatCantParse2, STRING_SPACE);
-        }
-        if (_inputThatCantParse3 != null) {
-            input = input.replace(_inputThatCantParse3, STRING_SPACE);
+
+        for (int i = 0; i < _inputThatCantParse.size(); i++) {
+            input = input.replace(_inputThatCantParse.get(i), STRING_SPACE);
         }
 
         if (input.contains(STRING_TONIGHT)) {
