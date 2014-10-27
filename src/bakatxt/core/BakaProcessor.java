@@ -216,6 +216,7 @@ public class BakaProcessor {
         task = _parser.add(COMMAND_ADD + SPACE + input);
         inputCmd = new UserAction(COMMAND_ADD, task);
         boolean isSuccessful = _ra.execute(inputCmd);
+        _displayTasks = _database.getAllUndoneTasks();
         return isSuccessful;
     }
 
@@ -259,6 +260,7 @@ public class BakaProcessor {
             }
             editStage--;
         }
+        _displayTasks = _database.getAllUndoneTasks();
         return isSuccessful;
     }
 
