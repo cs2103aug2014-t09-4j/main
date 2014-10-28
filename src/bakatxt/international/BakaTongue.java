@@ -14,7 +14,7 @@ public class BakaTongue {
     private static final String SPACE = " ";
     private static final String HEADER = "LANGUAGE";
 
-    private static final String[] LANGUAGES = { "English", "中文", "한국어" };
+    private static final String[] LANGUAGES = { "English", "中文", "한국어", "HINDI" };
 
     private static Locale currentLocale = new Locale("en", "US");
     private static ResourceBundle resBundle = ResourceBundle.getBundle(
@@ -46,6 +46,10 @@ public class BakaTongue {
             case "korean" :
             case "3" :
                 currentLocale = new Locale("ko", "KR");
+                break;
+            case "hindi" :
+            case "4" :
+                currentLocale = new Locale("hi", "IN");
                 break;
             case "wah lao" :
             case "singlish" :
