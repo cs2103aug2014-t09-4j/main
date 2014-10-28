@@ -394,7 +394,13 @@ public class BakaProcessor {
         Task task;
         String content = _parser.getString(input).trim();
         ArrayList<Integer> listOfIndex = _parser.getIndexList(content);
-        _displayTasks = _database.getAllUndoneTasks();
+
+        if (_previousAction == null) {
+            return false;
+        }
+
+        setToPreviousView();
+
         boolean isSuccessful = true;
         for (int i = 0; i < listOfIndex.size(); i++) {
             int trueIndex = listOfIndex.get(i);
