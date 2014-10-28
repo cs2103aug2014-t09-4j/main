@@ -6,6 +6,8 @@ import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.LinkedList;
 
 import javax.swing.JFrame;
@@ -41,6 +43,7 @@ public class BakaUI extends JFrame {
         _bakaUI = new BakaUI(bakaProcessor);
         _bakaUI.setVisible(true);
         _bakaUI.setLocation(UIHelper.WINDOW_LOCATION);
+        setInitialFocus();
         EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
@@ -146,6 +149,18 @@ public class BakaUI extends JFrame {
         setTitle("Baka TX");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setMouseActions();
+    }
+
+    /**
+     * Set the input box to be immediately selected on start up
+     */
+    private static void setInitialFocus() {
+        _bakaUI.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowOpened( WindowEvent e ){
+                _bakaPanel.getInput().requestFocus();
+            }
+        });
     }
 
     /**
