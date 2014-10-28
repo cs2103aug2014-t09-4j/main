@@ -141,7 +141,7 @@ public class BakaProcessor {
                 break;
 
             case EDIT :
-                isSuccessful = _editTask(input, command);
+                isSuccessful = editTask(input, command);
                 break;
 
             case UNDO :
@@ -231,13 +231,15 @@ public class BakaProcessor {
         return isSuccessful;
     }
 
-    private boolean _editTask(String input, String command) {
+    private boolean editTask(String input, String command) {
         boolean isSuccessful = false;
         if (_editStage == 0) {
-            _editStage = 6;
             String index = _parser.getString(input).trim();
             int trueIndex = Integer.valueOf(index.trim()) - 1;
             setToPreviousView();
+            if (trueIndex < 0 || trueIndex >= _displayTasks.size()) {
+                return false;
+            }
             _editTask = _displayTasks.get(trueIndex);
             _originalTask = new Task(_editTask);
 
@@ -245,6 +247,7 @@ public class BakaProcessor {
             BakaUI.setAlertMessageText(BakaTongue.getString("ALERT_EDIT_MODE")
                     + BakaTongue.getString("ALERT_EDIT_TITLE"));
             isSuccessful = true;
+            _editStage = 6;
         } else {
             input = _parser.getString(input);
             switch (_editStage) {
@@ -404,6 +407,9 @@ public class BakaProcessor {
         boolean isSuccessful = true;
         for (int i = 0; i < listOfIndex.size(); i++) {
             int trueIndex = listOfIndex.get(i);
+            if (trueIndex < 1 || trueIndex > _displayTasks.size()) {
+                return false;
+            }
             task = _displayTasks.get(trueIndex - 1);
             inputCmd = new UserAction(command, task);
             isSuccessful = isSuccessful && _ra.execute(inputCmd);
