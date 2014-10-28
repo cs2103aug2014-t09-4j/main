@@ -24,6 +24,8 @@ public class BakaProcessor {
 
     private static boolean _choosingLanguage = false;
 
+    private static String _previousAction = null;
+
     enum CommandType {
         HELP,
         ADD,
@@ -131,6 +133,7 @@ public class BakaProcessor {
             case SHOW :
             case DISPLAY :
                 displayTask(input);
+                _previousAction = input.trim();
                 break;
 
             case CLEAR :
@@ -160,6 +163,7 @@ public class BakaProcessor {
 
             case SEARCH :
                 searchTask(input);
+                _previousAction = input.trim();
                 break;
 
             case DONE :
@@ -179,13 +183,13 @@ public class BakaProcessor {
 
     private boolean undoTask() {
         boolean isSuccessful = _ra.undo();
-        _displayTasks = _database.getAllUndoneTasks();
+        setToPreviousView();
         return isSuccessful;
     }
 
     private boolean redoTask() {
         boolean isSuccessful = _ra.redo();
-        _displayTasks = _database.getAllUndoneTasks();
+        setToPreviousView();
         return isSuccessful;
     }
 
@@ -208,7 +212,7 @@ public class BakaProcessor {
         if (input.contains(SPACE)) {
             BakaTongue.setLanguage(_parser.getString(input));
             BakaUI.setAlertMessageText(BakaTongue.getString("MESSAGE_WELCOME"));
-            _displayTasks = _database.getAllUndoneTasks();
+            setToPreviousView();
         } else {
             _choosingLanguage = true;
             _displayTasks = BakaTongue.languageChoices();
@@ -223,7 +227,7 @@ public class BakaProcessor {
         task = _parser.add(COMMAND_ADD + SPACE + input);
         inputCmd = new UserAction(COMMAND_ADD, task);
         boolean isSuccessful = _ra.execute(inputCmd);
-        _displayTasks = _database.getAllUndoneTasks();
+        setToPreviousView();
         return isSuccessful;
     }
 
@@ -233,7 +237,7 @@ public class BakaProcessor {
             _editStage = 6;
             String index = _parser.getString(input).trim();
             int trueIndex = Integer.valueOf(index.trim()) - 1;
-            _displayTasks = _database.getAllUndoneTasks();
+            setToPreviousView();
             _editTask = _displayTasks.get(trueIndex);
             _originalTask = new Task(_editTask);
 
@@ -267,7 +271,7 @@ public class BakaProcessor {
             }
             _editStage--;
         }
-        _displayTasks = _database.getAllUndoneTasks();
+        setToPreviousView();
         return isSuccessful;
     }
 
@@ -398,9 +402,25 @@ public class BakaProcessor {
             inputCmd = new UserAction(command, task);
             isSuccessful = isSuccessful && _ra.execute(inputCmd);
         }
-        _displayTasks = _database.getAllUndoneTasks();
-        return isSuccessful;
 
+        setToPreviousView();
+
+        return isSuccessful;
+    }
+
+    private void setToPreviousView() {
+        String previousCommand = _parser.getCommand(_previousAction);
+        switch (previousCommand.toLowerCase()) {
+            case "display" :
+            case "show" :
+                displayTask(_previousAction);
+                break;
+            case "search" :
+                searchTask(_previousAction);
+                break;
+            default :
+                _displayTasks = _database.getAllUndoneTasks();
+        }
     }
 
     private boolean markDoneTask(String input, String command) {
@@ -417,7 +437,7 @@ public class BakaProcessor {
             isSuccessful = isSuccessful && _ra.execute(inputCmd);
 
         }
-        _displayTasks = _database.getAllUndoneTasks();
+        setToPreviousView();
         return isSuccessful;
     }
 
@@ -427,7 +447,7 @@ public class BakaProcessor {
         task = _parser.add(input);
         inputCmd = new UserAction(command, task);
         boolean isSuccessful = _ra.execute(inputCmd);
-        _displayTasks = _database.getAllUndoneTasks();
+        setToPreviousView();
         return isSuccessful;
     }
 }
