@@ -113,61 +113,68 @@ public class BakaProcessor {
             commandType = CommandType.DEFAULT;
         }
 
+        boolean isSuccessful = true;
         switch (commandType) {
             case HELP :
                 showHelp();
-                return true;
+                break;
 
             case ADD :
-                return addTask(input, command);
+                isSuccessful = addTask(input, command);
+                break;
 
             case REMOVE :
             case DELETE :
-                return deleteTask(input, command);
+                isSuccessful = deleteTask(input, command);
+                break;
 
             case SHOW :
             case DISPLAY :
                 displayTask(input);
-                return true;
+                break;
 
             case CLEAR :
                 clearTask(command);
                 break;
 
             case EDIT :
-                return editTask(input, command);
+                isSuccessful = _editTask(input, command);
+                break;
 
             case UNDO :
-                return undoTask();
+                isSuccessful = undoTask();
+                break;
 
             case REDO :
-                return redoTask();
+                isSuccessful = redoTask();
+                break;
 
             case LANGUAGE :
                 languageSelector(input);
-                return true;
+                break;
 
             case EXIT :
                 _database.close();
                 System.exit(0);
-                return true;
+                break;
 
             case SEARCH :
                 searchTask(input);
-                return true;
+                break;
 
             case DONE :
-                return markDoneTask(input, command);
+                isSuccessful = markDoneTask(input, command);
+                break;
 
             case DEFAULT :
-                return addTaskWithNoCommandWord(input);
+                isSuccessful = addTaskWithNoCommandWord(input);
+                break;
 
             default :
                 return false;
         }
 
-        _displayTasks = _database.getAllUndoneTasks();
-        return true;
+        return isSuccessful;
     }
 
     private boolean undoTask() {
