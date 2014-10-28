@@ -552,7 +552,7 @@ public class BakaParserTest {
     public void testGetDate2() {
         String input = "tomorrow";
         String output = _parser.getDate(input);
-        String expected = "2014-10-27";
+        String expected = _parser.getDate("one day later");
         assertEquals(expected, output);
     }
 
@@ -560,7 +560,7 @@ public class BakaParserTest {
     public void testGetDate3() {
         String input = "tonight";
         String output = _parser.getDate(input);
-        String expected = "2014-10-26";
+        String expected = _parser.getDate("today");
         assertEquals(expected, output);
     }
 
