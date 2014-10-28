@@ -237,7 +237,6 @@ public class BakaParser implements BakaParserInterface {
                     messageFragment = messageFragment + STRING_DASH
                             + STRING_YEAR;
                 }
-
                 dateFragment = messageFragment.split(DATE_FORMAT_DIVIDER_REGEX);
                 if (dateFragment[2].length() == 2) {
                     dateFragment[2] = STRING_YEAR_FRAG + dateFragment[2];
@@ -261,9 +260,16 @@ public class BakaParser implements BakaParserInterface {
                     || messageFragment.matches(DISABLE_FAKE_TIME_REGEX)
                     || messageFragment.matches(DISABLE_FAKE_DIGIT_REGEX)) {
                 _inputThatCantParse.add(originalFragment);
-                input = input.replace(originalFragment, STRING_SPACE);
-            }
+                String[] inputPart = input.split(STRING_SPACE);
 
+                input = STRING_EMPTY;
+                for (int j = 0; j < inputPart.length; j++) {
+                    if (inputPart[j].equals(originalFragment)) {
+                        inputPart[j] = STRING_EMPTY;
+                    }
+                    input += inputPart[j] + STRING_SPACE;
+                }
+            }
         }
 
         List<DateGroup> dateGroup = parser.parse(input);
@@ -288,8 +294,15 @@ public class BakaParser implements BakaParserInterface {
             input = input.replace(_inputDateThatCantParse, STRING_SPACE);
         }
 
-        for (int i = 0; i < _inputThatCantParse.size(); i++) {
-            input = input.replace(_inputThatCantParse.get(i), STRING_SPACE);
+        String[] inputPart = input.split(STRING_SPACE);
+        input = STRING_EMPTY;
+        for (int i = 0; i < inputPart.length; i++) {
+            for (int j = 0; j < _inputThatCantParse.size(); j++) {
+                if (inputPart[i].equals(_inputThatCantParse.get(j))) {
+                    inputPart[i] = STRING_EMPTY;
+                }
+            }
+            input += inputPart[i] + STRING_SPACE;
         }
 
         if (input.contains(STRING_TONIGHT)) {
