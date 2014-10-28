@@ -179,18 +179,18 @@ class BakaPanel extends JPanel {
      * Shake the input box when an error in input is detected, flash it if it is
      * successful
      *
-     * @param isBadInput
+     * @param isSuccessful
      *        is the boolean that decides whether or not to shake the box or flash it
      */
-    protected void animateInputBox(final boolean isBadInput) {
+    protected void animateInputBox(final boolean isSuccessful) {
         Runnable r = new Runnable() {
             @Override
             public void run() {
                 UIAnimator animate = new UIAnimator(_input);
-                if (isBadInput) {
-                    animate.shakeComponent(UIHelper.INPUT_LOCATION);
-                } else {
+                if (isSuccessful) {
                     animate.flashComponent();
+                } else {
+                    animate.shakeComponent(UIHelper.INPUT_LOCATION);
                 }
             }
         };

@@ -66,9 +66,8 @@ public class BakaUI extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 input.selectAll();
-                _bakaProcessor.executeCommand(input.getText());
-                // TODO only shake when there is an error
-                _bakaPanel.animateInputBox(true);
+                boolean isSuccessful = _bakaProcessor.executeCommand(input.getText());
+                _bakaPanel.animateInputBox(isSuccessful);
                 updateUI(_bakaProcessor.getAllTasks());
             }
         });
