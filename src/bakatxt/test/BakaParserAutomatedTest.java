@@ -300,7 +300,7 @@ public class BakaParserAutomatedTest {
 
     @Test
     public void testAddTimeFormat1() {
-        String input = BakaBot.ADD + "go library 20/7 2 pm";
+        String input = BakaBot.ADD + "go library 20/7 2pm";
         _bot.inputThisString(input);
         BakaBot.waitAWhile(BakaBot.WAIT_SHORT);
         LinkedList<Task> expected = new LinkedList<Task>();
