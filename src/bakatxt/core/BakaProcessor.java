@@ -18,9 +18,9 @@ public class BakaProcessor {
     private static LinkedList<Task> _displayTasks;
     private static ReverseAction _ra;
 
-    private static Integer editStage = 0;
-    private static Task originalTask;
-    private static Task editTask;
+    private static Integer _editStage = 0;
+    private static Task _originalTask;
+    private static Task _editTask;
 
     private static boolean _choosingLanguage = false;
 
@@ -95,7 +95,7 @@ public class BakaProcessor {
 
         String command = _parser.getCommand(input);
 
-        if (!command.equals(COMMAND_EDIT) && editStage > 0) {
+        if (!command.equals(COMMAND_EDIT) && _editStage > 0) {
             executeCommand(COMMAND_EDIT + SPACE + input);
             return true;
         }
@@ -220,23 +220,23 @@ public class BakaProcessor {
         return isSuccessful;
     }
 
-    private boolean editTask(String input, String command) {
+    private boolean _editTask(String input, String command) {
         boolean isSuccessful = false;
-        if (editStage == 0) {
-            editStage = 6;
+        if (_editStage == 0) {
+            _editStage = 6;
             String index = _parser.getString(input).trim();
             int trueIndex = Integer.valueOf(index.trim()) - 1;
             _displayTasks = _database.getAllUndoneTasks();
-            editTask = _displayTasks.get(trueIndex);
-            originalTask = new Task(editTask);
+            _editTask = _displayTasks.get(trueIndex);
+            _originalTask = new Task(_editTask);
 
-            BakaUI.setInputBoxText(editTask.getTitle());
+            BakaUI.setInputBoxText(_editTask.getTitle());
             BakaUI.setAlertMessageText(BakaTongue.getString("ALERT_EDIT_MODE")
                     + BakaTongue.getString("ALERT_EDIT_TITLE"));
             isSuccessful = true;
         } else {
             input = _parser.getString(input);
-            switch (editStage) {
+            switch (_editStage) {
                 case 6 :
                     isSuccessful = editTitle(input);
                     break;
@@ -258,7 +258,7 @@ public class BakaProcessor {
                 default :
                     break;
             }
-            editStage--;
+            _editStage--;
         }
         _displayTasks = _database.getAllUndoneTasks();
         return isSuccessful;
@@ -271,9 +271,9 @@ public class BakaProcessor {
                 BakaTongue.getString("USER_PROMPT_DESCRIPTION").toLowerCase())) {
             input = null;
         }
-        editTask.setDescription(input);
+        _editTask.setDescription(input);
 
-        inputCmd = new UserEditTask(command, originalTask, editTask);
+        inputCmd = new UserEditTask(command, _originalTask, _editTask);
         boolean isSuccessful = _ra.execute(inputCmd);
         nextStagePrompt = "";
         BakaUI.setInputBoxText(nextStagePrompt);
@@ -289,9 +289,9 @@ public class BakaProcessor {
             input = null;
         }
         parsedDateTime = _parser.getTime(input);
-        editTask.setTime(parsedDateTime);
+        _editTask.setTime(parsedDateTime);
 
-        nextStagePrompt = editTask.getEndTime();
+        nextStagePrompt = _editTask.getEndTime();
         if (nextStagePrompt.equals(STRING_NULL)) {
             nextStagePrompt = BakaTongue.getString("USER_PROMPT_END_TIME");
         }
@@ -310,9 +310,9 @@ public class BakaProcessor {
             input = null;
         }
         parsedDateTime = _parser.getTime(input);
-        editTask.setEndTime(parsedDateTime);
+        _editTask.setEndTime(parsedDateTime);
 
-        nextStagePrompt = editTask.getDescription();
+        nextStagePrompt = _editTask.getDescription();
         if (nextStagePrompt == null || nextStagePrompt.trim().isEmpty()) {
             nextStagePrompt = BakaTongue.getString("USER_PROMPT_DESCRIPTION");
         }
@@ -330,9 +330,9 @@ public class BakaProcessor {
             input = null;
         }
         parsedDateTime = _parser.getDate(input);
-        editTask.setDate(parsedDateTime);
+        _editTask.setDate(parsedDateTime);
 
-        nextStagePrompt = editTask.getTime();
+        nextStagePrompt = _editTask.getTime();
         if (nextStagePrompt.equals(STRING_NULL)) {
             nextStagePrompt = BakaTongue.getString("USER_PROMPT_START_TIME");
         }
@@ -348,9 +348,9 @@ public class BakaProcessor {
                 BakaTongue.getString("USER_PROMPT_VENUE").toLowerCase())) {
             input = null;
         }
-        editTask.setVenue(input);
+        _editTask.setVenue(input);
 
-        nextStagePrompt = editTask.getDate();
+        nextStagePrompt = _editTask.getDate();
         if (nextStagePrompt.equals(STRING_NULL)) {
             nextStagePrompt = BakaTongue.getString("USER_PROMPT_DATE");
         }
@@ -363,12 +363,12 @@ public class BakaProcessor {
     private boolean editTitle(String input) {
         String nextStagePrompt;
         if (input.trim().isEmpty()) {
-            editTask.setTitle(originalTask.getTitle());
+            _editTask.setTitle(_originalTask.getTitle());
         } else {
-            editTask.setTitle(input);
+            _editTask.setTitle(input);
         }
 
-        nextStagePrompt = editTask.getVenue();
+        nextStagePrompt = _editTask.getVenue();
         if (nextStagePrompt.equals(STRING_NULL)) {
             nextStagePrompt = BakaTongue.getString("USER_PROMPT_VENUE");
         }
