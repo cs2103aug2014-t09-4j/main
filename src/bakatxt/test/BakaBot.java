@@ -33,8 +33,8 @@ public class BakaBot extends Robot {
     public static final String DISPLAY = "display ";
 
     public static final int WAIT_SHORT = 25;
-    public static final int WAIT_MEDIUM = 200;
-    public static final int WAIT_LONG = 2000;
+    public static final int WAIT_MEDIUM = 100;
+    public static final int WAIT_LONG = 500;
 
     // some sample strings
     public static final String SAMPLE_FOX = "the quick brown fox jumps over "
