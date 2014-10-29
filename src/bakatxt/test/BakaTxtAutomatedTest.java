@@ -1,4 +1,4 @@
-package bakatxt.core;
+package bakatxt.test;
 
 import static org.junit.Assert.assertEquals;
 
@@ -12,10 +12,12 @@ import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
-import bakatxt.test.BakaBot;
+import bakatxt.core.BakaParser;
+import bakatxt.core.Database;
+import bakatxt.core.Task;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class BakaProcessorAutomatedTest {
+public class BakaTxtAutomatedTest {
 
     private static BakaBot _bot;
     private static Database _database;
