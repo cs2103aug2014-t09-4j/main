@@ -10,6 +10,7 @@ public class Task implements TaskInterface, Comparable<Task> {
     private static final String LINE_SEPARATOR = System
             .getProperty("line.separator");
 
+    private static final String STRING_OVERDUE = "Overdue since: ";
     private static final String TAG_OPEN = "[";
     private static final String TAG_CLOSE = "]";
     private static final String TAG_TITLE = TAG_OPEN + "TITLE" + TAG_CLOSE;
@@ -144,6 +145,8 @@ public class Task implements TaskInterface, Comparable<Task> {
             }
             _description = description.toString().trim();
         }
+
+        setOverdueStatus();
     }
 
     @Override
@@ -377,5 +380,66 @@ public class Task implements TaskInterface, Comparable<Task> {
         key.append(_date);
 
         return key.toString();
+    }
+
+    @Override
+    public boolean isOverdue() {
+        if (_isFloating) {
+            if (_description.contains(STRING_OVERDUE)) {
+                System.out.println("what's up");
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void setOverdueStatus() {
+        BakaParser _parser = new BakaParser();
+        String today = _parser.getDate("today");
+
+        if (_date == null || _date.equals("null") || _isDone) {
+            return;
+        } 
+        
+        int dateStatus = today.compareTo(_date);
+
+        if (dateStatus > 0) { // over due date
+            setOverdue();
+            
+        } else if (dateStatus == 0) { // same date
+
+            String timeNow = _parser.getTime("now");
+            int timeNowValue = Integer.valueOf(timeNow);
+
+            if (_time == null || _time.equals(TAG_NULL)) {
+                return;
+            }
+
+            int timeTaskValue = Integer.valueOf(_time);
+            if (timeTaskValue == timeNowValue) { // same time
+                return;
+                
+            } else if (timeTaskValue < timeNowValue) { // overdue time
+                
+                if (_endTime == null || _endTime.equals(TAG_NULL)) {
+                    setOverdue();
+                } else {
+                    int endTimeTaskValue = Integer.valueOf(_endTime);
+                    if (endTimeTaskValue < timeNowValue) {
+                        setOverdue();
+                    }
+                }
+
+            }
+        }
+    }
+
+    private void setOverdue() {
+        if (_description == null) {
+            _description = new String();
+        }
+        _description = STRING_OVERDUE + TAG_OPEN + getDate() + TAG_CLOSE
+                + SPACE + _description;
+        setFloating(true);
     }
 }

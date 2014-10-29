@@ -33,6 +33,8 @@ public interface TaskInterface {
 
     public boolean isDeleted();
 
+    public boolean isOverdue();
+
     // These are methods used by the Database
 
     public void setDone(boolean isDone);
