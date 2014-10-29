@@ -1,12 +1,13 @@
 package bakatxt.gui;
 
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Shape;
 import java.awt.geom.RoundRectangle2D;
 
 import javax.swing.JTextField;
-
+// TODO tons of things
 class Input extends JTextField {
 
     private Shape shape;
@@ -17,6 +18,8 @@ class Input extends JTextField {
         setBackground(UIHelper.GRAY_LIGHT);
         setForeground(UIHelper.PRESET_COLOR_DEFAULT);
         setCaretColor(UIHelper.PRESET_COLOR_DEFAULT);
+        setSelectedTextColor(UIHelper.PRESET_COLOR_DEFAULT);
+        setSelectionColor(new Color(0,0,0,150));
         setFocusTraversalKeysEnabled(false);
     }
 
