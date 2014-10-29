@@ -463,6 +463,7 @@ public class BakaProcessor {
         task = _parser.add(input);
         inputCmd = new UserAction(command, task);
         boolean isSuccessful = _ra.execute(inputCmd);
+        _previousAction = "display " + task.getDate();
         setToPreviousView();
         return isSuccessful;
     }
