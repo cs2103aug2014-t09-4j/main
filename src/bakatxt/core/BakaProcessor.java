@@ -60,10 +60,10 @@ public class BakaProcessor {
                 _displayTasks = _database.getWeekTasks();
             } else {
                 String currentDate = _parser.getDate(content);
-                if (currentDate == null) {
+                _displayTasks = _database.getTasksWithDate(currentDate);
+                if (_displayTasks.isEmpty()) {
                     return false;
                 }
-                _displayTasks = _database.getTasksWithDate(currentDate);
             }
             return true;
         } else {
