@@ -29,8 +29,14 @@ public class BakaBot extends Robot {
     // commands
     public static final String ADD = "add ";
     public static final String DELETE = "delete ";
+    public static final String REMOVE = "remove ";
     public static final String EDIT = "edit ";
     public static final String DISPLAY = "display ";
+    public static final String SHOW = "show ";
+    public static final String CLEAR = "clear";
+    public static final String UNDO = "undo";
+    public static final String REDO = "redo";
+    public static final String SEARCH = "search ";
 
     // delay between events
     public static final int WAIT_SHORT = 25;
@@ -368,6 +374,9 @@ public class BakaBot extends Robot {
                 break;
             case ':' :
                 typingThisChar(VK_SHIFT, VK_SEMICOLON);
+                break;
+            case '.' :
+                typingThisChar(VK_PERIOD);
                 break;
             default :
                 throw new IllegalArgumentException("Cannot type: " + character);
