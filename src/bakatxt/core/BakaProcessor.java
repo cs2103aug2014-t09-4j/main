@@ -68,11 +68,9 @@ public class BakaProcessor {
                 }
             }
             return true;
-        } else {
-            _displayTasks = _database.getAllUndoneTasks();
-            return true;
         }
-
+        _displayTasks = _database.getAllUndoneTasks();
+        return true;
     }
 
     private void searchTask(String input) {
