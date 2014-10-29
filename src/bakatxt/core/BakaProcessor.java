@@ -418,7 +418,7 @@ public class BakaProcessor {
                 return false;
             }
             task = _displayTasks.get(trueIndex - 1);
-            inputCmd = new UserAction(command, task);
+            inputCmd = new UserAction("delete", task);
             isSuccessful = isSuccessful && _ra.execute(inputCmd);
         }
 
