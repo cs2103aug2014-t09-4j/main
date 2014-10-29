@@ -59,7 +59,7 @@ public class ReverseAction implements ReverseActionInterface {
         if (!redoStack.isEmpty()) {
             UserAction action = redoStack.pop();
             isSuccessful = action.execute();
-            if (isSuccessful) {
+            if (!isSuccessful) {
                 redoStack.push(action);
             } else {
                 undoStack.push(action);
