@@ -44,27 +44,6 @@ public class UITest {
         BakaBot.botTearDown();
     }
 
-    //TODO
-    @Test
-    public void testTaskDisplay() throws AWTException {
-        _bot.inputThisString(BakaBot.DISPLAY);
-    }
-
-    //TODO
-    @Test
-    public void testTaskAdd() throws AWTException {
-    }
-
-    //TODO
-    @Test
-    public void testTaskDelete() throws AWTException {
-    }
-
-    //TODO
-    @Test
-    public void testTaskEdit() throws AWTException {
-    }
-
     /**
      * This method tests to make sure that the UI conforms to the correct size
      * at any point
@@ -131,7 +110,8 @@ public class UITest {
             _bot.enter();
         }
         BakaBot.waitAWhile(BakaBot.WAIT_LONG);
-        assertThat(BakaUI.getPanel().getInput().getLocation(), is(equalTo(UIHelper.INPUT_LOCATION)));
+        assertThat(BakaUI.getPanel().getInput().getLocation(),
+                   is(equalTo(UIHelper.INPUT_LOCATION)));
     }
 
 
