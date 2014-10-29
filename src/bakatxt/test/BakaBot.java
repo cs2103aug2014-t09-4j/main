@@ -33,6 +33,7 @@ public class BakaBot extends Robot {
     public static final String EDIT = "edit ";
     public static final String DISPLAY = "display ";
     public static final String SHOW = "show ";
+    public static final String VIEW = "view ";
     public static final String CLEAR = "clear";
     public static final String UNDO = "undo";
     public static final String REDO = "redo";
