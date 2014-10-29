@@ -434,10 +434,12 @@ public class BakaProcessor {
         switch (previousCommand.toLowerCase()) {
             case "display" :
             case "show" :
+            case "view" :
                 displayTask(_previousAction);
                 bypassPreviousView();
                 break;
             case "search" :
+            case "find" :
                 searchTask(_previousAction);
                 bypassPreviousView();
                 break;
