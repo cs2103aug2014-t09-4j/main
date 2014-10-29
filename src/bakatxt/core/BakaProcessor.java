@@ -40,6 +40,8 @@ public class BakaProcessor {
         REDO,
         LANGUAGE,
         SEARCH,
+        FIND,
+        VIEW,
         DONE,
         EXIT
     }
@@ -135,6 +137,7 @@ public class BakaProcessor {
                 isSuccessful = deleteTask(input, command);
                 break;
 
+            case VIEW :
             case SHOW :
             case DISPLAY :
                 isSuccessful = displayTask(input);
@@ -166,6 +169,7 @@ public class BakaProcessor {
                 System.exit(0);
                 break;
 
+            case FIND :
             case SEARCH :
                 searchTask(input);
                 _previousAction = input.trim();
