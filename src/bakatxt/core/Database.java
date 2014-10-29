@@ -446,7 +446,8 @@ public class Database implements DatabaseInterface {
         if (key == null) {
             for (Map.Entry<String, LinkedList<Task>> entry : _bakaMap
                     .entrySet()) {
-                if (entry.getKey().contains(TAG_FLOATING)) {
+                if (entry.getKey().contains(TAG_FLOATING)
+                        && !entry.getKey().contains(TAG_DELETED)) {
                     result.addAll(entry.getValue());
                 }
             }
