@@ -8,6 +8,8 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
 import java.awt.AWTException;
+import java.awt.Color;
+import java.awt.Point;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -17,10 +19,14 @@ import org.junit.Test;
 
 import bakatxt.test.BakaBot;
 
+/**
+ * This class is an automated test case for GUI elements
+ *
+ */
 @SuppressWarnings("boxing")
 public class UITest {
 
-    // Bot will help us automate typing & mouse movement
+    // _bot will help us automate typing & mouse movement
     private static BakaBot _bot;
 
     @BeforeClass
@@ -45,38 +51,27 @@ public class UITest {
     }
 
     /**
-     * This method tests to make sure that the UI conforms to the correct size
-     * at any point
+     * Ensure that the program is actually visible
+     * Boundary case for the negative partition.
+     *
      * @throws AWTException
      */
     @Test
-    public void testSizeOfUIElements() throws AWTException {
-        testMinHeightOfUIElements();
-        // boundary case for the positive partition
-        testMaxHeightOfUIElements();
-        testUnchangedWidth();
-    }
-
-    /**
-     * Ensure that the program is actually visible
-     * @throws AWTException
-     */
-    private static void testMinHeightOfUIElements() throws AWTException {
+    public void testMinHeightOfUIElements() throws AWTException {
         assertThat(BakaUI.getPanel().getHeight(), is(greaterThan(0)));
     }
 
 
     /**
-     * Ensure that the program height is not too long
+     * Ensure that the program height is not too long.
+     * Boundary case for the positive partition.
+     *
      * @throws AWTException
      */
-    private static void testMaxHeightOfUIElements() throws AWTException {
-        _bot.inputThisString("display");
-        final int iterations = UIHelper.SCREEN_SIZE.height / 100;
-        for (int i = 0; i < iterations; i++) {
-            _bot.inputThisString(BakaBot.ADD + "some task" + i);
-            BakaBot.waitAWhile(BakaBot.WAIT_MEDIUM);
-        }
+    @Test
+    public void testMaxHeightOfUIElements() throws AWTException {
+        showAllTasks();
+        addALotOfTasks();
         assertThat(getScrollPaneHeight(), is(equalTo(UIHelper.WINDOW_Y)));
     }
 
@@ -84,39 +79,87 @@ public class UITest {
      * Ensure that the width of the program does not change
      * @throws AWTException
      */
-    private static void testUnchangedWidth() throws AWTException {
-        _bot.inputThisString(BakaBot.ADD + BakaBot.SAMPLE_FOX);
+    @Test
+    public void testUnchangedWidth() throws AWTException {
+        _bot.inputThisString(BakaBot.ADD + BakaBot.SAMPLE_FOX
+                             + BakaBot.SAMPLE_ZOMBIES);
         BakaBot.waitAWhile(BakaBot.WAIT_LONG);
         assertThat(BakaUI.getPanel().getWidth(), is(equalTo(UIHelper.WINDOW_X)));
     }
 
     /**
-     * Tests to make sure that the locations of the elements do not move to an
-     * unspecified location
+     * The input box moves about a lot if the input fails, hence, we need to
+     * ensure that it does not move out of position
+     *
      * @throws AWTException
      */
     @Test
-    public void testLocationOfUIElements() throws AWTException {
-        testLocationOfInputBox();
+    public void testFailedInput() throws AWTException {
+        _bot.inputThisString(BakaBot.DISPLAY + "asd");
+        spamEnter();
+        BakaBot.waitAWhile(BakaBot.WAIT_VERY_LONG);
+        assertThat(getInputBoxLocation(), is(equalTo(UIHelper.INPUT_LOCATION)));
     }
 
     /**
-     * the input box moves about a lot, hence, we need to ensure that it does not
-     * move out of position
+     * The input box changes color on successful input, we need to make sure that
+     * the color returns to it's normal state upon animation completion
+     *
+     * @throws AWTException
      */
-    private static void testLocationOfInputBox() {
+    @Test
+    public void testSuccessfulInput() throws AWTException {
+        showAllTasks();
+        spamEnter();
+        BakaBot.waitAWhile(BakaBot.WAIT_VERY_LONG);
+        assertThat(getInputBoxColor(), is(equalTo(UIHelper.GRAY_LIGHT)));
+    }
+
+    /**
+     * Types 'display ' and enter
+     */
+    private static void showAllTasks() {
         _bot.inputThisString(BakaBot.DISPLAY);
+    }
+
+    /**
+     * Adds enough tasks such that the scroll bar 'appears'
+     */
+    private static void addALotOfTasks() {
+        final int iterations = UIHelper.SCREEN_SIZE.height / 100;
+        for (int i = 0; i < iterations; i++) {
+            _bot.inputThisString(BakaBot.ADD + "some task" + i);
+            BakaBot.waitAWhile(BakaBot.WAIT_MEDIUM);
+        }
+    }
+
+    /**
+     * Hits the enter key. A lot.
+     */
+    private static void spamEnter() {
         for (int i = 0; i < 100; i++) {
             _bot.enter();
         }
-        BakaBot.waitAWhile(BakaBot.WAIT_LONG);
-        assertThat(BakaUI.getPanel().getInput().getLocation(),
-                   is(equalTo(UIHelper.INPUT_LOCATION)));
     }
 
-
+    /**
+     * @return the height of the scrollpane
+     */
     private static int getScrollPaneHeight() {
         return BakaUI.getPanel().getScrollPane().getHeight();
     }
-}
 
+    /**
+     * @return the relative location of the input box
+     */
+    private static Point getInputBoxLocation() {
+        return BakaUI.getPanel().getInput().getLocation();
+    }
+
+    /**
+     * @return the color of the input box
+     */
+    private static Color getInputBoxColor() {
+        return BakaUI.getPanel().getInput().getBackground();
+    }
+}
