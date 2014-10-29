@@ -274,7 +274,7 @@ public class BakaParserTest {
 
     @Test
     public void testAddTimeDurationFormat1() {
-        String input = "add lunch buffet tomorrow 1pm to 3pm @town";
+        String input = "add lunch buffet tomorrow from 1pm to 3pm @town";
         Task output = _parser.add(input);
         Task expected = new Task("lunch buffet");
         expected.setDate(_parser.getDate("tomorrow"));
@@ -286,7 +286,7 @@ public class BakaParserTest {
 
     @Test
     public void testAddTimeDurationFormat2() {
-        String input = "add google hangouts next week 9pm to 11pm @ home";
+        String input = "add google hangouts from next week 9pm to 11pm @ home";
         Task output = _parser.add(input);
         Task expected = new Task("google hangouts");
         expected.setDate(_parser.getDate("next week"));

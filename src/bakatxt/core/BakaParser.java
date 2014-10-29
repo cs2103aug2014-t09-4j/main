@@ -19,6 +19,7 @@ public class BakaParser implements BakaParserInterface {
     private static final String STRING_AT = "at";
     private static final String STRING_ON = "on";
     private static final String STRING_TO = "to";
+    private static final String STRING_FROM = "from";
     private static final String STRING_DASH = "-";
     private static final String STRING_YEAR = "2014";
     private static final String STRING_YEAR_FRAG = "20";
@@ -166,16 +167,21 @@ public class BakaParser implements BakaParserInterface {
     private static String removePrepositions(String input) {
         input = input.replace("\\s+", "\\s");
         String[] part = input.trim().split(STRING_SPACE);
+        String[] prepoList = { "at", "on", "from" };
 
         do {
             int lastIndex = part.length - 1;
-            if (part[lastIndex].equals(STRING_AT)
-                    || part[lastIndex].equals(STRING_ON)) {
-                input = input.substring(0, input.length() - 2).trim();
+            for (int i = 0; i < prepoList.length; i++) {
+                if (part[lastIndex].equals(prepoList[i])) {
+                    input = input.substring(0,
+                            input.length() - prepoList[i].length()).trim();
+                }
             }
             part = input.split(STRING_SPACE);
+
         } while (part[part.length - 1].equals(STRING_AT)
-                || part[part.length - 1].equals(STRING_ON));
+                || part[part.length - 1].equals(STRING_ON)
+                || part[part.length - 1].equals(STRING_FROM));
 
         return input;
     }
