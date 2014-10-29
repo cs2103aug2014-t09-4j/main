@@ -51,7 +51,7 @@ public class BakaProcessor {
         _ra = new ReverseAction();
     }
 
-    private void displayTask(String input) {
+    private boolean displayTask(String input) {
         input = input.trim();
         if (input.contains(SPACE)) {
             String content = _parser.getString(input);
@@ -60,10 +60,15 @@ public class BakaProcessor {
                 _displayTasks = _database.getWeekTasks();
             } else {
                 String currentDate = _parser.getDate(content);
+                if (currentDate == null) {
+                    return false;
+                }
                 _displayTasks = _database.getTasksWithDate(currentDate);
             }
+            return true;
         } else {
             _displayTasks = _database.getAllUndoneTasks();
+            return true;
         }
 
     }
@@ -132,7 +137,7 @@ public class BakaProcessor {
 
             case SHOW :
             case DISPLAY :
-                displayTask(input);
+                isSuccessful = displayTask(input);
                 _previousAction = input.trim();
                 break;
 
