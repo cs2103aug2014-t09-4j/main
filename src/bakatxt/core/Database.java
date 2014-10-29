@@ -131,7 +131,6 @@ public class Database implements DatabaseInterface {
     private void updateMemory() {
         LOGGER.info("bakaMap update initialized");
         _bakaMap = new HashMap<String, LinkedList<Task>>();
-        String today = _parser.getDate(STRING_TODAY);
         try (BufferedReader inputStream = Files.newBufferedReader(_userFile,
                 CHARSET_DEFAULT)) {
             String line;
@@ -144,30 +143,12 @@ public class Database implements DatabaseInterface {
                     deleteDoneTask(line);
                 } else if (line.contains(TAG_TITLE)) {
                     Task task = new Task(line);
-                    setOverdueToFloating(today, task);
                     addTaskToMap(task);
                 }
             }
         } catch (IOException ex) {
             ex.printStackTrace();
             LOGGER.severe("bakaMap update failed");
-        }
-    }
-
-    @SuppressWarnings("static-method")
-    private void setOverdueToFloating(String today, Task task) {
-        String taskDate = task.getDate();
-        if (!task.isDone() && !taskDate.equals("null")) {
-            if (today.compareTo(taskDate) > 0) {
-                String newDescription = task.getDescription();
-                if (newDescription == null) {
-                    newDescription = new String();
-                }
-                newDescription = STRING_OVERDUE + TAG_OPEN + taskDate
-                        + TAG_CLOSE + SPACE + newDescription;
-                task.setDescription(newDescription);
-                task.setFloating(true);
-            }
         }
     }
 
