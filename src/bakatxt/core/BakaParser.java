@@ -365,6 +365,9 @@ public class BakaParser implements BakaParserInterface {
      */
     @Override
     public String getCommand(String input) {
+        if (input == null || input.isEmpty()) {
+            return STRING_EMPTY;
+        }
         String[] part = input.split(STRING_SPACE);
         return part[0].toUpperCase();
     }

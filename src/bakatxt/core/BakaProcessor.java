@@ -24,7 +24,7 @@ public class BakaProcessor {
 
     private static boolean _choosingLanguage = false;
 
-    private static String _previousAction = "DISPLAY";
+    private static String _previousAction = null;
 
     enum CommandType {
         HELP,
