@@ -32,9 +32,11 @@ public class BakaBot extends Robot {
     public static final String EDIT = "edit ";
     public static final String DISPLAY = "display ";
 
+    // delay between events
     public static final int WAIT_SHORT = 25;
     public static final int WAIT_MEDIUM = 100;
     public static final int WAIT_LONG = 500;
+    public static final int WAIT_VERY_LONG = 1500;
 
     // some sample strings
     public static final String SAMPLE_FOX = "the quick brown fox jumps over "
@@ -67,13 +69,10 @@ public class BakaBot extends Robot {
     }
 
     /**
-     * Call this in the @Before method in your JUnit test. Starts the GUI and
-     * reinitializes the test files if needed.
+     * Call this in the @Before method in your JUnit test. Does nothing.
      * @throws IOException
      */
     public static void botSetUp() throws IOException {
-        BakaUI.startGui(new BakaProcessor());
-        initializeTestFile();
     }
 
     /**
