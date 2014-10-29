@@ -7,6 +7,8 @@ public interface TaskInterface {
 
     public String getDate();
 
+    public String getFormattedDate();
+
     public String getTime();
 
     public String getEndTime();

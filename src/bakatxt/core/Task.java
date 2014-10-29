@@ -160,6 +160,12 @@ public class Task implements TaskInterface, Comparable<Task> {
     }
 
     @Override
+    public String getFormattedDate() {
+        BakaParser parser = new BakaParser();
+        return parser.getFormattedDate(_date);
+    }
+
+    @Override
     public String getTime() {
         return _time;
     }
