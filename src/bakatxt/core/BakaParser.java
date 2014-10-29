@@ -35,6 +35,7 @@ public class BakaParser implements BakaParserInterface {
     private static final String DATE_FORMAT_DDMM_REGEX = "(0?[12]?[0-9]|3[01])[/-](0?[1-9]|1[012])";
     private static final String DATE_FORMAT_DIVIDER_REGEX = "[/-]";
     private static final String DATE_FORMAT_STANDARD = "yyyy-MM-dd";
+    private static final String DATE_FORMAT_SPECIAL = "EEEE, dd MMMM YYYY";
     private static final String DISABLE_NUMBER_REGEX = "\\d{3,}?";
     private static final String DISABLE_PARSING_REGEX = "(([0-2]\\d[0-5]\\d)|(\\d{1,2}))[^h]";
     private static final String DISABLE_FAKE_TIME_REGEX = "\\D\\S+\\d";
@@ -103,6 +104,7 @@ public class BakaParser implements BakaParserInterface {
             _isTime = true;
         }
 
+        
         if (_isExceptionString) {
             str = str.replaceAll(STRING_REPLACEMENT, STRING_CANT_PARSE);
         }
@@ -314,6 +316,7 @@ public class BakaParser implements BakaParserInterface {
         if (input.contains(STRING_TONIGHT)) {
             input = input.replace(STRING_TONIGHT, STRING_TONIGHT_TIME);
         }
+
         List<DateGroup> dateGroup = parser.parse(input);
         if (dateGroup.size() > 0) {
 
@@ -419,17 +422,48 @@ public class BakaParser implements BakaParserInterface {
      * 
      * @param input
      *            a <code>String</code> containing a date.
-     * @return a <code>String</code> of the date in YYYY-MM-DD format or null
+     * @return a <code>String</code> of the date in YYYY-MM-dd format or null
      *         when the input cannot be parsed.
      */
     @Override
     public String getDate(String input) {
+        String date;
         if (input != null) {
             identifyDate(input);
-        } else {
+            date = _date;
             _date = null;
+        } else {
+            date = null;
         }
-        return _date;
+        return date;
+    }
+
+    /**
+     * Takes in a String of a specific date format and parse the date into
+     * another format.
+     * 
+     * @param input
+     *            a <code>String</code> containing a date in YYYY-MM-dd format.
+     * @return a <code>String</code> of the date in EEEE, dd MMMM YYYY format or
+     *         null when the input cannot be parsed.
+     */
+    @Override
+    public String getFormattedDate(String input) {
+        String formattedDate;
+        Parser parser = new Parser();
+        List<DateGroup> dateGroup = parser.parse(input);
+        if (dateGroup.size() > 0) {
+            Date date = dateGroup.get(0).getDates().get(0);
+
+            SimpleDateFormat DATE_FORMAT = new SimpleDateFormat(
+                    DATE_FORMAT_SPECIAL);
+            String output = DATE_FORMAT.format(date);
+
+            formattedDate = output;
+        } else {
+            formattedDate = null;
+        }
+        return formattedDate;
     }
 
     /**
@@ -442,11 +476,14 @@ public class BakaParser implements BakaParserInterface {
      */
     @Override
     public String getTime(String input) {
+        String time;
         if (input != null) {
             identifyTime(input);
-        } else {
+            time = _time;
             _time = null;
+        } else {
+            time = null;
         }
-        return _time;
+        return time;
     }
 }
