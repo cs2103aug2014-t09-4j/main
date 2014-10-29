@@ -430,12 +430,20 @@ public class BakaProcessor {
             case "display" :
             case "show" :
                 displayTask(_previousAction);
+                bypassPreviousView();
                 break;
             case "search" :
                 searchTask(_previousAction);
+                bypassPreviousView();
                 break;
             default :
                 _displayTasks = _database.getAllUndoneTasks();
+        }
+    }
+
+    private void bypassPreviousView() {
+        if (_displayTasks.isEmpty()) {
+            _displayTasks = _database.getAllUndoneTasks();
         }
     }
 
