@@ -97,7 +97,11 @@ public class BakaBot extends Robot {
 
     /**
      * moves the cursor to the BakaTxt input box and clicks it
+     *
+     * @deprecated this method is no longer needed since the input box is auto
+     * selected on initiation
      */
+    @Deprecated
     public void mouseToInputBox() {
         mouseMove(UIHelper.WINDOW_LOCATION.x + 60,
                 UIHelper.WINDOW_LOCATION.y + 20);

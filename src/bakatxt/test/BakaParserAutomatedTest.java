@@ -26,7 +26,6 @@ public class BakaParserAutomatedTest {
         BakaBot.botOneTimeSetUp();
         _parser = new BakaParser();
         _database = Database.getInstance();
-        _bot.mouseToInputBox();
     }
 
     @AfterClass

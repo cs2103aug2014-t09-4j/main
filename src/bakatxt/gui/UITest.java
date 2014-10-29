@@ -37,7 +37,6 @@ public class UITest {
     @Before
     public void setUp() throws Exception {
         BakaBot.botSetUp();
-        _bot.mouseToInputBox();
     }
 
     @After
