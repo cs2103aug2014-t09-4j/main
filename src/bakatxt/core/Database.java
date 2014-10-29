@@ -30,7 +30,6 @@ public class Database implements DatabaseInterface {
 
     private static final String STRING_TODAY = "today";
     private static final String STRING_DAY = "day";
-    private static final String STRING_OVERDUE = "overdue since: ";
 
     private static final String MESSAGE_FILE_CHANGE = "File changed. Current filename is \"%1$s\".";
     private static final String MESSAGE_OUTPUT_FILENAME = "Filename: %1$s"
