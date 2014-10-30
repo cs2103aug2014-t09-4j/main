@@ -83,11 +83,35 @@ public class BakaProcessor {
         return _displayTasks;
     }
 
-    private void clearTask(String command) {
+    private boolean clearTask(String input, String command) {
         UserAction inputCmd;
-        inputCmd = new UserClear(command);
-        _ra.execute(inputCmd);
-        _database.getAllUndoneTasks();
+        boolean isSuccessful = true;
+
+        if (input.contains(SPACE)) {
+            String content = _parser.getString(input);
+            String date = _parser.getDate(content);
+
+            if (date == null) {
+                date = content;
+            }
+
+            inputCmd = new UserClear(command, date);
+            isSuccessful = _ra.execute(inputCmd);
+            setToPreviousView();
+            return isSuccessful;
+        }
+
+        if (_previousAction == null) {
+            return false;
+        }
+
+        setToPreviousView();
+        String date = _parser.getString(_previousAction);
+        inputCmd = new UserClear(command, date);
+        isSuccessful = _ra.execute(inputCmd);
+        setToPreviousView();
+
+        return isSuccessful;
     }
 
     public boolean executeCommand(String input) {
@@ -145,7 +169,7 @@ public class BakaProcessor {
                 break;
 
             case CLEAR :
-                clearTask(command);
+                isSuccessful = clearTask(input, command);
                 break;
 
             case EDIT :

@@ -5,9 +5,21 @@ import java.util.LinkedList;
 public class UserClear extends UserAction {
     private LinkedList<Task> _tasks;
 
-    public UserClear(String command) {
+    public UserClear(String command, String date) {
         super(command, null);
-        _tasks = super._database.getAllTasks();
+
+        if (date == null) {
+            date = new String();
+        }
+
+        date = date.trim();
+        if (date.isEmpty()) {
+            _tasks = super._database.getAllTasks();
+        } else if (date.equals("week")) {
+            _tasks = super._database.getWeekTasks();
+        } else {
+            _tasks = super._database.getTasksWithDate(date);
+        }
     }
 
     @Override
