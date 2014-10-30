@@ -26,7 +26,7 @@ public class BakaUI extends JFrame {
     private static BakaUI _bakaUI;
     private static BakaPanel _bakaPanel;
     private static BakaProcessor _bakaProcessor;
-    private static boolean _isNewTask = false;;
+    private static boolean _isNewTask = false;
 
     /**
      * @param thisSession
