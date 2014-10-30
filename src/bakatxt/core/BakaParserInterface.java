@@ -18,4 +18,6 @@ public interface BakaParserInterface {
     public String getFormattedDate(String input);
 
     public String getTime(String input);
+
+    public String getTimeNow();
 }

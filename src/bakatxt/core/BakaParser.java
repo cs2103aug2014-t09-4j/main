@@ -20,6 +20,7 @@ public class BakaParser implements BakaParserInterface {
     private static final String STRING_ON = "on";
     private static final String STRING_TO = "to";
     private static final String STRING_FROM = "from";
+    private static final String STRING_NOW = "now";
     private static final String STRING_DASH = "-";
     private static final String STRING_YEAR = "2014";
     private static final String STRING_YEAR_FRAG = "20";
@@ -35,6 +36,7 @@ public class BakaParser implements BakaParserInterface {
     private static final String DATE_FORMAT_DDMM_REGEX = "(0?[12]?[0-9]|3[01])[/-](0?[1-9]|1[012])";
     private static final String DATE_FORMAT_DIVIDER_REGEX = "[/-]";
     private static final String DATE_FORMAT_STANDARD = "yyyy-MM-dd";
+    private static final String TIME_FORMAT = "HHmm";
     private static final String DATE_FORMAT_SPECIAL = "EEEE, dd MMMM YYYY";
     private static final String DISABLE_NUMBER_REGEX = "\\d{3,}?";
     private static final String DISABLE_PARSING_REGEX = "(([0-2]\\d[0-5]\\d)|(\\d{1,2}))[^h]";
@@ -285,9 +287,9 @@ public class BakaParser implements BakaParserInterface {
             Date date = dateGroup.get(0).getDates().get(0);
             _inputDate = dateGroup.get(0).getText();
 
-            SimpleDateFormat DATE_FORMAT = new SimpleDateFormat(
+            SimpleDateFormat dateFormat = new SimpleDateFormat(
                     DATE_FORMAT_STANDARD);
-            String output = DATE_FORMAT.format(date);
+            String output = dateFormat.format(date);
 
             _date = output;
         } else {
@@ -332,11 +334,11 @@ public class BakaParser implements BakaParserInterface {
             }
 
             _inputTime = dateGroup.get(0).getText();
-            SimpleDateFormat TIME_FORMAT = new SimpleDateFormat("HHmm");
-            String outputStart = TIME_FORMAT.format(timeStart);
+            SimpleDateFormat timeFormat = new SimpleDateFormat("HHmm");
+            String outputStart = timeFormat.format(timeStart);
 
             if (timeEnd != null) {
-                String outputEnd = TIME_FORMAT.format(timeEnd);
+                String outputEnd = timeFormat.format(timeEnd);
                 output = outputStart + STRING_SPACE + STRING_DASH
                         + STRING_SPACE + outputEnd;
             } else {
@@ -471,7 +473,7 @@ public class BakaParser implements BakaParserInterface {
      * 
      * @param input
      *            a <code>String</code> containing a time.
-     * @return a <code>String</code> of the time in HHHH, 24 hours format or
+     * @return a <code>String</code> of the time in HHmm, 24 hours format or
      *         null when the input cannot be parsed.
      */
     @Override
@@ -485,5 +487,20 @@ public class BakaParser implements BakaParserInterface {
             time = null;
         }
         return time;
+    }
+    
+    /**
+     * @return a <code>String</code> of the current time in HHmm format.
+     */
+    @Override
+    public String getTimeNow() {
+        Parser parser = new Parser();
+        
+        List<DateGroup> dateGroup = parser.parse(STRING_NOW);
+        Date date = dateGroup.get(0).getDates().get(0);
+        SimpleDateFormat timeFormat = new SimpleDateFormat(TIME_FORMAT);
+        String output = timeFormat.format(date);
+
+        return output;
     }
 }
