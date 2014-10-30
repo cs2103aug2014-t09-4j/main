@@ -157,7 +157,7 @@ public class BakaProcessor {
 
             case REMOVE :
             case DELETE :
-                isSuccessful = deleteTask(input, command);
+                isSuccessful = deleteTask(input);
                 break;
 
             case VIEW :
@@ -427,7 +427,7 @@ public class BakaProcessor {
         return true;
     }
 
-    private boolean deleteTask(String input, String command) {
+    private boolean deleteTask(String input) {
         UserAction inputCmd;
         Task task;
         String content = _parser.getString(input).trim();
@@ -438,7 +438,6 @@ public class BakaProcessor {
         }
 
         setToPreviousView();
-
         boolean isSuccessful = true;
         for (int i = 0; i < listOfIndex.size(); i++) {
             int trueIndex = listOfIndex.get(i);
@@ -449,7 +448,6 @@ public class BakaProcessor {
             inputCmd = new UserAction("delete", task);
             isSuccessful = isSuccessful && _ra.execute(inputCmd);
         }
-
         setToPreviousView();
 
         return isSuccessful;
