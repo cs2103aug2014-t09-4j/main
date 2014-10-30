@@ -28,6 +28,8 @@ public class BakaUI extends JFrame {
     private static BakaProcessor _bakaProcessor;
     private static boolean _isNewTask = false;
 
+    private static final String INITIAL_DISPLAY = "display today";
+
     /**
      * @param thisSession
      *        refers to the logic module we are interacting with
@@ -48,6 +50,7 @@ public class BakaUI extends JFrame {
         EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
+                setInitialDisplay();
                 processInput();
             }
         });
@@ -70,8 +73,7 @@ public class BakaUI extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 input.selectAll();
-                boolean isSuccessful = _bakaProcessor.executeCommand(input.getText());
-                _bakaPanel.animateInputBox(isSuccessful);
+                shouldAnimate(processInput(input.getText()));
                 updateUI(_bakaProcessor.getAllTasks());
             }
         });
@@ -166,6 +168,24 @@ public class BakaUI extends JFrame {
                 _bakaPanel.getInput().requestFocus();
             }
         });
+    }
+
+    private static void setInitialDisplay() {
+        EventQueue.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                processInput(INITIAL_DISPLAY);
+                updateUI(_bakaProcessor.getAllTasks());
+            }
+        });
+    }
+
+    private static boolean processInput(String inputText) {
+        return _bakaProcessor.executeCommand(inputText);
+    }
+
+    private static void shouldAnimate(boolean shouldAnimate) {
+        _bakaPanel.animateInputBox(shouldAnimate);
     }
 
     /**
