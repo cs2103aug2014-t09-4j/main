@@ -173,18 +173,22 @@ class Contents extends JPanel {
     }
 
     private static void shouldAnimate(TaskBox task) {
+        /*
         final UIAnimator animate = new UIAnimator(task);
         final boolean isNewTask = BakaUI.isNewTask();
-        Runnable r = new Runnable() {
+        if (BakaUI.isNewTask()) {
+        EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
-                if (isNewTask) {
+                if (BakaUI.isNewTask()) {
                     animate.flashComponent();
                 }
             }
-        };
-        Thread t = new Thread(r);
-        t.start();
+        });
+        }
+        //Thread t = new Thread(r);
+        //t.start();
+         */
     }
 
     /**
