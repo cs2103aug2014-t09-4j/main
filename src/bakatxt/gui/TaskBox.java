@@ -10,6 +10,7 @@ import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.Point;
 
 import javax.swing.JPanel;
 
@@ -19,11 +20,13 @@ import bakatxt.core.Task;
  * This class places the elements of a single task correctly in their box.
  *
  */
-abstract class TaskBox extends JPanel {
+abstract class TaskBox extends JPanel implements BakaAnimator {
 
     // TODO set min/max size
     protected static final boolean IS_LINE_WRAP = true;
     private static final String AT = " @";
+
+    private final Color _baseColor;
 
     public TaskBox(Task task, int index, Color backgroundColor) {
 
@@ -31,6 +34,8 @@ abstract class TaskBox extends JPanel {
         setBackground(backgroundColor);
         setLayout(new GridBagLayout());
         addComponentsToPane(task, index);
+
+        _baseColor = backgroundColor;
     }
 
     protected void addComponentsToPane(Task task, int index) {
@@ -150,5 +155,28 @@ abstract class TaskBox extends JPanel {
     @Override
     protected void paintBorder(Graphics g) {
         g.setColor(UIHelper.TRANSPARENT);
+    }
+
+
+    @Override
+    public Color getColor() {
+        return _baseColor;
+    }
+
+    @Override
+    public void setColor(Color newColor) {
+        setBackground(newColor);
+    }
+
+    /**
+     * We are not animating the location for TaskBox
+     */
+    @Override
+    public Point getPoint() {
+        return null;
+    }
+
+    @Override
+    public void setPoint(Point newLocation) {
     }
 }
