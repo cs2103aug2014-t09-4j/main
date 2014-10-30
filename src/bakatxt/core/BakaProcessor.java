@@ -64,6 +64,7 @@ public class BakaProcessor {
                 String currentDate = _parser.getDate(content);
                 _displayTasks = _database.getTasksWithDate(currentDate);
                 if (_displayTasks.isEmpty()) {
+                    _displayTasks = _database.getAllUndoneTasks();
                     return false;
                 }
             }
@@ -434,21 +435,13 @@ public class BakaProcessor {
             case "show" :
             case "view" :
                 displayTask(_previousAction);
-                bypassPreviousView();
                 break;
             case "search" :
             case "find" :
                 searchTask(_previousAction);
-                bypassPreviousView();
                 break;
             default :
                 _displayTasks = _database.getAllUndoneTasks();
-        }
-    }
-
-    private void bypassPreviousView() {
-        if (_displayTasks.isEmpty()) {
-            _displayTasks = _database.getAllUndoneTasks();
         }
     }
 
@@ -474,10 +467,13 @@ public class BakaProcessor {
         UserAction inputCmd;
         Task task;
         task = _parser.add(input);
+        _previousAction = "display " + task.getDate();
+        _displayTasks = _database.getTasksWithDate(task.getDate());
         inputCmd = new UserAction(command, task);
         boolean isSuccessful = _ra.execute(inputCmd);
-        _previousAction = "display " + task.getDate();
-        setToPreviousView();
+        if (isSuccessful) {
+            _displayTasks.add(task);
+        }
         return isSuccessful;
     }
 }
