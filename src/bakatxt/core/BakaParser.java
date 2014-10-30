@@ -492,8 +492,7 @@ public class BakaParser implements BakaParserInterface {
     /**
      * @return a <code>String</code> of the current time in HHmm format.
      */
-    @Override
-    public String getTimeNow() {
+    public static String getTimeNow() {
         Parser parser = new Parser();
         
         List<DateGroup> dateGroup = parser.parse(STRING_NOW);
