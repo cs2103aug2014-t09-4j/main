@@ -31,7 +31,8 @@ public class BakaTongue {
         }
     }
 
-    public static void setLanguage(String language) {
+    public static boolean setLanguage(String language) {
+        boolean isSuccessful = true;
         switch (language.toLowerCase().trim()) {
             case "english" :
             case "1" :
@@ -60,9 +61,11 @@ public class BakaTongue {
                 break;
             default :
                 currentLocale = new Locale("en", "US");
+                isSuccessful = false;
         }
         resBundle = ResourceBundle.getBundle(BUNDLE_NAME, currentLocale);
         Database.getInstance().updateLocale(currentLocale.toString());
+        return isSuccessful;
     }
 
     public static void setLanguage(String lang, String region) {

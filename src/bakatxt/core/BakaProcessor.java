@@ -91,9 +91,10 @@ public class BakaProcessor {
     }
 
     public boolean executeCommand(String input) {
+        boolean isSuccessful = true;
 
         if (_choosingLanguage) {
-            BakaTongue.setLanguage(input);
+            isSuccessful = BakaTongue.setLanguage(input);
             BakaUI.setAlertMessageText(BakaTongue.getString("MESSAGE_WELCOME"));
             _choosingLanguage = false;
             input = "display";
@@ -121,7 +122,6 @@ public class BakaProcessor {
             commandType = CommandType.DEFAULT;
         }
 
-        boolean isSuccessful = true;
         switch (commandType) {
             case HELP :
                 showHelp();
@@ -139,7 +139,8 @@ public class BakaProcessor {
             case VIEW :
             case SHOW :
             case DISPLAY :
-                isSuccessful = displayTask(input);
+                // catches unsuccessful tasks that invoke displayTasks();
+                isSuccessful = isSuccessful && displayTask(input);
                 _previousAction = input.trim();
                 break;
 
@@ -160,7 +161,7 @@ public class BakaProcessor {
                 break;
 
             case LANGUAGE :
-                languageSelector(input);
+                isSuccessful = languageSelector(input);
                 break;
 
             case EXIT :
@@ -214,10 +215,11 @@ public class BakaProcessor {
         }
     }
 
-    private void languageSelector(String input) {
+    private boolean languageSelector(String input) {
         input = input.trim();
+        boolean isSuccessful = true;
         if (input.contains(SPACE)) {
-            BakaTongue.setLanguage(_parser.getString(input));
+            isSuccessful = BakaTongue.setLanguage(_parser.getString(input));
             BakaUI.setAlertMessageText(BakaTongue.getString("MESSAGE_WELCOME"));
             setToPreviousView();
         } else {
@@ -226,6 +228,7 @@ public class BakaProcessor {
             BakaUI.setAlertMessageText(BakaTongue
                     .getString("MESSAGE_LANGUAGE_CHOICE"));
         }
+        return isSuccessful;
     }
 
     private boolean addTaskWithNoCommandWord(String input) {
