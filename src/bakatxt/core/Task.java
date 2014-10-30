@@ -219,10 +219,18 @@ public class Task implements TaskInterface, Comparable<Task> {
         if (input == null || input.equals("null")) {
             _time = null;
         } else {
-            _time = input.trim();
+            _time = input;
+            timeNowCheck();
         }
         updateFloatingStatus();
         return _time;
+    }
+
+    private void timeNowCheck() {
+        String timeNow = BakaParser.getTimeNow();
+        if (_time.equals(timeNow)) {
+            _time = null;
+        }
     }
 
     @Override
