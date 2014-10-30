@@ -5,7 +5,6 @@ package bakatxt.gui;
 import java.awt.Color;
 import java.awt.Point;
 
-import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
 
 /**
@@ -29,52 +28,47 @@ class UIAnimator {
      *  to signify the 255 value
      */
     private static final float MAX_COLOR = 255;
-    // the coponent we are animating
-    private static JComponent _component;
+    /**
+     * the amount of change in color per iteration
+     */
+    private static final float DELTA = (float)0.0030637255;
+    // the component we are animating
+    private static BakaAnimator _component;
 
-    public UIAnimator(JComponent component) {
+    public UIAnimator(BakaAnimator component) {
         _component = component;
     }
 
     /**
      * Vibrates the component
-     *
-     * @param initialLocation
-     *        is the initial location the component is in
      */
-    protected void shakeComponent(final Point initialLocation) {
+    protected void shakeComponent() {
         for (int i = 0; i < ITERATIONS_SHAKE; i++) {
-            shakeOneIteration(initialLocation, ITERATIONS_SHAKE - i);
+            shakeOneIteration(_component.getPoint(), ITERATIONS_SHAKE - i);
         }
     }
 
     /**
-     * Flashes the component's color
+     * Flashes the component's color, flash does not animate if isExceedMaximumColor
+     * is triggered.
      */
+    // TODO the flash color should be calculated from the initial color
+    // TODO flash add
     protected void flashComponent() {
-        if(!isEqual(UIHelper.GRAY_FLASH, _component.getBackground())) {
 
-            float red = getColorAsFloat(UIHelper.GRAY_FLASH.getRed());
-            float green = getColorAsFloat(UIHelper.GRAY_FLASH.getGreen());
-            float blue = getColorAsFloat(UIHelper.GRAY_FLASH.getBlue());
+        float red = getColorAsFloat(_component.getColor().getRed());
+        float green = getColorAsFloat(_component.getColor().getGreen());
+        float blue = getColorAsFloat(_component.getColor().getBlue());
 
-            float redChange = getDelta(_component.getBackground().getRed(),
-                                       UIHelper.GRAY_FLASH.getRed());
-            float greenChange = getDelta(_component.getBackground().getGreen(),
-                                         UIHelper.GRAY_FLASH.getGreen());
-            float blueChange = getDelta(_component.getBackground().getBlue(),
-                                        UIHelper.GRAY_FLASH.getBlue());
-
-            setColor(UIHelper.GRAY_FLASH);
-
-            for (int i = 0; i < ITERATIONS_FLASH; i++) {
-                red += redChange;
-                green += greenChange;
-                blue += blueChange;
-                setColor(new Color(red, green, blue));
+        if(!isExceedMaximumColor(red, green, blue)) {
+            for (int i = ITERATIONS_FLASH; i > 0; i--) {
+                float extraColor = DELTA * i;
+                setColor(new Color(red + extraColor,
+                                   green + extraColor,
+                                   blue + extraColor));
                 waitAWhile();
             }
-            setColor(UIHelper.GRAY_LIGHT);
+            setColor(_component.getColor());
         }
     }
 
@@ -110,20 +104,19 @@ class UIAnimator {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                _component.setLocation(p);
+                _component.setPoint(p);
             }
         });
     }
 
-    /**
-     * @param colorOne
-     *        The first color to be compared
-     * @param colorTwo
-     *        the second color to be compared
-     * @return true if the colors are equal
-     */
-    private static boolean isEqual(Color colorOne, Color colorTwo) {
-        return colorOne.equals(colorTwo);
+    private static boolean isExceedMaximumColor(float red, float green, float blue) {
+        return isExceedMaximumColor(red) ||
+               isExceedMaximumColor(green) ||
+               isExceedMaximumColor(blue);
+    }
+
+    private static boolean isExceedMaximumColor(float color) {
+        return (DELTA * ITERATIONS_FLASH + color) >= 1;
     }
 
     /**
@@ -138,19 +131,6 @@ class UIAnimator {
     }
 
     /**
-     * gets the rate of change needed to have a smooth animation
-     *
-     * @param initial
-     *        The initial and final color
-     * @param animated
-     *        The flash color
-     * @return the delta value
-     */
-    private static float getDelta(int initial, int animated) {
-        return (initial - animated) / MAX_COLOR / ITERATIONS_FLASH;
-    }
-
-    /**
      * sets the color of the component
      *
      * @param color
@@ -160,7 +140,7 @@ class UIAnimator {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                _component.setBackground(color);
+                _component.setColor(color);
             }
         });
     }

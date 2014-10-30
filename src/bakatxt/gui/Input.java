@@ -3,14 +3,17 @@ package bakatxt.gui;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Point;
 import java.awt.Shape;
 import java.awt.geom.RoundRectangle2D;
 
 import javax.swing.JTextField;
 // TODO tons of things
-class Input extends JTextField {
+class Input extends JTextField implements BakaAnimator {
 
     private Shape shape;
+    private final Color _baseColor;
+    private final Point _baseLocation;
 
     public Input() {
         setOpaque(false);
@@ -21,6 +24,9 @@ class Input extends JTextField {
         setSelectedTextColor(UIHelper.PRESET_COLOR_DEFAULT);
         setSelectionColor(new Color(0,0,0,150));
         setFocusTraversalKeysEnabled(false);
+
+        _baseColor = UIHelper.GRAY_LIGHT;
+        _baseLocation = new Point(2 * UIHelper.BORDER, 2 * UIHelper.BORDER);
     }
 
     @Override
@@ -42,5 +48,25 @@ class Input extends JTextField {
                     UIHelper.WINDOW_ROUNDNESS, UIHelper.WINDOW_ROUNDNESS);
         }
         return shape.contains(x, y);
+    }
+
+    @Override
+    public Color getColor() {
+        return _baseColor;
+    }
+
+    @Override
+    public void setColor(Color newColor) {
+        setBackground(newColor);
+    }
+
+    @Override
+    public Point getPoint() {
+        return _baseLocation;
+    }
+
+    @Override
+    public void setPoint(Point newLocation) {
+        setLocation(newLocation);
     }
 }
