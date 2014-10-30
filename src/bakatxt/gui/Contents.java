@@ -120,26 +120,37 @@ class Contents extends JPanel {
         assert (y > 0) : "y must be greater than zero";
         assert (offset > 0) : "offset must be at least 1";
         int taskNumber = y - offset;
+        TaskBox taskBox;
 
         if (tasks.size() == 1) {
-            setEvents(new OnlyTaskBox(tasks.pop(), taskNumber,
-                    alternatingColors(taskNumber)));
+            taskBox = new OnlyTaskBox(tasks.pop(), taskNumber,
+                          alternatingColors(taskNumber));
+
+            setEvents(taskBox);
+            shouldAnimate(taskBox);
             taskNumber++;
 
         } else {
-            setEvents(new FirstTaskBox(tasks.pop(), taskNumber,
-                    alternatingColors(taskNumber)));
+            taskBox = new FirstTaskBox(tasks.pop(), taskNumber,
+                          alternatingColors(taskNumber));
+
+            setEvents(taskBox);
             taskNumber++;
             while (true) {
 
                 if (tasks.size() == 1) {
-                    setEvents(new FinalTaskBox(tasks.pop(), taskNumber,
-                            alternatingColors(taskNumber)));
+                    taskBox = new FinalTaskBox(tasks.pop(), taskNumber,
+                                  alternatingColors(taskNumber));
+
+                    setEvents(taskBox);
+                    shouldAnimate(taskBox);
                     taskNumber++;
                     break;
                 }
-                setEvents(new MiddleTaskBox(tasks.pop(), taskNumber,
-                        alternatingColors(taskNumber)));
+                taskBox = new MiddleTaskBox(tasks.pop(), taskNumber,
+                              alternatingColors(taskNumber));
+
+                setEvents(taskBox);
                 taskNumber++;
             }
         }
@@ -159,6 +170,21 @@ class Contents extends JPanel {
      */
     private void setDateAndDay(FormattedText dateAndDay) {
         this.add(dateAndDay);
+    }
+
+    private static void shouldAnimate(TaskBox task) {
+        final UIAnimator animate = new UIAnimator(task);
+        final boolean isNewTask = BakaUI.isNewTask();
+        Runnable r = new Runnable() {
+            @Override
+            public void run() {
+                if (isNewTask) {
+                    animate.flashComponent();
+                }
+            }
+        };
+        Thread t = new Thread(r);
+        t.start();
     }
 
     /**

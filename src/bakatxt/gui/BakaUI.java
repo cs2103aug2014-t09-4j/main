@@ -26,6 +26,7 @@ public class BakaUI extends JFrame {
     private static BakaUI _bakaUI;
     private static BakaPanel _bakaPanel;
     private static BakaProcessor _bakaProcessor;
+    private static boolean _isNewTask = false;;
 
     /**
      * @param thisSession
@@ -129,6 +130,10 @@ public class BakaUI extends JFrame {
      */
     protected static BakaPanel getPanel() {
         return _bakaPanel;
+    }
+
+    protected static boolean isNewTask() {
+        return _isNewTask;
     }
 
     /**
