@@ -50,7 +50,7 @@ abstract class TaskBox extends JPanel implements BakaAnimator {
 
     private void setNumber(GridBagConstraints layout, int number) {
 
-        FormattedText index = new FormattedText(Integer.toString(number),
+        FormattedText index = new FormattedText(shouldAddLeadingZero(number),
                 Font.PLAIN, 16, UIHelper.GRAY_MEDIUM);
         layout.fill = GridBagConstraints.NONE;
         layout.anchor = GridBagConstraints.CENTER;
@@ -150,6 +150,14 @@ abstract class TaskBox extends JPanel implements BakaAnimator {
             return "";
         }
         return prefix + s;
+    }
+
+    private static String shouldAddLeadingZero(int number) {
+        String num = Integer.toString(number);
+        if (number < 10) {
+            num = "0" + num;
+        }
+        return num;
     }
 
     @Override
