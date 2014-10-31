@@ -390,11 +390,8 @@ public class Task implements TaskInterface, Comparable<Task> {
 
     @Override
     public boolean isOverdue() {
-        if (_isFloating) {
-            if (_description.contains(STRING_OVERDUE)) {
-                System.out.println("what's up");
-                return true;
-            }
+        if (_description.contains(STRING_OVERDUE)) {
+            return true;
         }
         return false;
     }
@@ -463,9 +460,11 @@ public class Task implements TaskInterface, Comparable<Task> {
         }
         if (toMerge.getDate() != null && !toMerge.getDate().equals("null")) {
             this.setDate(toMerge.getDate());
+            removeOverdueComment();
         }
         if (toMerge.getTime() != null && !toMerge.getTime().equals("null")) {
             this.setTime(toMerge.getTime());
+            removeOverdueComment();
         }
         if (toMerge.getEndTime() != null
                 && !toMerge.getEndTime().equals("null")) {
@@ -476,5 +475,12 @@ public class Task implements TaskInterface, Comparable<Task> {
             }
         }
         return this;
+    }
+
+    private void removeOverdueComment() {
+        if (this.isOverdue()) {
+            int index = this.getDescription().indexOf("]") + 1;
+            this.setDescription(_description.substring(index));
+        }
     }
 }
