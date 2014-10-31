@@ -377,7 +377,8 @@ public class BakaParser implements BakaParserInterface {
     /**
      * @param input
      *            a <code>String</code> that contains a command and details.
-     * @return <code>String</code> of details without the command.
+     * @return <code>String</code> of details without the command or the
+     *         original <code>String</code> input if there are no spaces.
      */
     @Override
     public String getString(String input) {
@@ -389,7 +390,8 @@ public class BakaParser implements BakaParserInterface {
     /**
      * @param input
      *            a <code>String</code> that contains a command and details.
-     * @return <code>String</code> of the command without the details.
+     * @return <code>String</code> of the command without the details or a
+     *         <code>String</code> of the first word of the input.
      */
     @Override
     public String getCommand(String input) {
@@ -447,8 +449,8 @@ public class BakaParser implements BakaParserInterface {
      * 
      * @param input
      *            a <code>String</code> containing a date.
-     * @return a <code>String</code> of the date in YYYY-MM-dd format or null
-     *         when the input cannot be parsed.
+     * @return a <code>String</code> of the date in YYYY-MM-dd format or
+     *         <code>null</code> when the input cannot be parsed.
      */
     @Override
     public String getDate(String input) {
@@ -470,7 +472,7 @@ public class BakaParser implements BakaParserInterface {
      * @param input
      *            a <code>String</code> containing a date in YYYY-MM-dd format.
      * @return a <code>String</code> of the date in EEEE, dd MMMM YYYY format or
-     *         null when the input cannot be parsed.
+     *         <code>null</code> when the input cannot be parsed.
      */
     @Override
     public String getFormattedDate(String input) {
@@ -497,7 +499,7 @@ public class BakaParser implements BakaParserInterface {
      * @param input
      *            a <code>String</code> containing a time.
      * @return a <code>String</code> of the time in HHmm, 24 hours format or
-     *         null when the input cannot be parsed.
+     *         <code>null</code> when the input cannot be parsed.
      */
     @Override
     public String getTime(String input) {
