@@ -442,7 +442,7 @@ public class Database implements DatabaseInterface {
     @Override
     public LinkedList<Task> getTasksWithDate(String key) {
         LinkedList<Task> result = new LinkedList<Task>();
-        if (key == null) {
+        if (key == null || key.equals("null")) {
             for (Map.Entry<String, LinkedList<Task>> entry : _bakaMap
                     .entrySet()) {
                 if (entry.getKey().contains(TAG_FLOATING)
