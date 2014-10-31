@@ -13,12 +13,19 @@ public class UserClear extends UserAction {
         }
 
         date = date.trim();
-        if (date.isEmpty()) {
-            _tasks = super._database.getAllTasks();
-        } else if (date.equals("week")) {
-            _tasks = super._database.getWeekTasks();
-        } else {
-            _tasks = super._database.getTasksWithDate(date);
+
+        switch (date) {
+            case "" :
+                _tasks = super._database.getTasksWithDate(null);
+                break;
+            case "week" :
+                _tasks = super._database.getWeekTasks();
+                break;
+            case "all" :
+                _tasks = super._database.getAllUndoneTasks();
+                break;
+            default :
+                _tasks = super._database.getTasksWithDate(date);
         }
     }
 

@@ -12,6 +12,7 @@ public class BakaProcessor {
     private static String COMMAND_ADD = "ADD";
     private static String SPACE = " ";
     private static String STRING_NULL = "null";
+    private static String STRING_DEFAULT_VIEW = "DISPLAY today";
 
     private static Database _database;
     private static BakaParser _parser;
@@ -24,7 +25,7 @@ public class BakaProcessor {
 
     private static boolean _choosingLanguage = false;
 
-    private static String _previousAction = null;
+    private static String _previousAction;
 
     enum CommandType {
         HELP,
@@ -51,6 +52,7 @@ public class BakaProcessor {
         _parser = new BakaParser();
         _displayTasks = _database.getAllUndoneTasks();
         _ra = new ReverseAction();
+        _previousAction = STRING_DEFAULT_VIEW;
     }
 
     private boolean displayTask(String input) {
@@ -86,27 +88,21 @@ public class BakaProcessor {
     private boolean clearTask(String input, String command) {
         UserAction inputCmd;
         boolean isSuccessful = true;
+        String date = null;
 
         if (input.contains(SPACE)) {
-            String content = _parser.getString(input);
-            String date = _parser.getDate(content);
-
-            if (date == null) {
-                date = content;
-            }
-
-            inputCmd = new UserClear(command, date);
-            isSuccessful = _ra.execute(inputCmd);
+            date = _parser.getString(input);
+            date = _parser.getDate(date);
+        } else {
             setToPreviousView();
-            return isSuccessful;
+            if (_previousAction.contains(SPACE)) {
+                date = _parser.getString(_previousAction);
+                date = _parser.getDate(date);
+            } else {
+                date = "all";
+            }
         }
 
-        if (_previousAction == null) {
-            return false;
-        }
-
-        setToPreviousView();
-        String date = _parser.getString(_previousAction);
         inputCmd = new UserClear(command, date);
         isSuccessful = _ra.execute(inputCmd);
         setToPreviousView();
