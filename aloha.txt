@@ -1,5 +1,0 @@
-[LOCALE] en_US
-[-] BakaTXT Human-Readable Human-Fixable Database
-[-] alpha v0.0
-[-] Each task has to be in the same line
-
