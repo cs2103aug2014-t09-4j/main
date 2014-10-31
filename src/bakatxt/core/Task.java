@@ -443,6 +443,7 @@ public class Task implements TaskInterface, Comparable<Task> {
         }
         _description = STRING_OVERDUE + TAG_OPEN + getDate() + TAG_CLOSE
                 + SPACE + _description;
+        setDescription(_description);
         setFloating(true);
     }
 
