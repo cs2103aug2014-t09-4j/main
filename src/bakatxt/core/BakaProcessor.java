@@ -65,7 +65,8 @@ public class BakaProcessor {
             } else {
                 String currentDate = _parser.getDate(content);
                 _displayTasks = _database.getTasksWithDate(currentDate);
-                if (_displayTasks.isEmpty()) {
+                if ((currentDate == null && !content.equals("floating"))
+                        || _displayTasks.isEmpty()) {
                     _displayTasks = _database.getAllUndoneTasks();
                     return false;
                 }
