@@ -74,4 +74,20 @@ public class TaskTest {
         task = new Task(real);
         assertEquals(task.toString(), real);
     }
+
+    // merging tasks
+    @Test
+    public void testMerging() {
+        Task task = new Task("hello World");
+        task.setTime("2000");
+        task.setEndTime("2100");
+        System.out.println(task.toDisplayString());
+        Task mergeThis = new Task();
+        mergeThis.setTime("1900");
+        mergeThis.setDate("2014-12-14");
+        mergeThis.setDescription("aloha");
+        mergeThis.setVenue("nowhere");
+        task.merge(mergeThis);
+        System.out.println(task.toDisplayString());
+    }
 }

@@ -265,48 +265,87 @@ public class BakaProcessor {
 
     private boolean editTask(String input, String command) {
         boolean isSuccessful = false;
+        setToPreviousView();
         if (_editStage == 0) {
-            String index = _parser.getString(input).trim();
-            int trueIndex = Integer.valueOf(index.trim()) - 1;
-            setToPreviousView();
-            if (trueIndex < 0 || trueIndex >= _displayTasks.size()) {
-                return false;
+            input = _parser.getString(input).trim();
+            if (input.contains(SPACE)) {
+                isSuccessful = editInstant(input, command);
+            } else {
+                int trueIndex = Integer.valueOf(input) - 1;
+                if (trueIndex < 0 || trueIndex >= _displayTasks.size()) {
+                    return false;
+                }
+                isSuccessful = editStages(trueIndex);
             }
-            _editTask = _displayTasks.get(trueIndex);
-            _originalTask = new Task(_editTask);
-
-            BakaUI.setInputBoxText(_editTask.getTitle());
-            BakaUI.setAlertMessageText(BakaTongue.getString("ALERT_EDIT_MODE")
-                    + BakaTongue.getString("ALERT_EDIT_TITLE"));
-            isSuccessful = true;
-            _editStage = 6;
         } else {
-            input = _parser.getString(input);
-            switch (_editStage) {
-                case 6 :
-                    isSuccessful = editTitle(input);
-                    break;
-                case 5 :
-                    isSuccessful = editVenue(input);
-                    break;
-                case 4 :
-                    isSuccessful = editDate(input);
-                    break;
-                case 3 :
-                    isSuccessful = editStartTime(input);
-                    break;
-                case 2 :
-                    isSuccessful = editEndTime(input);
-                    break;
-                case 1 :
-                    isSuccessful = editDescription(input, command);
-                    break;
-                default :
-                    break;
-            }
-            _editStage--;
+            isSuccessful = editStageActions(input, command, isSuccessful);
         }
         setToPreviousView();
+        return isSuccessful;
+    }
+
+    private boolean editStageActions(String input, String command,
+            boolean isSuccessful) {
+        input = _parser.getString(input);
+        switch (_editStage) {
+            case 6 :
+                isSuccessful = editTitle(input);
+                break;
+            case 5 :
+                isSuccessful = editVenue(input);
+                break;
+            case 4 :
+                isSuccessful = editDate(input);
+                break;
+            case 3 :
+                isSuccessful = editStartTime(input);
+                break;
+            case 2 :
+                isSuccessful = editEndTime(input);
+                break;
+            case 1 :
+                isSuccessful = editDescription(input, command);
+                break;
+            default :
+                break;
+        }
+        _editStage--;
+        return isSuccessful;
+    }
+
+    private boolean editStages(int trueIndex) {
+        boolean isSuccessful;
+        _editTask = _displayTasks.get(trueIndex);
+        _originalTask = new Task(_editTask);
+
+        BakaUI.setInputBoxText(_editTask.getTitle());
+        BakaUI.setAlertMessageText(BakaTongue.getString("ALERT_EDIT_MODE")
+                + BakaTongue.getString("ALERT_EDIT_TITLE"));
+        isSuccessful = true;
+        _editStage = 6;
+        return isSuccessful;
+    }
+
+    private boolean editInstant(String input, String command) {
+        boolean isSuccessful;
+        String index = _parser.getCommand(input);
+        int trueIndex = Integer.valueOf(index) - 1;
+        if (trueIndex < 0 || trueIndex >= _displayTasks.size()) {
+            return false;
+        }
+        String content = _parser.getString(input);
+        Task edits = _parser.add(content);
+        _editTask = _displayTasks.get(trueIndex);
+        _originalTask = new Task(_editTask);
+        _editTask.merge(edits);
+
+        UserAction inputCmd = new UserEditTask(command, _originalTask,
+                _editTask);
+        isSuccessful = _ra.execute(inputCmd);
+
+        if (isSuccessful) {
+            _previousAction = "display " + _editTask.getDate();
+        }
         return isSuccessful;
     }
 

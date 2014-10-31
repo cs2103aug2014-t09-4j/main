@@ -37,6 +37,8 @@ public interface TaskInterface {
 
     public boolean isOverdue();
 
+    public Task merge(Task toMerge);
+
     // These are methods used by the Database
 
     public void setDone(boolean isDone);

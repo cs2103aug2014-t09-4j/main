@@ -448,4 +448,33 @@ public class Task implements TaskInterface, Comparable<Task> {
                 + SPACE + _description;
         setFloating(true);
     }
+
+    @Override
+    public Task merge(Task toMerge) {
+        if (toMerge.getTitle() != null && !toMerge.getTitle().isEmpty()) {
+            this.setTitle(toMerge.getTitle());
+        }
+        if (toMerge.getVenue() != null && !toMerge.getVenue().equals("null")) {
+            this.setVenue(toMerge.getVenue());
+        }
+        if (toMerge.getDescription() != null
+                && !toMerge.getDescription().isEmpty()) {
+            this.setDescription(toMerge.getDescription());
+        }
+        if (toMerge.getDate() != null && !toMerge.getDate().equals("null")) {
+            this.setDate(toMerge.getDate());
+        }
+        if (toMerge.getTime() != null && !toMerge.getTime().equals("null")) {
+            this.setTime(toMerge.getTime());
+        }
+        if (toMerge.getEndTime() != null
+                && !toMerge.getEndTime().equals("null")) {
+            this.setEndTime(toMerge.getEndTime());
+        } else {
+            if (toMerge.getTime() != null && !toMerge.getTime().equals("null")) {
+                this.setEndTime(null);
+            }
+        }
+        return this;
+    }
 }
