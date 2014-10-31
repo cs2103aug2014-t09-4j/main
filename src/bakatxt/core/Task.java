@@ -220,17 +220,9 @@ public class Task implements TaskInterface, Comparable<Task> {
             _time = null;
         } else {
             _time = input;
-            timeNowCheck();
         }
         updateFloatingStatus();
         return _time;
-    }
-
-    private void timeNowCheck() {
-        String timeNow = BakaParser.getTimeNow();
-        if (_time.equals(timeNow)) {
-            _time = null;
-        }
     }
 
     @Override

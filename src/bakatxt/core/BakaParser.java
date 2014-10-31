@@ -103,7 +103,10 @@ public class BakaParser implements BakaParserInterface {
 
         identifyTime(str);
         if (_time != null) {
-            _isTime = true;
+            checkWithCurrentTime(_time);
+            if (_time != null) {
+                _isTime = true;
+            }
         }
 
         
@@ -351,6 +354,26 @@ public class BakaParser implements BakaParserInterface {
         }
     }
 
+    private static void checkWithCurrentTime(String input) {
+        Parser parser = new Parser();
+
+        List<DateGroup> dateGroup = parser.parse(STRING_NOW);
+        Date date = dateGroup.get(0).getDates().get(0);
+        SimpleDateFormat timeFormat = new SimpleDateFormat(TIME_FORMAT);
+        String output = timeFormat.format(date);
+
+        if (input.equals(output)) {
+            _time = null;
+        } else {
+            dateGroup = parser.parse("1 minute later");
+            Date newDate = dateGroup.get(0).getDates().get(0);
+            String newOutput = timeFormat.format(newDate);
+            if (input.equals(newOutput)) {
+                _time = null;
+            }
+        }
+    }
+
     /**
      * @param input
      *            a <code>String</code> that contains a command and details.
@@ -487,19 +510,5 @@ public class BakaParser implements BakaParserInterface {
             time = null;
         }
         return time;
-    }
-    
-    /**
-     * @return a <code>String</code> of the current time in HHmm format.
-     */
-    public static String getTimeNow() {
-        Parser parser = new Parser();
-        
-        List<DateGroup> dateGroup = parser.parse(STRING_NOW);
-        Date date = dateGroup.get(0).getDates().get(0);
-        SimpleDateFormat timeFormat = new SimpleDateFormat(TIME_FORMAT);
-        String output = timeFormat.format(date);
-
-        return output;
     }
 }
