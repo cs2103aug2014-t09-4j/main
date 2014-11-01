@@ -91,6 +91,7 @@ public class BakaProcessor {
         boolean isSuccessful = true;
         String date = null;
 
+        input = input.trim();
         if (input.contains(SPACE)) {
             date = _parser.getString(input);
             date = _parser.getDate(date);
@@ -103,7 +104,6 @@ public class BakaProcessor {
                 date = "all";
             }
         }
-
         inputCmd = new UserClear(command, date);
         isSuccessful = _ra.execute(inputCmd);
         setToPreviousView();
