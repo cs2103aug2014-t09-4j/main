@@ -213,6 +213,7 @@ public class BakaParser implements BakaParserInterface {
         } else {
             _title = removePrepositions(input).trim();
         }
+        _title = _title.replaceAll("\\s+", STRING_SPACE);
     }
 
     private static void identifyDescription(String input) {
