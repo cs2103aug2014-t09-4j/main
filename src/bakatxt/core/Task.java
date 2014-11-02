@@ -237,7 +237,6 @@ public class Task implements TaskInterface, Comparable<Task> {
                 _endTime = input.trim();
             }
         }
-        setOverdueStatus();
         return _endTime;
     }
 
@@ -290,6 +289,9 @@ public class Task implements TaskInterface, Comparable<Task> {
 
     @Override
     public String toString() {
+        setOverdueStatus();
+        updateFloatingStatus();
+
         StringBuilder task = new StringBuilder();
 
         task.append(TAG_OPEN);
