@@ -532,9 +532,13 @@ public class BakaProcessor {
         _displayTasks = _database.getTasksWithDate(task.getDate());
         inputCmd = new UserAction(command, task);
         boolean isSuccessful = _ra.execute(inputCmd);
+        if (task.isOverdue()) {
+            _previousAction = "display floating";
+        }
         if (isSuccessful) {
             _displayTasks.add(task);
         }
+        System.out.println(task);
         return isSuccessful;
     }
 }
