@@ -257,6 +257,8 @@ public class Task implements TaskInterface, Comparable<Task> {
         } else {
             _description = input.trim();
         }
+        setOverdueStatus();
+        updateFloatingStatus();
         return _description;
     }
 
@@ -289,9 +291,6 @@ public class Task implements TaskInterface, Comparable<Task> {
 
     @Override
     public String toString() {
-        setOverdueStatus();
-        updateFloatingStatus();
-
         StringBuilder task = new StringBuilder();
 
         task.append(TAG_OPEN);
@@ -417,7 +416,7 @@ public class Task implements TaskInterface, Comparable<Task> {
             
         } else if (dateStatus == 0) { // same date
 
-            String timeNow = parser.getTime("now");
+            String timeNow = BakaParser.getCurrentTime();
             int timeNowValue = Integer.valueOf(timeNow);
 
             if (_time == null || _time.equals(TAG_NULL)) {
@@ -449,7 +448,7 @@ public class Task implements TaskInterface, Comparable<Task> {
         }
         _description = STRING_OVERDUE + TAG_OPEN + getDate() + TAG_CLOSE
                 + SPACE + _description;
-        setDescription(_description);
+        _description = _description.trim();
         setFloating(true);
     }
 
