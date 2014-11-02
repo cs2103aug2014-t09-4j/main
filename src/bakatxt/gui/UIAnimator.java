@@ -11,28 +11,43 @@ import javax.swing.SwingUtilities;
  * This class holds methods for animations used in BakaTxt
  */
 class UIAnimator {
-    // Maximum length of time in miliseconds the animations should be
+
+    /**
+     * Maximum length of time in miliseconds the animations should be
+     */
     private static final int TIME_LENGTH = 640;
-    // delay between animation frames
+
+    /**
+     * delay between animation frames
+     */
     private static final int DELAY = 20;
-    // number of iterations the input box should be changing color
+
+    /**
+     * number of iterations the input box should be changing color
+     */
     private static final int ITERATIONS_FLASH = TIME_LENGTH / DELAY;
+
     /**
      * number of times the input box shakes, '4' is the number of times the delay
      * is used in the following method
      * @see {@link #shakeOneIteration(Point, int)}
      */
     private static final int ITERATIONS_SHAKE = TIME_LENGTH / DELAY / 4;
+
     /**
-     *  in typical RGB, the value of each color ranges from 0-255, this is just
-     *  to signify the 255 value
+     * in typical RGB, the value of each color ranges from 0-255, this is just
+     * to signify the 255 value
      */
     private static final float MAX_COLOR = 255;
+
     /**
      * the amount of change in color per iteration
      */
     private static final float DELTA = (float)0.0030637255;
-    // the component we are animating
+
+    /**
+     *  the component we are animating
+     */
     private static BakaAnimator _component;
 
     public UIAnimator(BakaAnimator component) {
@@ -52,8 +67,6 @@ class UIAnimator {
      * Flashes the component's color, flash does not animate if isExceedMaximumColor
      * is triggered.
      */
-    // TODO the flash color should be calculated from the initial color
-    // TODO flash add
     protected void flashComponent() {
 
         float red = getColorAsFloat(_component.getColor().getRed());
@@ -109,12 +122,30 @@ class UIAnimator {
         });
     }
 
+    /**
+     * Ensure that the 3 components of color does not exceed 1 during the animation
+     *
+     * @param red
+     *        red component of light
+     * @param green
+     *        green component of light
+     * @param blue
+     *        blue component of light
+     * @return true if any color exceeds 1
+     */
     private static boolean isExceedMaximumColor(float red, float green, float blue) {
         return isExceedMaximumColor(red) ||
                isExceedMaximumColor(green) ||
                isExceedMaximumColor(blue);
     }
 
+    /**
+     * Ensure that the component of color does not exceed 1 during the animation
+     *
+     * @param color
+     *        the color we are checking
+     * @return true if that component exceeds 1
+     */
     private static boolean isExceedMaximumColor(float color) {
         return (DELTA * ITERATIONS_FLASH + color) >= 1;
     }

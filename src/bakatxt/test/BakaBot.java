@@ -22,11 +22,15 @@ import bakatxt.gui.UIHelper;
  */
 public class BakaBot extends Robot {
 
-    // places to store and backup our test files
+    /**
+     * places to store and backup our test files
+     */
     private static final Path TEST_FILE = new File("./mytestfile.txt").toPath();
     private static final Path TEST_FILE_SAVE = new File("./mytestfile.txt.bak").toPath();
 
-    // commands
+    /**
+     * commands
+     */
     public static final String ADD = "add ";
     public static final String DELETE = "delete ";
     public static final String REMOVE = "remove ";
@@ -39,13 +43,17 @@ public class BakaBot extends Robot {
     public static final String REDO = "redo";
     public static final String SEARCH = "search ";
 
-    // delay between events
+    /**
+     * delay between events
+     */
     public static final int WAIT_SHORT = 25;
     public static final int WAIT_MEDIUM = 100;
     public static final int WAIT_LONG = 500;
     public static final int WAIT_VERY_LONG = 1500;
 
-    // some sample strings
+    /**
+     * sample strings
+     */
     public static final String SAMPLE_FOX = "the quick brown fox jumps over "
                                           + "the lazy dog 1234567890";
     public static final String SAMPLE_ZOMBIES = "PAINFUL ZOMBIES QUICKLY WATCH A"
@@ -58,6 +66,7 @@ public class BakaBot extends Robot {
     /**
      * Call this in the @BeforeClass method in your JUnit test. Sets up the files
      * for testing while retaining the old files.
+     *
      * @throws IOException
      */
     public static void botOneTimeSetUp() throws IOException {
@@ -69,6 +78,7 @@ public class BakaBot extends Robot {
     /**
      * Call this in the @AfterClass method in your JUnit test. Restores the old
      * task database file used before the test.
+     *
      * @throws IOException
      */
     public static void botOneTimeTearDown() throws IOException {
@@ -76,10 +86,9 @@ public class BakaBot extends Robot {
     }
 
     /**
-     * Call this in the @Before method in your JUnit test. Does nothing.
-     * @throws IOException
+     * Call this in the @Before method in your JUnit test. Does nothing currently.
      */
-    public static void botSetUp() throws IOException {
+    public static void botSetUp(){
     }
 
     /**
@@ -91,9 +100,11 @@ public class BakaBot extends Robot {
     }
 
     /**
-     * moves the cursor to the input box and simulate a keyboard typing the string
-     * s
-     * @param s is the string to be typed
+     * moves the cursor to the input box and simulate a keyboard typing the
+     * string s
+     *
+     * @param s
+     *        the string to be typed
      */
     public void inputThisString(String s) {
         typeThis(s);
@@ -118,10 +129,11 @@ public class BakaBot extends Robot {
 
     /**
      * Tells the process to wait waitTime milliseconds
+     *
      * @param waitTime is the time in miliseconds to wait
      */
     public static void waitAWhile(final int waitTime) {
-        try{
+        try {
             Thread.sleep(waitTime);
         } catch (InterruptedException e) {
         }
@@ -136,7 +148,9 @@ public class BakaBot extends Robot {
 
     /**
      * Types a string using keyboard inputs
-     * @param toBeTyped is the string to be typed
+     *
+     * @param toBeTyped
+     *        the string to be typed
      */
     public void typeThis(CharSequence toBeTyped) {
         for (int i = 0; i < toBeTyped.length(); i++) {
@@ -146,29 +160,47 @@ public class BakaBot extends Robot {
         }
     }
 
+    /**
+     * Saves the current database otherwise it would be written with the test cases
+     *
+     * @throws IOException
+     */
     private static void saveOldFile() throws IOException {
         Files.deleteIfExists(TEST_FILE_SAVE);
-        if(Files.exists(TEST_FILE)) {
+        if (Files.exists(TEST_FILE)) {
             Files.copy(TEST_FILE, TEST_FILE_SAVE);
         }
     }
 
+    /**
+     * Initializes a new database, this is actually unnecessary.
+     *
+     * @throws IOException
+     */
     private static void initializeTestFile() throws IOException {
         Files.deleteIfExists(TEST_FILE);
         Files.createFile(TEST_FILE);
     }
 
+    /**
+     * Restores the old database.
+     *
+     * @throws IOException
+     */
     private static void restoreTestFile() throws IOException {
         Files.deleteIfExists(TEST_FILE);
-        if(Files.exists(TEST_FILE_SAVE)) {
+        if (Files.exists(TEST_FILE_SAVE)) {
             Files.copy(TEST_FILE_SAVE, TEST_FILE);
         }
         Files.deleteIfExists(TEST_FILE_SAVE);
     }
 
     /**
-     * types a character, note, only what is on a standard keyboard layout, no unicode
-     * @param character is the character to be typed
+     * types a character, note, only what is on a standard keyboard layout,
+     * i.e, no unicode
+     *
+     * @param character
+     *        is the character to be typed
      */
     private void typeThisChar(char character) {
         switch (character) {
@@ -387,7 +419,8 @@ public class BakaBot extends Robot {
     /**
      * Types the char based on what keypresses are needed to type it
      *
-     * @param keyCodes is the keyCodes needed to be activated
+     * @param keyCodes
+     *        the keyCodes needed to be activated
      */
     private void typingThisChar(int... keyCodes) {
         for (int i = 0; i < keyCodes.length; i++) {
