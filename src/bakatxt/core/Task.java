@@ -237,6 +237,7 @@ public class Task implements TaskInterface, Comparable<Task> {
                 _endTime = input.trim();
             }
         }
+        setOverdueStatus();
         return _endTime;
     }
 
@@ -390,10 +391,10 @@ public class Task implements TaskInterface, Comparable<Task> {
 
     @Override
     public boolean isOverdue() {
-        if (_description.contains(STRING_OVERDUE)) {
-            return true;
+        if (_description==null || !_description.contains(STRING_OVERDUE)) {
+            return false;
         }
-        return false;
+        return true;
     }
 
     private void setOverdueStatus() {
