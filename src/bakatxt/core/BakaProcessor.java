@@ -377,7 +377,7 @@ public class BakaProcessor {
         _editTask.setTime(parsedDateTime);
 
         nextStagePrompt = _editTask.getEndTime();
-        if (nextStagePrompt.equals(STRING_NULL)) {
+        if (nextStagePrompt == null || nextStagePrompt.equals(STRING_NULL)) {
             nextStagePrompt = BakaTongue.getString("USER_PROMPT_END_TIME");
         }
         BakaUI.setInputBoxText(nextStagePrompt);
@@ -418,7 +418,7 @@ public class BakaProcessor {
         _editTask.setDate(parsedDateTime);
 
         nextStagePrompt = _editTask.getTime();
-        if (nextStagePrompt.equals(STRING_NULL)) {
+        if (nextStagePrompt == null || nextStagePrompt.equals(STRING_NULL)) {
             nextStagePrompt = BakaTongue.getString("USER_PROMPT_START_TIME");
         }
         BakaUI.setInputBoxText(nextStagePrompt);
@@ -454,7 +454,7 @@ public class BakaProcessor {
         }
 
         nextStagePrompt = _editTask.getVenue();
-        if (nextStagePrompt.equals(STRING_NULL)) {
+        if (nextStagePrompt == null || nextStagePrompt.equals(STRING_NULL)) {
             nextStagePrompt = BakaTongue.getString("USER_PROMPT_VENUE");
         }
         BakaUI.setInputBoxText(nextStagePrompt);
