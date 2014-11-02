@@ -91,7 +91,7 @@ public class BakaParser implements BakaParserInterface {
             str = str.replaceAll(STRING_CANT_PARSE, STRING_REPLACEMENT);
             _isExceptionString = true;
         }
-        
+
         if (str.contains(STRING_ADD)) {
             str = str.replace(STRING_ADD + STRING_SPACE, STRING_ADD);
         }
@@ -108,7 +108,6 @@ public class BakaParser implements BakaParserInterface {
                 _isTime = true;
             }
         }
-
         
         if (_isExceptionString) {
             str = str.replaceAll(STRING_REPLACEMENT, STRING_CANT_PARSE);
@@ -372,6 +371,20 @@ public class BakaParser implements BakaParserInterface {
                 _time = null;
             }
         }
+    }
+
+    /**
+     * @return <code>String</code> of current time in HHmm format.
+     */
+    public static String getCurrentTime() {
+        Parser parser = new Parser();
+
+        List<DateGroup> dateGroup = parser.parse(STRING_NOW);
+        Date date = dateGroup.get(0).getDates().get(0);
+        SimpleDateFormat timeFormat = new SimpleDateFormat(TIME_FORMAT);
+        String output = timeFormat.format(date);
+
+        return output;
     }
 
     /**
