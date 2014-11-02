@@ -400,8 +400,11 @@ public class Task implements TaskInterface, Comparable<Task> {
     }
 
     private void setOverdueStatus() {
-        BakaParser _parser = new BakaParser();
-        String today = _parser.getDate("today");
+        BakaParser parser = new BakaParser();
+        String today = parser.getDate("today");
+        _time = parser.getTime(_time);
+        _endTime = parser.getTime(_endTime);
+        _date = parser.getDate(_date);
 
         if (_date == null || _date.equals("null") || _isDone) {
             return;
@@ -414,7 +417,7 @@ public class Task implements TaskInterface, Comparable<Task> {
             
         } else if (dateStatus == 0) { // same date
 
-            String timeNow = _parser.getTime("now");
+            String timeNow = parser.getTime("now");
             int timeNowValue = Integer.valueOf(timeNow);
 
             if (_time == null || _time.equals(TAG_NULL)) {
