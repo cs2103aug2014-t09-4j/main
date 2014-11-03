@@ -11,6 +11,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 
 import bakatxt.core.Task;
+import bakatxt.gui.theme.ThemeReader;
 import bakatxt.international.BakaTongue;
 
 /**
@@ -160,9 +161,9 @@ class Contents extends JPanel {
 
     private static Color alternatingColors(int taskNumber) {
         if (taskNumber % 2 == 0) {
-            return UIHelper.GRAY_BLACK;
+            return UIHelper.TASK_DARK_COLOR;
         }
-        return UIHelper.GRAY_DARK;
+        return UIHelper.TASK_LIGHT_COLOR;
     }
 
     /**
@@ -201,8 +202,8 @@ class Contents extends JPanel {
 
     // TODO probably a better method to do this
     private void setNoEvents() {
-        FormattedText task = new FormattedText("You have no events!", UIHelper.PRESET_TYPE_TITLE,
-                UIHelper.PRESET_SIZE_TITLE, UIHelper.PRESET_COLOR_TITLE);
+        FormattedText task = new FormattedText("You have no events!",
+                                               ThemeReader.getTitleTheme());
         this.add(task);
     }
 
@@ -222,7 +223,6 @@ class Contents extends JPanel {
             dayAndDate = BakaTongue.getString("MESSAGE_FLOATING");
         }
 
-        return new FormattedText(dayAndDate, UIHelper.PRESET_TYPE_DATE,
-                UIHelper.PRESET_SIZE_DATE, UIHelper.PRESET_COLOR_DATE);
+        return new FormattedText(dayAndDate, ThemeReader.getDateTheme());
     }
 }

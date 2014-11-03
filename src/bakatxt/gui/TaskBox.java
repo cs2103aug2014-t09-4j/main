@@ -1,11 +1,10 @@
-// @author A0116538A
+//@author A0116538A
 
 package bakatxt.gui;
 
 // TODO comments
 
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -15,6 +14,7 @@ import java.awt.Point;
 import javax.swing.JPanel;
 
 import bakatxt.core.Task;
+import bakatxt.gui.theme.ThemeReader;
 
 /**
  * This class places the elements of a single task correctly in their box.
@@ -51,7 +51,7 @@ abstract class TaskBox extends JPanel implements BakaAnimator {
     private void setNumber(GridBagConstraints layout, int number) {
 
         FormattedText index = new FormattedText(shouldAddLeadingZero(number),
-                Font.PLAIN, 16, UIHelper.GRAY_MEDIUM);
+                                                ThemeReader.getNumberTheme());
         layout.fill = GridBagConstraints.NONE;
         layout.anchor = GridBagConstraints.CENTER;
         layout.weightx = 1.0;
@@ -69,8 +69,8 @@ abstract class TaskBox extends JPanel implements BakaAnimator {
                                     String locationText) {
         locationText = removeNullValues(AT, locationText);
         FormattedText task = new FormattedText(taskText + locationText,
-                UIHelper.PRESET_TYPE_TITLE, UIHelper.PRESET_SIZE_TITLE,
-                UIHelper.PRESET_COLOR_TITLE, IS_LINE_WRAP);
+                                               ThemeReader.getTitleTheme(),
+                                               IS_LINE_WRAP);
         layout.fill = GridBagConstraints.HORIZONTAL;
         layout.anchor = GridBagConstraints.LINE_START;
         layout.weightx = 0.01;
@@ -83,11 +83,10 @@ abstract class TaskBox extends JPanel implements BakaAnimator {
         this.add(task, layout);
     }
 
-    private void setDescription(GridBagConstraints layout,
-            String descriptionText) {
+    private void setDescription(GridBagConstraints layout, String descriptionText) {
         FormattedText description = new FormattedText(descriptionText,
-                UIHelper.PRESET_TYPE_DEFAULT, UIHelper.PRESET_SIZE_DEFAULT,
-                UIHelper.PRESET_COLOR_DEFAULT, IS_LINE_WRAP);
+                                                      ThemeReader.getDefaultTheme(),
+                                                      IS_LINE_WRAP);
         layout.fill = GridBagConstraints.BOTH;
         layout.anchor = GridBagConstraints.FIRST_LINE_START;
         layout.weightx = 1.0;
@@ -104,8 +103,7 @@ abstract class TaskBox extends JPanel implements BakaAnimator {
 
         startTimeText = removeNullValues(startTimeText);
         FormattedText time = new FormattedText(startTimeText,
-                UIHelper.PRESET_TYPE_DATE, UIHelper.PRESET_SIZE_DATE,
-                UIHelper.PRESET_COLOR_DATE);
+                                               ThemeReader.getDateTheme());
         layout.fill = GridBagConstraints.NONE;
         layout.anchor = GridBagConstraints.FIRST_LINE_END;
         layout.weightx = 0.01;
@@ -123,8 +121,7 @@ abstract class TaskBox extends JPanel implements BakaAnimator {
 
         endTimeText = removeNullValues(endTimeText);
         FormattedText time = new FormattedText(endTimeText,
-                UIHelper.PRESET_TYPE_DATE, UIHelper.PRESET_SIZE_DATE,
-                UIHelper.PRESET_COLOR_DATE);
+                                               ThemeReader.getDateTheme());
         layout.fill = GridBagConstraints.NONE;
         layout.anchor = GridBagConstraints.LAST_LINE_END;
         layout.weightx = 0.01;

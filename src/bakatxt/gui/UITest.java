@@ -26,7 +26,9 @@ import bakatxt.test.BakaBot;
 @SuppressWarnings("boxing")
 public class UITest {
 
-    // _bot will help us automate typing & mouse movement
+    /**
+     *  _bot will help us automate typing & mouse movement
+     */
     private static BakaBot _bot;
 
     @BeforeClass
@@ -95,7 +97,7 @@ public class UITest {
      */
     @Test
     public void testFailedInput() throws AWTException {
-        _bot.inputThisString(BakaBot.DISPLAY + "asd");
+        _bot.inputThisString(BakaBot.ADD + BakaBot.ADD);
         spamEnter();
         BakaBot.waitAWhile(BakaBot.WAIT_VERY_LONG);
         assertThat(getInputBoxLocation(), is(equalTo(UIHelper.INPUT_LOCATION)));
@@ -112,7 +114,7 @@ public class UITest {
         showAllTasks();
         spamEnter();
         BakaBot.waitAWhile(BakaBot.WAIT_VERY_LONG);
-        assertThat(getInputBoxColor(), is(equalTo(UIHelper.GRAY_LIGHT)));
+        assertThat(getInputBoxColor(), is(equalTo(UIHelper.INPUT_COLOR)));
     }
 
     /**
