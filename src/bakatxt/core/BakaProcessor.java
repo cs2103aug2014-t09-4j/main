@@ -436,7 +436,7 @@ public class BakaProcessor {
         _editTask.setVenue(input);
 
         nextStagePrompt = _editTask.getDate();
-        if (nextStagePrompt.equals(STRING_NULL)) {
+        if (nextStagePrompt == null || nextStagePrompt.equals(STRING_NULL)) {
             nextStagePrompt = BakaTongue.getString("USER_PROMPT_DATE");
         }
         BakaUI.setInputBoxText(nextStagePrompt);
