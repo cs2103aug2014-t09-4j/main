@@ -146,7 +146,9 @@ public class Task implements TaskInterface, Comparable<Task> {
             _description = description.toString().trim();
         }
 
-        setOverdueStatus();
+        if (_isDone == false) {
+            setOverdueStatus();
+        }
     }
 
     @Override
@@ -257,8 +259,10 @@ public class Task implements TaskInterface, Comparable<Task> {
         } else {
             _description = input.trim();
         }
-        setOverdueStatus();
-        updateFloatingStatus();
+        if (_isDone == false) {
+            setOverdueStatus();
+            updateFloatingStatus();
+        }
         return _description;
     }
 
