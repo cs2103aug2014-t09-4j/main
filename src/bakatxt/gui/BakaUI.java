@@ -15,11 +15,13 @@ import javax.swing.SwingUtilities;
 
 import bakatxt.core.BakaProcessor;
 import bakatxt.core.Task;
+import bakatxt.gui.theme.ThemeReader;
 
 /**
  * BakaUI is the "main window" of the GUI for BakaTXT. Since we are doing a custom
  * window design, BakaUI is actually completely transparent. We will instead draw
  * a BakaPanel that fills the BakaUI window, and treat it as our actual window.
+ *
  */
 public class BakaUI extends JFrame {
 
@@ -73,7 +75,11 @@ public class BakaUI extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 input.selectAll();
-                shouldAnimate(processInput(input.getText()));
+                String s = input.getText();
+                if (s.equals("theme darker")) {
+                    setTheme("darker");
+                }
+                shouldAnimate(processInput(s));
                 updateUI(_bakaProcessor.getAllTasks());
             }
         });
@@ -134,6 +140,14 @@ public class BakaUI extends JFrame {
         return _bakaPanel;
     }
 
+    protected static boolean setTheme(String themePath) {
+        ThemeReader newTheme = new ThemeReader("./" + themePath);
+        return false;
+    }
+
+    /**
+     * @return
+     */
     protected static boolean isNewTask() {
         return _isNewTask;
     }
@@ -153,7 +167,7 @@ public class BakaUI extends JFrame {
         setContentPane(_bakaPanel);
         pack();
         setAlwaysOnTop(false);
-        setTitle("Baka TX");
+        setTitle("BakaTxt");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setMouseActions();
     }

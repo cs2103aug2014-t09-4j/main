@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 
 /**
  * This class controls the colors as well as the fonts of the GUI from the theme
@@ -52,8 +53,8 @@ public class ThemeReader {
     private static BakaTheme _default = new BakaTheme(new Color(228, 224, 227),
                                                       Font.PLAIN, 12);
 
-    public ThemeReader() {
-        //readFile(Paths.get("DarkAsMySoul"));
+    public ThemeReader(String path) {
+        readFile(Paths.get(path));
     }
 
     /**
@@ -188,6 +189,7 @@ public class ThemeReader {
             if (thisTheme[1] == null) {
                 return;
             }
+            thisTheme[0] = thisTheme[0].trim();
             thisTheme[1] = thisTheme[1].trim();
             switch (thisTheme[0].toUpperCase()) {
                 case "TYPEFACE" :
@@ -339,7 +341,7 @@ public class ThemeReader {
      * @return the font type from the string
      */
     private static Integer readFontType(String fontType) {
-        switch (fontType) {
+        switch (fontType.trim()) {
             case "PLAIN" :
                 return Font.PLAIN;
             case "BOLD" :
@@ -360,7 +362,7 @@ public class ThemeReader {
      */
     private static Integer readFontSize(String fontSize) {
         try {
-            return valueOf(fontSize);
+            return valueOf(fontSize.trim());
         } catch (NumberFormatException e) {
             return null;
         }
@@ -405,7 +407,7 @@ public class ThemeReader {
         if (newColor == null) {
             return original;
         }
-        return original;
+        return newColor;
     }
 
     /**
@@ -439,7 +441,8 @@ public class ThemeReader {
      * @return the string after trimming
      */
     private static String trimString(String string) {
-        return string.substring(1, string.length() - 2);
+        string = string.trim();
+        return string.substring(1, string.length() - 1);
     }
 
     /**

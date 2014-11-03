@@ -86,6 +86,8 @@ class BakaPanel extends JPanel {
      */
     protected void refreshContents(LinkedList<Task> tasks) {
 
+        setBackground(ThemeReader.getPanelColor());
+
         _contents.removeAll();
         _contents.updateContents(tasks);
 
@@ -100,6 +102,8 @@ class BakaPanel extends JPanel {
                 _bakaScrollPane.getVerticalScrollBar().setValue(0);
             }
         });
+
+        repaint();
     }
 
     /**
