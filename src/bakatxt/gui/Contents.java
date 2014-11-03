@@ -161,9 +161,9 @@ class Contents extends JPanel {
 
     private static Color alternatingColors(int taskNumber) {
         if (taskNumber % 2 == 0) {
-            return UIHelper.TASK_DARK_COLOR;
+            return ThemeReader.getTaskDarkColor();
         }
-        return UIHelper.TASK_LIGHT_COLOR;
+        return ThemeReader.getTaskLightColor();
     }
 
     /**

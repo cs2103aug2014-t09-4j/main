@@ -39,7 +39,7 @@ class BakaPanel extends JPanel {
 
         setOpaque(false);
         setMaximumSize(UIHelper.WINDOW_SIZE);
-        setBackground(UIHelper.PANEL_COLOR);
+        setBackground(ThemeReader.getPanelColor());
         setLayout(new GridBagLayout());
         addComponentsToPane();
     }

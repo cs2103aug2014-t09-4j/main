@@ -11,6 +11,9 @@ import java.awt.geom.RoundRectangle2D;
 
 import javax.swing.JTextField;
 
+import bakatxt.gui.theme.BakaTheme;
+import bakatxt.gui.theme.ThemeReader;
+
 /**
  * This class sets the input box for BakaUI
  *
@@ -32,17 +35,23 @@ class Input extends JTextField implements BakaAnimator {
      */
     private final Point _baseLocation;
 
+    private BakaTheme _theme;
+
     public Input() {
+
+        _theme = ThemeReader.getInteractTheme();
+
         setOpaque(false);
-        setFont(new Font("Helvetica Neue",Font.PLAIN, 24));
-        setBackground(UIHelper.INPUT_COLOR);
-        setForeground(UIHelper.PRESET_COLOR_DEFAULT);
-        setCaretColor(UIHelper.PRESET_COLOR_DEFAULT);
-        setSelectedTextColor(UIHelper.PRESET_COLOR_DEFAULT);
-        setSelectionColor(new Color(0,0,0,150));
+        setFont(new Font(ThemeReader.getTypeface(), _theme.getFontType(),
+                         _theme.getFontSize()));
+        setBackground(ThemeReader.getInputColor());
+        setForeground(_theme.getColor());
+        setCaretColor(_theme.getColor());
+        setSelectedTextColor(_theme.getColor());
+        setSelectionColor(ThemeReader.getSelectionColor());
         setFocusTraversalKeysEnabled(false);
 
-        _baseColor = UIHelper.INPUT_COLOR;
+        _baseColor = ThemeReader.getInputColor();
         _baseLocation = new Point(2 * UIHelper.BORDER, 2 * UIHelper.BORDER);
     }
 

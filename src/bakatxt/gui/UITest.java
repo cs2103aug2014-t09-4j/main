@@ -114,7 +114,7 @@ public class UITest {
         showAllTasks();
         spamEnter();
         BakaBot.waitAWhile(BakaBot.WAIT_VERY_LONG);
-        assertThat(getInputBoxColor(), is(equalTo(UIHelper.INPUT_COLOR)));
+        assertThat(getInputBoxColor(), is(equalTo(getProperInputBoxColor())));
     }
 
     /**
@@ -163,5 +163,12 @@ public class UITest {
      */
     private static Color getInputBoxColor() {
         return BakaUI.getPanel().getInput().getBackground();
+    }
+
+    /**
+     * @return the base color of the input box
+     */
+    private static Color getProperInputBoxColor() {
+        return BakaUI.getPanel().getInput().getColor();
     }
 }

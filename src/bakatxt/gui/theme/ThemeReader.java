@@ -32,6 +32,7 @@ public class ThemeReader {
     private static Color _taskLight = new Color(48, 48, 48);
     private static Color _taskDark = new Color(36, 36, 36);
     private static Color _scroll = new Color(0, 0, 0, 100);
+    private static Color _selection = new Color(0, 0, 0, 150);
 
     /**
      * Color, font size, and font type of various elements in the GUI
@@ -46,6 +47,8 @@ public class ThemeReader {
                                                      Font.PLAIN, 16);
     private static BakaTheme _title = new BakaTheme(new Color(239, 62, 47),
                                                     Font.BOLD, 18);
+    private static BakaTheme _interact = new BakaTheme(new Color(228, 224, 227),
+                                                        Font.PLAIN, 24);
     private static BakaTheme _default = new BakaTheme(new Color(228, 224, 227),
                                                       Font.PLAIN, 12);
 
@@ -96,6 +99,13 @@ public class ThemeReader {
     }
 
     /**
+     * @return the text selection color to be used
+     */
+    public static Color getSelectionColor() {
+        return _selection;
+    }
+
+    /**
      * @return the style of the date text to be used
      */
     public static BakaTheme getDateTheme() {
@@ -128,6 +138,13 @@ public class ThemeReader {
      */
     public static BakaTheme getTitleTheme() {
         return _title;
+    }
+
+    /**
+     * @return the style of the text in the input box to be used
+     */
+    public static BakaTheme getInteractTheme() {
+        return _interact;
     }
 
     /**
@@ -191,6 +208,9 @@ public class ThemeReader {
                 case "SCROLLBAR" :
                     setScroll(thisTheme[1]);
                     break;
+                case "SELECTION" :
+                    setSelection(thisTheme[1]);
+                    break;
                 case "DATE" :
                     setDate(thisTheme[1]);
                     break;
@@ -204,6 +224,9 @@ public class ThemeReader {
                     setNumber(thisTheme[1]);
                 case "TITLE" :
                     setDate(thisTheme[1]);
+                    break;
+                case "INTERACT" :
+                    setInteract(thisTheme[1]);
                     break;
                 case "DEFAULT" :
                     setDefault(thisTheme[1]);
@@ -239,6 +262,10 @@ public class ThemeReader {
         _scroll = setToOriginalIfNull(_scroll, readColor(scroll));
     }
 
+    private static void setSelection(String selection) {
+        _selection = setToOriginalIfNull(_selection, readColor(selection));
+    }
+
     private static void setDate(String date) {
         _date = setToOriginalIfNull(_date, readTheme(date));
     }
@@ -253,6 +280,10 @@ public class ThemeReader {
 
     private static void setNumber(String number) {
         _number = setToOriginalIfNull(_number, readTheme(number));
+    }
+
+    private static void setInteract(String interact) {
+        _interact = setToOriginalIfNull(_interact, readTheme(interact));
     }
 
     private static void setDefault(String defaultText) {

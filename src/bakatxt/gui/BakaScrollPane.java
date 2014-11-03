@@ -19,6 +19,8 @@ import javax.swing.ScrollPaneLayout;
 import javax.swing.Timer;
 import javax.swing.plaf.basic.BasicScrollBarUI;
 
+import bakatxt.gui.theme.ThemeReader;
+
 /**
  * This class gives an invisible vertical scrollbar to a component when it's
  * maximum height is reached
@@ -149,8 +151,8 @@ class BakaScrollPane extends JScrollPane {
 
         @Override
         protected void paintThumb(Graphics g, JComponent c, Rectangle thumbBounds) {
-            UIHelper.paintRoundedRectangle(g, UIHelper.SCROLLBAR_COLOR, thumbBounds.x,
-                                           thumbBounds.y, BAR_WIDTH,
+            UIHelper.paintRoundedRectangle(g, ThemeReader.getScrollColor(),
+                                           thumbBounds.x,thumbBounds.y, BAR_WIDTH,
                                            thumbBounds.height, BAR_ROUNDNESS);
         }
 
