@@ -13,8 +13,8 @@ import bakatxt.core.BakaParser;
 import bakatxt.core.Database;
 import bakatxt.core.Task;
 import bakatxt.core.UserAction;
-import bakatxt.core.UserEditTask;
 import bakatxt.core.UserEditStatus;
+import bakatxt.core.UserEditTask;
 
 public class UserInputTest {
 
@@ -83,11 +83,11 @@ public class UserInputTest {
         UserAction command = new UserEditStatus("done", dummy, true);
 
         command.execute();
-        LinkedList<Task> tasks = _database.getAllUndoneTasks();
-        assertFalse(tasks.contains(dummy));
+        LinkedList<Task> tasks = _database.getAllTasks();
+        assertTrue(tasks.contains(dummy));
 
         command.undo();
-        tasks = _database.getAllUndoneTasks();
+        tasks = _database.getAllTasks();
         assertTrue(tasks.contains(dummy));
     }
 }
