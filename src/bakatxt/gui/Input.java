@@ -37,6 +37,7 @@ class Input extends JTextField implements BakaAnimator {
 
     private BakaTheme _theme;
 
+    @SuppressWarnings("boxing")
     public Input() {
 
         _theme = ThemeReader.getInteractTheme();
