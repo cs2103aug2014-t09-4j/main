@@ -511,7 +511,7 @@ public class BakaProcessor {
         UserAction inputCmd;
         String content = _parser.getString(input).trim();
         ArrayList<Integer> listOfIndex = _parser.getIndexList(content);
-        _displayTasks = _database.getAllUndoneTasks();
+        setToPreviousView();
         boolean isSuccessful = true;
         for (int i = 0; i < listOfIndex.size(); i++) {
             int trueIndex = listOfIndex.get(i);
