@@ -4,7 +4,6 @@ package bakatxt.gui;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
@@ -12,66 +11,99 @@ import java.awt.RenderingHints;
 import java.awt.Toolkit;
 import java.awt.geom.RoundRectangle2D;
 
-//TODO comments
-
+/**
+ * Helper methods and variables for the GUI
+ *
+ */
 public class UIHelper {
-    public static final Dimension SCREEN_SIZE = Toolkit.getDefaultToolkit().getScreenSize();
-    public static final int WINDOW_OFFSET_TOP = SCREEN_SIZE.height/6;
-    public static final int WINDOW_X = 650;
-    public static final int WINDOW_Y = SCREEN_SIZE.height - 2 * WINDOW_OFFSET_TOP;
-    public static final Dimension WINDOW_SIZE = new Dimension(WINDOW_X, WINDOW_Y);
-    public static final Point WINDOW_LOCATION = new Point(
-            SCREEN_SIZE.width / 2 - WINDOW_X / 2, WINDOW_OFFSET_TOP);
-    protected static final int WINDOW_ROUNDNESS = 20;
-    protected static final int BORDER = 4; // leave as half of actual border
+    /**
+     * Get the size of the screen BakaTxt is on
+     */
+    public static final Dimension SCREEN_SIZE = Toolkit.getDefaultToolkit()
+                                                .getScreenSize();
 
+    /**
+     * The location of BakaTxt relative to the top of the screen
+     */
+    public static final int WINDOW_OFFSET_TOP = SCREEN_SIZE.height/6;
+
+    /**
+     * The width of BakaTxt
+     */
+    public static final int WINDOW_X = 650;
+
+    /**
+     * The height of BakaTxt
+     */
+    public static final int WINDOW_Y = SCREEN_SIZE.height - 2 * WINDOW_OFFSET_TOP;
+
+    /**
+     * The width and height of BakaTxt as a Dimension object
+     */
+    public static final Dimension WINDOW_SIZE = new Dimension(WINDOW_X, WINDOW_Y);
+
+    /**
+     * The location of BakaTxt on the screen
+     */
+    public static final Point WINDOW_LOCATION = new Point(SCREEN_SIZE.width / 2 -
+                                                          WINDOW_X / 2,
+                                                          WINDOW_OFFSET_TOP);
+
+    /**
+     * Standard roundedness variable used for most rounded corners in BakaTxt
+     */
+    protected static final int WINDOW_ROUNDNESS = 20;
+
+    /**
+     * Standard (half of) width variable used for borders in BakaTxt
+     */
+    protected static final int BORDER = 4;
+
+    /**
+     * Location of the input box in BakaTxt
+     */
     public static final Point INPUT_LOCATION = new Point(BORDER * 2, BORDER * 2);
 
-    /* to be implemented?
-    protected static final List<String> SUGGESTIONS_MAIN = new ArrayList<>(asList(
-            "add", "display", "delete", "exit"));
-    protected static final List<String> SUGGESTIONS_ADD = new ArrayList<>(asList(
-            "today", "tomorrow"));
-    protected static final List<String> SUGGESTIONS_DISPLAY = new ArrayList<>(asList(
-            "day", "week", "month"));
-    protected static final List<List<String>> SUGGESTIONS = asList(
-            SUGGESTIONS_MAIN, SUGGESTIONS_ADD, SUGGESTIONS_DISPLAY);
-    */
-
-    // TODO rename to better names
+    /**
+     * A transparent color
+     */
     protected static final Color TRANSPARENT = new Color(0, 0, 0, 0);
-    protected static final Color GRAY_MEDIUM = new Color(66, 66, 66);
-    protected static final Color GRAY_LIGHT = new Color(100, 100, 100);
-    protected static final Color GRAY_DARK = new Color(48, 48, 48);
-    protected static final Color GRAY_BLACK = new Color(36, 36, 36);
-    protected static final Color GRAY_FLASH = new Color(125, 125, 125);
 
-    protected static final Color SCROLLBAR = new Color(0, 0, 0, 100);
-
-    protected static final Color PRESET_COLOR_DATE = new Color(253, 184, 19);
-    protected static final Color PRESET_COLOR_ALERT = new Color(250, 250, 250);
-    protected static final Color PRESET_COLOR_LOCATION = new Color(227, 122, 37);
-    protected static final Color PRESET_COLOR_TITLE = new Color(239, 62, 47);
-    protected static final Color PRESET_COLOR_DEFAULT = new Color(228, 224, 227);
-
-    protected static final int PRESET_TYPE_DATE = Font.PLAIN;
-    protected static final int PRESET_TYPE_TIME = Font.PLAIN;
-    protected static final int PRESET_TYPE_LOCATION = Font.BOLD;
-    protected static final int PRESET_TYPE_TITLE = Font.BOLD;
-    protected static final int PRESET_TYPE_DEFAULT = Font.PLAIN;
-
-    protected static final int PRESET_SIZE_DATE = 12;
-    protected static final int PRESET_SIZE_TIME = 14;
-    protected static final int PRESET_SIZE_LOCATION = 14;
-    protected static final int PRESET_SIZE_TITLE = 18;
-    protected static final int PRESET_SIZE_DEFAULT = 12;
-
-
+    /**
+     * Draw a rectangle with rounded edges
+     *
+     * @param g
+     *        abstract base class for all graphics contexts
+     * @param background
+     *        color to paint
+     * @param width
+     *        width of component
+     * @param height
+     *        height of component
+     */
     protected static void paintRoundedRectangle(Graphics g, Color background,
                                                 int width, int height) {
         paintRoundedRectangle(g, background, 0, 0, width, height, WINDOW_ROUNDNESS);
     }
 
+    /**
+     * Draw a rectangle with rounded edges with roundness specification
+     *
+     * @param g
+     *        abstract base class for all graphics contexts
+     * @param background
+     *        color to paint
+     * @param startX
+     *        start X location to paint the rectangle
+     * @param startY
+     *        start Y location to paint the rectangle
+     * @param width
+     *        width of component
+     * @param height
+     *        height of component
+     * @param round
+     *        specify the radius of the round corners
+     */
     protected static void paintRoundedRectangle(Graphics g, Color background,
                                                 int startX, int startY,
                                                 int width, int height, int round) {
@@ -83,6 +115,11 @@ public class UIHelper {
         g2d.dispose();
     }
 
+    /**
+     * Provide RenderingHints for anti-aliasing
+     *
+     * @return RenderingHints for anti-aliasing
+     */
     protected static RenderingHints antiAlias() {
         RenderingHints qualityHints =
                 new RenderingHints(RenderingHints.KEY_ANTIALIASING,
