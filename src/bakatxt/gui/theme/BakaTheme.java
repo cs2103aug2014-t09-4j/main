@@ -5,7 +5,7 @@ package bakatxt.gui.theme;
 import java.awt.Color;
 
 /**
- * This class controls the look of the BakaTxt GUI
+ * This is a theme object for the text in the GUI
  *
  */
 public class BakaTheme {
