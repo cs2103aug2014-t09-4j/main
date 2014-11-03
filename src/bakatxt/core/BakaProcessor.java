@@ -240,6 +240,7 @@ public class BakaProcessor {
             }
             String languageKey = "COMMAND_" + cmd;
             Task command = new Task(BakaTongue.getString(languageKey));
+            command.setDone(true);
             command.setDate(BakaTongue.getString("COMMAND_HELP"));
             _displayTasks.add(command);
         }
