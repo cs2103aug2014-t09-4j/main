@@ -112,6 +112,17 @@ public class BakaProcessor {
         return isSuccessful;
     }
 
+    /**
+     * Takes in a String and execute the command with the content. First, the
+     * command will be taken parsed to get the command word and it will follow
+     * the switch statement to do execute its command.
+     * 
+     * @param str
+     *            is the <code>String</code> containing the command and details
+     * @return boolean, true if the user entered a valid command false if the
+     *         user entered an invalid one
+     */
+
     public boolean executeCommand(String input) {
         boolean isSuccessful = true;
 
