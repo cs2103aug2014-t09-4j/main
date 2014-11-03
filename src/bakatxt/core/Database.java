@@ -47,13 +47,14 @@ public class Database implements DatabaseInterface {
     private static final String FILE_WARNING = FILE_COMMENT
             + "Each task has to be in the same line";
 
-    private static final String FILE_LOCALE = TAG_OPEN + "LOCALE" + TAG_CLOSE;
-
-    private static final String DEFAULT_LOCALE = "en_US";
+    private static final String LOCALE_FILE = TAG_OPEN + "LOCALE" + TAG_CLOSE;
+    private static final String LOCALE_DEFAULT = "en_US";
 
     private static final String TAG_DELETED = "9999";
     private static final String TAG_DONE = "5000";
     private static final String TAG_FLOATING = "0000";
+
+    private static final String VIEW_DONE = TAG_OPEN + "VIEW DONE" + TAG_CLOSE;
 
     private static final Charset CHARSET_DEFAULT = Charset.forName("UTF-8");
     private static final byte[] EMPTY_BYTE = {};
@@ -69,10 +70,11 @@ public class Database implements DatabaseInterface {
     private BufferedWriter _outputStream;
     private HashMap<String, LinkedList<Task>> _bakaMap;
     private TreeSet<String> _sortedKeys;
-    private boolean _removeDone;
-    private boolean _removeDeleted;
+    private boolean _isRemoveDone;
+    private boolean _isRemoveDeleted;
     private String _localeString;
     private BakaParser _parser;
+    private boolean _isViewDone;
 
     private Database(String fileName) {
         assert (_database == null);
@@ -108,10 +110,11 @@ public class Database implements DatabaseInterface {
 
     private void initializeVariables() {
         _parser = new BakaParser();
-        _localeString = DEFAULT_LOCALE;
+        _localeString = LOCALE_DEFAULT;
+        _isRemoveDeleted = true;
+        _isViewDone = false;
         updateMemory();
-        _removeDone = false;
-        _removeDeleted = true;
+        _isRemoveDone = false;
     }
 
     private void initializeFilePath(String fileName) {
@@ -136,9 +139,15 @@ public class Database implements DatabaseInterface {
             while ((line = inputStream.readLine()) != null) {
                 if (line.isEmpty()) {
                     continue;
-                } else if (line.contains(FILE_LOCALE)) {
+                } else if (line.contains(VIEW_DONE)) {
+                    if (line.contains("true")) {
+                        _isViewDone = true;
+                    } else {
+                        _isViewDone = false;
+                    }
+                } else if (line.contains(LOCALE_FILE)) {
                     updateLanguage(line);
-                } else if (line.contains(TAG_DONE) && _removeDone) {
+                } else if (line.contains(TAG_DONE) && _isRemoveDone) {
                     deleteDoneTask(line);
                 } else if (line.contains(TAG_TITLE)) {
                     Task task = new Task(line);
@@ -296,14 +305,16 @@ public class Database implements DatabaseInterface {
         LOGGER.info("update file initialized");
         // tempCreation();
         resetFile();
-        writeLocale();
         writeFileComments();
+        writeLocaleAndViewDone();
         return writeLinesToFile();
     }
 
-    private void writeLocale() {
+    private void writeLocaleAndViewDone() {
         try {
-            _outputStream.write(FILE_LOCALE + SPACE + _localeString.trim());
+            _outputStream.write(LOCALE_FILE + SPACE + _localeString.trim());
+            _outputStream.newLine();
+            _outputStream.write(VIEW_DONE + SPACE + _isViewDone);
             _outputStream.newLine();
         } catch (IOException ex) {
             LOGGER.severe("unable to write to file!");
@@ -330,9 +341,9 @@ public class Database implements DatabaseInterface {
         try {
             sort();
             for (String key : _sortedKeys) {
-                if (_removeDone && key.contains(TAG_DONE)) {
+                if (_isRemoveDone && key.contains(TAG_DONE)) {
                     continue;
-                } else if (_removeDeleted && key.contains(TAG_DELETED)) {
+                } else if (_isRemoveDeleted && key.contains(TAG_DELETED)) {
                     continue;
                 }
                 LinkedList<Task> listToWrite = _bakaMap.get(key);
@@ -415,6 +426,10 @@ public class Database implements DatabaseInterface {
             if (key.contains(TAG_DELETED)) {
                 continue;
             }
+            if (_isViewDone == false && key.contains(TAG_DONE)) {
+                continue;
+            }
+
             LinkedList<Task> today = _bakaMap.get(key);
             for (Task task : today) {
                 String taskTitle = task.getTitle().toLowerCase();
@@ -442,42 +457,27 @@ public class Database implements DatabaseInterface {
     @Override
     public LinkedList<Task> getTasksWithDate(String key) {
         LinkedList<Task> result = new LinkedList<Task>();
+        String date;
         if (key == null || key.equals("null")) {
-            for (Map.Entry<String, LinkedList<Task>> entry : _bakaMap
-                    .entrySet()) {
-                if (entry.getKey().contains(TAG_FLOATING)
+            date = TAG_FLOATING;
+        } else {
+            date = key;
+        }
+        for (Map.Entry<String, LinkedList<Task>> entry : _bakaMap.entrySet()) {
+            if (_isViewDone) {
+                if (entry.getKey().contains(date)
                         && !entry.getKey().contains(TAG_DELETED)) {
                     result.addAll(entry.getValue());
                 }
-            }
-        } else {
-            key = key.trim();
-            if (_bakaMap.containsKey(key)) {
-                result.addAll(_bakaMap.get(key));
+            } else {
+                if (entry.getKey().equals(date)) {
+                    result.addAll(entry.getValue());
+                }
             }
         }
-        return result;
-    }
+        Collections.sort(result);
 
-    /**
-     * Returns a <code>LinkedList</code> containing all the non-deleted tasks in
-     * the memory.
-     * The list is sorted with the floating tasks first in alphabetical order
-     * followed by tasks with dates in chronological order.
-     * 
-     * @return <code>LinkedList</code> containing all the existing tasks
-     */
-    @Override
-    public LinkedList<Task> getAllTasks() {
-        LinkedList<Task> all = new LinkedList<Task>();
-        sort();
-        for (String key : _sortedKeys) {
-            if (key.contains(TAG_DELETED)) {
-                continue;
-            }
-            all.addAll(_bakaMap.get(key));
-        }
-        return all;
+        return result;
     }
 
     /**
@@ -489,16 +489,24 @@ public class Database implements DatabaseInterface {
      * @return <code>LinkedList</code> containing all the undone tasks
      */
     @Override
-    public LinkedList<Task> getAllUndoneTasks() {
-        LinkedList<Task> undone = new LinkedList<Task>();
+    public LinkedList<Task> getAllTasks() {
+        LinkedList<Task> tasks = new LinkedList<Task>();
         sort();
         for (String key : _sortedKeys) {
-            if (!key.contains(TAG_DONE) && !key.contains(TAG_DELETED)) {
-                LinkedList<Task> today = _bakaMap.get(key);
-                undone.addAll(today);
+            if (!key.contains(TAG_DELETED)) {
+                if (_isViewDone) {
+                    updateTasksList(tasks, key);
+                } else if (!key.contains(TAG_DONE)) {
+                    updateTasksList(tasks, key);
+                }
             }
         }
-        return undone;
+        return tasks;
+    }
+
+    private void updateTasksList(LinkedList<Task> tasks, String key) {
+        LinkedList<Task> today = _bakaMap.get(key);
+        tasks.addAll(today);
     }
 
     /**
@@ -513,23 +521,32 @@ public class Database implements DatabaseInterface {
     @Override
     public LinkedList<Task> getWeekTasks() {
         LinkedList<Task> thisWeek = new LinkedList<Task>();
-
-        String today = _parser.getDate(STRING_TODAY);
-        LinkedList<Task> day = _bakaMap.get(today);
-        if (day != null) {
-            thisWeek.addAll(day);
-        }
+        LinkedList<String> dates = new LinkedList<String>();
 
         String[] intString = { "one", "two", "three", "four", "five", "six" };
-
+        String day = _parser.getDate(STRING_TODAY);
+        dates.add(day);
         for (int i = 0; i < 6; i++) {
-            String date = _parser.getDate(intString[i] + SPACE + STRING_DAY);
-            day = _bakaMap.get(date);
-            if (day != null) {
-                thisWeek.addAll(day);
+            day = _parser.getDate(intString[i] + SPACE + STRING_DAY);
+            dates.add(day);
+        }
+
+        for (Map.Entry<String, LinkedList<Task>> entry : _bakaMap.entrySet()) {
+            for (String date : dates) {
+                if (_isViewDone) {
+                    if (entry.getKey().contains(date)
+                            && !entry.getKey().contains(TAG_DELETED)) {
+                        thisWeek.addAll(entry.getValue());
+                    }
+                } else {
+                    if (entry.getKey().equals(date)) {
+                        thisWeek.addAll(entry.getValue());
+                    }
+                }
             }
         }
 
+        Collections.sort(thisWeek);
         return thisWeek;
     }
 
@@ -576,10 +593,10 @@ public class Database implements DatabaseInterface {
     @Override
     public void removeDone() {
         LOGGER.info("delete done initialized");
-        _removeDone = true;
+        _isRemoveDone = true;
         updateFile();
         updateMemory();
-        _removeDone = false;
+        _isRemoveDone = false;
     }
 
     @Override
@@ -600,6 +617,13 @@ public class Database implements DatabaseInterface {
     public void updateLocale(String locale) {
         LOGGER.info("locale write initialized");
         _localeString = locale.trim();
-        dirtyWrite(FILE_LOCALE + SPACE + _localeString);
+        dirtyWrite(LOCALE_FILE + SPACE + _localeString);
+    }
+
+    @Override
+    public void updateDoneView(boolean isViewingDone) {
+        LOGGER.info("view done write initialized");
+        _isViewDone = isViewingDone;
+        dirtyWrite(VIEW_DONE + SPACE + _isViewDone);
     }
 }

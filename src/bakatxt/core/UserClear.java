@@ -22,7 +22,7 @@ public class UserClear extends UserAction {
                 _tasks = super._database.getWeekTasks();
                 break;
             case "all" :
-                _tasks = super._database.getAllUndoneTasks();
+                _tasks = super._database.getAllTasks();
                 break;
             default :
                 _tasks = super._database.getTasksWithDate(date);

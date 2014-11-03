@@ -50,7 +50,7 @@ public class BakaProcessor {
     public BakaProcessor() {
         _database = Database.getInstance();
         _parser = new BakaParser();
-        _displayTasks = _database.getAllUndoneTasks();
+        _displayTasks = _database.getAllTasks();
         _ra = new ReverseAction();
         _previousAction = STRING_DEFAULT_VIEW;
     }
@@ -59,21 +59,22 @@ public class BakaProcessor {
         input = input.trim();
         if (input.contains(SPACE)) {
             String content = _parser.getString(input);
-
-            if (content.equals("week")) {
+            if (content.equals("all")) {
+                _displayTasks = _database.getAllTasks();
+            } else if (content.equals("week")) {
                 _displayTasks = _database.getWeekTasks();
             } else {
                 String currentDate = _parser.getDate(content);
                 _displayTasks = _database.getTasksWithDate(currentDate);
                 if ((currentDate == null && !content.equals("floating"))
                         || _displayTasks.isEmpty()) {
-                    _displayTasks = _database.getAllUndoneTasks();
+                    _displayTasks = _database.getAllTasks();
                     return false;
                 }
             }
             return true;
         }
-        _displayTasks = _database.getAllUndoneTasks();
+        _displayTasks = _database.getAllTasks();
         return true;
     }
 
@@ -123,6 +124,14 @@ public class BakaProcessor {
 
         input = BakaTongue.toEnglish(input);
 
+        if (input.toLowerCase().equals("show done")) {
+            _database.updateDoneView(true);
+            return true;
+        } else if (input.toLowerCase().equals("hide done")) {
+            _database.updateDoneView(false);
+            return true;
+        }
+
         String command = _parser.getCommand(input);
 
         if (!command.equals(COMMAND_EDIT) && _editStage > 0) {
@@ -160,9 +169,9 @@ public class BakaProcessor {
             case VIEW :
             case SHOW :
             case DISPLAY :
+                _previousAction = input.trim();
                 // catches unsuccessful tasks that invoke displayTasks();
                 isSuccessful = isSuccessful && displayTask(input);
-                _previousAction = input.trim();
                 break;
 
             case CLEAR :
@@ -502,7 +511,7 @@ public class BakaProcessor {
                 searchTask(_previousAction);
                 break;
             default :
-                _displayTasks = _database.getAllUndoneTasks();
+                _displayTasks = _database.getAllTasks();
         }
     }
 

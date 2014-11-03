@@ -29,11 +29,11 @@ public interface DatabaseInterface {
 
     public LinkedList<Task> getAllTasks();
 
-    public LinkedList<Task> getAllUndoneTasks();
-
     public LinkedList<Task> getWeekTasks();
 
     public void clear() throws IOException;
 
     public void updateLocale(String locale);
+    
+    public void updateDoneView(boolean isViewingDone);
 }
