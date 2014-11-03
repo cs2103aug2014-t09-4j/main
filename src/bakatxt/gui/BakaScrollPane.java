@@ -149,7 +149,7 @@ class BakaScrollPane extends JScrollPane {
 
         @Override
         protected void paintThumb(Graphics g, JComponent c, Rectangle thumbBounds) {
-            UIHelper.paintRoundedRectangle(g, UIHelper.SCROLLBAR, thumbBounds.x,
+            UIHelper.paintRoundedRectangle(g, UIHelper.SCROLLBAR_COLOR, thumbBounds.x,
                                            thumbBounds.y, BAR_WIDTH,
                                            thumbBounds.height, BAR_ROUNDNESS);
         }

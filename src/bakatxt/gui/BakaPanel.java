@@ -12,6 +12,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 import bakatxt.core.Task;
+import bakatxt.gui.theme.ThemeReader;
 import bakatxt.international.BakaTongue;
 
 /**
@@ -38,7 +39,7 @@ class BakaPanel extends JPanel {
 
         setOpaque(false);
         setMaximumSize(UIHelper.WINDOW_SIZE);
-        setBackground(UIHelper.GRAY_MEDIUM);
+        setBackground(UIHelper.PANEL_COLOR);
         setLayout(new GridBagLayout());
         addComponentsToPane();
     }
@@ -171,8 +172,7 @@ class BakaPanel extends JPanel {
      * @return a alert message FormattedText with the string
      */
     private static FormattedText setAlertMessageText(String message) {
-        return new FormattedText(message, UIHelper.PRESET_TYPE_DEFAULT,
-                UIHelper.PRESET_SIZE_DEFAULT, UIHelper.PRESET_COLOR_ALERT);
+        return new FormattedText(message, ThemeReader.getAlertTheme());
     }
 
     /**
@@ -183,10 +183,10 @@ class BakaPanel extends JPanel {
      *        is the boolean that decides whether or not to shake the box or flash it
      */
     protected void animateInputBox(final boolean isSuccessful) {
-        final UIAnimator animate = new UIAnimator(_input);
         Runnable r = new Runnable() {
             @Override
             public void run() {
+                final UIAnimator animate = new UIAnimator(_input);
                 if (isSuccessful) {
                     animate.flashComponent();
                 } else {
