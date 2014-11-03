@@ -224,8 +224,9 @@ public class ThemeReader {
                     break;
                 case "NUMBER" :
                     setNumber(thisTheme[1]);
+                    break;
                 case "TITLE" :
-                    setDate(thisTheme[1]);
+                    setTitle(thisTheme[1]);
                     break;
                 case "INTERACT" :
                     setInteract(thisTheme[1]);
@@ -282,6 +283,10 @@ public class ThemeReader {
 
     private static void setNumber(String number) {
         _number = setToOriginalIfNull(_number, readTheme(number));
+    }
+
+    private static void setTitle(String title) {
+        _title = setToOriginalIfNull(_title, readTheme(title));
     }
 
     private static void setInteract(String interact) {

@@ -76,10 +76,12 @@ public class BakaUI extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 input.selectAll();
                 String s = input.getText();
-                if (s.equals("theme darker")) {
-                    setTheme("darker");
+                if (s.equals("theme blue")) {
+                    shouldAnimate(setTheme("blue"));
+                    processInput("display");
+                } else {
+                    shouldAnimate(processInput(s));
                 }
-                shouldAnimate(processInput(s));
                 updateUI(_bakaProcessor.getAllTasks());
             }
         });
@@ -142,7 +144,7 @@ public class BakaUI extends JFrame {
 
     protected static boolean setTheme(String themePath) {
         ThemeReader newTheme = new ThemeReader("./" + themePath);
-        return false;
+        return true;
     }
 
     /**

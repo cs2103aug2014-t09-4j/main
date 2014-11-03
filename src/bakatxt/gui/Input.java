@@ -28,7 +28,7 @@ class Input extends JTextField implements BakaAnimator {
     /**
      * Color of the input box
      */
-    private final Color _baseColor;
+    private Color _baseColor;
 
     /**
      * Relative location of the input box
@@ -37,23 +37,25 @@ class Input extends JTextField implements BakaAnimator {
 
     private BakaTheme _theme;
 
-    @SuppressWarnings("boxing")
     public Input() {
-
-        _theme = ThemeReader.getInteractTheme();
-
         setOpaque(false);
+        setTheme();
+        setFocusTraversalKeysEnabled(false);
+
+        _baseLocation = new Point(2 * UIHelper.BORDER, 2 * UIHelper.BORDER);
+    }
+
+    @SuppressWarnings("boxing")
+    protected void setTheme() {
+        _theme = ThemeReader.getInteractTheme();
         setFont(new Font(ThemeReader.getTypeface(), _theme.getFontType(),
-                         _theme.getFontSize()));
+                _theme.getFontSize()));
         setBackground(ThemeReader.getInputColor());
         setForeground(_theme.getColor());
         setCaretColor(_theme.getColor());
         setSelectedTextColor(_theme.getColor());
         setSelectionColor(ThemeReader.getSelectionColor());
-        setFocusTraversalKeysEnabled(false);
-
         _baseColor = ThemeReader.getInputColor();
-        _baseLocation = new Point(2 * UIHelper.BORDER, 2 * UIHelper.BORDER);
     }
 
     /**

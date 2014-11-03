@@ -2,7 +2,6 @@
 
 package bakatxt.gui;
 
-import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 
@@ -24,27 +23,23 @@ class FormattedText extends JTextArea {
     private String _typeface = ThemeReader.getTypeface();
 
     public FormattedText(String s, BakaTheme theme) {
-        setOpaque(false);
-        setFont(new Font(_typeface, theme.getFontType(),
-                         theme.getFontSize()));
-        setBackground(UIHelper.TRANSPARENT);
-        Color color = theme.getColor();
-        setForeground(color);
-        setEditable(false);
-        setLineWrap(false);
-        setText(s);
+        this(s, theme, false);
     }
 
     public FormattedText(String s, BakaTheme theme, boolean isLineWrap) {
         setOpaque(false);
-        setFont(new Font(_typeface, theme.getFontType(),
-                         theme.getFontSize()));
+        setTheme(theme);
         setBackground(UIHelper.TRANSPARENT);
-        setForeground(theme.getColor());
         setEditable(false);
         setLineWrap(isLineWrap);
         setWrapStyleWord(true);
         setText(s);
+    }
+
+    protected void setTheme(BakaTheme theme) {
+        setFont(new Font(_typeface, theme.getFontType(),
+                theme.getFontSize()));
+        setForeground(theme.getColor());
     }
 
     @Override

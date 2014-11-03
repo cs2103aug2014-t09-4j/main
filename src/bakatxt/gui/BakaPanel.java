@@ -88,6 +88,9 @@ class BakaPanel extends JPanel {
 
         setBackground(ThemeReader.getPanelColor());
 
+        _input.setTheme();
+        _alertMessage.setTheme(ThemeReader.getAlertTheme());
+
         _contents.removeAll();
         _contents.updateContents(tasks);
 
