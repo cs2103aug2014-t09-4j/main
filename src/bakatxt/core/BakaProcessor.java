@@ -1,9 +1,11 @@
 package bakatxt.core;
 
+import java.nio.file.NoSuchFileException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
 import bakatxt.gui.BakaUI;
+import bakatxt.gui.theme.ThemeReader;
 import bakatxt.international.BakaTongue;
 
 public class BakaProcessor {
@@ -44,6 +46,7 @@ public class BakaProcessor {
         FIND,
         VIEW,
         DONE,
+        THEME,
         EXIT
     }
 
@@ -116,7 +119,7 @@ public class BakaProcessor {
      * Takes in a String and execute the command with the content. First, the
      * command will be taken parsed to get the command word and it will follow
      * the switch statement to do execute its command.
-     * 
+     *
      * @param str
      *            is the <code>String</code> containing the command and details
      * @return boolean, true if the user entered a valid command false if the
@@ -218,6 +221,10 @@ public class BakaProcessor {
 
             case DONE :
                 isSuccessful = markDoneTask(input, command);
+                break;
+
+            case THEME :
+                isSuccessful = setTheme(input);
                 break;
 
             case DEFAULT :
@@ -560,5 +567,18 @@ public class BakaProcessor {
             _displayTasks.add(task);
         }
         return isSuccessful;
+    }
+
+    private boolean setTheme(String theme) {
+        theme = _parser.getString(theme).trim();
+        try {
+            @SuppressWarnings("unused")
+            ThemeReader newTheme = new ThemeReader("./" + theme);
+            setToPreviousView();
+            return true;
+        } catch (NoSuchFileException e) {
+            setToPreviousView();
+            return false;
+        }
     }
 }

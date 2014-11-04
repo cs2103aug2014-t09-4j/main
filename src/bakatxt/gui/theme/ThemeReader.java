@@ -10,6 +10,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -53,7 +54,7 @@ public class ThemeReader {
     private static BakaTheme _default = new BakaTheme(new Color(228, 224, 227),
                                                       Font.PLAIN, 12);
 
-    public ThemeReader(String path) {
+    public ThemeReader(String path) throws NoSuchFileException {
         readFile(Paths.get(path));
     }
 

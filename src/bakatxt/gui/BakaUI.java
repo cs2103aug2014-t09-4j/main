@@ -15,7 +15,6 @@ import javax.swing.SwingUtilities;
 
 import bakatxt.core.BakaProcessor;
 import bakatxt.core.Task;
-import bakatxt.gui.theme.ThemeReader;
 
 /**
  * BakaUI is the "main window" of the GUI for BakaTXT. Since we are doing a custom
@@ -76,12 +75,7 @@ public class BakaUI extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 input.selectAll();
                 String s = input.getText();
-                if (s.equals("theme blue")) {
-                    shouldAnimate(setTheme("blue"));
-                    processInput("display");
-                } else {
-                    shouldAnimate(processInput(s));
-                }
+                shouldAnimate(processInput(s));
                 updateUI(_bakaProcessor.getAllTasks());
             }
         });
@@ -140,11 +134,6 @@ public class BakaUI extends JFrame {
      */
     protected static BakaPanel getPanel() {
         return _bakaPanel;
-    }
-
-    protected static boolean setTheme(String themePath) {
-        ThemeReader newTheme = new ThemeReader("./" + themePath);
-        return true;
     }
 
     /**
