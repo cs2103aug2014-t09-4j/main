@@ -17,11 +17,6 @@ import bakatxt.gui.theme.ThemeReader;
 @SuppressWarnings("boxing")
 class FormattedText extends JTextArea {
 
-    /**
-     * get the typeface we are using for the UI
-     */
-    private String _typeface = ThemeReader.getTypeface();
-
     public FormattedText(String s, BakaTheme theme) {
         this(s, theme, false);
     }
@@ -37,7 +32,7 @@ class FormattedText extends JTextArea {
     }
 
     protected void setTheme(BakaTheme theme) {
-        setFont(new Font(_typeface, theme.getFontType(),
+        setFont(new Font(ThemeReader.getTypeface(), theme.getFontType(),
                 theme.getFontSize()));
         setForeground(theme.getColor());
     }
