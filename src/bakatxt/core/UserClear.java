@@ -18,6 +18,7 @@ public class UserClear extends UserAction {
         switch (date) {
             case "" :
                 _tasks = super._database.getTasksWithDate(null);
+                System.out.println(_tasks);
                 break;
             case "week" :
                 _tasks = super._database.getWeekTasks();

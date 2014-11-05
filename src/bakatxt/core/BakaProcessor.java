@@ -54,7 +54,7 @@ public class BakaProcessor {
     public BakaProcessor() {
         _database = Database.getInstance();
         _parser = new BakaParser();
-        _displayTasks = _database.getAllTasks();
+        _displayTasks = _database.getTasksWithDate(_parser.getDate("today"));
         _ra = new ReverseAction();
         _previousAction = STRING_DEFAULT_VIEW;
     }
@@ -72,8 +72,10 @@ public class BakaProcessor {
                 _displayTasks = _database.getTasksWithDate(currentDate);
                 if ((currentDate == null && !content.equals("floating"))
                         || _displayTasks.isEmpty()) {
-                    _displayTasks = _database.getAllTasks();
-                    return false;
+                    if (!content.equals("today")) {
+                        _displayTasks = _database.getAllTasks();
+                        return false;
+                    }
                 }
             }
             return true;
