@@ -14,6 +14,7 @@ import java.awt.Point;
 import javax.swing.JPanel;
 
 import bakatxt.core.Task;
+import bakatxt.gui.look.BakaAnimator;
 import bakatxt.gui.look.ThemeReader;
 import bakatxt.gui.look.UIHelper;
 

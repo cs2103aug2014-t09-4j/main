@@ -7,8 +7,6 @@ import java.awt.Point;
 
 import javax.swing.SwingUtilities;
 
-import bakatxt.gui.BakaAnimator;
-
 /**
  * This class holds methods for animations used in BakaTxt
  */

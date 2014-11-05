@@ -1,6 +1,6 @@
 //@author A0116538A
 
-package bakatxt.gui;
+package bakatxt.gui.look;
 
 import java.awt.Color;
 import java.awt.Point;

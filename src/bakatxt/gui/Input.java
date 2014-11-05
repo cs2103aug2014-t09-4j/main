@@ -11,6 +11,7 @@ import java.awt.geom.RoundRectangle2D;
 
 import javax.swing.JTextField;
 
+import bakatxt.gui.look.BakaAnimator;
 import bakatxt.gui.look.BakaTheme;
 import bakatxt.gui.look.ThemeReader;
 import bakatxt.gui.look.UIHelper;
@@ -46,11 +47,14 @@ public class Input extends JTextField implements BakaAnimator {
         _baseLocation = new Point(2 * UIHelper.BORDER, 2 * UIHelper.BORDER);
     }
 
+    /**
+     * refresh the colors and the font when a new theme is set
+     */
     @SuppressWarnings("boxing")
     protected void setTheme() {
         _theme = ThemeReader.getInteractTheme();
         setFont(new Font(ThemeReader.getTypeface(), _theme.getFontType(),
-                _theme.getFontSize()));
+                         _theme.getFontSize()));
         setBackground(ThemeReader.getInputColor());
         setForeground(_theme.getColor());
         setCaretColor(_theme.getColor());
@@ -88,21 +92,33 @@ public class Input extends JTextField implements BakaAnimator {
         return shape.contains(x, y);
     }
 
+    /**
+     * @see {@link bakatxt.gui.look.BakaAnimator}
+     */
     @Override
     public Color getColor() {
         return _baseColor;
     }
 
+    /**
+     * @see {@link bakatxt.gui.look.BakaAnimator}
+     */
     @Override
     public void setColor(Color newColor) {
         setBackground(newColor);
     }
 
+    /**
+     * @see {@link bakatxt.gui.look.BakaAnimator}
+     */
     @Override
     public Point getPoint() {
         return _baseLocation;
     }
 
+    /**
+     * @see {@link bakatxt.gui.look.BakaAnimator}
+     */
     @Override
     public void setPoint(Point newLocation) {
         setLocation(newLocation);
