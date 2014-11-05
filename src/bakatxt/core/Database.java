@@ -459,7 +459,7 @@ public class Database implements DatabaseInterface {
         LinkedList<Task> result = new LinkedList<Task>();
         String date;
         if (key == null || key.equals("null")) {
-            date = new String();
+            date = TAG_FLOATING;
         } else {
             date = key;
         }
@@ -475,7 +475,9 @@ public class Database implements DatabaseInterface {
                 if (date.isEmpty() && !entry.getKey().contains(TAG_DELETED)
                         && !entry.getKey().contains(TAG_DONE)) {
                     result.addAll(entry.getValue());
-                } else if (entry.getKey().equals(date)) {
+                } else if (entry.getKey().contains(date)
+                        && !entry.getKey().contains(TAG_DONE)
+                        && !entry.getKey().contains(TAG_DELETED)) {
                     result.addAll(entry.getValue());
                 }
             }
