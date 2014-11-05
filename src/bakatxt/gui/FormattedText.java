@@ -7,8 +7,9 @@ import java.awt.Graphics;
 
 import javax.swing.JTextArea;
 
-import bakatxt.gui.theme.BakaTheme;
-import bakatxt.gui.theme.ThemeReader;
+import bakatxt.gui.look.BakaTheme;
+import bakatxt.gui.look.ThemeReader;
+import bakatxt.gui.look.UIHelper;
 
 /**
  * This class is used for each of the text elements

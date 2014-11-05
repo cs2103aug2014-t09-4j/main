@@ -1,6 +1,6 @@
 //@author A0116538A
 
-package bakatxt.gui;
+package bakatxt.test;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThan;
@@ -17,7 +17,8 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import bakatxt.test.BakaBot;
+import bakatxt.gui.BakaUI;
+import bakatxt.gui.look.UIHelper;
 
 /**
  * This class is an automated test case for GUI elements

@@ -19,14 +19,15 @@ import javax.swing.ScrollPaneLayout;
 import javax.swing.Timer;
 import javax.swing.plaf.basic.BasicScrollBarUI;
 
-import bakatxt.gui.theme.ThemeReader;
+import bakatxt.gui.look.ThemeReader;
+import bakatxt.gui.look.UIHelper;
 
 /**
  * This class gives an invisible vertical scrollbar to a component when it's
  * maximum height is reached
  *
  */
-class BakaScrollPane extends JScrollPane {
+public class BakaScrollPane extends JScrollPane {
 
     private static final int WIDTH = UIHelper.WINDOW_X - 4 * UIHelper.BORDER;
     private static final int BAR_WIDTH = 9;

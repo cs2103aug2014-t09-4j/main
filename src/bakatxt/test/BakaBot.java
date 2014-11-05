@@ -14,7 +14,7 @@ import java.nio.file.Path;
 
 import bakatxt.core.BakaProcessor;
 import bakatxt.gui.BakaUI;
-import bakatxt.gui.UIHelper;
+import bakatxt.gui.look.UIHelper;
 
 /**
  * This class is a helper class to automate test cases for JUnit on the GUI.

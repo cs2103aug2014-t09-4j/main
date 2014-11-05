@@ -1,16 +1,18 @@
 //@author A0116538A
 
-package bakatxt.gui;
+package bakatxt.gui.look;
 
 import java.awt.Color;
 import java.awt.Point;
 
 import javax.swing.SwingUtilities;
 
+import bakatxt.gui.BakaAnimator;
+
 /**
  * This class holds methods for animations used in BakaTxt
  */
-class UIAnimator {
+public class UIAnimator {
 
     /**
      * Maximum length of time in miliseconds the animations should be
@@ -57,7 +59,7 @@ class UIAnimator {
     /**
      * Vibrates the component
      */
-    protected void shakeComponent() {
+    public void shakeComponent() {
         for (int i = 0; i < ITERATIONS_SHAKE; i++) {
             shakeOneIteration(_component.getPoint(), ITERATIONS_SHAKE - i);
         }
@@ -67,7 +69,7 @@ class UIAnimator {
      * Flashes the component's color, flash does not animate if isExceedMaximumColor
      * is triggered.
      */
-    protected void flashComponent() {
+    public void flashComponent() {
 
         float red = getColorAsFloat(_component.getColor().getRed());
         float green = getColorAsFloat(_component.getColor().getGreen());

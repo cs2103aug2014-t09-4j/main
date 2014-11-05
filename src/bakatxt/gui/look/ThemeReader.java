@@ -1,6 +1,6 @@
 //@author A0116538A
 
-package bakatxt.gui.theme;
+package bakatxt.gui.look;
 
 import static java.lang.Integer.valueOf;
 

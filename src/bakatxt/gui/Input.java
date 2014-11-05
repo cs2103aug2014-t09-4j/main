@@ -11,14 +11,15 @@ import java.awt.geom.RoundRectangle2D;
 
 import javax.swing.JTextField;
 
-import bakatxt.gui.theme.BakaTheme;
-import bakatxt.gui.theme.ThemeReader;
+import bakatxt.gui.look.BakaTheme;
+import bakatxt.gui.look.ThemeReader;
+import bakatxt.gui.look.UIHelper;
 
 /**
  * This class sets the input box for BakaUI
  *
  */
-class Input extends JTextField implements BakaAnimator {
+public class Input extends JTextField implements BakaAnimator {
 
     /**
      * Needed to read mouse clicks on the input box

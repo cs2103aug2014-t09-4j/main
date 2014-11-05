@@ -15,6 +15,7 @@ import javax.swing.SwingUtilities;
 
 import bakatxt.core.BakaProcessor;
 import bakatxt.core.Task;
+import bakatxt.gui.look.UIHelper;
 
 /**
  * BakaUI is the "main window" of the GUI for BakaTXT. Since we are doing a custom
@@ -125,14 +126,14 @@ public class BakaUI extends JFrame {
     /**
      * @return the JFrame window
      */
-    protected static BakaUI getWindow() {
+    public static BakaUI getWindow() {
         return _bakaUI;
     }
 
     /**
      * @return the Jpanel with all the content
      */
-    protected static BakaPanel getPanel() {
+    public static BakaPanel getPanel() {
         return _bakaPanel;
     }
 

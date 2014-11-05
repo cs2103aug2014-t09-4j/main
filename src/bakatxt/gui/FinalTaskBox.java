@@ -8,6 +8,7 @@ import java.awt.Graphics2D;
 import java.awt.geom.Path2D;
 
 import bakatxt.core.Task;
+import bakatxt.gui.look.UIHelper;
 
 /**
  * This class dictates the color and shape of the box which the task will be put in.

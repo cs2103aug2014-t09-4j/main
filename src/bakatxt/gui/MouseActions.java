@@ -9,6 +9,7 @@ import java.awt.event.MouseMotionListener;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 
+@Deprecated
 public class MouseActions implements MouseListener, MouseMotionListener {
     JComponent target;
     Point dragMousePosition;

@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 
 import bakatxt.gui.BakaUI;
-import bakatxt.gui.theme.ThemeReader;
+import bakatxt.gui.look.ThemeReader;
 import bakatxt.international.BakaTongue;
 
 public class BakaProcessor {

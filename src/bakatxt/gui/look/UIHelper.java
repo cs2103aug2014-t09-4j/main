@@ -1,6 +1,6 @@
 //@author A0116538A
 
-package bakatxt.gui;
+package bakatxt.gui.look;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -12,7 +12,7 @@ import java.awt.Toolkit;
 import java.awt.geom.RoundRectangle2D;
 
 /**
- * Helper methods and variables for the GUI
+ * Helper methods and variables for the GUI, mostly for shaping, locations and sizes
  *
  */
 public class UIHelper {
@@ -52,12 +52,12 @@ public class UIHelper {
     /**
      * Standard roundedness variable used for most rounded corners in BakaTxt
      */
-    protected static final int WINDOW_ROUNDNESS = 20;
+    public static final int WINDOW_ROUNDNESS = 20;
 
     /**
      * Standard (half of) width variable used for borders in BakaTxt
      */
-    protected static final int BORDER = 4;
+    public static final int BORDER = 4;
 
     /**
      * Location of the input box in BakaTxt
@@ -67,7 +67,14 @@ public class UIHelper {
     /**
      * A transparent color
      */
-    protected static final Color TRANSPARENT = new Color(0, 0, 0, 0);
+    public static final Color TRANSPARENT = new Color(0, 0, 0, 0);
+
+    /**
+     * Size of a taskbox
+     */
+    public static final Dimension TASKBOX_SIZE = new Dimension(WINDOW_X -
+                                                                  4 * BORDER,
+                                                                  100);
 
     /**
      * Draw a rectangle with rounded edges
@@ -81,7 +88,7 @@ public class UIHelper {
      * @param height
      *        height of component
      */
-    protected static void paintRoundedRectangle(Graphics g, Color background,
+    public static void paintRoundedRectangle(Graphics g, Color background,
                                                 int width, int height) {
         paintRoundedRectangle(g, background, 0, 0, width, height, WINDOW_ROUNDNESS);
     }
@@ -104,7 +111,7 @@ public class UIHelper {
      * @param round
      *        specify the radius of the round corners
      */
-    protected static void paintRoundedRectangle(Graphics g, Color background,
+    public static void paintRoundedRectangle(Graphics g, Color background,
                                                 int startX, int startY,
                                                 int width, int height, int round) {
         Graphics2D g2d = (Graphics2D) g.create();
@@ -120,7 +127,7 @@ public class UIHelper {
      *
      * @return RenderingHints for anti-aliasing
      */
-    protected static RenderingHints antiAlias() {
+    public static RenderingHints antiAlias() {
         RenderingHints qualityHints =
                 new RenderingHints(RenderingHints.KEY_ANTIALIASING,
                                    RenderingHints.VALUE_ANTIALIAS_ON);

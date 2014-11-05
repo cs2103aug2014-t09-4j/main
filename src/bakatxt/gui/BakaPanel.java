@@ -12,17 +12,21 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 import bakatxt.core.Task;
-import bakatxt.gui.theme.ThemeReader;
+import bakatxt.gui.look.ThemeReader;
+import bakatxt.gui.look.UIAnimator;
+import bakatxt.gui.look.UIHelper;
 import bakatxt.international.BakaTongue;
 
 /**
  * This class is used as the actual window (i.e, what the user perceives as a window)
  * for BakaTXT. Apart from that, it also draws the input box and the rest of the content.
+ *
  */
-class BakaPanel extends JPanel {
-
-    private static final String MESSAGE_WELCOME = BakaTongue
-            .getString("MESSAGE_WELCOME");
+public class BakaPanel extends JPanel {
+    /**
+     * BakaTxt welcome message
+     */
+    private static final String MESSAGE_WELCOME = BakaTongue.getString("MESSAGE_WELCOME");
 
     private static Input _input;
     private static Contents _contents;
@@ -47,7 +51,7 @@ class BakaPanel extends JPanel {
     /**
      * @return the input box
      */
-    protected Input getInput() {
+    public Input getInput() {
         return _input;
     }
 
@@ -74,7 +78,7 @@ class BakaPanel extends JPanel {
     /**
      * @return the scrollpane
      */
-    protected BakaScrollPane getScrollPane() {
+    public BakaScrollPane getScrollPane() {
         return _bakaScrollPane;
     }
 

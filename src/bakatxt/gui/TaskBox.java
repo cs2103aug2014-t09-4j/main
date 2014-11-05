@@ -14,7 +14,8 @@ import java.awt.Point;
 import javax.swing.JPanel;
 
 import bakatxt.core.Task;
-import bakatxt.gui.theme.ThemeReader;
+import bakatxt.gui.look.ThemeReader;
+import bakatxt.gui.look.UIHelper;
 
 /**
  * This class places the elements of a single task correctly in their box.
