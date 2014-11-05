@@ -31,6 +31,10 @@ final class FinalTaskBox extends TaskBox {
         super.paintComponent(g);
     }
 
+    /**
+     * This class draws curved corners for the bottom corners of a rectangle
+     *
+     */
     class BottomRounded extends Path2D.Double {
 
         public BottomRounded(double width, double height) {

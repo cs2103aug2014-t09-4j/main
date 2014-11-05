@@ -32,9 +32,15 @@ class FormattedText extends JTextArea {
         setText(s);
     }
 
+    /**
+     * Refresh the colors and typeface when a new theme is set
+     *
+     * @param theme
+     *        is the new theme set
+     */
     protected void setTheme(BakaTheme theme) {
         setFont(new Font(ThemeReader.getTypeface(), theme.getFontType(),
-                theme.getFontSize()));
+                         theme.getFontSize()));
         setForeground(theme.getColor());
     }
 

@@ -31,6 +31,10 @@ final class FirstTaskBox extends TaskBox {
         super.paintComponent(g);
     }
 
+    /**
+     * This class draws curved corners for the top corners of a rectangle
+     *
+     */
     class TopRounded extends Path2D.Double {
 
         public TopRounded(double width, double height) {
