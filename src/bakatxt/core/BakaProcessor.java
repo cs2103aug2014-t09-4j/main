@@ -63,24 +63,25 @@ public class BakaProcessor {
         input = input.trim();
         if (input.contains(SPACE)) {
             String content = _parser.getString(input);
-            if (content.equals("all")) {
-                _displayTasks = _database.getAllTasks();
-            } else if (content.equals("week")) {
-                _displayTasks = _database.getWeekTasks();
-            } else {
-                String currentDate = _parser.getDate(content);
-                _displayTasks = _database.getTasksWithDate(currentDate);
-                if ((currentDate == null && !content.equals("floating"))
-                        || _displayTasks.isEmpty()) {
-                    if (!content.equals("today")) {
-                        _displayTasks = _database.getAllTasks();
-                        return false;
-                    }
-                }
+            
+            switch(content) {
+                case "all":
+                    _displayTasks = _database.getAllTasks();
+                    break;
+                case "week":
+                    _displayTasks = _database.getWeekTasks();
+                    break;
+                default:
+                    String currentDate = _parser.getDate(content);
+                    _displayTasks = _database.getTasksWithDate(currentDate);
             }
-            return true;
+        } else {
+            _displayTasks = _database.getAllTasks();
         }
-        _displayTasks = _database.getAllTasks();
+            
+        if (_displayTasks.isEmpty()) {
+            return false;
+        }
         return true;
     }
 
