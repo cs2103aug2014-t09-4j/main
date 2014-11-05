@@ -1,6 +1,5 @@
+//@author A0116320Y
 package bakatxt.core;
-
-// Interface for a Task object
 
 public interface TaskInterface {
     public String getTitle();
@@ -38,8 +37,6 @@ public interface TaskInterface {
     public boolean isOverdue();
 
     public Task merge(Task toMerge);
-
-    // These are methods used by the Database
 
     public void setDone(boolean isDone);
 
