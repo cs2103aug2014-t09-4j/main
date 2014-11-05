@@ -1,8 +1,7 @@
+//@author A0115160X
 package bakatxt.core;
 
 import java.util.ArrayList;
-
-// Interface for Parser
 
 public interface BakaParserInterface {
     public String getCommand(String input);
