@@ -63,7 +63,7 @@ class Contents extends JPanel {
 
         while (tasks.peek() != null) {
 
-            currentDate = tasks.peek().getDate();
+            currentDate = tasks.peek().getFormattedDate();
 
             setDateAndDay(setDayAndDateText(currentDate));
             offset++;
