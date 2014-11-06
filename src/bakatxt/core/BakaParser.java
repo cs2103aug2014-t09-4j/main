@@ -491,16 +491,19 @@ public class BakaParser implements BakaParserInterface {
     @Override
     public String getFormattedDate(String input) {
         String formattedDate;
-        Parser parser = new Parser();
-        List<DateGroup> dateGroup = parser.parse(input);
-        if (dateGroup.size() > 0) {
-            Date date = dateGroup.get(0).getDates().get(0);
-
-            SimpleDateFormat DATE_FORMAT = new SimpleDateFormat(
+        if (input != null) {
+            Parser parser = new Parser();
+            List<DateGroup> dateGroup = parser.parse(input);
+            if (dateGroup.size() > 0) {
+                Date date = dateGroup.get(0).getDates().get(0);
+                SimpleDateFormat DATE_FORMAT = new SimpleDateFormat(
                     DATE_FORMAT_SPECIAL);
-            String output = DATE_FORMAT.format(date);
+                String output = DATE_FORMAT.format(date);
 
-            formattedDate = output;
+                formattedDate = output;
+            } else {
+                formattedDate = null;
+            }
         } else {
             formattedDate = null;
         }
