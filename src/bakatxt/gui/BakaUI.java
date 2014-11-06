@@ -11,11 +11,16 @@ import java.awt.event.WindowEvent;
 import java.util.LinkedList;
 
 import javax.swing.JFrame;
+import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 
 import bakatxt.core.BakaProcessor;
 import bakatxt.core.Task;
 import bakatxt.gui.look.UIHelper;
+
+import com.tulskiy.keymaster.common.HotKey;
+import com.tulskiy.keymaster.common.HotKeyListener;
+import com.tulskiy.keymaster.common.Provider;
 
 /**
  * BakaUI is the "main window" of the GUI for BakaTXT. Since we are doing a custom
@@ -31,6 +36,9 @@ public class BakaUI extends JFrame {
     private static boolean _isNewTask = false;
 
     private static final String INITIAL_DISPLAY = "display today";
+    private static final String HOTKEY = "control SPACE";
+
+    private static final Provider provider = Provider.getCurrentProvider(true);
 
     /**
      * @param thisSession
@@ -39,6 +47,7 @@ public class BakaUI extends JFrame {
     private BakaUI(BakaProcessor bakaProcessor) {
         _bakaProcessor = bakaProcessor;
         initUI();
+        setupHotkey();
     }
 
     /**
@@ -192,6 +201,26 @@ public class BakaUI extends JFrame {
 
     private static void shouldAnimate(boolean shouldAnimate) {
         _bakaPanel.animateInputBox(shouldAnimate);
+    }
+
+    private static void setupHotkey() {
+        final HotKeyListener listener = new HotKeyListener() {
+            @Override
+            public void onHotKey(final HotKey hotKey) {
+                System.out.println("hotkey!");
+                EventQueue.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        _bakaUI.setAlwaysOnTop(true);
+                        _bakaUI.toFront();
+                        _bakaUI.requestFocus();
+                        _bakaUI.setAlwaysOnTop(false);
+                    }
+                });
+            }
+        };
+        provider.reset();
+        provider.register(KeyStroke.getKeyStroke(HOTKEY), listener);
     }
 
     /**
