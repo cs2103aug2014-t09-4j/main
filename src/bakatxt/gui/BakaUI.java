@@ -207,7 +207,6 @@ public class BakaUI extends JFrame {
         final HotKeyListener listener = new HotKeyListener() {
             @Override
             public void onHotKey(final HotKey hotKey) {
-                System.out.println("hotkey!");
                 EventQueue.invokeLater(new Runnable() {
                     @Override
                     public void run() {
