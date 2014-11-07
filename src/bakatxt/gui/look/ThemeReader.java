@@ -31,7 +31,7 @@ import bakatxt.international.BakaTongue;
 public class ThemeReader {
 
     private static final String EXT = ".bakaTheme";
-    private static final String HEADER = BakaTongue.getString("THEME");
+    private static final String HEADER = BakaTongue.getString("COMMAND_THEME");
 
     /**
      * The font to use for the GUI
