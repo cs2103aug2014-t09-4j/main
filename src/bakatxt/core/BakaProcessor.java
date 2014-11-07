@@ -139,23 +139,25 @@ public class BakaProcessor {
             isSuccessful = BakaTongue.setLanguage(input);
             BakaUI.setAlertMessageText(BakaTongue.getString("MESSAGE_WELCOME"));
             _choosingLanguage = false;
-            input = "display";
+            input = _previousAction;
         }
 
         if (_choosingTheme) {
             isSuccessful = ThemeReader.setTheme(input);
             BakaUI.setAlertMessageText(BakaTongue.getString("MESSAGE_WELCOME"));
             _choosingTheme = false;
-            input = "display";
+            input = _previousAction;
         }
 
         input = BakaTongue.toEnglish(input);
 
         if (input.toLowerCase().equals("show done")) {
             _database.updateDoneView(true);
+            setToPreviousView();
             return true;
         } else if (input.toLowerCase().equals("hide done")) {
             _database.updateDoneView(false);
+            setToPreviousView();
             return true;
         }
 
