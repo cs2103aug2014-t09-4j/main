@@ -7,12 +7,21 @@ import static java.lang.Integer.valueOf;
 import java.awt.Color;
 import java.awt.Font;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
-import java.nio.file.NoSuchFileException;
+import java.nio.file.OpenOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+import java.util.Collections;
+import java.util.LinkedList;
+
+import bakatxt.core.Database;
+import bakatxt.core.Task;
+import bakatxt.international.BakaTongue;
 
 /**
  * This class controls the colors as well as the fonts of the GUI from the theme
@@ -21,10 +30,13 @@ import java.nio.file.Paths;
 @SuppressWarnings("boxing")
 public class ThemeReader {
 
+    private static final String EXT = ".bakaTheme";
+    private static final String HEADER = "THEMES";
+
     /**
      * The font to use for the GUI
      */
-    private static String _typeface = "Helvetica Neue";
+    private static String _typeface = "Arial";
 
     /**
      * Colors for the boxes in the GUI
@@ -54,8 +66,147 @@ public class ThemeReader {
     private static BakaTheme _default = new BakaTheme(new Color(228, 224, 227),
                                                       Font.PLAIN, 12);
 
-    public ThemeReader(String path) throws NoSuchFileException {
-        readFile(Paths.get(path));
+    public static boolean setTheme(String input) {
+        // input is asserted to be a selected choice
+        input = input.trim();
+        LinkedList<Task> choices = themeChoices();
+        Path themePath = null;
+        try {
+            int index = Integer.valueOf(input) - 1;
+            if (index >= choices.size() || index < 0) {
+                return false;
+            }
+            themePath = Paths
+                    .get("themes", choices.get(index).getTitle() + EXT);
+            if (Files.exists(themePath)) {
+                readFile(themePath);
+            } else {
+                return false;
+            }
+        } catch (NumberFormatException ex) {
+
+        }
+        if (themePath != null) {
+            Database.getInstance().updateTheme(themePath.toString());
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean setTheme(Path themePath) {
+        if (Files.exists(themePath)) {
+            readFile(themePath);
+            return true;
+        }
+        return false;
+    }
+
+    public static LinkedList<Task> themeChoices() {
+        // todo: add default theme directory
+        Path dir = Paths.get("themes/").toAbsolutePath();
+        if (!dir.toFile().exists()) {
+            try {
+                Files.createDirectories(dir);
+            } catch (Exception ex) {
+            }
+        }
+        populateDefaultThemes();
+        File[] files = dir.toFile().listFiles();
+        LinkedList<Task> names = new LinkedList<Task>();
+        for (File f : files) {
+            if (f.isFile() && f.toString().contains(EXT)) {
+                String displayString = f.getName();
+                displayString = displayString.replace(EXT, "");
+                Task themeDisplay = new Task(displayString);
+                themeDisplay.setDate(BakaTongue.getString(HEADER));
+                names.add(themeDisplay);
+            }
+        }
+        Collections.sort(names);
+        return names;
+    }
+
+    private static void populateDefaultThemes() {
+        Charset charset = Charset.forName("UTF-8");
+        OpenOption[] options = { StandardOpenOption.CREATE };
+        populateDarkAsMySoulTheme(charset, options);
+        populateWhiteSpaceTheme(charset, options);
+    }
+
+    private static void populateWhiteSpaceTheme(Charset charset,
+            OpenOption[] options) {
+        Path defaultTheme = Paths.get("themes/", "WhiteSpace.bakaTheme");
+        try (BufferedWriter outputStream = Files.newBufferedWriter(
+                defaultTheme, charset, options)) {
+            outputStream.write("TYPEFACE = Arial");
+            outputStream.newLine();
+            outputStream.write("INPUT = (255,255,255)");
+            outputStream.newLine();
+            outputStream.write("PANEL = (250,250,250)");
+            outputStream.newLine();
+            outputStream.write("TASK1 = (240,240,240)");
+            outputStream.newLine();
+            outputStream.write("TASK2 = (235,235,235)");
+            outputStream.newLine();
+            outputStream.write("SCROLLBAR = (0,0,0,150)");
+            outputStream.newLine();
+            outputStream.write("SELECTION = (100,100,100)");
+            outputStream.newLine();
+            outputStream.write("DATE = (30,30,30) & PLAIN & 12");
+            outputStream.newLine();
+            outputStream.write("ALERT = (50,50,50) & PLAIN & 14");
+            outputStream.newLine();
+            outputStream.write("LOCATION = (150,150,150) & BOLD & 14");
+            outputStream.newLine();
+            outputStream.write("NUMBER = (70,70,70) & PLAIN & 16");
+            outputStream.newLine();
+            outputStream.write("TITLE = (20,20,20) & BOLD & 16");
+            outputStream.newLine();
+            outputStream.write("INTERACT = (0,0,0) & PLAIN & 24");
+            outputStream.newLine();
+            outputStream.write("DEFAULT = (60,60,60) & PLAIN & 12");
+            outputStream.newLine();
+        } catch (IOException ex) {
+            // not going to do anything
+        }
+    }
+
+    private static void populateDarkAsMySoulTheme(Charset charset,
+            OpenOption[] options) {
+        Path defaultTheme = Paths.get("themes/", "DarkAsMySoul.bakaTheme");
+        try (BufferedWriter outputStream = Files.newBufferedWriter(
+                defaultTheme, charset, options)) {
+            outputStream.write("TYPEFACE = Arial");
+            outputStream.newLine();
+            outputStream.write("INPUT = (100,100,100)");
+            outputStream.newLine();
+            outputStream.write("PANEL = (66,66,66)");
+            outputStream.newLine();
+            outputStream.write("TASK1 = (48,48,48)");
+            outputStream.newLine();
+            outputStream.write("TASK2 = (36,36,36)");
+            outputStream.newLine();
+            outputStream.write("SCROLLBAR = (0,0,0,100)");
+            outputStream.newLine();
+            outputStream.write("SELECTION = (0,0,0,150)");
+            outputStream.newLine();
+            outputStream.write("DATE = (253,184,19) & PLAIN & 12");
+            outputStream.newLine();
+            outputStream.write("ALERT = (250,250,250) & PLAIN & 12");
+            outputStream.newLine();
+            outputStream.write("LOCATION = (227,122,37) & BOLD & 14");
+            outputStream.newLine();
+            outputStream.write("NUMBER = (80,80,80) & PLAIN & 16");
+            outputStream.newLine();
+            outputStream.write("TITLE = (239,62,47) & BOLD & 18");
+            outputStream.newLine();
+            outputStream.write("INTERACT = (228,224,227) & PLAIN & 24");
+            outputStream.newLine();
+            outputStream.write("DEFAULT = (228,224,227) & PLAIN & 12");
+            outputStream.newLine();
+        } catch (IOException ex) {
+            // not going to do anything
+        }
     }
 
     /**
@@ -173,7 +324,7 @@ public class ThemeReader {
                 setThemes(line);
             }
         } catch (IOException ex) {
-            ex.printStackTrace();
+            // TODO log printStackTrace()
         }
     }
 

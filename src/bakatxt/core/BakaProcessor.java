@@ -1,7 +1,6 @@
 //@author A0116014Y
 package bakatxt.core;
 
-import java.nio.file.NoSuchFileException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
@@ -27,6 +26,7 @@ public class BakaProcessor {
     private static Task _editTask;
 
     private static boolean _choosingLanguage = false;
+    private static boolean _choosingTheme = false;
 
     private static String _previousAction;
 
@@ -140,6 +140,13 @@ public class BakaProcessor {
             input = "display";
         }
 
+        if (_choosingTheme) {
+            isSuccessful = ThemeReader.setTheme(input);
+            BakaUI.setAlertMessageText(BakaTongue.getString("MESSAGE_WELCOME"));
+            _choosingTheme = false;
+            input = "display";
+        }
+
         input = BakaTongue.toEnglish(input);
 
         if (input.toLowerCase().equals("show done")) {
@@ -228,7 +235,7 @@ public class BakaProcessor {
                 break;
 
             case THEME :
-                isSuccessful = setTheme(input);
+                isSuccessful = themeSelector(input);
                 break;
 
             case DEFAULT :
@@ -280,6 +287,20 @@ public class BakaProcessor {
             _displayTasks = BakaTongue.languageChoices();
             BakaUI.setAlertMessageText(BakaTongue
                     .getString("MESSAGE_LANGUAGE_CHOICE"));
+        }
+        return isSuccessful;
+    }
+
+    private boolean themeSelector(String input) {
+        input = input.trim();
+        boolean isSuccessful = true;
+        if (input.contains(SPACE)) {
+            setToPreviousView();
+        } else {
+            _choosingTheme = true;
+            _displayTasks = ThemeReader.themeChoices();
+            BakaUI.setAlertMessageText(BakaTongue
+                    .getString("MESSAGE_THEME_CHOICE"));
         }
         return isSuccessful;
     }
@@ -567,16 +588,4 @@ public class BakaProcessor {
         return isSuccessful;
     }
 
-    private boolean setTheme(String theme) {
-        theme = _parser.getString(theme).trim();
-        try {
-            @SuppressWarnings("unused")
-            ThemeReader newTheme = new ThemeReader("./" + theme);
-            setToPreviousView();
-            return true;
-        } catch (NoSuchFileException e) {
-            setToPreviousView();
-            return false;
-        }
-    }
 }

@@ -36,5 +36,7 @@ public interface DatabaseInterface {
 
     public void updateLocale(String locale);
     
+    public void updateTheme(String theme);
+
     public void updateDoneView(boolean isViewingDone);
 }

@@ -19,6 +19,7 @@ import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import bakatxt.gui.look.ThemeReader;
 import bakatxt.international.BakaTongue;
 import bakatxt.log.BakaLogger;
 
@@ -55,6 +56,7 @@ public class Database implements DatabaseInterface {
     private static final String TAG_FLOATING = "0000";
 
     private static final String VIEW_DONE = TAG_OPEN + "VIEW DONE" + TAG_CLOSE;
+    private static final String THEME = TAG_OPEN + "THEME" + TAG_CLOSE;
 
     private static final Charset CHARSET_DEFAULT = Charset.forName("UTF-8");
     private static final byte[] EMPTY_BYTE = {};
@@ -75,6 +77,7 @@ public class Database implements DatabaseInterface {
     private String _localeString;
     private BakaParser _parser;
     private boolean _isViewDone;
+    private String _theme;
 
     private Database(String fileName) {
         assert (_database == null);
@@ -113,6 +116,7 @@ public class Database implements DatabaseInterface {
         _localeString = LOCALE_DEFAULT;
         _isRemoveDeleted = true;
         _isViewDone = false;
+        _theme = null;
         updateMemory();
         _isRemoveDone = false;
     }
@@ -146,7 +150,9 @@ public class Database implements DatabaseInterface {
                         _isViewDone = false;
                     }
                 } else if (line.contains(LOCALE_FILE)) {
-                    updateLanguage(line);
+                    settingLanguage(line);
+                } else if (line.contains(THEME)) {
+                    settingTheme(line);
                 } else if (line.contains(TAG_DONE) && _isRemoveDone) {
                     deleteDoneTask(line);
                 } else if (line.contains(TAG_TITLE)) {
@@ -166,10 +172,20 @@ public class Database implements DatabaseInterface {
         addTaskToMap(doneTask);
     }
 
-    private void updateLanguage(String line) {
+    private void settingLanguage(String line) {
         _localeString = line.substring(line.indexOf(TAG_CLOSE) + 1);
         String[] localeArgs = _localeString.split("_");
+        try {
         BakaTongue.setLanguage(localeArgs[0], localeArgs[1]);
+        } catch (Exception ex) {
+            LOGGER.severe("unable to read language settings");
+        }
+    }
+
+    private void settingTheme(String line) {
+        _theme = line.substring(line.indexOf(TAG_CLOSE) + 1).trim();
+        Path themePath = Paths.get(_theme);
+        ThemeReader.setTheme(themePath);
     }
 
     private boolean addTaskToMap(Task task) {
@@ -306,15 +322,18 @@ public class Database implements DatabaseInterface {
         // tempCreation();
         resetFile();
         writeFileComments();
-        writeLocaleAndViewDone();
+        writeSettings();
         return writeLinesToFile();
     }
 
-    private void writeLocaleAndViewDone() {
+    private void writeSettings() {
         try {
             _outputStream.write(LOCALE_FILE + SPACE + _localeString.trim());
             _outputStream.newLine();
             _outputStream.write(VIEW_DONE + SPACE + _isViewDone);
+            _outputStream.newLine();
+            _outputStream.write(THEME + SPACE + _theme.trim());
+            _outputStream.newLine();
             _outputStream.newLine();
         } catch (IOException ex) {
             LOGGER.severe("unable to write to file!");
@@ -625,6 +644,13 @@ public class Database implements DatabaseInterface {
         LOGGER.info("locale write initialized");
         _localeString = locale.trim();
         dirtyWrite(LOCALE_FILE + SPACE + _localeString);
+    }
+
+    @Override
+    public void updateTheme(String theme) {
+        LOGGER.info("theme write initialized");
+        _theme = theme.trim();
+        dirtyWrite(THEME + SPACE + _theme);
     }
 
     @Override
