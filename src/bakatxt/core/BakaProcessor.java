@@ -212,11 +212,6 @@ public class BakaProcessor {
                 _previousAction = input.trim();
                 // catches unsuccessful tasks that invoke displayTasks();
                 isSuccessful = isSuccessful && displayTask(input);
-                if (isSuccessful) {
-                    status("MESSAGE_DISPLAY_SUCCESS");
-                } else {
-                    status("MESSAGE_DISPLAY_FAIL");
-                }
                 break;
 
             case CLEAR :
