@@ -66,6 +66,7 @@ public class ThemeReader {
     private static BakaTheme _default = new BakaTheme(new Color(228, 224, 227),
                                                       Font.PLAIN, 12);
 
+    //@author A0116320Y
     public static boolean setTheme(String input) {
         // input is asserted to be a selected choice
         input = input.trim();
@@ -102,7 +103,6 @@ public class ThemeReader {
     }
 
     public static LinkedList<Task> themeChoices() {
-        // todo: add default theme directory
         Path dir = Paths.get("themes/").toAbsolutePath();
         if (!dir.toFile().exists()) {
             try {
@@ -209,6 +209,7 @@ public class ThemeReader {
         }
     }
 
+    //@author A0116538A
     /**
      * @return the typeface to be used in the GUI
      */
