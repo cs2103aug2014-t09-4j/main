@@ -57,9 +57,6 @@ public class BakaTongue {
             case "singlish" :
                 currentLocale = new Locale("en", "SG");
                 break;
-            case "hodor" :
-                currentLocale = new Locale("zz", "ZZ");
-                break;
             default :
                 currentLocale = new Locale("en", "US");
                 isSuccessful = false;
