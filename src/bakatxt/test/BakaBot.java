@@ -25,8 +25,8 @@ public class BakaBot extends Robot {
     /**
      * places to store and backup our test files
      */
-    private static final Path TEST_FILE = new File("./mytestfile.txt").toPath();
-    private static final Path TEST_FILE_SAVE = new File("./mytestfile.txt.bak").toPath();
+    private static final Path TEST_FILE = new File("./BakaStorage.txt").toPath();
+    private static final Path TEST_FILE_SAVE = new File("./BakaStorage.txt.bak").toPath();
 
     /**
      * commands
