@@ -392,6 +392,7 @@ public class BakaProcessor {
         _editTask = _displayTasks.get(trueIndex);
         _originalTask = new Task(_editTask);
         _editTask.merge(edits);
+        _editTask.updateOverdueStatus();
 
         UserAction inputCmd = new UserEditTask(command, _originalTask,
                 _editTask);
