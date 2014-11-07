@@ -12,6 +12,7 @@ public class BakaProcessor {
 
     private static String COMMAND_EDIT = "EDIT";
     private static String COMMAND_ADD = "ADD";
+    private static String COMMAND_DONE = "DONE";
     private static String SPACE = " ";
     private static String STRING_NULL = "null";
     private static String STRING_DEFAULT_VIEW = "DISPLAY today";
@@ -47,6 +48,7 @@ public class BakaProcessor {
         FIND,
         VIEW,
         DONE,
+        UNDONE,
         THEME,
         EXIT
     }
@@ -231,7 +233,11 @@ public class BakaProcessor {
                 break;
 
             case DONE :
-                isSuccessful = markDoneTask(input, command);
+                isSuccessful = markDoneTask(input, command, true);
+                break;
+
+            case UNDONE :
+                isSuccessful = markDoneTask(input, COMMAND_DONE, false);
                 break;
 
             case THEME :
@@ -559,7 +565,7 @@ public class BakaProcessor {
         }
     }
 
-    private boolean markDoneTask(String input, String command) {
+    private boolean markDoneTask(String input, String command, boolean done) {
         Task task;
         UserAction inputCmd;
         String content = _parser.getString(input).trim();
@@ -569,9 +575,8 @@ public class BakaProcessor {
         for (int i = 0; i < listOfIndex.size(); i++) {
             int trueIndex = listOfIndex.get(i);
             task = _displayTasks.get(trueIndex - 1);
-            inputCmd = new UserEditStatus(command, task, true);
+            inputCmd = new UserEditStatus(command, task, done);
             isSuccessful = isSuccessful && _ra.execute(inputCmd);
-
         }
         setToPreviousView();
         return isSuccessful;
