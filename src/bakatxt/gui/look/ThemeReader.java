@@ -31,7 +31,7 @@ import bakatxt.international.BakaTongue;
 public class ThemeReader {
 
     private static final String EXT = ".bakaTheme";
-    private static final String HEADER = "THEMES";
+    private static final String HEADER = BakaTongue.getString("THEME");
 
     /**
      * The font to use for the GUI
@@ -118,7 +118,7 @@ public class ThemeReader {
                 String displayString = f.getName();
                 displayString = displayString.replace(EXT, "");
                 Task themeDisplay = new Task(displayString);
-                themeDisplay.setDate(BakaTongue.getString(HEADER));
+                themeDisplay.setDate(HEADER);
                 names.add(themeDisplay);
             }
         }

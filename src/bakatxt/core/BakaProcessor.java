@@ -335,13 +335,12 @@ public class BakaProcessor {
         boolean isSuccessful = true;
         if (input.contains(SPACE)) {
             isSuccessful = BakaTongue.setLanguage(_parser.getString(input));
-            status(BakaTongue.getString("MESSAGE_WELCOME"));
+            status("MESSAGE_WELCOME");
             setToPreviousView();
         } else {
             _choosingLanguage = true;
             _displayTasks = BakaTongue.languageChoices();
-            status(BakaTongue
-                    .getString("MESSAGE_LANGUAGE_CHOICE"));
+            status("MESSAGE_LANGUAGE_CHOICE");
         }
         return isSuccessful;
     }
@@ -354,8 +353,7 @@ public class BakaProcessor {
         } else {
             _choosingTheme = true;
             _displayTasks = ThemeReader.themeChoices();
-            status(BakaTongue
-                    .getString("MESSAGE_THEME_CHOICE"));
+            status("MESSAGE_THEME_CHOICE");
         }
         return isSuccessful;
     }
