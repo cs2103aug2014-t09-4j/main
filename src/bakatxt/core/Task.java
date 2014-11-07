@@ -148,7 +148,7 @@ public class Task implements TaskInterface, Comparable<Task> {
         }
 
         if (_isDone == false) {
-            setOverdueStatus();
+            updateOverdueStatus();
         }
     }
 
@@ -260,10 +260,6 @@ public class Task implements TaskInterface, Comparable<Task> {
         } else {
             _description = input.trim();
         }
-        if (_isDone == false) {
-            setOverdueStatus();
-            updateFloatingStatus();
-        }
         return _description;
     }
 
@@ -339,6 +335,14 @@ public class Task implements TaskInterface, Comparable<Task> {
     @Override
     public void setDone(boolean isDone) {
         _isDone = isDone;
+        if (_isDone && isOverdue()) {
+            _date = _description.substring(_description.indexOf(TAG_OPEN) + 1,
+                    _description.indexOf(TAG_CLOSE));
+            removeOverdueComment();
+        } else if (!_isDone) {
+            updateOverdueStatus();
+        }
+        updateFloatingStatus();
     }
 
     @Override
@@ -403,7 +407,8 @@ public class Task implements TaskInterface, Comparable<Task> {
         return true;
     }
 
-    private void setOverdueStatus() {
+    @Override
+    public void updateOverdueStatus() {
         BakaParser parser = new BakaParser();
         String today = parser.getDate("today");
         _time = parser.getTime(_time);

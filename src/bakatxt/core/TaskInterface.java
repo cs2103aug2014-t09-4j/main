@@ -44,6 +44,8 @@ public interface TaskInterface {
 
     public void setFloating(boolean isFloating);
 
+    public void updateOverdueStatus();
+
     public String toDisplayString();
 
     public String getKey();

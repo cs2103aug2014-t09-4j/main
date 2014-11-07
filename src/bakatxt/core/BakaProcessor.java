@@ -581,6 +581,7 @@ public class BakaProcessor {
         UserAction inputCmd;
         Task task;
         task = _parser.add(input);
+        task.updateOverdueStatus();
         inputCmd = new UserAction(command, task);
         boolean isSuccessful = _ra.execute(inputCmd);
         _previousAction = "display " + task.getDate();
