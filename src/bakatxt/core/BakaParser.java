@@ -70,6 +70,7 @@ public class BakaParser implements BakaParserInterface {
      * 
      * @param str
      *            is the <code>String</code> containing the command and details
+     *            to be parsed
      * @return task containing the parsed information
      */
     @Override
@@ -139,11 +140,21 @@ public class BakaParser implements BakaParserInterface {
         return task;
     }
 
+    /**
+     * 
+     * @param input
+     *            is the <code>String</code> containing the command and details
+     *            to be parsed
+     * @return a <code>String</code> of the command or first word
+     */
     private static String getFirstWord(String input) {
         String[] part = input.split(STRING_SPACE);
         return part[0].trim();
     }
 
+    /**
+     * Set all the global variables to <code>null</code>
+     */
     private static void resetDetails() {
         _date = null;
         _time = null;
@@ -153,6 +164,12 @@ public class BakaParser implements BakaParserInterface {
         _inputThatCantParse = new ArrayList<String>();
     }
 
+    /**
+     * 
+     * @param input
+     *            is a <code>String</code> of details to be parsed
+     * @return a <code>String</code> of details without the date and time
+     */
     private static String replaceDateTimeDescription(String input) {
 
         if (_isDate) {
@@ -170,6 +187,13 @@ public class BakaParser implements BakaParserInterface {
         return input;
     }
 
+    /**
+     * 
+     * @param input
+     *            is a <code>String</code> of details to be parsed
+     * @return a <code>String</code> of details without the unnecessary
+     *         prepositions at the end
+     */
     private static String removePrepositions(String input) {
         input = input.replace("\\s+", "\\s");
         String[] part = input.trim().split(STRING_SPACE);
@@ -192,6 +216,12 @@ public class BakaParser implements BakaParserInterface {
         return input;
     }
 
+    /**
+     * 
+     * @param input
+     *            is a <code>String</code> of details to be parsed
+     * @return a <code>String</code> of details without the description
+     */
     private static String replaceDescription(String input) {
         if (_isDescription) {
             String descriptionTemp = STRING_DOUBLE_DASH + _description;
@@ -200,6 +230,12 @@ public class BakaParser implements BakaParserInterface {
         return input;
     }
 
+    /**
+     * Title is parsed from the details.
+     * 
+     * @param input
+     *            is a <code>String</code> of details to be parsed
+     */
     private static void identifyTitle(String input) {
         input = replaceDateTimeDescription(input);
 
@@ -216,12 +252,24 @@ public class BakaParser implements BakaParserInterface {
         _title = _title.replaceAll("\\s+", STRING_SPACE);
     }
 
+    /**
+     * Description is parsed from the details.
+     * 
+     * @param input
+     *            is a <code>String</code> of details to be parsed
+     */
     private static void identifyDescription(String input) {
         String[] part = input.split(STRING_DOUBLE_DASH);
         _description = part[1].trim();
         _isDescription = true;
     }
 
+    /**
+     * Venue is parsed from the details.
+     * 
+     * @param input
+     *            is a <code>String</code> of details to be parsed
+     */
     private static void identifyVenue(String input) {
         input = replaceDateTimeDescription(input);
         int index = input.indexOf(STRING_ADD) + 1;
@@ -230,6 +278,12 @@ public class BakaParser implements BakaParserInterface {
         _venue = removePrepositions(input).trim();
     }
 
+    /**
+     * Date is parsed from the details using a modified natty parser.
+     * 
+     * @param input
+     *            is a <code>String</code> of details to be parsed
+     */
     private static void identifyDate(String input) {
         Parser parser = new Parser();
         String[] temp = input.split(STRING_SPACE);
@@ -300,6 +354,12 @@ public class BakaParser implements BakaParserInterface {
         }
     }
 
+    /**
+     * Time is parsed from the details using a modified natty parser.
+     * 
+     * @param input
+     *            is a <code>String</code> of details to be parsed
+     */
     private static void identifyTime(String input) {
         Parser parser = new Parser();
 
@@ -354,6 +414,13 @@ public class BakaParser implements BakaParserInterface {
         }
     }
 
+    /**
+     * Set the time to <code>null</code> if the current time is parsed due to
+     * the natty parser.
+     * 
+     * @param input
+     *            is a <code>String</code> of time in HHmm format
+     */
     private static void checkWithCurrentTime(String input) {
         Parser parser = new Parser();
 

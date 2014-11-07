@@ -9,6 +9,11 @@ public class UserEditStatus extends UserAction {
         _flag = flag;
     }
 
+    /**
+     * 
+     * @return <code>true</code> when the status of the task is changed
+     *         successfully
+     */
     @Override
     public boolean execute() {
         switch (super._command) {
@@ -23,6 +28,10 @@ public class UserEditStatus extends UserAction {
         }
     }
 
+    /**
+     * @return <code>true</code> when the status of the task is changed
+     *         successfully
+     */
     @Override
     public boolean undo() {
         switch (super._command) {

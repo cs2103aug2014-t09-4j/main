@@ -6,6 +6,13 @@ import java.util.LinkedList;
 public class UserClear extends UserAction {
     private LinkedList<Task> _tasks;
 
+    /**
+     * 
+     * @param command
+     *            <code>String</code> of command clear
+     * @param date
+     *            code>String</code> of a day or a period to clear the tasks
+     */
     public UserClear(String command, String date) {
         super(command, null);
 
@@ -30,6 +37,9 @@ public class UserClear extends UserAction {
         }
     }
 
+    /**
+     * @return <code>true</code> when all of the tasks are deleted
+     */
     @Override
     public boolean execute() {
         for (Task task : _tasks) {
@@ -38,6 +48,9 @@ public class UserClear extends UserAction {
         return true;
     }
 
+    /**
+     * @return <code>true</code> when all of the tasks are added
+     */
     @Override
     public boolean undo() {
         for (Task task : _tasks) {
