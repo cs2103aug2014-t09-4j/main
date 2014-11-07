@@ -2,6 +2,7 @@
 
 ### Project Specific ###
 mytestfile.txt
+BakaStorage.txt
 Baka.log*
 
 ### Eclipse ###
@@ -74,4 +75,3 @@ Icon
 Network Trash Folder
 Temporary Items
 .apdisk
-BakaStorage.txt
