@@ -144,9 +144,9 @@ public class ThemeReader {
             outputStream.newLine();
             outputStream.write("PANEL = (250,250,250)");
             outputStream.newLine();
-            outputStream.write("TASK1 = (240,240,240)");
+            outputStream.write("TASK1 = (235,235,235)");
             outputStream.newLine();
-            outputStream.write("TASK2 = (235,235,235)");
+            outputStream.write("TASK2 = (225,225,225)");
             outputStream.newLine();
             outputStream.write("SCROLLBAR = (0,0,0,150)");
             outputStream.newLine();
