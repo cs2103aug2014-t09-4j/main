@@ -162,10 +162,10 @@ public class BakaParserTest {
 
     @Test
     public void testAddDateNoon() {
-        String input = "add lunch at noon";
+        String input = "add lunch at noon 3100-12-31";
         Task output = _parser.add(input);
         Task expected = new Task("lunch");
-        expected.setDate(_parser.getDate("noon"));
+        expected.setDate("3100-12-31");
         expected.setTime("1200");
         assertEquals(expected, output);
     }
@@ -363,51 +363,15 @@ public class BakaParserTest {
 
     @Test
     public void testAddTimeDurationFormat6() {
-        String input = "add google hangouts 13:00 - 15:00 @home";
+        String input = "add google hangouts 13:00 - 16:00 @home";
         Task output = _parser.add(input);
         Task expected = new Task("google hangouts");
         expected.setDate(_parser.getDate("today"));
         expected.setTime("1300");
-        expected.setEndTime("1500");
+        expected.setEndTime("1600");
         expected.setVenue("home");
         assertEquals(expected, output);
     }
-
-    // @Test
-    // public void testAddTimeDurationFormat7() {
-    // String input = "add google hangouts next week @ home 1pm to 3pm";
-    // Task output = _parser.add(input);
-    // Task expected = new Task("google hangouts");
-    // expected.setDate(_parser.getDate("next week"));
-    // expected.setTime("1300");
-    // expected.setEndTime("1500");
-    // expected.setVenue("home");
-    // assertEquals(expected, output);
-    // }
-    //
-    // @Test
-    // public void testAddTimeDurationFormat8() {
-    // String input = "add google hangouts next friday @home 1pm to 3pm";
-    // Task output = _parser.add(input);
-    // Task expected = new Task("google hangouts");
-    // expected.setDate(_parser.getDate("next friday"));
-    // expected.setTime("1300");
-    // expected.setEndTime("1500");
-    // expected.setVenue("home");
-    // assertEquals(expected, output);
-    // }
-    //
-    // @Test
-    // public void testAddTimeDurationFormat9() {
-    // String input = "add google hangouts 1pm to 3pm @home friday";
-    // Task output = _parser.add(input);
-    // Task expected = new Task("google hangouts");
-    // expected.setDate(_parser.getDate("friday"));
-    // expected.setTime("1300");
-    // expected.setEndTime("1500");
-    // expected.setVenue("home");
-    // assertEquals(expected, output);
-    // }
 
     @Test
     public void testAddDateVenue() {

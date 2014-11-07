@@ -42,6 +42,7 @@ public class BakaBot extends Robot {
     public static final String UNDO = "undo";
     public static final String REDO = "redo";
     public static final String SEARCH = "search ";
+    public static final String DONE = "done ";
 
     /**
      * delay between events
