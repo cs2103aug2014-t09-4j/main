@@ -212,6 +212,7 @@ public class BakaProcessor {
                 _previousAction = input.trim();
                 // catches unsuccessful tasks that invoke displayTasks();
                 isSuccessful = isSuccessful && displayTask(input);
+                status("MESSAGE_WELCOME");
                 break;
 
             case CLEAR :
@@ -225,11 +226,6 @@ public class BakaProcessor {
 
             case EDIT :
                 isSuccessful = editTask(input, command);
-                if (isSuccessful) {
-                    status("MESSAGE_EDIT_SUCCESS");
-                } else {
-                    status("MESSAGE_EDIT_FAIL");
-                }
                 break;
 
             case UNDO :
@@ -443,7 +439,10 @@ public class BakaProcessor {
         isSuccessful = _ra.execute(inputCmd);
 
         if (isSuccessful) {
+            status("MESSAGE_EDIT_SUCCESS");
             _previousAction = "display " + _editTask.getDate();
+        } else {
+            status("MESSAGE_EDIT_FAIL");
         }
         return isSuccessful;
     }
@@ -462,6 +461,12 @@ public class BakaProcessor {
         nextStagePrompt = "";
         BakaUI.setInputBoxText(nextStagePrompt);
         status("MESSAGE_WELCOME");
+        if (isSuccessful) {
+            status("MESSAGE_EDIT_SUCCESS");
+            _previousAction = "display " + _editTask.getDate();
+        } else {
+            status("MESSAGE_EDIT_FAIL");
+        }
         return isSuccessful;
     }
 
