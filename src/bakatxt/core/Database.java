@@ -116,7 +116,7 @@ public class Database implements DatabaseInterface {
         _localeString = LOCALE_DEFAULT;
         _isRemoveDeleted = true;
         _isViewDone = false;
-        _theme = null;
+        _theme = "themes/DarkAsMySoul.bakaTheme";
         updateMemory();
         _isRemoveDone = false;
     }
