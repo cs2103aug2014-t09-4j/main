@@ -21,7 +21,8 @@ public class BakaProcessorCLI {
             String input = _sc.nextLine();
             _processor.executeCommand(input);
             for (int i = 0; i < _processor.getAllTasks().size(); i++) {
-                System.out.println(_processor.getAllTasks().get(i));
+                System.out.println(_processor.getAllTasks().get(i)
+                        .toDisplayString());
             }
         }
     }
