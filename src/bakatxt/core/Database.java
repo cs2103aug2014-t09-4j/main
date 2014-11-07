@@ -100,7 +100,7 @@ public class Database implements DatabaseInterface {
      */
     public static Database getInstance() {
         if (_database == null) {
-            _database = new Database("mytestfile.txt");
+            _database = new Database("BakaStorage.txt");
         }
         return _database;
     }
