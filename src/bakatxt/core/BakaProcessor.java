@@ -131,20 +131,19 @@ public class BakaProcessor {
      * @return boolean, true if the user entered a valid command false if the
      *         user entered an invalid one
      */
-
     public boolean executeCommand(String input) {
         boolean isSuccessful = true;
 
         if (_choosingLanguage) {
             isSuccessful = BakaTongue.setLanguage(input);
-            BakaUI.setAlertMessageText(BakaTongue.getString("MESSAGE_WELCOME"));
+            status("MESSAGE_WELCOME");
             _choosingLanguage = false;
             input = _previousAction;
         }
 
         if (_choosingTheme) {
             isSuccessful = ThemeReader.setTheme(input);
-            BakaUI.setAlertMessageText(BakaTongue.getString("MESSAGE_WELCOME"));
+            status("MESSAGE_THEME");
             _choosingTheme = false;
             input = _previousAction;
         }
@@ -154,10 +153,12 @@ public class BakaProcessor {
         if (input.toLowerCase().equals("show done")) {
             _database.updateDoneView(true);
             setToPreviousView();
+            status("MESSAGE_SHOW_DONE");
             return true;
         } else if (input.toLowerCase().equals("hide done")) {
             _database.updateDoneView(false);
             setToPreviousView();
+            status("MESSAGE_HIDE_DONE");
             return true;
         }
 
@@ -188,11 +189,21 @@ public class BakaProcessor {
 
             case ADD :
                 isSuccessful = addTask(input, command);
+                if (isSuccessful) {
+                    status("MESSAGE_ADD_SUCCESS");
+                } else {
+                    status("MESSAGE_ADD_FAIL");
+                }
                 break;
 
             case REMOVE :
             case DELETE :
                 isSuccessful = deleteTask(input);
+                if (isSuccessful) {
+                    status("MESSAGE_DELETE_SUCCESS");
+                } else {
+                    status("MESSAGE_DELETE_FAIL");
+                }
                 break;
 
             case VIEW :
@@ -201,22 +212,47 @@ public class BakaProcessor {
                 _previousAction = input.trim();
                 // catches unsuccessful tasks that invoke displayTasks();
                 isSuccessful = isSuccessful && displayTask(input);
+                if (isSuccessful) {
+                    status("MESSAGE_DISPLAY_SUCCESS");
+                } else {
+                    status("MESSAGE_DISPLAY_FAIL");
+                }
                 break;
 
             case CLEAR :
                 isSuccessful = clearTask(input, command);
+                if (isSuccessful) {
+                    status("MESSAGE_CLEAR_SUCCESS");
+                } else {
+                    status("MESSAGE_CLEAR_FAIL");
+                }
                 break;
 
             case EDIT :
                 isSuccessful = editTask(input, command);
+                if (isSuccessful) {
+                    status("MESSAGE_EDIT_SUCCESS");
+                } else {
+                    status("MESSAGE_EDIT_FAIL");
+                }
                 break;
 
             case UNDO :
                 isSuccessful = undoTask();
+                if (isSuccessful) {
+                    status("MESSAGE_UNDO_SUCCESS");
+                } else {
+                    status("MESSAGE_UNDO_FAIL");
+                }
                 break;
 
             case REDO :
                 isSuccessful = redoTask();
+                if (isSuccessful) {
+                    status("MESSAGE_REDO_SUCCESS");
+                } else {
+                    status("MESSAGE_REDO_FAIL");
+                }
                 break;
 
             case LANGUAGE :
@@ -232,14 +268,25 @@ public class BakaProcessor {
             case SEARCH :
                 searchTask(input);
                 _previousAction = input.trim();
+                status("MESSAGE_WELCOME");
                 break;
 
             case DONE :
                 isSuccessful = markDoneTask(input, command, true);
+                if (isSuccessful) {
+                    status("MESSAGE_DONE_SUCCESS");
+                } else {
+                    status("MESSAGE_DONE_FAIL");
+                }
                 break;
 
             case UNDONE :
                 isSuccessful = markDoneTask(input, COMMAND_DONE, false);
+                if (isSuccessful) {
+                    status("MESSAGE_DONE_SUCCESS");
+                } else {
+                    status("MESSAGE_DONE_FAIL");
+                }
                 break;
 
             case THEME :
@@ -248,6 +295,11 @@ public class BakaProcessor {
 
             case DEFAULT :
                 isSuccessful = addTaskWithNoCommandWord(input);
+                if (isSuccessful) {
+                    status("MESSAGE_ADD_SUCCESS");
+                } else {
+                    status("MESSAGE_ADD_FAIL");
+                }
                 break;
 
             default :
@@ -288,12 +340,12 @@ public class BakaProcessor {
         boolean isSuccessful = true;
         if (input.contains(SPACE)) {
             isSuccessful = BakaTongue.setLanguage(_parser.getString(input));
-            BakaUI.setAlertMessageText(BakaTongue.getString("MESSAGE_WELCOME"));
+            status(BakaTongue.getString("MESSAGE_WELCOME"));
             setToPreviousView();
         } else {
             _choosingLanguage = true;
             _displayTasks = BakaTongue.languageChoices();
-            BakaUI.setAlertMessageText(BakaTongue
+            status(BakaTongue
                     .getString("MESSAGE_LANGUAGE_CHOICE"));
         }
         return isSuccessful;
@@ -307,7 +359,7 @@ public class BakaProcessor {
         } else {
             _choosingTheme = true;
             _displayTasks = ThemeReader.themeChoices();
-            BakaUI.setAlertMessageText(BakaTongue
+            status(BakaTongue
                     .getString("MESSAGE_THEME_CHOICE"));
         }
         return isSuccessful;
@@ -373,8 +425,7 @@ public class BakaProcessor {
         _originalTask = new Task(_editTask);
 
         BakaUI.setInputBoxText(_editTask.getTitle());
-        BakaUI.setAlertMessageText(BakaTongue.getString("ALERT_EDIT_MODE")
-                + BakaTongue.getString("ALERT_EDIT_TITLE"));
+        status("ALERT_EDIT_TITLE");
         isSuccessful = true;
         _editStage = 6;
         return isSuccessful;
@@ -417,7 +468,7 @@ public class BakaProcessor {
         boolean isSuccessful = _ra.execute(inputCmd);
         nextStagePrompt = "";
         BakaUI.setInputBoxText(nextStagePrompt);
-        BakaUI.setAlertMessageText(BakaTongue.getString("MESSAGE_WELCOME"));
+        status("MESSAGE_WELCOME");
         return isSuccessful;
     }
 
@@ -436,8 +487,7 @@ public class BakaProcessor {
             nextStagePrompt = BakaTongue.getString("USER_PROMPT_END_TIME");
         }
         BakaUI.setInputBoxText(nextStagePrompt);
-        BakaUI.setAlertMessageText(BakaTongue.getString("ALERT_EDIT_MODE")
-                + BakaTongue.getString("ALERT_EDIT_END_TIME"));
+        status("ALERT_EDIT_END_TIME");
         return true;
     }
 
@@ -457,8 +507,7 @@ public class BakaProcessor {
             nextStagePrompt = BakaTongue.getString("USER_PROMPT_DESCRIPTION");
         }
         BakaUI.setInputBoxText(nextStagePrompt);
-        BakaUI.setAlertMessageText(BakaTongue.getString("ALERT_EDIT_MODE")
-                + BakaTongue.getString("ALERT_EDIT_DESCRIPTION"));
+        status("ALERT_EDIT_DESCRIPTION");
         return true;
     }
 
@@ -477,8 +526,7 @@ public class BakaProcessor {
             nextStagePrompt = BakaTongue.getString("USER_PROMPT_START_TIME");
         }
         BakaUI.setInputBoxText(nextStagePrompt);
-        BakaUI.setAlertMessageText(BakaTongue.getString("ALERT_EDIT_MODE")
-                + BakaTongue.getString("ALERT_EDIT_START_TIME"));
+        status("ALERT_EDIT_START_TIME");
         return true;
     }
 
@@ -495,8 +543,7 @@ public class BakaProcessor {
             nextStagePrompt = BakaTongue.getString("USER_PROMPT_DATE");
         }
         BakaUI.setInputBoxText(nextStagePrompt);
-        BakaUI.setAlertMessageText(BakaTongue.getString("ALERT_EDIT_MODE")
-                + BakaTongue.getString("ALERT_EDIT_DATE"));
+        status("ALERT_EDIT_DATE");
         return true;
     }
 
@@ -513,8 +560,7 @@ public class BakaProcessor {
             nextStagePrompt = BakaTongue.getString("USER_PROMPT_VENUE");
         }
         BakaUI.setInputBoxText(nextStagePrompt);
-        BakaUI.setAlertMessageText(BakaTongue.getString("ALERT_EDIT_MODE")
-                + BakaTongue.getString("ALERT_EDIT_VENUE"));
+        status("ALERT_EDIT_VENUE");
         return true;
     }
 
@@ -590,4 +636,7 @@ public class BakaProcessor {
         return isSuccessful;
     }
 
+    private void status(String message) {
+        BakaUI.setAlertMessageText(BakaTongue.getString(message));
+    }
 }
