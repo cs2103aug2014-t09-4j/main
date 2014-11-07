@@ -314,14 +314,7 @@ public class BakaProcessor {
     }
 
     private boolean addTaskWithNoCommandWord(String input) {
-        UserAction inputCmd;
-        Task task;
-        task = _parser.add(COMMAND_ADD + SPACE + input);
-        inputCmd = new UserAction(COMMAND_ADD, task);
-        boolean isSuccessful = _ra.execute(inputCmd);
-        _previousAction = "display " + task.getDate();
-        setToPreviousView();
-        return isSuccessful;
+        return addTask(input, COMMAND_ADD);
     }
 
     private boolean editTask(String input, String command) {
@@ -591,7 +584,7 @@ public class BakaProcessor {
         inputCmd = new UserAction(command, task);
         boolean isSuccessful = _ra.execute(inputCmd);
         _previousAction = "display " + task.getDate();
-        _displayTasks = _database.getTasksWithDate(task.getDate());
+        setToPreviousView();
         return isSuccessful;
     }
 
