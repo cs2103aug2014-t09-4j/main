@@ -128,7 +128,8 @@ public class ThemeReader {
 
     private static void populateDefaultThemes() {
         Charset charset = Charset.forName("UTF-8");
-        OpenOption[] options = { StandardOpenOption.CREATE };
+        OpenOption[] options = { StandardOpenOption.CREATE,
+                StandardOpenOption.TRUNCATE_EXISTING };
         populateDarkAsMySoulTheme(charset, options);
         populateWhiteSpaceTheme(charset, options);
     }
