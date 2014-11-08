@@ -103,12 +103,21 @@ public class Database implements DatabaseInterface {
         return _database;
     }
 
+    /**
+     * Set up the output buffer and initialize instance variables.
+     * 
+     * @param fileName
+     *            storage file containing the tasks and settings
+     */
     private void setEnvironment(String fileName) {
         initializeFilePath(fileName);
         initializeOutputStream();
         initializeVariables();
     }
 
+    /**
+     * Initialize all the variables of the <code>Database</code> singleton
+     */
     private void initializeVariables() {
         _parser = new BakaParser();
         _localeString = LOCALE_DEFAULT;
@@ -118,10 +127,21 @@ public class Database implements DatabaseInterface {
         updateMemory();
     }
 
+    /**
+     * Convert the filename of the storage to a <code>Path</code> and set it to
+     * the instance attribute.
+     * 
+     * @param fileName
+     *            storage file containing the tasks and settings
+     */
     private void initializeFilePath(String fileName) {
         _userFile = Paths.get(fileName);
     }
 
+    /**
+     * Setup of the output file writer to enable writing of information to the
+     * storage file.
+     */
     private void initializeOutputStream() {
         try {
             _outputStream = Files.newBufferedWriter(_userFile, CHARSET_DEFAULT,
@@ -131,6 +151,12 @@ public class Database implements DatabaseInterface {
         }
     }
 
+    /**
+     * Reads the storage file through a buffered input stream into a
+     * <code>HashMap</code> containing <code>LinkedList</code> of tasks to their
+     * relevant keys. User settings such as language and themes are also
+     * applied.
+     */
     private void updateMemory() {
         LOGGER.info("bakaMap update initialized");
         _bakaMap = new HashMap<String, LinkedList<Task>>();
@@ -161,6 +187,13 @@ public class Database implements DatabaseInterface {
         }
     }
 
+    /**
+     * Set the language of <code>BakaTxt</code> based on the settings inside the
+     * storage file.
+     * 
+     * @param line
+     *            containing the language preference in the storage file
+     */
     private void settingLanguage(String line) {
         _localeString = line.substring(line.indexOf(TAG_CLOSE) + 1);
         String[] localeArgs = _localeString.split("_");
@@ -171,12 +204,28 @@ public class Database implements DatabaseInterface {
         }
     }
 
+    /**
+     * Set the theme of <code>BakaTxt</code> based on the settings inside the
+     * storage file.
+     * 
+     * @param line
+     *            containing the theme preference in the storage file
+     */
     private void settingTheme(String line) {
         _theme = line.substring(line.indexOf(TAG_CLOSE) + 1).trim();
         Path themePath = Paths.get(_theme);
         ThemeReader.setTheme(themePath);
     }
 
+    /**
+     * Adds a <code>Task</code> that is changed or new into the
+     * <code>HashMap</code> in memory. Repeated <code>Tasks</code> will not be
+     * added.
+     * 
+     * @param task
+     *            that is to be added or has been changed
+     * @return <code>true</code> if task is added, <code>false</code> otherwise.
+     */
     private boolean addTaskToMap(Task task) {
         LOGGER.fine("add to bakaMap");
         String key = task.getKey();
@@ -200,6 +249,13 @@ public class Database implements DatabaseInterface {
         return _userFile.toString();
     }
 
+    /**
+     * Updates the instance attribute of a <code>TreeSet</code> containing the
+     * sorted keys of the <code>HashMap</code>. <code>Task</code> in
+     * <code>LinkedList</code> in the <code>HashMap</code> are also sorted in a
+     * chronological order as determined by <code>compareTo</code> of the
+     * <code>Task</code>.
+     */
     private void sort() {
         _sortedKeys = new TreeSet<String>(_bakaMap.keySet());
         for (Map.Entry<String, LinkedList<Task>> entry : _bakaMap.entrySet()) {
@@ -208,6 +264,11 @@ public class Database implements DatabaseInterface {
         }
     }
 
+    /**
+     * Output the storage filename as a formatted <code>String</code>
+     * 
+     * @return <code>String</code> containing the filename of the storage file.
+     */
     @Override
     public String toString() {
         String lineOne = String.format(MESSAGE_OUTPUT_FILENAME, getFileName());
@@ -238,6 +299,15 @@ public class Database implements DatabaseInterface {
         return isAdded;
     }
 
+    /**
+     * Checks if the task already exists in the <code>HashMap</code> by looking
+     * into the associated <code>key</code> value.
+     * 
+     * @param task
+     *            to be checked;
+     * @return <code>true</code> if the task already exist, else
+     *         <code>false</code>
+     */
     private boolean isExisting(Task task) {
         String key = task.getKey();
         LinkedList<Task> target = _bakaMap.get(key);
@@ -299,6 +369,13 @@ public class Database implements DatabaseInterface {
         BakaLogger.teardown();
     }
 
+    /**
+     * Writes the preset comments, preferences and content of the
+     * <code>HashMap</code> into the storage file that is empty.
+     * 
+     * @return <code>true</code> if the tasks are written to the storage file,
+     *         <code>false</code> otherwise.
+     */
     private boolean updateFile() {
         LOGGER.info("update file initialized");
         // tempCreation();
@@ -308,6 +385,10 @@ public class Database implements DatabaseInterface {
         return writeLinesToFile();
     }
 
+    /**
+     * Writes the user preferences into the file based on the attributes stored
+     * in the instance.
+     */
     private void writeSettings() {
         try {
             _outputStream.write(LOCALE_FILE + SPACE + _localeString.trim());
@@ -322,6 +403,9 @@ public class Database implements DatabaseInterface {
         }
     }
 
+    /**
+     * Writes the preset storage file comments to the storage file.
+     */
     private void writeFileComments() {
         try {
             _outputStream.write(FILE_HEADER);
@@ -337,6 +421,15 @@ public class Database implements DatabaseInterface {
         }
     }
 
+    /**
+     * Writes <code>Task</code> from the <code>HashMap</code> into the storage
+     * file. Deleted <code>Task</code> are determined to be written based on the
+     * <code>boolean _isRemovedDeleted</code>.
+     * 
+     * @return <code>true</code> if the content of the <code>HashMap</code> can
+     *         be written to the storage file, <code>false</code> if an
+     *         exception arises.
+     */
     private boolean writeLinesToFile() {
         LOGGER.info("write to file initialized");
         try {
@@ -360,6 +453,9 @@ public class Database implements DatabaseInterface {
         }
     }
 
+    /**
+     * Reset the file by overwriting the content with an empty <code>byte</code>
+     */
     private void resetFile() {
         LOGGER.info("reset file initialized");
         try {
@@ -369,6 +465,10 @@ public class Database implements DatabaseInterface {
         }
     }
 
+    /**
+     * Creates a temporary copy of the storage file in the same folder as the
+     * storage file.
+     */
     private void tempCreation() {
         // copy userFile into tempFile
         Path tempFile;
@@ -410,7 +510,9 @@ public class Database implements DatabaseInterface {
      * the memory with titles containing the specified string.
      * 
      * The list is sorted with the floating tasks first in alphabetical order
-     * followed by tasks with dates in chronological order.
+     * followed by tasks with dates in chronological order. Listing of done
+     * tasks is
+     * determined by the user preference as stated in <code>_isViewDone</code>.
      * 
      * @param title
      *            full or partial <code>String</code> of a title
@@ -441,15 +543,16 @@ public class Database implements DatabaseInterface {
     }
 
     /**
-     * Returns a <code>LinkedList</code> containing all the undone non-deleted
+     * Returns a <code>LinkedList</code> containing all the non-deleted
      * tasks in the memory with the specified date.
      * 
-     * The list is sorted in chronological order.
+     * The list is sorted in chronological order. Listing of done tasks is
+     * determined by the user preference as stated in <code>_isViewDone</code>.
      * 
      * @param key
      *            <code>String</code> containing the date
      * 
-     * @return <code>LinkedList</code> containing all the undone tasks in
+     * @return <code>LinkedList</code> containing all the tasks in
      *         specified date or floating tasks if specified date is
      *         <code>null</code>
      */
@@ -487,12 +590,15 @@ public class Database implements DatabaseInterface {
     }
 
     /**
-     * Returns a <code>LinkedList</code> containing all the undone tasks in
+     * Returns a <code>LinkedList</code> containing all the tasks in
      * the memory.
-     * The list is sorted with the floating tasks first in alphabetical order
-     * followed by tasks with dates in chronological order.
      * 
-     * @return <code>LinkedList</code> containing all the undone tasks
+     * The list is sorted with the floating tasks first in alphabetical order
+     * followed by tasks with dates in chronological order. Listing of done
+     * tasks is determined by the user preference as stated in
+     * <code>_isViewDone</code>.
+     * 
+     * @return <code>LinkedList</code> containing all the tasks
      */
     @Override
     public LinkedList<Task> getAllTasks() {
@@ -510,19 +616,31 @@ public class Database implements DatabaseInterface {
         return tasks;
     }
 
+    /**
+     * Add all tasks in a <code>HashMap</code> key into the specified
+     * <code>LinkedList</code>.
+     * 
+     * @param tasks
+     *            the target <code>LinkedList</code>
+     * @param key
+     *            of the values in the <code>HashMap</code> to be added to the
+     *            target <code>LinkedList</code>.
+     */
     private void updateTasksList(LinkedList<Task> tasks, String key) {
         LinkedList<Task> today = _bakaMap.get(key);
         tasks.addAll(today);
     }
 
     /**
-     * Returns a <code>LinkedList</code> containing all the undone tasks for the
+     * Returns a <code>LinkedList</code> containing all the tasks for the
      * next 7 days, including today.
      * 
      * The list is sorted with the floating tasks first in alphabetical order
-     * followed by tasks with dates in chronological order.
+     * followed by tasks with dates in chronological order. Listing of done
+     * tasks is determined by the user preference as stated in
+     * <code>_isViewDone</code>.
      * 
-     * @return <code>LinkedList</code> containing all the undone tasks in 7 days
+     * @return <code>LinkedList</code> containing all the tasks in 7 days
      */
     @Override
     public LinkedList<Task> getWeekTasks() {
@@ -579,13 +697,25 @@ public class Database implements DatabaseInterface {
         return updateFile();
     }
 
+    /**
+     * Writes the line to the storage file without any form of post-processing.
+     * This ensures that the information is added to the storage file once it is
+     * received by <code>Database</code>.
+     * 
+     * @param line
+     *            containing the relevant information to be written
+     * @return <code>true</code> if the information can be written to the
+     *         storage file, <code>false</code> if the storage file cannot be
+     *         written to.
+     */
     private boolean dirtyWrite(String line) {
         try {
             _outputStream.write(line);
             _outputStream.newLine();
             _outputStream.flush();
             return true;
-        } catch (IOException ex) {
+        } catch (Exception ex) {
+            System.out.println("KNNBCCB");
             return false;
         }
     }
@@ -599,7 +729,7 @@ public class Database implements DatabaseInterface {
 
     /**
      * Writes the current locale used by <code>BakaTxt</code> into the storage
-     * file to enable persistence
+     * file to enable persistence.
      * 
      * @param locale
      *            current locale used
@@ -611,6 +741,13 @@ public class Database implements DatabaseInterface {
         dirtyWrite(LOCALE_FILE + SPACE + _localeString);
     }
 
+    /**
+     * Writes the current theme used by <code>BakaTxt</code> into the storage
+     * file to enable persistence.
+     * 
+     * @param theme
+     *            current theme used
+     */
     @Override
     public void updateTheme(String theme) {
         LOGGER.info("theme write initialized");
@@ -618,6 +755,13 @@ public class Database implements DatabaseInterface {
         dirtyWrite(THEME + SPACE + _theme);
     }
 
+    /**
+     * Writes the current view option for done tasks into the storage file to
+     * enable persistence.
+     * 
+     * @param boolean <code>true</code> to show done, <code>false</code>
+     *        otherwise.
+     */
     @Override
     public void updateDoneView(boolean isViewingDone) {
         LOGGER.info("view done write initialized");
