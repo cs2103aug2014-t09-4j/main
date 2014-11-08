@@ -32,7 +32,6 @@ public class Database implements DatabaseInterface {
     private static final String STRING_TODAY = "today";
     private static final String STRING_DAY = "day";
 
-    private static final String MESSAGE_FILE_CHANGE = "File changed. Current filename is \"%1$s\".";
     private static final String MESSAGE_OUTPUT_FILENAME = "Filename: %1$s"
             + LINE_SEPARATOR;
 
@@ -72,7 +71,6 @@ public class Database implements DatabaseInterface {
     private BufferedWriter _outputStream;
     private HashMap<String, LinkedList<Task>> _bakaMap;
     private TreeSet<String> _sortedKeys;
-    private boolean _isRemoveDone;
     private boolean _isRemoveDeleted;
     private String _localeString;
     private BakaParser _parser;
@@ -118,7 +116,6 @@ public class Database implements DatabaseInterface {
         _isViewDone = false;
         _theme = "themes/DarkAsMySoul.bakaTheme";
         updateMemory();
-        _isRemoveDone = false;
     }
 
     private void initializeFilePath(String fileName) {
@@ -153,8 +150,6 @@ public class Database implements DatabaseInterface {
                     settingLanguage(line);
                 } else if (line.contains(THEME)) {
                     settingTheme(line);
-                } else if (line.contains(TAG_DONE) && _isRemoveDone) {
-                    deleteDoneTask(line);
                 } else if (line.contains(TAG_TITLE)) {
                     Task task = new Task(line);
                     addTaskToMap(task);
@@ -164,12 +159,6 @@ public class Database implements DatabaseInterface {
             ex.printStackTrace();
             LOGGER.severe("bakaMap update failed");
         }
-    }
-
-    private void deleteDoneTask(String line) {
-        Task doneTask = new Task(line);
-        doneTask.setDeleted(true);
-        addTaskToMap(doneTask);
     }
 
     private void settingLanguage(String line) {
@@ -199,13 +188,6 @@ public class Database implements DatabaseInterface {
         }
         LinkedList<Task> target = _bakaMap.get(key);
         return target.add(task);
-    }
-
-    @Override
-    public String setFile(String fileName) {
-        setEnvironment(fileName);
-        String output = String.format(MESSAGE_FILE_CHANGE, getFileName());
-        return output;
     }
 
     /**
@@ -360,9 +342,7 @@ public class Database implements DatabaseInterface {
         try {
             sort();
             for (String key : _sortedKeys) {
-                if (_isRemoveDone && key.contains(TAG_DONE)) {
-                    continue;
-                } else if (_isRemoveDeleted && key.contains(TAG_DELETED)) {
+                if (_isRemoveDeleted && key.contains(TAG_DELETED)) {
                     continue;
                 }
                 LinkedList<Task> listToWrite = _bakaMap.get(key);
@@ -608,21 +588,6 @@ public class Database implements DatabaseInterface {
         } catch (IOException ex) {
             return false;
         }
-    }
-
-    /**
-     * Removes tasks that are done from the memory and the storage file. This
-     * method is not persistent. Subsequent tasks that are marked as done are
-     * still kept in the storage file and memory until this method is called
-     * again.
-     */
-    @Override
-    public void removeDone() {
-        LOGGER.info("delete done initialized");
-        _isRemoveDone = true;
-        updateFile();
-        updateMemory();
-        _isRemoveDone = false;
     }
 
     @Override
