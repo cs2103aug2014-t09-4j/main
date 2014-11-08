@@ -566,6 +566,12 @@ public class BakaProcessor {
     private boolean deleteTask(String input) {
         UserAction inputCmd;
         Task task;
+
+        input = input.trim();
+        if (!input.contains(SPACE)) {
+            return false;
+        }
+
         String content = _parser.getString(input).trim();
         ArrayList<Integer> listOfIndex = _parser.getIndexList(content);
 
@@ -609,6 +615,12 @@ public class BakaProcessor {
     private boolean markDoneTask(String input, String command, boolean done) {
         Task task;
         UserAction inputCmd;
+
+        input = input.trim();
+        if (!input.contains(SPACE)) {
+            return false;
+        }
+
         String content = _parser.getString(input).trim();
         ArrayList<Integer> listOfIndex = _parser.getIndexList(content);
         setToPreviousView();
