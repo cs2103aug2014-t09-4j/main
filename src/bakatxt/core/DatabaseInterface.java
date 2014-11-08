@@ -7,7 +7,6 @@ import java.util.LinkedList;
 // Interface for Database to write to textfile
 
 public interface DatabaseInterface {
-    public String setFile(String fileName);
 
     public String getFileName();
 
@@ -21,8 +20,6 @@ public interface DatabaseInterface {
             throws IOException;
 
     public void close();
-
-    public void removeDone();
 
     public LinkedList<Task> getTaskWithTitle(String title);
 

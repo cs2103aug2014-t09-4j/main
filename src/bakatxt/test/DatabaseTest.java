@@ -20,8 +20,6 @@ public class DatabaseTest {
     @Before
     public void setUp() throws Exception {
         database = Database.getInstance();
-        database.setFile("aloha.txt");
-        System.out.println(database.getFileName());
         Task task = new Task("beforeTask");
         database.add(task);
     }
@@ -132,7 +130,6 @@ public class DatabaseTest {
         task.setDone(true);
 
         database.add(task);
-        database.removeDone();
         LinkedList<Task> tasks = database.getAllTasks();
         assertFalse(tasks.contains(task));
     }
