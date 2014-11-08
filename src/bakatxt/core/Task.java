@@ -73,12 +73,20 @@ public class Task implements TaskInterface, Comparable<Task> {
             _isFloating = true;
             _isDeleted = false;
         } else if (isValidTaskString(input)) {
-            // TODO fix semi corrupted tasks
             initializeFromDatabaseString(tokenizedInput);
             updateFloatingStatus();
         }
     }
 
+    /**
+     * Checks that the task from the storage file contains all the relevant
+     * information.
+     * 
+     * @param input
+     *            a <code>String</code> from the storage file
+     * @return <code>true</code> if the string is a valid task,
+     *         <code>false</code> otherwise.
+     */
     private static boolean isValidTaskString(String input) {
         ArrayList<String> headers = new ArrayList<String>();
         headers.add(TAG_TITLE);
@@ -100,15 +108,26 @@ public class Task implements TaskInterface, Comparable<Task> {
         return true;
     }
 
+    /**
+     * Extracts the information of a <code>Task</code> into its proper
+     * attributes of a <code>Task</code> instance.
+     * 
+     * @param tokenizedInput
+     *            a <code>List</code> containing all the <code>String</code>
+     *            tokens of the <code>String</code> from the storage file.
+     */
     private void initializeFromDatabaseString(List<String> tokenizedInput) {
         int titleIndex = tokenizedInput.indexOf(TAG_TITLE) + 1;
         StringBuilder title = new StringBuilder();
+
+        // ensure capturing of titles with more than one word
         for (int i = titleIndex; i < tokenizedInput.indexOf(TAG_DATE); i++) {
             title.append(tokenizedInput.get(i));
             title.append(SPACE);
         }
         _title = title.toString().trim();
 
+        // retrieving the indices of the information of the Task
         int dateIndex = tokenizedInput.indexOf(TAG_DATE) + 1;
         int timeIndex = tokenizedInput.indexOf(TAG_TIME) + 1;
         int endTimeIndex = tokenizedInput.indexOf(TAG_ENDTIME) + 1;
@@ -117,10 +136,12 @@ public class Task implements TaskInterface, Comparable<Task> {
         int deletedIndex = tokenizedInput.indexOf(TAG_DELETED) + 1;
         int descriptionIndex = tokenizedInput.indexOf(TAG_DESCRIPTION) + 1;
 
+        // date and time
         _date = tokenizedInput.get(dateIndex);
         _time = tokenizedInput.get(timeIndex);
         _endTime = tokenizedInput.get(endTimeIndex);
 
+        // ensure capture of multiple words of the venue
         for (int i = venueIndex; i < doneIndex - 1; i++) {
             if (_venue == null) {
                 _venue = tokenizedInput.get(i);
@@ -128,10 +149,13 @@ public class Task implements TaskInterface, Comparable<Task> {
                 _venue = _venue + SPACE + tokenizedInput.get(i);
             }
         }
+
+        // boolean flags of done, floating and deleted
         _isDone = tokenizedInput.get(doneIndex).equals(TAG_TRUE);
         _isFloating = _date.equals(_time);
         _isDeleted = tokenizedInput.get(deletedIndex).equals(TAG_TRUE);
 
+        // capture the remaining information as the description
         if (descriptionIndex + 1 == tokenizedInput.size()) {
             if (tokenizedInput.get(descriptionIndex).equals(TAG_NULL)) {
                 _description = null;
@@ -147,21 +171,35 @@ public class Task implements TaskInterface, Comparable<Task> {
             _description = description.toString().trim();
         }
 
+        // if task is not done, update accordingly of its overdue status
         if (_isDone == false) {
             updateOverdueStatus();
         }
     }
 
+    /**
+     * @return title of the task
+     */
     @Override
     public String getTitle() {
         return _title;
     }
 
+    /**
+     * @return date of the task
+     */
     @Override
     public String getDate() {
         return _date;
     }
 
+    /**
+     * Format valid dates into a more user-friendly format for GUI. Retains
+     * special date <code>String</code> to ensure duality of the date field in
+     * GUI.
+     * 
+     * @return a formatted date of the task if valid
+     */
     @Override
     public String getFormattedDate() {
         BakaParser parser = new BakaParser();
@@ -175,32 +213,61 @@ public class Task implements TaskInterface, Comparable<Task> {
         return formatted;
     }
 
+    /**
+     * @return start time of the task
+     */
     @Override
     public String getTime() {
         return _time;
     }
 
+    /**
+     * @return end time of the task
+     */
     @Override
     public String getEndTime() {
         return _endTime;
     }
 
+    /**
+     * @return venue of the task
+     */
     @Override
     public String getVenue() {
         return _venue;
     }
 
+    /**
+     * @return description of the task
+     */
     @Override
     public String getDescription() {
         return _description;
     }
 
+    /**
+     * Sets the title of the task
+     * 
+     * @param input
+     *            containing the title of the task
+     * 
+     * @return <code>String</code> containing the updated title of the task
+     */
     @Override
     public String setTitle(String input) {
         _title = input.trim();
         return _title;
     }
 
+    /**
+     * Sets the date of the task, and update the floating status of the task
+     * accordingly.
+     * 
+     * @param input
+     *            containing the date of the task
+     * 
+     * @return <code>String</code> containing the updated date of the task
+     */
     @Override
     public String setDate(String input) {
         if (input == null || input.equals("null")) {
@@ -212,6 +279,10 @@ public class Task implements TaskInterface, Comparable<Task> {
         return _date;
     }
 
+    /**
+     * Sets the floating status to <code>true</code> if there is no date and
+     * time specified, else set to <code>false</code>.
+     */
     private void updateFloatingStatus() {
         if (_date == null || _date.equals("null")) {
             if (_time == null || _time.equals("null")) {
@@ -224,6 +295,15 @@ public class Task implements TaskInterface, Comparable<Task> {
         }
     }
 
+    /**
+     * Sets the time of the task, and update the floating status of the task
+     * accordingly.
+     * 
+     * @param input
+     *            containing the time of the task
+     * 
+     * @return <code>String</code> containing the updated time of the task
+     */
     @Override
     public String setTime(String input) {
         if (input == null || input.equals("null")) {
@@ -235,6 +315,16 @@ public class Task implements TaskInterface, Comparable<Task> {
         return _time;
     }
 
+    /**
+     * Sets the end time of the task, and update the floating status of the task
+     * accordingly. If the start time is <code>null</code>, the end time will be
+     * set as start time.
+     * 
+     * @param input
+     *            containing the end time of the task
+     * 
+     * @return <code>String</code> containing the updated end time of the task
+     */
     @Override
     public String setEndTime(String input) {
         if (input == null || input.equals("null")) {
@@ -250,6 +340,12 @@ public class Task implements TaskInterface, Comparable<Task> {
         return _endTime;
     }
 
+    /**
+     * @param input
+     *            containing the venue of the task
+     * 
+     * @return <code>String</code> containing the updated venue of the task
+     */
     @Override
     public String setVenue(String input) {
         if (input == null || input.equals("null")) {
@@ -260,6 +356,12 @@ public class Task implements TaskInterface, Comparable<Task> {
         return _venue;
     }
 
+    /**
+     * @param input
+     *            containing the venue of the task
+     * 
+     * @return <code>String</code> containing the updated venue of the task
+     */
     @Override
     public String setDescription(String input) {
         if (input == null || input.equals("null")) {
@@ -270,11 +372,18 @@ public class Task implements TaskInterface, Comparable<Task> {
         return _description;
     }
 
+    /**
+     * @return <code>true</code> if the task is done, <code>false</code>
+     *         otherwise.
+     */
     @Override
     public boolean isDone() {
         return _isDone;
     }
 
+    /**
+     * @return a formatted <code>String</code> of the task
+     */
     @Override
     public String toDisplayString() {
         StringBuilder task = new StringBuilder();
@@ -297,6 +406,11 @@ public class Task implements TaskInterface, Comparable<Task> {
         return task.toString();
     }
 
+    /**
+     * @return a <code>String</code> containing the relevant information of the
+     *         task that is required to maintain integrity of the task and
+     *         enable correct sorting of the tasks in the storage file.
+     */
     @Override
     public String toString() {
         StringBuilder task = new StringBuilder();
@@ -329,16 +443,34 @@ public class Task implements TaskInterface, Comparable<Task> {
         return task.toString();
     }
 
+    /**
+     * Sets a task to be deleted from the storage file.
+     * 
+     * @param <code>true</code> for task to be deleted, <code>false</code>
+     *        otherwise.
+     */
     @Override
     public void setDeleted(boolean isDeleted) {
         _isDeleted = isDeleted;
     }
 
+    /**
+     * @return <code>true</code> if task is floating, <code>false</code>
+     *         otherwise.
+     */
     @Override
     public boolean isFloating() {
         return _isFloating;
     }
 
+    /**
+     * Sets a task to be done or undone. If task is done, the date of an overdue
+     * task is restored. If task is not done, overdue status is updated
+     * accordingly.
+     * 
+     * @param <code>true</code> for task to be done, <code>false</code> for task
+     *        to be undone.
+     */
     @Override
     public void setDone(boolean isDone) {
         _isDone = isDone;
@@ -352,6 +484,12 @@ public class Task implements TaskInterface, Comparable<Task> {
         updateFloatingStatus();
     }
 
+    /**
+     * Sets a task floating status.
+     * 
+     * @param <code>true</code> for task to be floating, <code>false</code>
+     *        otherwise.
+     */
     @Override
     public void setFloating(boolean isFloating) {
         _isFloating = isFloating;
@@ -360,11 +498,25 @@ public class Task implements TaskInterface, Comparable<Task> {
         }
     }
 
+    /**
+     * @return <code>true</code> if the task is set to be deleted,
+     *         <code>false</code> otherwise.
+     */
     @Override
     public boolean isDeleted() {
         return _isDeleted;
     }
 
+    /**
+     * Determines if two tasks are equal through comparison of the
+     * <code>String</code> to be written to the storage file.
+     * 
+     * @param Task
+     *            to be compared with
+     * 
+     * @return <code>true</code> if both tasks contain the same information,
+     *         <code>false</code> otherwise.
+     */
     @Override
     public boolean equals(Object obj) {
         if (!(obj instanceof Task)) {
@@ -374,6 +526,17 @@ public class Task implements TaskInterface, Comparable<Task> {
         return this.toString().equals(task.toString());
     }
 
+    /**
+     * Sets the comparison of two tasks to be time-based to ensure that the
+     * tasks are sorted chronologically in the storage file and
+     * <code>Database</code>
+     * 
+     * @param Task
+     *            to be compared with
+     * 
+     * @return <code>0</code> if they are of the same date and time,
+     *         <code>1</code> or <code>-1</code> if they are of different time.
+     */
     @Override
     public int compareTo(Task task) {
         String thisOne = this.getKey() + this.getTime();
@@ -385,6 +548,11 @@ public class Task implements TaskInterface, Comparable<Task> {
         return timeComparison;
     }
 
+    /**
+     * Generates the key of which the task is placed in the memory.
+     * 
+     * @return <code>String</code> key of the task.
+     */
     @Override
     public String getKey() {
         StringBuilder key = new StringBuilder();
@@ -406,6 +574,13 @@ public class Task implements TaskInterface, Comparable<Task> {
         return key.toString();
     }
 
+    /**
+     * Checks if a task is overdue based on the overdue status in the
+     * description.
+     * 
+     * @return <code>true</code> if the task is overdue, <code>false</code>
+     *         otherwise.
+     */
     @Override
     public boolean isOverdue() {
         if (_description==null || !_description.contains(STRING_OVERDUE)) {
@@ -414,6 +589,11 @@ public class Task implements TaskInterface, Comparable<Task> {
         return true;
     }
 
+    /**
+     * Updates the overdue status of a task against the current time. Sets task
+     * to be floating and prepend overdue information to the description if task
+     * is overdue.
+     */
     @Override
     public void updateOverdueStatus() {
         BakaParser parser = new BakaParser();
@@ -459,6 +639,10 @@ public class Task implements TaskInterface, Comparable<Task> {
         }
     }
 
+    /**
+     * Prepends the overdue information to the description and updates the date
+     * and time accordingly.
+     */
     private void setOverdue() {
         if (_description == null) {
             _description = new String();
@@ -469,6 +653,16 @@ public class Task implements TaskInterface, Comparable<Task> {
         setFloating(true);
     }
 
+    /**
+     * Merges two tasks into one, with <code>null</code> fields being of the
+     * lowest priorities. Information from task specified has a higher priority
+     * over existing information in the <code>Task</code> instance.
+     * 
+     * @param Task
+     *            containing information to be merged
+     * 
+     * @return Task containing information of updated set of information.
+     */
     @Override
     public Task merge(Task toMerge) {
         if (toMerge.getTitle() != null && !toMerge.getTitle().isEmpty()) {
@@ -500,6 +694,9 @@ public class Task implements TaskInterface, Comparable<Task> {
         return this;
     }
 
+    /**
+     * Removes the overdue information from the description of the task
+     */
     private void removeOverdueComment() {
         if (this.isOverdue()) {
             int index = this.getDescription().indexOf("]") + 1;
