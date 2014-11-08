@@ -675,6 +675,28 @@ public class Database implements DatabaseInterface {
     }
 
     /**
+     * Returns a <code>LinkedList</code> containing all the done tasks.
+     * 
+     * The list is sorted with the floating tasks first in alphabetical order
+     * followed by tasks with dates in chronological order.
+     * 
+     * @return <code>LinkedList</code> containing all the done tasks.
+     */
+    @Override
+    public LinkedList<Task> getDoneTasks() {
+        LinkedList<Task> tasks = new LinkedList<Task>();
+        sort();
+        for (String key : _sortedKeys) {
+            if (!key.contains(TAG_DELETED)) {
+                if (key.contains(TAG_DONE)) {
+                    updateTasksList(tasks, key);
+                }
+            }
+        }
+        return tasks;
+    }
+
+    /**
      * Sets a specific task's floating status based on the specified boolean.
      * This is implemented by deleting the original task from the memory
      * and storage file, before adding an updated copy back to memory and

@@ -73,6 +73,9 @@ public class BakaProcessor {
                 case "week":
                     _displayTasks = _database.getWeekTasks();
                     break;
+                case "done" :
+                    _displayTasks = _database.getDoneTasks();
+                    break;
                 default:
                     String currentDate = _parser.getDate(content);
                     _displayTasks = _database.getTasksWithDate(currentDate);
