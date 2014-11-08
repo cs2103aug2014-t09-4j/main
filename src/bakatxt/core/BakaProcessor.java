@@ -107,12 +107,10 @@ public class BakaProcessor {
         input = input.trim();
         if (input.contains(SPACE)) {
             date = _parser.getString(input);
-            date = _parser.getDate(date);
         } else {
             setToPreviousView();
             if (_previousAction.contains(SPACE)) {
                 date = _parser.getString(_previousAction);
-                date = _parser.getDate(date);
             } else {
                 date = "all";
             }

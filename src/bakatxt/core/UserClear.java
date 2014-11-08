@@ -32,7 +32,12 @@ public class UserClear extends UserAction {
             case "all" :
                 _tasks = super._database.getAllTasks();
                 break;
+            case "done" :
+                _tasks = super._database.getDoneTasks();
+                break;
             default :
+                BakaParser parser = new BakaParser();
+                date = parser.getDate(date);
                 _tasks = super._database.getTasksWithDate(date);
         }
     }
