@@ -165,7 +165,14 @@ public class Task implements TaskInterface, Comparable<Task> {
     @Override
     public String getFormattedDate() {
         BakaParser parser = new BakaParser();
-        return parser.getFormattedDate(_date);
+        if (_date == null || _date.equals("null")) {
+            return null;
+        }
+        String formatted = parser.getFormattedDate(_date);
+        if (formatted == null || formatted.equals("null")) {
+            return _date;
+        }
+        return formatted;
     }
 
     @Override
