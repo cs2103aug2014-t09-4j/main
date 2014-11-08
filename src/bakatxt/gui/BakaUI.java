@@ -170,7 +170,6 @@ public class BakaUI extends JFrame {
         setAlwaysOnTop(false);
         setTitle("BakaTxt");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setMouseActions();
     }
 
     /**
@@ -220,17 +219,5 @@ public class BakaUI extends JFrame {
         };
         provider.reset();
         provider.register(KeyStroke.getKeyStroke(HOTKEY), listener);
-    }
-
-    /**
-     * Allow mouse movement of window from any part of the window
-     * @deprecated
-     * TODO remove by 0.5
-     */
-    @Deprecated
-    private static void setMouseActions() {
-        MouseActions mouseActions = new MouseActions(_bakaPanel);
-        _bakaPanel.addMouseListener(mouseActions);
-        _bakaPanel.addMouseMotionListener(mouseActions);
     }
 }
