@@ -4,6 +4,8 @@ package bakatxt.core;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.OpenOption;
@@ -81,7 +83,7 @@ public class Database implements DatabaseInterface {
         assert (_database == null);
         try {
             BakaLogger.setup();
-        } catch (SecurityException | IOException ex) {
+        } catch (Exception ex) {
             BakaLogger.setup(true);
         } finally {
             LOGGER.setLevel(Level.INFO);
@@ -146,9 +148,65 @@ public class Database implements DatabaseInterface {
         try {
             _outputStream = Files.newBufferedWriter(_userFile, CHARSET_DEFAULT,
                     OPEN_OPTIONS);
-        } catch (IOException ex) {
-            LOGGER.severe("BufferedWriter failed");
+        } catch (Exception ex) {
+            LOGGER.severe(stackTraceString(ex));
+            iterativeRunAndSet();
         }
+    }
+
+    /**
+     * This will check all possible writable potential storage files and set it
+     * as the default writable file. If there is none found, the last file in
+     * this search sequence will be duplicated into a new writable file.
+     * 
+     * This method is iterative and will end when it reaches a count of
+     * Integer.MAX_VALUE. This is highly not possible and illogical, unless
+     * there is a specific blocking set in place.
+     */
+    private void iterativeRunAndSet() {
+        String prefix = "BakaStorage";
+        String suffix = ".txt";
+        for (int i = 0; i <= Integer.MAX_VALUE; i++) {
+            String potentialFile = prefix + i + suffix;
+            Path potential = Paths.get(potentialFile);
+            if (potential.toFile().exists()) {
+                _userFile = potential;
+                if (potential.toFile().canWrite()) {
+                    changeFile(potential);
+                    break;
+                }
+            } else {
+                changeFile(potential);
+                break;
+            }
+        }
+    }
+
+    /**
+     * Duplicate the file that can be read into a possible potential target
+     * file. Write stream is then pointed to this new file.
+     * 
+     * @param potential
+     *            Path containing a potential file location
+     */
+    private void changeFile(Path potential) {
+        Path temp = tempCreation();
+        try {
+            Files.copy(temp, potential,
+                    StandardCopyOption.REPLACE_EXISTING);
+            _userFile = potential;
+            _outputStream = Files.newBufferedWriter(_userFile,
+                    CHARSET_DEFAULT, OPEN_OPTIONS);
+        } catch (IOException ex) {
+            LOGGER.severe(stackTraceString(ex));
+        }
+    }
+
+    private String stackTraceString(Throwable thrown) {
+        StringWriter converted = new StringWriter();
+        PrintWriter printWriter = new PrintWriter(converted);
+        thrown.printStackTrace(printWriter);
+        return converted.toString();
     }
 
     /**
@@ -181,9 +239,9 @@ public class Database implements DatabaseInterface {
                     addTaskToMap(task);
                 }
             }
-        } catch (IOException ex) {
-            ex.printStackTrace();
-            LOGGER.severe("bakaMap update failed");
+        } catch (Exception ex) {
+            LOGGER.severe(stackTraceString(ex));
+            iterativeRunAndSet();
         }
     }
 
@@ -200,7 +258,7 @@ public class Database implements DatabaseInterface {
         try {
         BakaTongue.setLanguage(localeArgs[0], localeArgs[1]);
         } catch (Exception ex) {
-            LOGGER.severe("unable to read language settings");
+            LOGGER.severe(stackTraceString(ex));
         }
     }
 
@@ -362,8 +420,9 @@ public class Database implements DatabaseInterface {
         updateFile();
         try {
             _outputStream.close();
-        } catch (IOException ex) {
-            ex.printStackTrace();
+        } catch (Exception ex) {
+            LOGGER.severe(stackTraceString(ex));
+            iterativeRunAndSet();
         }
         _database = null;
         BakaLogger.teardown();
@@ -398,8 +457,10 @@ public class Database implements DatabaseInterface {
             _outputStream.write(THEME + SPACE + _theme.trim());
             _outputStream.newLine();
             _outputStream.newLine();
-        } catch (IOException ex) {
-            LOGGER.severe("unable to write to file!");
+        } catch (Exception ex) {
+            LOGGER.severe(stackTraceString(ex));
+            iterativeRunAndSet();
+            updateFile();
         }
     }
 
@@ -416,8 +477,10 @@ public class Database implements DatabaseInterface {
             _outputStream.newLine();
             _outputStream.newLine();
             _outputStream.flush();
-        } catch (IOException ex) {
-            LOGGER.severe("unable to write to file!");
+        } catch (Exception ex) {
+            LOGGER.severe(stackTraceString(ex));
+            iterativeRunAndSet();
+            updateFile();
         }
     }
 
@@ -447,8 +510,10 @@ public class Database implements DatabaseInterface {
                 _outputStream.flush();
             }
             return true;
-        } catch (IOException ex) {
-            LOGGER.severe("unable to write to file!");
+        } catch (Exception ex) {
+            LOGGER.severe(stackTraceString(ex));
+            iterativeRunAndSet();
+            updateFile();
             return false;
         }
     }
@@ -460,27 +525,31 @@ public class Database implements DatabaseInterface {
         LOGGER.info("reset file initialized");
         try {
             Files.write(_userFile, EMPTY_BYTE);
-        } catch (IOException ex) {
-            LOGGER.severe("file reset failed");
+        } catch (Exception ex) {
+            LOGGER.severe(stackTraceString(ex));
+            iterativeRunAndSet();
         }
     }
 
     /**
      * Creates a temporary copy of the storage file in the same folder as the
      * storage file.
+     * 
+     * @return Path of the temp file created
      */
-    private void tempCreation() {
+    private Path tempCreation() {
         // copy userFile into tempFile
-        Path tempFile;
+        Path tempFile = null;
         try {
             tempFile = Files.createTempFile(_userFile.toAbsolutePath()
                     .getParent(), "Baka", ".archive.txt");
-            updateFile();
             Files.copy(_userFile, tempFile, StandardCopyOption.REPLACE_EXISTING);
-        } catch (IOException ex) {
+            tempFile.toFile().deleteOnExit();
+        } catch (Exception ex) {
             LOGGER.warning("Temp creation failed");
         }
         LOGGER.info("Temp creation completed");
+        return tempFile;
     }
 
     /**
@@ -737,7 +806,9 @@ public class Database implements DatabaseInterface {
             _outputStream.flush();
             return true;
         } catch (Exception ex) {
-            System.out.println("KNNBCCB");
+            LOGGER.severe(stackTraceString(ex));
+            iterativeRunAndSet();
+            dirtyWrite(line);
             return false;
         }
     }
