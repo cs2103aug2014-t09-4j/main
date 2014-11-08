@@ -813,13 +813,6 @@ public class Database implements DatabaseInterface {
         }
     }
 
-    @Override
-    public void clear() {
-        tempCreation();
-        resetFile();
-        updateMemory();
-    }
-
     /**
      * Writes the current locale used by <code>BakaTxt</code> into the storage
      * file to enable persistence.

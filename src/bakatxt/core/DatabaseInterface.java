@@ -31,8 +31,6 @@ public interface DatabaseInterface {
 
     public LinkedList<Task> getDoneTasks();
 
-    public void clear() throws IOException;
-
     public void updateLocale(String locale);
     
     public void updateTheme(String theme);
