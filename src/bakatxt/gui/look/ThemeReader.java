@@ -67,6 +67,15 @@ public class ThemeReader {
                                                       Font.PLAIN, 12);
 
     //@author A0116320Y
+    /**
+     * Sets the tehem according to the choice index specified.
+     * 
+     * @param input
+     *            index chosen by the user
+     * 
+     * @return <code>true</code> if the theme specified exists and is
+     *         applied, <code>false</code> when theme does not exist.
+     */
     public static boolean setTheme(String input) {
         // input is asserted to be a selected choice
         input = input.trim();
@@ -94,6 +103,13 @@ public class ThemeReader {
         return false;
     }
 
+    /**
+     * Enable setting of theme directly based on specifying <code>Path</code>.
+     * Used to set theme from preferences stored in the storage file.
+     * 
+     * @param Path
+     *            containing the location of the theme file
+     */
     public static boolean setTheme(Path themePath) {
         if (Files.exists(themePath)) {
             readFile(themePath);
@@ -102,6 +118,13 @@ public class ThemeReader {
         return false;
     }
 
+    /**
+     * Packages the theme files into a <code>LinkedList</code> to be displayed
+     * to the user as choices.
+     * 
+     * @return <code>LinkedList</code> containing pseudo-Tasks with information
+     *         containing the theme names.
+     */
     public static LinkedList<Task> themeChoices() {
         Path dir = Paths.get("themes/").toAbsolutePath();
         if (!dir.toFile().exists()) {
@@ -126,6 +149,10 @@ public class ThemeReader {
         return names;
     }
 
+    /**
+     * Populate the themes folder with default themes. Overwrites existing
+     * default theme files each time to ensure no corruption in default theme.
+     */
     private static void populateDefaultThemes() {
         Charset charset = Charset.forName("UTF-8");
         OpenOption[] options = { StandardOpenOption.CREATE,
@@ -134,6 +161,14 @@ public class ThemeReader {
         populateWhiteSpaceTheme(charset, options);
     }
 
+    /**
+     * Populates WhiteSpace.bakaTheme
+     * 
+     * @param charset
+     *            UTF-8
+     * @param options
+     *            Create if do not exists, and reset existing files.
+     */
     private static void populateWhiteSpaceTheme(Charset charset,
             OpenOption[] options) {
         Path defaultTheme = Paths.get("themes/", "WhiteSpace.bakaTheme");
@@ -172,6 +207,14 @@ public class ThemeReader {
         }
     }
 
+    /**
+     * Populates DarkAsMySoul.bakaTheme
+     * 
+     * @param charset
+     *            UTF-8
+     * @param options
+     *            Create if do not exists, and reset existing files.
+     */
     private static void populateDarkAsMySoulTheme(Charset charset,
             OpenOption[] options) {
         Path defaultTheme = Paths.get("themes/", "DarkAsMySoul.bakaTheme");
