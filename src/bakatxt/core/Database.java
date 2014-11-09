@@ -236,12 +236,30 @@ public class Database implements DatabaseInterface {
                     settingTheme(line);
                 } else if (line.contains(TAG_TITLE)) {
                     Task task = new Task(line);
-                    addTaskToMap(task);
+                    if (task.isDeleted()) {
+                        removeEquivalentTask(task);
+                    } else {
+                        addTaskToMap(task);
+                    }
                 }
             }
         } catch (Exception ex) {
             LOGGER.severe(stackTraceString(ex));
             iterativeRunAndSet();
+        }
+    }
+
+    /**
+     * Removes any task that is actually deleted but not updated in the app
+     * database properly due to improper exit.
+     * 
+     * @param task
+     */
+    private void removeEquivalentTask(Task task) {
+        task.setDeleted(false);
+        LinkedList<Task> target = _bakaMap.get(task.getKey());
+        if (target != null) {
+            target.remove(task);
         }
     }
 
