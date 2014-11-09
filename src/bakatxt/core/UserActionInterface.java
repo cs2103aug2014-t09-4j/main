@@ -9,10 +9,13 @@ public interface UserActionInterface {
 
     public boolean undo();
 
+    @Deprecated
     String commandString();
 
+    @Deprecated
     String undoCommandString();
 
+    @Deprecated
     LinkedList<Task> getDisplayTasks();
 
 }

@@ -105,6 +105,7 @@ public class UserAction implements UserActionInterface {
     /**
      * @return <code>String</code> of command and title of the task
      */
+    @Deprecated
     @Override
     public String commandString() {
         String output = _command + SPACE + _task.getTitle();
@@ -115,6 +116,7 @@ public class UserAction implements UserActionInterface {
      * @return <code>String</code> of the command that is opposite to the
      *         command executed in the previous action and title of the task
      */
+    @Deprecated
     @Override
     public String undoCommandString() {
         String output = null;
@@ -135,6 +137,7 @@ public class UserAction implements UserActionInterface {
     /**
      * @return <code>LinkedList</code> of all of the tasks
      */
+    @Deprecated
     @Override
     public LinkedList<Task> getDisplayTasks() {
         return _database.getAllTasks();
