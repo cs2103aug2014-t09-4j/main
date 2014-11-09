@@ -8,8 +8,6 @@ import java.util.List;
 public class Task implements TaskInterface, Comparable<Task> {
 
     private static final String SPACE = " ";
-    private static final String LINE_SEPARATOR = System
-            .getProperty("line.separator");
 
     private static final String STRING_OVERDUE = "Overdue since: ";
     private static final String TAG_OPEN = "[";
@@ -28,7 +26,6 @@ public class Task implements TaskInterface, Comparable<Task> {
 
     private static final String TAG_TRUE = "true";
     private static final String TAG_NULL = "null";
-    private static final String TAG_TAB = "\t";
 
     private static final String TAG_FLOATING_HEAD = "0000" + SPACE;
     private static final String TAG_DONE_HEAD = "5000" + SPACE;
