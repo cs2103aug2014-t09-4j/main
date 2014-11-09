@@ -202,7 +202,16 @@ public class Database implements DatabaseInterface {
         }
     }
 
-    private String stackTraceString(Throwable thrown) {
+    /**
+     * Packages the <code>exception</code> stack trace into a
+     * <code>String</code> for logging.
+     * 
+     * @param thrown
+     *            <code>exception</code> thrown
+     * 
+     * @return <code>String</code> containing the stack trace information
+     */
+    private static String stackTraceString(Throwable thrown) {
         StringWriter converted = new StringWriter();
         PrintWriter printWriter = new PrintWriter(converted);
         thrown.printStackTrace(printWriter);
