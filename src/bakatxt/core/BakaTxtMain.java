@@ -1,19 +1,15 @@
 //@author A0116014Y
 package bakatxt.core;
 
-import java.awt.GraphicsEnvironment;
-import java.util.Scanner;
-
 import bakatxt.gui.BakaUI;
 
 public class BakaTxtMain {
 
-    private static Scanner _sc;
     private static BakaProcessor _processor;
 
-    public BakaTxtMain() {
+    private static final String CLI = "--cli";
 
-        _sc = new Scanner(System.in);
+    public BakaTxtMain() {
         _processor = new BakaProcessor();
     }
 
@@ -21,16 +17,32 @@ public class BakaTxtMain {
 
         BakaTxtMain thisSession = new BakaTxtMain();
 
-        if (GraphicsEnvironment.isHeadless()) {
-            while (true) {
-                String input = _sc.nextLine();
-                _processor.executeCommand(input);
-                // String result = _processor.executeCommand(input);
-                // System.out.println(result);
-            }
+        if (isCLI(args)) {
+            BakaCommandLine.startCli(_processor);
         }
-
         BakaUI.startGui(_processor);
     }
 
+    //@author A0116538A
+    /**
+     * This method checks if the flag to initiate the CLI for bakatxt is in the
+     * arguments specified to the program in the terminal.
+     *
+     * note: this is a simple implementation. It would (probably) be much better
+     *       to parse the flags properly for extensibility in the future. However,
+     *       since there is only one flag that we actually even need, this solution
+     *       is " Good Enough™ ".
+     *
+     * @param args
+     *        the String array we are checking
+     * @return true if the array contains the flag to start the CLI
+     */
+     private static boolean isCLI (String[] args) {
+         for (int i = 0; i < args.length; i++) {
+             if (args[i].trim().equalsIgnoreCase(CLI)) {
+                 return true;
+             }
+         }
+         return false;
+     }
 }

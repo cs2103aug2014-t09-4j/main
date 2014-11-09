@@ -2,20 +2,20 @@ package bakatxt.core;
 
 import java.util.Scanner;
 
-public class BakaProcessorCLI {
+public class BakaCommandLine {
 
     private static Scanner _sc;
     private static BakaProcessor _processor;
 
-    public BakaProcessorCLI() {
+    public BakaCommandLine(BakaProcessor processor) {
         _sc = new Scanner(System.in);
-        _processor = new BakaProcessor();
+        _processor = processor;
 
     }
 
-    public static void main(String[] args) {
+    public static void startCli(BakaProcessor processor) {
 
-        BakaProcessorCLI thisSession = new BakaProcessorCLI();
+        BakaCommandLine thisSession = new BakaCommandLine(processor);
 
         while (true) {
             String input = _sc.nextLine();
