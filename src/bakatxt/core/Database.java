@@ -388,8 +388,8 @@ public class Database implements DatabaseInterface {
     public boolean delete(Task task) {
         LOGGER.info("delete task initialized");
 
-        updateFile();
-        updateMemory();
+        // updateFile();
+        // updateMemory();
 
         String key = task.getKey();
         LinkedList<Task> target = _bakaMap.get(key);
@@ -405,7 +405,7 @@ public class Database implements DatabaseInterface {
             dirtyWrite(toDelete.toString());
         }
 
-        updateFile();
+        // updateFile();
         return isRemoved;
     }
 
@@ -608,6 +608,8 @@ public class Database implements DatabaseInterface {
                 }
             }
         }
+
+        Collections.sort(result);
         return result;
     }
 
@@ -630,31 +632,13 @@ public class Database implements DatabaseInterface {
         LinkedList<Task> result = new LinkedList<Task>();
         String date;
         if (key == null || key.equals("null")) {
-            date = TAG_FLOATING;
+            date = TAG_FLOATING + SPACE + "null";
         } else {
             date = key;
         }
-        for (Map.Entry<String, LinkedList<Task>> entry : _bakaMap.entrySet()) {
-            if (_isViewDone) {
-                if (date.isEmpty() && !entry.getKey().contains(TAG_DELETED)) {
-                    result.addAll(entry.getValue());
-                } else if (entry.getKey().contains(date)
-                        && !entry.getKey().contains(TAG_DELETED)) {
-                    result.addAll(entry.getValue());
-                }
-            } else {
-                if (date.isEmpty() && !entry.getKey().contains(TAG_DELETED)
-                        && !entry.getKey().contains(TAG_DONE)) {
-                    result.addAll(entry.getValue());
-                } else if (entry.getKey().contains(date)
-                        && !entry.getKey().contains(TAG_DONE)
-                        && !entry.getKey().contains(TAG_DELETED)) {
-                    result.addAll(entry.getValue());
-                }
-            }
-        }
-        Collections.sort(result);
 
+        updateTasksList(result, date);
+        Collections.sort(result);
         return result;
     }
 
@@ -675,11 +659,11 @@ public class Database implements DatabaseInterface {
         sort();
         for (String key : _sortedKeys) {
             if (!key.contains(TAG_DELETED)) {
-                if (_isViewDone) {
-                    updateTasksList(tasks, key);
-                } else if (!key.contains(TAG_DONE)) {
-                    updateTasksList(tasks, key);
+                if (!_isViewDone && key.contains(TAG_DONE)) {
+                    continue;
                 }
+                LinkedList<Task> target = _bakaMap.get(key);
+                tasks.addAll(target);
             }
         }
         return tasks;
@@ -697,7 +681,15 @@ public class Database implements DatabaseInterface {
      */
     private void updateTasksList(LinkedList<Task> tasks, String key) {
         LinkedList<Task> today = _bakaMap.get(key);
-        tasks.addAll(today);
+        if (today != null && !today.isEmpty()) {
+            tasks.addAll(today);
+        }
+        if (_isViewDone) {
+            today = _bakaMap.get(TAG_DONE + SPACE + key);
+            if (today != null && !today.isEmpty()) {
+                tasks.addAll(today);
+            }
+        }
     }
 
     /**
@@ -724,19 +716,8 @@ public class Database implements DatabaseInterface {
             dates.add(day);
         }
 
-        for (Map.Entry<String, LinkedList<Task>> entry : _bakaMap.entrySet()) {
-            for (String date : dates) {
-                if (_isViewDone) {
-                    if (entry.getKey().contains(date)
-                            && !entry.getKey().contains(TAG_DELETED)) {
-                        thisWeek.addAll(entry.getValue());
-                    }
-                } else {
-                    if (entry.getKey().equals(date)) {
-                        thisWeek.addAll(entry.getValue());
-                    }
-                }
-            }
+        for (String date : dates) {
+            updateTasksList(thisWeek, date);
         }
 
         Collections.sort(thisWeek);
@@ -758,10 +739,13 @@ public class Database implements DatabaseInterface {
         for (String key : _sortedKeys) {
             if (!key.contains(TAG_DELETED)) {
                 if (key.contains(TAG_DONE)) {
-                    updateTasksList(tasks, key);
+                    LinkedList<Task> source = _bakaMap.get(key);
+                    tasks.addAll(source);
                 }
             }
         }
+
+        Collections.sort(tasks);
         return tasks;
     }
 

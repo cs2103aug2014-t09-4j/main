@@ -50,6 +50,7 @@ public class UserInputTest {
     @Test
     public void testDelete() {
         dummy = _parser.add("add testDelete command tonight");
+        dummy.updateOverdueStatus();
         UserAction command = new UserAction("delete", dummy);
 
         command.execute();
