@@ -25,13 +25,8 @@ public class TaskTest {
         task.setDate("2014-05-02");
         task.setTime("2230");
         task.setDone(true);
-        String expected = "\t[TITLE] New Task \n" + "\t[DATE] 2014-05-02 \n"
-                + "\t[TIME] 2230 \n" + "\t[ENDTIME] null \n"
-                + "\t[VENUE] null \n"
-                + "\t[DESCRIPTION] null \n" + "\t[DONE] true \n"
-                + "\t[FLOATING] false \n\n";
+        String expected = "[TITLE] New Task [DATE] 2014-05-02 [TIME] 2230 ";
         String output = task.toDisplayString();
-        // System.out.println(output);
         assertEquals(expected, output);
     }
 
@@ -48,7 +43,6 @@ public class TaskTest {
                 + "[DATE] null [TIME] null [ENDTIME] null [VENUE] null "
                 + "[DONE] true [FLOATING] true " + "[DELETED] true "
                 + "[DESCRIPTION] null ";
-        // System.out.println(output);
         assertEquals(expected, output);
     }
 
@@ -82,13 +76,11 @@ public class TaskTest {
         Task task = new Task("hello World");
         task.setTime("2000");
         task.setEndTime("2100");
-        System.out.println(task.toDisplayString());
         Task mergeThis = new Task();
         mergeThis.setTime("1900");
         mergeThis.setDate("2014-12-14");
         mergeThis.setDescription("aloha");
         mergeThis.setVenue("nowhere");
         task.merge(mergeThis);
-        System.out.println(task.toDisplayString());
     }
 }

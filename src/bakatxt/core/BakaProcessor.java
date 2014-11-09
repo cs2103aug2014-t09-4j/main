@@ -21,6 +21,7 @@ public class BakaProcessor {
     private static BakaParser _parser;
     private static LinkedList<Task> _displayTasks;
     private static ReverseAction _ra;
+    private static boolean _isGui;
 
     private static Integer _editStage = 0;
     private static Task _originalTask;
@@ -53,12 +54,13 @@ public class BakaProcessor {
         EXIT
     }
 
-    public BakaProcessor() {
+    public BakaProcessor(boolean isGui) {
         _database = Database.getInstance();
         _parser = new BakaParser();
         _displayTasks = _database.getTasksWithDate(_parser.getDate("today"));
         _ra = new ReverseAction();
         _previousAction = STRING_DEFAULT_VIEW;
+        _isGui = isGui;
     }
 
     private boolean displayTask(String input) {
@@ -328,6 +330,9 @@ public class BakaProcessor {
     }
 
     private boolean languageSelector(String input) {
+        if (!_isGui) {
+            return false;
+        }
         input = input.trim();
         boolean isSuccessful = true;
         if (input.contains(SPACE)) {
@@ -343,6 +348,9 @@ public class BakaProcessor {
     }
 
     private boolean themeSelector(String input) {
+        if (!_isGui) {
+            return false;
+        }
         input = input.trim();
         boolean isSuccessful = true;
         if (input.contains(SPACE)) {
@@ -648,6 +656,8 @@ public class BakaProcessor {
     }
 
     private void status(String message) {
-        BakaUI.setAlertMessageText(BakaTongue.getString(message));
+        if (_isGui) {
+            BakaUI.setAlertMessageText(BakaTongue.getString(message));
+        }
     }
 }

@@ -73,7 +73,7 @@ public class BakaBot extends Robot {
     public static void botOneTimeSetUp() throws IOException {
         saveOldFile();
         initializeTestFile();
-        BakaUI.startGui(new BakaProcessor());
+        BakaUI.startGui(new BakaProcessor(true));
     }
 
     /**

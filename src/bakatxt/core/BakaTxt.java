@@ -3,22 +3,22 @@ package bakatxt.core;
 
 import bakatxt.gui.BakaUI;
 
-public class BakaTxtMain {
+public class BakaTxt {
 
     private static BakaProcessor _processor;
 
     private static final String CLI = "--cli";
 
-    public BakaTxtMain() {
-        _processor = new BakaProcessor();
+    public BakaTxt() {
+        _processor = new BakaProcessor(true);
     }
 
     public static void main(String[] args) {
 
-        BakaTxtMain thisSession = new BakaTxtMain();
+        BakaTxt thisSession = new BakaTxt();
 
         if (isCLI(args)) {
-            BakaCommandLine.startCli(_processor);
+            BakaCommandLine.startCli();
         }
         BakaUI.startGui(_processor);
     }

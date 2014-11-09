@@ -388,21 +388,24 @@ public class Task implements TaskInterface, Comparable<Task> {
     public String toDisplayString() {
         StringBuilder task = new StringBuilder();
 
-        task.append(TAG_TAB + TAG_TITLE + SPACE + _title + SPACE
-                + LINE_SEPARATOR);
-        task.append(TAG_TAB + TAG_DATE + SPACE + _date + SPACE + LINE_SEPARATOR);
-        task.append(TAG_TAB + TAG_TIME + SPACE + _time + SPACE + LINE_SEPARATOR);
-        task.append(TAG_TAB + TAG_ENDTIME + SPACE + _endTime + SPACE
-                + LINE_SEPARATOR);
-        task.append(TAG_TAB + TAG_VENUE + SPACE + _venue + SPACE
-                + LINE_SEPARATOR);
-        task.append(TAG_TAB + TAG_DESCRIPTION + SPACE + _description + SPACE
-                + LINE_SEPARATOR);
-        task.append(TAG_TAB + TAG_DONE + SPACE + _isDone + SPACE
-                + LINE_SEPARATOR);
-        task.append(TAG_TAB + TAG_FLOATING + SPACE + _isFloating + SPACE
-                + LINE_SEPARATOR);
-        task.append(LINE_SEPARATOR);
+        task.append(TAG_TITLE + SPACE + _title + SPACE);
+        if (_date != null && !_date.equals(TAG_NULL)) {
+            task.append(TAG_DATE + SPACE + _date + SPACE);
+        }
+        if (_time != null && !_time.equals(TAG_NULL)) {
+            task.append(TAG_TIME + SPACE + _time + SPACE);
+        }
+        if (_endTime != null && !_endTime.equals(TAG_NULL)) {
+            task.append(TAG_ENDTIME + SPACE + _endTime + SPACE);
+        }
+        if (_venue != null && !_venue.equals(TAG_NULL)) {
+            task.append(TAG_VENUE + SPACE + _venue + SPACE);
+        }
+        if (_description != null && !_description.equals(TAG_NULL)
+                && _description.isEmpty()) {
+            task.append(TAG_DESCRIPTION + SPACE + _description + SPACE);
+        }
+        
         return task.toString();
     }
 
