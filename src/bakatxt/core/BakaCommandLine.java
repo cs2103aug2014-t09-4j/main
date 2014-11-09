@@ -19,8 +19,13 @@ public class BakaCommandLine {
         _processor = new BakaProcessor(false);
     }
 
+    /**
+     * Starts the command-line. This will pass the user input to
+     * <code>BakaProcessor</code> before requesting for the relevant output
+     * information to be shown to the
+     * user.
+     */
     public static void startCli() {
-
         BakaCommandLine thisSession = new BakaCommandLine();
 
         String input;
@@ -46,6 +51,10 @@ public class BakaCommandLine {
         } while (!input.equals("exit"));
     }
 
+    /**
+     * Prints out the <code>LinkedList</code> of tasks retrieved from
+     * <code>BakaProcessor</code>.
+     */
     private static void printTasks() {
         LinkedList<Task> tasks = _processor.getAllTasks();
         for (int i = 0; i < tasks.size(); i++) {
