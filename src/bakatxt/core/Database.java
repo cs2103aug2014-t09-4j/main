@@ -580,8 +580,8 @@ public class Database implements DatabaseInterface {
      * 
      * The list is sorted with the floating tasks first in alphabetical order
      * followed by tasks with dates in chronological order. Listing of done
-     * tasks is
-     * determined by the user preference as stated in <code>_isViewDone</code>.
+     * tasks is determined by the user preference as stated in
+     * <code>_isViewDone</code>.
      * 
      * @param title
      *            full or partial <code>String</code> of a title
@@ -671,7 +671,7 @@ public class Database implements DatabaseInterface {
 
     /**
      * Add all tasks in a <code>HashMap</code> key into the specified
-     * <code>LinkedList</code>.
+     * <code>LinkedList</code>. Adds done tasks if required.
      * 
      * @param tasks
      *            the target <code>LinkedList</code>
