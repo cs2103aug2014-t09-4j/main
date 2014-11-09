@@ -260,7 +260,11 @@ public class BakaParser implements BakaParserInterface {
      */
     private static void identifyDescription(String input) {
         String[] part = input.split(STRING_DOUBLE_DASH);
+        if (part.length == 0) {
+            _description = null;
+        } else {
         _description = part[1].trim();
+        }
         _isDescription = true;
     }
 
