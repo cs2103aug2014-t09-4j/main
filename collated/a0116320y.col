@@ -1,0 +1,3068 @@
+//@author: a0116320y
+
+
+
+	/**
+	 * origin: U:\workspace\BakaTxt\src\bakatxt\core\BakaCommandLine.java
+	 */
+
+package bakatxt.core;
+
+import java.util.LinkedList;
+import java.util.Scanner;
+
+public class BakaCommandLine {
+
+    private static final String MESSAGE_WELCOME = "Welcome to BakaTxt Commandline!";
+    private static final String MESSAGE_COMMAND = "Command: ";
+    private static final String MESSAGE_NO_TASK = "No task to display!";
+    private static final String MESSAGE_ERROR = "An error has occurred! Please try again!";
+
+    private static Scanner _sc;
+    private static BakaProcessor _processor;
+
+    public BakaCommandLine() {
+        _sc = new Scanner(System.in);
+        _processor = new BakaProcessor(false);
+    }
+
+    /**
+     * Starts the command-line. This will pass the user input to
+     * <code>BakaProcessor</code> before requesting for the relevant output
+     * information to be shown to the
+     * user.
+     */
+    public static void startCli() {
+        BakaCommandLine thisSession = new BakaCommandLine();
+
+        String input;
+        boolean isSuccessful;
+
+        System.out.println(MESSAGE_WELCOME);
+        _processor.executeCommand("display today");
+        printTasks();
+
+        do {
+            System.out.println();
+            System.out.print(MESSAGE_COMMAND);
+            input = _sc.nextLine().trim();
+            if (input.isEmpty()) {
+                continue;
+            }
+            isSuccessful = _processor.executeCommand(input);
+            if (!isSuccessful) {
+                System.out.println(MESSAGE_ERROR);
+            } else {
+                printTasks();
+            }
+        } while (!input.equals("exit"));
+    }
+
+    /**
+     * Prints out the <code>LinkedList</code> of tasks retrieved from
+     * <code>BakaProcessor</code>.
+     */
+    private static void printTasks() {
+        LinkedList<Task> tasks = _processor.getAllTasks();
+        for (int i = 0; i < tasks.size(); i++) {
+            System.out.printf("%4d. ", i + 1);
+            System.out.println(tasks.get(i).toDisplayString());
+        }
+
+        if (tasks.isEmpty()) {
+            System.out.println(MESSAGE_NO_TASK);
+        }
+    }
+}
+
+	// End of segment: U:\workspace\BakaTxt\src\bakatxt\core\BakaCommandLine.java
+
+
+
+
+
+	/**
+	 * origin: U:\workspace\BakaTxt\src\bakatxt\core\Database.java
+	 */
+
+package bakatxt.core;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.OpenOption;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.nio.file.StandardOpenOption;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.TreeSet;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import bakatxt.gui.look.ThemeReader;
+import bakatxt.international.BakaTongue;
+import bakatxt.log.BakaLogger;
+
+public class Database implements DatabaseInterface {
+
+    private static final String LINE_SEPARATOR = System
+            .getProperty("line.separator");
+    private static final String SPACE = " ";
+
+    private static final String STRING_TODAY = "today";
+    private static final String STRING_DAY = "day";
+
+    private static final String MESSAGE_OUTPUT_FILENAME = "Filename: %1$s"
+            + LINE_SEPARATOR;
+
+    private static final String TAG_OPEN = "[";
+    private static final String TAG_CLOSE = "]";
+    private static final String TAG_TITLE = TAG_OPEN + "TITLE" + TAG_CLOSE;
+
+    private static final String FILE_COMMENT = TAG_OPEN + "-" + TAG_CLOSE
+            + SPACE;
+    private static final String FILE_HEADER = FILE_COMMENT
+            + "BakaTXT Human-Readable Human-Fixable Database";
+    private static final String FILE_VERSION = FILE_COMMENT + "alpha v0.0";
+    private static final String FILE_WARNING = FILE_COMMENT
+            + "Each task has to be in the same line";
+
+    private static final String LOCALE_FILE = TAG_OPEN + "LOCALE" + TAG_CLOSE;
+    private static final String LOCALE_DEFAULT = "en_US";
+
+    private static final String TAG_DELETED = "9999";
+    private static final String TAG_DONE = "5000";
+    private static final String TAG_FLOATING = "0000";
+
+    private static final String VIEW_DONE = TAG_OPEN + "VIEW DONE" + TAG_CLOSE;
+    private static final String THEME = TAG_OPEN + "THEME" + TAG_CLOSE;
+
+    private static final Charset CHARSET_DEFAULT = Charset.forName("UTF-8");
+    private static final byte[] EMPTY_BYTE = {};
+    private static final OpenOption[] OPEN_OPTIONS = {
+            StandardOpenOption.CREATE, StandardOpenOption.APPEND };
+
+    private static final Logger LOGGER = Logger.getLogger(Database.class
+            .getName());
+
+    private static Database _database = null;
+
+    private Path _userFile;
+    private BufferedWriter _outputStream;
+    private HashMap<String, LinkedList<Task>> _bakaMap;
+    private TreeSet<String> _sortedKeys;
+    private boolean _isRemoveDeleted;
+    private String _localeString;
+    private BakaParser _parser;
+    private boolean _isViewDone;
+    private String _theme;
+
+    private Database(String fileName) {
+        assert (_database == null);
+        try {
+            BakaLogger.setup();
+        } catch (Exception ex) {
+            BakaLogger.setup(true);
+        } finally {
+            LOGGER.setLevel(Level.INFO);
+            setEnvironment(fileName);
+            LOGGER.info("Database setup completed");
+        }
+    }
+
+    /**
+     * Returns a single shared instance of Database to enable reading and
+     * writing to the storage text file.
+     * 
+     * @return a singleton instance of Database
+     */
+    public static Database getInstance() {
+        if (_database == null) {
+            _database = new Database("BakaStorage.txt");
+        }
+        return _database;
+    }
+
+    /**
+     * Set up the output buffer and initialize instance variables.
+     * 
+     * @param fileName
+     *            storage file containing the tasks and settings
+     */
+    private void setEnvironment(String fileName) {
+        initializeFilePath(fileName);
+        initializeOutputStream();
+        initializeVariables();
+    }
+
+    /**
+     * Initialize all the variables of the <code>Database</code> singleton
+     */
+    private void initializeVariables() {
+        _parser = new BakaParser();
+        _localeString = LOCALE_DEFAULT;
+        _isRemoveDeleted = true;
+        _isViewDone = false;
+        _theme = "themes/DarkAsMySoul.bakaTheme";
+        updateMemory();
+    }
+
+    /**
+     * Convert the filename of the storage to a <code>Path</code> and set it to
+     * the instance attribute.
+     * 
+     * @param fileName
+     *            storage file containing the tasks and settings
+     */
+    private void initializeFilePath(String fileName) {
+        _userFile = Paths.get(fileName);
+    }
+
+    /**
+     * Setup of the output file writer to enable writing of information to the
+     * storage file.
+     */
+    private void initializeOutputStream() {
+        try {
+            _outputStream = Files.newBufferedWriter(_userFile, CHARSET_DEFAULT,
+                    OPEN_OPTIONS);
+        } catch (Exception ex) {
+            LOGGER.severe(stackTraceString(ex));
+            iterativeRunAndSet();
+        }
+    }
+
+    /**
+     * This will check all possible writable potential storage files and set it
+     * as the default writable file. If there is none found, the last file in
+     * this search sequence will be duplicated into a new writable file.
+     * 
+     * This method is iterative and will end when it reaches a count of
+     * Integer.MAX_VALUE. This is highly not possible and illogical, unless
+     * there is a specific blocking set in place.
+     */
+    private void iterativeRunAndSet() {
+        String prefix = "BakaStorage";
+        String suffix = ".txt";
+        for (int i = 0; i <= Integer.MAX_VALUE; i++) {
+            String potentialFile = prefix + i + suffix;
+            Path potential = Paths.get(potentialFile);
+            if (potential.toFile().exists()) {
+                _userFile = potential;
+                if (potential.toFile().canWrite()) {
+                    changeFile(potential);
+                    break;
+                }
+            } else {
+                changeFile(potential);
+                break;
+            }
+        }
+    }
+
+    /**
+     * Duplicate the file that can be read into a possible potential target
+     * file. Write stream is then pointed to this new file.
+     * 
+     * @param potential
+     *            Path containing a potential file location
+     */
+    private void changeFile(Path potential) {
+        Path temp = tempCreation();
+        try {
+            Files.copy(temp, potential,
+                    StandardCopyOption.REPLACE_EXISTING);
+            _userFile = potential;
+            _outputStream = Files.newBufferedWriter(_userFile,
+                    CHARSET_DEFAULT, OPEN_OPTIONS);
+        } catch (IOException ex) {
+            LOGGER.severe(stackTraceString(ex));
+        }
+    }
+
+    /**
+     * Packages the <code>exception</code> stack trace into a
+     * <code>String</code> for logging.
+     * 
+     * @param thrown
+     *            <code>exception</code> thrown
+     * 
+     * @return <code>String</code> containing the stack trace information
+     */
+    private static String stackTraceString(Throwable thrown) {
+        StringWriter converted = new StringWriter();
+        PrintWriter printWriter = new PrintWriter(converted);
+        thrown.printStackTrace(printWriter);
+        return converted.toString();
+    }
+
+    /**
+     * Reads the storage file through a buffered input stream into a
+     * <code>HashMap</code> containing <code>LinkedList</code> of tasks to their
+     * relevant keys. User settings such as language and themes are also
+     * applied.
+     */
+    private void updateMemory() {
+        LOGGER.info("bakaMap update initialized");
+        _bakaMap = new HashMap<String, LinkedList<Task>>();
+        try (BufferedReader inputStream = Files.newBufferedReader(_userFile,
+                CHARSET_DEFAULT)) {
+            String line;
+            while ((line = inputStream.readLine()) != null) {
+                if (line.isEmpty()) {
+                    continue;
+                } else if (line.contains(VIEW_DONE)) {
+                    if (line.contains("true")) {
+                        _isViewDone = true;
+                    } else {
+                        _isViewDone = false;
+                    }
+                } else if (line.contains(LOCALE_FILE)) {
+                    settingLanguage(line);
+                } else if (line.contains(THEME)) {
+                    settingTheme(line);
+                } else if (line.contains(TAG_TITLE)) {
+                    Task task = new Task(line);
+                    if (task.isDeleted()) {
+                        removeEquivalentTask(task);
+                    } else {
+                        addTaskToMap(task);
+                    }
+                }
+            }
+        } catch (Exception ex) {
+            LOGGER.severe(stackTraceString(ex));
+            iterativeRunAndSet();
+        }
+    }
+
+    /**
+     * Removes any task that is actually deleted but not updated in the app
+     * database properly due to improper exit.
+     * 
+     * @param task
+     */
+    private void removeEquivalentTask(Task task) {
+        task.setDeleted(false);
+        LinkedList<Task> target = _bakaMap.get(task.getKey());
+        if (target != null) {
+            target.remove(task);
+        }
+    }
+
+    /**
+     * Set the language of <code>BakaTxt</code> based on the settings inside the
+     * storage file.
+     * 
+     * @param line
+     *            containing the language preference in the storage file
+     */
+    private void settingLanguage(String line) {
+        _localeString = line.substring(line.indexOf(TAG_CLOSE) + 1);
+        String[] localeArgs = _localeString.split("_");
+        try {
+        BakaTongue.setLanguage(localeArgs[0], localeArgs[1]);
+        } catch (Exception ex) {
+            LOGGER.severe(stackTraceString(ex));
+        }
+    }
+
+    /**
+     * Set the theme of <code>BakaTxt</code> based on the settings inside the
+     * storage file.
+     * 
+     * @param line
+     *            containing the theme preference in the storage file
+     */
+    private void settingTheme(String line) {
+        _theme = line.substring(line.indexOf(TAG_CLOSE) + 1).trim();
+        Path themePath = Paths.get(_theme);
+        ThemeReader.setTheme(themePath);
+    }
+
+    /**
+     * Adds a <code>Task</code> that is changed or new into the
+     * <code>HashMap</code> in memory. Repeated <code>Tasks</code> will not be
+     * added.
+     * 
+     * @param task
+     *            that is to be added or has been changed
+     * @return <code>true</code> if task is added, <code>false</code> otherwise.
+     */
+    private boolean addTaskToMap(Task task) {
+        LOGGER.fine("add to bakaMap");
+        String key = task.getKey();
+        if (isExisting(task)) {
+            return false;
+        }
+        if (!_bakaMap.containsKey(key)) {
+            _bakaMap.put(key, new LinkedList<Task>());
+        }
+        LinkedList<Task> target = _bakaMap.get(key);
+        return target.add(task);
+    }
+
+    /**
+     * Returns the relative file name of the storage file where IO is done.
+     * 
+     * @return <code>String</code> of the text file
+     */
+    @Override
+    public String getFileName() {
+        return _userFile.toString();
+    }
+
+    /**
+     * Updates the instance attribute of a <code>TreeSet</code> containing the
+     * sorted keys of the <code>HashMap</code>. <code>Task</code> in
+     * <code>LinkedList</code> in the <code>HashMap</code> are also sorted in a
+     * chronological order as determined by <code>compareTo</code> of the
+     * <code>Task</code>.
+     */
+    private void sort() {
+        _sortedKeys = new TreeSet<String>(_bakaMap.keySet());
+        for (Map.Entry<String, LinkedList<Task>> entry : _bakaMap.entrySet()) {
+            LinkedList<Task> today = entry.getValue();
+            Collections.sort(today);
+        }
+    }
+
+    /**
+     * Output the storage filename as a formatted <code>String</code>
+     * 
+     * @return <code>String</code> containing the filename of the storage file.
+     */
+    @Override
+    public String toString() {
+        String lineOne = String.format(MESSAGE_OUTPUT_FILENAME, getFileName());
+        return lineOne;
+    }
+
+    /**
+     * Returns a boolean to specify if a task is added.
+     * Adds a non-deleted unique task to the HashMap in the memory and writes a
+     * copy of the task into the storage file.
+     * 
+     * @param task
+     *            a specific task to add
+     * @return <code>true</code> if task is written to the storage file
+     */
+    @Override
+    public boolean add(Task task) {
+        LOGGER.info("add task initialized");
+        if (task.getTitle().isEmpty()) {
+            return false;
+        }
+        Task toAdd = new Task(task);
+        toAdd.setDeleted(false);
+        boolean isAdded = addTaskToMap(toAdd);
+        if (isAdded) {
+            dirtyWrite(toAdd.toString());
+        }
+        return isAdded;
+    }
+
+    /**
+     * Checks if the task already exists in the <code>HashMap</code> by looking
+     * into the associated <code>key</code> value.
+     * 
+     * @param task
+     *            to be checked;
+     * @return <code>true</code> if the task already exist, else
+     *         <code>false</code>
+     */
+    private boolean isExisting(Task task) {
+        String key = task.getKey();
+        LinkedList<Task> target = _bakaMap.get(key);
+        if (target == null || !target.contains(task)) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Returns a boolean to specify if a task is deleted.
+     * Deletes a task from the HashMap in the memory and refreshes the storage
+     * file with the existing copy in the memory.
+     * 
+     * @param task
+     *            a specific task to delete
+     * @return <code>true</code> if task is deleted from the memory
+     */
+    @Override
+    public boolean delete(Task task) {
+        LOGGER.info("delete task initialized");
+
+        // updateFile();
+        updateMemory();
+
+        String key = task.getKey();
+        LinkedList<Task> target = _bakaMap.get(key);
+        if (target == null) {
+            return false;
+        }
+
+        boolean isRemoved = target.remove(task);
+        if (isRemoved) {
+            Task toDelete = new Task(task);
+            toDelete.setDeleted(true);
+            addTaskToMap(toDelete);
+            dirtyWrite(toDelete.toString());
+        }
+
+        // updateFile();
+        return isRemoved;
+    }
+
+    /**
+     * Writes the content of the HashMap into the storage file. Storage file is
+     * created if it does not exists. Closes BufferedWriter stream and set the
+     * Database instance to null. Activity logging is also stopped.
+     */
+    @Override
+    public void close() {
+        LOGGER.info("end Database initialized");
+        updateFile();
+        try {
+            _outputStream.close();
+        } catch (Exception ex) {
+            LOGGER.severe(stackTraceString(ex));
+            iterativeRunAndSet();
+        }
+        _database = null;
+        BakaLogger.teardown();
+    }
+
+    /**
+     * Writes the preset comments, preferences and content of the
+     * <code>HashMap</code> into the storage file that is empty.
+     * 
+     * @return <code>true</code> if the tasks are written to the storage file,
+     *         <code>false</code> otherwise.
+     */
+    private boolean updateFile() {
+        LOGGER.info("update file initialized");
+        // tempCreation();
+        resetFile();
+        writeFileComments();
+        writeSettings();
+        return writeLinesToFile();
+    }
+
+    /**
+     * Writes the user preferences into the file based on the attributes stored
+     * in the instance.
+     */
+    private void writeSettings() {
+        try {
+            _outputStream.write(LOCALE_FILE + SPACE + _localeString.trim());
+            _outputStream.newLine();
+            _outputStream.write(VIEW_DONE + SPACE + _isViewDone);
+            _outputStream.newLine();
+            _outputStream.write(THEME + SPACE + _theme.trim());
+            _outputStream.newLine();
+            _outputStream.newLine();
+        } catch (Exception ex) {
+            LOGGER.severe(stackTraceString(ex));
+            iterativeRunAndSet();
+            updateFile();
+        }
+    }
+
+    /**
+     * Writes the preset storage file comments to the storage file.
+     */
+    private void writeFileComments() {
+        try {
+            _outputStream.write(FILE_HEADER);
+            _outputStream.newLine();
+            _outputStream.write(FILE_VERSION);
+            _outputStream.newLine();
+            _outputStream.write(FILE_WARNING);
+            _outputStream.newLine();
+            _outputStream.newLine();
+            _outputStream.flush();
+        } catch (Exception ex) {
+            LOGGER.severe(stackTraceString(ex));
+            iterativeRunAndSet();
+            updateFile();
+        }
+    }
+
+    /**
+     * Writes <code>Task</code> from the <code>HashMap</code> into the storage
+     * file. Deleted <code>Task</code> are determined to be written based on the
+     * <code>boolean _isRemovedDeleted</code>.
+     * 
+     * @return <code>true</code> if the content of the <code>HashMap</code> can
+     *         be written to the storage file, <code>false</code> if an
+     *         exception arises.
+     */
+    private boolean writeLinesToFile() {
+        LOGGER.info("write to file initialized");
+        try {
+            sort();
+            for (String key : _sortedKeys) {
+                if (_isRemoveDeleted && key.contains(TAG_DELETED)) {
+                    continue;
+                }
+                LinkedList<Task> listToWrite = _bakaMap.get(key);
+                for (Task task : listToWrite) {
+                    _outputStream.write(task.toString());
+                    _outputStream.newLine();
+                }
+                _outputStream.newLine();
+                _outputStream.flush();
+            }
+            return true;
+        } catch (Exception ex) {
+            LOGGER.severe(stackTraceString(ex));
+            iterativeRunAndSet();
+            updateFile();
+            return false;
+        }
+    }
+
+    /**
+     * Reset the file by overwriting the content with an empty <code>byte</code>
+     */
+    private void resetFile() {
+        LOGGER.info("reset file initialized");
+        try {
+            Files.write(_userFile, EMPTY_BYTE);
+        } catch (Exception ex) {
+            LOGGER.severe(stackTraceString(ex));
+            iterativeRunAndSet();
+        }
+    }
+
+    /**
+     * Creates a temporary copy of the storage file in the same folder as the
+     * storage file.
+     * 
+     * @return Path of the temp file created
+     */
+    private Path tempCreation() {
+        // copy userFile into tempFile
+        Path tempFile = null;
+        try {
+            tempFile = Files.createTempFile(_userFile.toAbsolutePath()
+                    .getParent(), "Baka", ".archive.txt");
+            Files.copy(_userFile, tempFile, StandardCopyOption.REPLACE_EXISTING);
+            tempFile.toFile().deleteOnExit();
+        } catch (Exception ex) {
+            LOGGER.warning("Temp creation failed");
+        }
+        LOGGER.info("Temp creation completed");
+        return tempFile;
+    }
+
+    /**
+     * Sets a specific task's done status based on the specified boolean. This
+     * is implemented by deleting the original copy of the task from the memory
+     * and storage file, before adding an updated copy back to memory and
+     * storage file.
+     * 
+     * @param task
+     *            a task to change the status
+     * @param isDone
+     *            a boolean to specify the status of the task to be set
+     * 
+     * @return <code>true</code> if the updated task is written to the storage
+     *         file
+     */
+    @Override
+    public boolean setDone(Task task, boolean isDone) {
+        LOGGER.info("done status change initialized");
+        delete(task);
+        task.setDone(isDone);
+        return add(task);
+    }
+
+    /**
+     * Returns a <code>LinkedList</code> containing all the non-deleted tasks in
+     * the memory with titles containing the specified string.
+     * 
+     * The list is sorted with the floating tasks first in alphabetical order
+     * followed by tasks with dates in chronological order. Listing of done
+     * tasks is determined by the user preference as stated in
+     * <code>_isViewDone</code>.
+     * 
+     * @param title
+     *            full or partial <code>String</code> of a title
+     * @return <code>LinkedList</code> containing all the existing tasks with
+     *         the title containing the <code>String</code> input
+     */
+    @Override
+    public LinkedList<Task> getTaskWithTitle(String title) {
+        LinkedList<Task> result = new LinkedList<Task>();
+        sort();
+        for (String key : _sortedKeys) {
+            if (key.contains(TAG_DELETED)) {
+                continue;
+            }
+            if (_isViewDone == false && key.contains(TAG_DONE)) {
+                continue;
+            }
+
+            LinkedList<Task> today = _bakaMap.get(key);
+            for (Task task : today) {
+                String taskTitle = task.getTitle().toLowerCase();
+                if (taskTitle.contains(title.toLowerCase())) {
+                    result.add(task);
+                }
+            }
+        }
+
+        Collections.sort(result);
+        return result;
+    }
+
+    /**
+     * Returns a <code>LinkedList</code> containing all the non-deleted
+     * tasks in the memory with the specified date.
+     * 
+     * The list is sorted in chronological order. Listing of done tasks is
+     * determined by the user preference as stated in <code>_isViewDone</code>.
+     * 
+     * @param key
+     *            <code>String</code> containing the date
+     * 
+     * @return <code>LinkedList</code> containing all the tasks in
+     *         specified date or floating tasks if specified date is
+     *         <code>null</code>
+     */
+    @Override
+    public LinkedList<Task> getTasksWithDate(String key) {
+        LinkedList<Task> result = new LinkedList<Task>();
+        String date;
+        if (key == null || key.equals("null")) {
+            date = TAG_FLOATING + SPACE + "null";
+        } else {
+            date = key;
+        }
+
+        updateTasksList(result, date);
+        Collections.sort(result);
+        return result;
+    }
+
+    /**
+     * Returns a <code>LinkedList</code> containing all the tasks in
+     * the memory.
+     * 
+     * The list is sorted with the floating tasks first in alphabetical order
+     * followed by tasks with dates in chronological order. Listing of done
+     * tasks is determined by the user preference as stated in
+     * <code>_isViewDone</code>.
+     * 
+     * @return <code>LinkedList</code> containing all the tasks
+     */
+    @Override
+    public LinkedList<Task> getAllTasks() {
+        LinkedList<Task> tasks = new LinkedList<Task>();
+        sort();
+        for (String key : _sortedKeys) {
+            if (!key.contains(TAG_DELETED)) {
+                if (!_isViewDone && key.contains(TAG_DONE)) {
+                    continue;
+                }
+                LinkedList<Task> target = _bakaMap.get(key);
+                tasks.addAll(target);
+            }
+        }
+        return tasks;
+    }
+
+    /**
+     * Add all tasks in a <code>HashMap</code> key into the specified
+     * <code>LinkedList</code>. Adds done tasks if required.
+     * 
+     * @param tasks
+     *            the target <code>LinkedList</code>
+     * @param key
+     *            of the values in the <code>HashMap</code> to be added to the
+     *            target <code>LinkedList</code>.
+     */
+    private void updateTasksList(LinkedList<Task> tasks, String key) {
+        LinkedList<Task> today = _bakaMap.get(key);
+        if (today != null && !today.isEmpty()) {
+            tasks.addAll(today);
+        }
+        if (_isViewDone) {
+            today = _bakaMap.get(TAG_DONE + SPACE + key);
+            if (today != null && !today.isEmpty()) {
+                tasks.addAll(today);
+            }
+        }
+    }
+
+    /**
+     * Returns a <code>LinkedList</code> containing all the tasks for the
+     * next 7 days, including today.
+     * 
+     * The list is sorted with the floating tasks first in alphabetical order
+     * followed by tasks with dates in chronological order. Listing of done
+     * tasks is determined by the user preference as stated in
+     * <code>_isViewDone</code>.
+     * 
+     * @return <code>LinkedList</code> containing all the tasks in 7 days
+     */
+    @Override
+    public LinkedList<Task> getWeekTasks() {
+        LinkedList<Task> thisWeek = new LinkedList<Task>();
+        LinkedList<String> dates = new LinkedList<String>();
+
+        String[] intString = { "one", "two", "three", "four", "five", "six" };
+        String day = _parser.getDate(STRING_TODAY);
+        dates.add(day);
+        for (int i = 0; i < 6; i++) {
+            day = _parser.getDate(intString[i] + SPACE + STRING_DAY);
+            dates.add(day);
+        }
+
+        for (String date : dates) {
+            updateTasksList(thisWeek, date);
+        }
+
+        Collections.sort(thisWeek);
+        return thisWeek;
+    }
+
+    /**
+     * Returns a <code>LinkedList</code> containing all the done tasks.
+     * 
+     * The list is sorted with the floating tasks first in alphabetical order
+     * followed by tasks with dates in chronological order.
+     * 
+     * @return <code>LinkedList</code> containing all the done tasks.
+     */
+    @Override
+    public LinkedList<Task> getDoneTasks() {
+        LinkedList<Task> tasks = new LinkedList<Task>();
+        sort();
+        for (String key : _sortedKeys) {
+            if (!key.contains(TAG_DELETED)) {
+                if (key.contains(TAG_DONE)) {
+                    LinkedList<Task> source = _bakaMap.get(key);
+                    tasks.addAll(source);
+                }
+            }
+        }
+
+        Collections.sort(tasks);
+        return tasks;
+    }
+
+    /**
+     * Sets a specific task's floating status based on the specified boolean.
+     * This is implemented by deleting the original task from the memory
+     * and storage file, before adding an updated copy back to memory and
+     * storage file.
+     * 
+     * @param task
+     *            a task to change the status
+     * @param isFloating
+     *            a boolean to specify the status of the task to be set
+     * 
+     * @return <code>true</code> if the updated task is written to the storage
+     *         file
+     */
+    @Override
+    public boolean setFloating(Task task, boolean isFloating) {
+        LOGGER.info("set floating status initialized");
+        delete(task);
+        task.setFloating(isFloating);
+        add(task);
+        return updateFile();
+    }
+
+    /**
+     * Writes the line to the storage file without any form of post-processing.
+     * This ensures that the information is added to the storage file once it is
+     * received by <code>Database</code>.
+     * 
+     * @param line
+     *            containing the relevant information to be written
+     * @return <code>true</code> if the information can be written to the
+     *         storage file, <code>false</code> if the storage file cannot be
+     *         written to.
+     */
+    private boolean dirtyWrite(String line) {
+        try {
+            _outputStream.write(line);
+            _outputStream.newLine();
+            _outputStream.flush();
+            return true;
+        } catch (Exception ex) {
+            LOGGER.severe(stackTraceString(ex));
+            iterativeRunAndSet();
+            dirtyWrite(line);
+            return false;
+        }
+    }
+
+    /**
+     * Writes the current locale used by <code>BakaTxt</code> into the storage
+     * file to enable persistence.
+     * 
+     * @param locale
+     *            current locale used
+     */
+    @Override
+    public void updateLocale(String locale) {
+        LOGGER.info("locale write initialized");
+        _localeString = locale.trim();
+        dirtyWrite(LOCALE_FILE + SPACE + _localeString);
+    }
+
+    /**
+     * Writes the current theme used by <code>BakaTxt</code> into the storage
+     * file to enable persistence.
+     * 
+     * @param theme
+     *            current theme used
+     */
+    @Override
+    public void updateTheme(String theme) {
+        LOGGER.info("theme write initialized");
+        _theme = theme.trim();
+        dirtyWrite(THEME + SPACE + _theme);
+    }
+
+    /**
+     * Writes the current view option for done tasks into the storage file to
+     * enable persistence.
+     * 
+     * @param isViewingDone
+     *            is <code>true</code> to show done, <code>false</code>
+     *            otherwise.
+     */
+    @Override
+    public void updateDoneView(boolean isViewingDone) {
+        LOGGER.info("view done write initialized");
+        _isViewDone = isViewingDone;
+        dirtyWrite(VIEW_DONE + SPACE + _isViewDone);
+    }
+}
+
+	// End of segment: U:\workspace\BakaTxt\src\bakatxt\core\Database.java
+
+
+
+
+
+	/**
+	 * origin: U:\workspace\BakaTxt\src\bakatxt\core\DatabaseInterface.java
+	 */
+
+package bakatxt.core;
+
+import java.io.IOException;
+import java.util.LinkedList;
+
+// Interface for Database to write to textfile
+
+public interface DatabaseInterface {
+
+    public String getFileName();
+
+    public boolean add(Task task);
+
+    public boolean delete(Task task);
+
+    public boolean setDone(Task task, boolean isDone);
+
+    public boolean setFloating(Task task, boolean isFloating)
+            throws IOException;
+
+    public void close();
+
+    public LinkedList<Task> getTaskWithTitle(String title);
+
+    public LinkedList<Task> getTasksWithDate(String key);
+
+    public LinkedList<Task> getAllTasks();
+
+    public LinkedList<Task> getWeekTasks();
+
+    public LinkedList<Task> getDoneTasks();
+
+    public void updateLocale(String locale);
+    
+    public void updateTheme(String theme);
+
+    public void updateDoneView(boolean isViewingDone);
+}
+
+	// End of segment: U:\workspace\BakaTxt\src\bakatxt\core\DatabaseInterface.java
+
+
+
+
+
+	/**
+	 * origin: U:\workspace\BakaTxt\src\bakatxt\core\Task.java
+	 */
+
+package bakatxt.core;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+public class Task implements TaskInterface, Comparable<Task> {
+
+    private static final String SPACE = " ";
+
+    private static final String STRING_OVERDUE = "Overdue since: ";
+    private static final String TAG_OPEN = "[";
+    private static final String TAG_CLOSE = "]";
+    private static final String TAG_TITLE = TAG_OPEN + "TITLE" + TAG_CLOSE;
+    private static final String TAG_DATE = TAG_OPEN + "DATE" + TAG_CLOSE;
+    private static final String TAG_TIME = TAG_OPEN + "TIME" + TAG_CLOSE;
+    private static final String TAG_ENDTIME = TAG_OPEN + "ENDTIME" + TAG_CLOSE;
+    private static final String TAG_VENUE = TAG_OPEN + "VENUE" + TAG_CLOSE;
+    private static final String TAG_DESCRIPTION = TAG_OPEN + "DESCRIPTION"
+            + TAG_CLOSE;
+    private static final String TAG_FLOATING = TAG_OPEN + "FLOATING"
+            + TAG_CLOSE;
+    private static final String TAG_DONE = TAG_OPEN + "DONE" + TAG_CLOSE;
+    private static final String TAG_DELETED = TAG_OPEN + "DELETED" + TAG_CLOSE;
+
+    private static final String TAG_TRUE = "true";
+    private static final String TAG_NULL = "null";
+
+    private static final String TAG_FLOATING_HEAD = "0000" + SPACE;
+    private static final String TAG_DONE_HEAD = "5000" + SPACE;
+    private static final String TAG_DELETED_HEAD = "9999" + SPACE;
+
+    private String _title;
+    private String _date;
+    private String _time;
+    private String _endTime;
+    private String _venue;
+    private String _description; // TODO allow line breaks for description
+    private boolean _isFloating;
+    private boolean _isDone;
+    private boolean _isDeleted;
+
+    public Task() {
+        _title = null;
+        _date = null;
+        _time = null;
+        _endTime = null;
+        _venue = null;
+        _description = null;
+        _isDone = false;
+        _isFloating = false;
+        _isDeleted = false;
+    }
+
+    public Task(Task task) {
+        this(task.toString());
+    }
+
+    public Task(String input) {
+        List<String> tokenizedInput = Arrays.asList(input.split("\\s+"));
+        if (!tokenizedInput.contains(TAG_TITLE)) {
+            _title = input;
+            _date = null;
+            _time = null;
+            _endTime = null;
+            _venue = null;
+            _description = null;
+            _isDone = false;
+            _isFloating = true;
+            _isDeleted = false;
+        } else if (isValidTaskString(input)) {
+            initializeFromDatabaseString(tokenizedInput);
+            updateFloatingStatus();
+        }
+    }
+
+    /**
+     * Checks that the task from the storage file contains all the relevant
+     * information.
+     * 
+     * @param input
+     *            a <code>String</code> from the storage file
+     * @return <code>true</code> if the string is a valid task,
+     *         <code>false</code> otherwise.
+     */
+    private static boolean isValidTaskString(String input) {
+        ArrayList<String> headers = new ArrayList<String>();
+        headers.add(TAG_TITLE);
+        headers.add(TAG_DATE);
+        headers.add(TAG_TIME);
+        headers.add(TAG_ENDTIME);
+        headers.add(TAG_VENUE);
+        headers.add(TAG_DONE);
+        headers.add(TAG_FLOATING);
+        headers.add(TAG_DELETED);
+        headers.add(TAG_DESCRIPTION);
+
+        for (String header : headers) {
+            if (!input.contains(header)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Extracts the information of a <code>Task</code> into its proper
+     * attributes of a <code>Task</code> instance.
+     * 
+     * @param tokenizedInput
+     *            a <code>List</code> containing all the <code>String</code>
+     *            tokens of the <code>String</code> from the storage file.
+     */
+    private void initializeFromDatabaseString(List<String> tokenizedInput) {
+        int titleIndex = tokenizedInput.indexOf(TAG_TITLE) + 1;
+        StringBuilder title = new StringBuilder();
+
+        // ensure capturing of titles with more than one word
+        for (int i = titleIndex; i < tokenizedInput.indexOf(TAG_DATE); i++) {
+            title.append(tokenizedInput.get(i));
+            title.append(SPACE);
+        }
+        _title = title.toString().trim();
+
+        // retrieving the indices of the information of the Task
+        int dateIndex = tokenizedInput.indexOf(TAG_DATE) + 1;
+        int timeIndex = tokenizedInput.indexOf(TAG_TIME) + 1;
+        int endTimeIndex = tokenizedInput.indexOf(TAG_ENDTIME) + 1;
+        int venueIndex = tokenizedInput.indexOf(TAG_VENUE) + 1;
+        int doneIndex = tokenizedInput.indexOf(TAG_DONE) + 1;
+        int deletedIndex = tokenizedInput.indexOf(TAG_DELETED) + 1;
+        int descriptionIndex = tokenizedInput.indexOf(TAG_DESCRIPTION) + 1;
+
+        // date and time
+        _date = tokenizedInput.get(dateIndex);
+        _time = tokenizedInput.get(timeIndex);
+        _endTime = tokenizedInput.get(endTimeIndex);
+
+        // ensure capture of multiple words of the venue
+        for (int i = venueIndex; i < doneIndex - 1; i++) {
+            if (_venue == null) {
+                _venue = tokenizedInput.get(i);
+            } else {
+                _venue = _venue + SPACE + tokenizedInput.get(i);
+            }
+        }
+
+        // boolean flags of done, floating and deleted
+        _isDone = tokenizedInput.get(doneIndex).equals(TAG_TRUE);
+        _isFloating = _date.equals(_time);
+        _isDeleted = tokenizedInput.get(deletedIndex).equals(TAG_TRUE);
+
+        // capture the remaining information as the description
+        if (descriptionIndex + 1 == tokenizedInput.size()) {
+            if (tokenizedInput.get(descriptionIndex).equals(TAG_NULL)) {
+                _description = null;
+            } else {
+                _description = tokenizedInput.get(descriptionIndex);
+            }
+        } else {
+            StringBuilder description = new StringBuilder();
+            for (int i = descriptionIndex; i < tokenizedInput.size(); i++) {
+                description.append(tokenizedInput.get(i));
+                description.append(SPACE);
+            }
+            _description = description.toString().trim();
+        }
+
+        // if task is not done, update accordingly of its overdue status
+        if (_isDone == false) {
+            updateOverdueStatus();
+        }
+    }
+
+    /**
+     * @return title of the task
+     */
+    @Override
+    public String getTitle() {
+        return _title;
+    }
+
+    /**
+     * @return date of the task
+     */
+    @Override
+    public String getDate() {
+        return _date;
+    }
+
+    /**
+     * Format valid dates into a more user-friendly format for GUI. Retains
+     * special date <code>String</code> to ensure duality of the date field in
+     * GUI.
+     * 
+     * @return a formatted date of the task if valid
+     */
+    @Override
+    public String getFormattedDate() {
+        BakaParser parser = new BakaParser();
+        if (_date == null || _date.equals("null")) {
+            return null;
+        }
+        String formatted = parser.getFormattedDate(_date);
+        if (formatted == null || formatted.equals("null")) {
+            return _date;
+        }
+        return formatted;
+    }
+
+    /**
+     * @return start time of the task
+     */
+    @Override
+    public String getTime() {
+        return _time;
+    }
+
+    /**
+     * @return end time of the task
+     */
+    @Override
+    public String getEndTime() {
+        return _endTime;
+    }
+
+    /**
+     * @return venue of the task
+     */
+    @Override
+    public String getVenue() {
+        return _venue;
+    }
+
+    /**
+     * @return description of the task
+     */
+    @Override
+    public String getDescription() {
+        return _description;
+    }
+
+    /**
+     * Sets the title of the task
+     * 
+     * @param input
+     *            containing the title of the task
+     * 
+     * @return <code>String</code> containing the updated title of the task
+     */
+    @Override
+    public String setTitle(String input) {
+        _title = input.trim();
+        return _title;
+    }
+
+    /**
+     * Sets the date of the task, and update the floating status of the task
+     * accordingly.
+     * 
+     * @param input
+     *            containing the date of the task
+     * 
+     * @return <code>String</code> containing the updated date of the task
+     */
+    @Override
+    public String setDate(String input) {
+        if (input == null || input.equals("null")) {
+            _date = null;
+        } else {
+            _date = input.trim();
+        }
+        updateFloatingStatus();
+        return _date;
+    }
+
+    /**
+     * Sets the floating status to <code>true</code> if there is no date and
+     * time specified, else set to <code>false</code>.
+     */
+    private void updateFloatingStatus() {
+        if (_date == null || _date.equals("null")) {
+            if (_time == null || _time.equals("null")) {
+                _isFloating = true;
+            } else {
+                _isFloating = false;
+            }
+        } else {
+            _isFloating = false;
+        }
+    }
+
+    /**
+     * Sets the time of the task, and update the floating status of the task
+     * accordingly.
+     * 
+     * @param input
+     *            containing the time of the task
+     * 
+     * @return <code>String</code> containing the updated time of the task
+     */
+    @Override
+    public String setTime(String input) {
+        if (input == null || input.equals("null")) {
+            _time = null;
+        } else {
+            _time = input;
+        }
+        updateFloatingStatus();
+        return _time;
+    }
+
+    /**
+     * Sets the end time of the task, and update the floating status of the task
+     * accordingly. If the start time is <code>null</code>, the end time will be
+     * set as start time.
+     * 
+     * @param input
+     *            containing the end time of the task
+     * 
+     * @return <code>String</code> containing the updated end time of the task
+     */
+    @Override
+    public String setEndTime(String input) {
+        if (input == null || input.equals("null")) {
+            _endTime = null;
+        } else {
+            if (_time == null) {
+                _time = input.trim();
+                _endTime = null;
+            } else {
+                _endTime = input.trim();
+            }
+        }
+        return _endTime;
+    }
+
+    /**
+     * @param input
+     *            containing the venue of the task
+     * 
+     * @return <code>String</code> containing the updated venue of the task
+     */
+    @Override
+    public String setVenue(String input) {
+        if (input == null || input.equals("null")) {
+            _venue = null;
+        } else {
+            _venue = input.trim();
+        }
+        return _venue;
+    }
+
+    /**
+     * @param input
+     *            containing the venue of the task
+     * 
+     * @return <code>String</code> containing the updated venue of the task
+     */
+    @Override
+    public String setDescription(String input) {
+        if (input == null || input.equals("null")) {
+            _description = null;
+        } else {
+            _description = input.trim();
+        }
+        return _description;
+    }
+
+    /**
+     * @return <code>true</code> if the task is done, <code>false</code>
+     *         otherwise.
+     */
+    @Override
+    public boolean isDone() {
+        return _isDone;
+    }
+
+    /**
+     * @return a formatted <code>String</code> of the task
+     */
+    @Override
+    public String toDisplayString() {
+        StringBuilder task = new StringBuilder();
+
+        task.append(TAG_TITLE + SPACE + _title + SPACE);
+        if (_date != null && !_date.equals(TAG_NULL)) {
+            task.append(TAG_DATE + SPACE + _date + SPACE);
+        }
+        if (_time != null && !_time.equals(TAG_NULL)) {
+            task.append(TAG_TIME + SPACE + _time + SPACE);
+        }
+        if (_endTime != null && !_endTime.equals(TAG_NULL)) {
+            task.append(TAG_ENDTIME + SPACE + _endTime + SPACE);
+        }
+        if (_venue != null && !_venue.equals(TAG_NULL)) {
+            task.append(TAG_VENUE + SPACE + _venue + SPACE);
+        }
+        if (_description != null && !_description.equals(TAG_NULL)
+                && !_description.isEmpty()) {
+            task.append(TAG_DESCRIPTION + SPACE + _description + SPACE);
+        }
+        
+        return task.toString();
+    }
+
+    /**
+     * @return a <code>String</code> containing the relevant information of the
+     *         task that is required to maintain integrity of the task and
+     *         enable correct sorting of the tasks in the storage file.
+     */
+    @Override
+    public String toString() {
+        StringBuilder task = new StringBuilder();
+
+        task.append(TAG_OPEN);
+
+        if (_isDeleted) {
+            task.append(TAG_DELETED_HEAD);
+        }
+
+        if (_isDone) {
+            task.append(TAG_DONE_HEAD);
+        }
+
+        if (_isFloating) {
+            task.append(TAG_FLOATING_HEAD);
+        }
+
+        task.append(_date + SPACE + _time + TAG_CLOSE + SPACE);
+        task.append(TAG_TITLE + SPACE + _title + SPACE);
+        task.append(TAG_DATE + SPACE + _date + SPACE);
+        task.append(TAG_TIME + SPACE + _time + SPACE);
+        task.append(TAG_ENDTIME + SPACE + _endTime + SPACE);
+        task.append(TAG_VENUE + SPACE + _venue + SPACE);
+        task.append(TAG_DONE + SPACE + _isDone + SPACE);
+        task.append(TAG_FLOATING + SPACE + _isFloating + SPACE);
+        task.append(TAG_DELETED + SPACE + _isDeleted + SPACE);
+        task.append(TAG_DESCRIPTION + SPACE + _description + SPACE);
+
+        return task.toString();
+    }
+
+    /**
+     * Sets a task to be deleted from the storage file.
+     * 
+     * @param isDeleted
+     *            is <code>true</code> for task to be deleted,
+     *            <code>false</code> otherwise.
+     */
+    @Override
+    public void setDeleted(boolean isDeleted) {
+        _isDeleted = isDeleted;
+    }
+
+    /**
+     * @return <code>true</code> if task is floating, <code>false</code>
+     *         otherwise.
+     */
+    @Override
+    public boolean isFloating() {
+        return _isFloating;
+    }
+
+    /**
+     * Sets a task to be done or undone. If task is done, the date of an overdue
+     * task is restored. If task is not done, overdue status is updated
+     * accordingly.
+     * 
+     * @param isDone
+     *            is <code>true</code> for task to be done, <code>false</code>
+     *            for task to be undone.
+     */
+    @Override
+    public void setDone(boolean isDone) {
+        _isDone = isDone;
+        if (_isDone && isOverdue()) {
+            _date = _description.substring(_description.indexOf(TAG_OPEN) + 1,
+                    _description.indexOf(TAG_CLOSE));
+            removeOverdueComment();
+        } else if (!_isDone) {
+            updateOverdueStatus();
+        }
+        updateFloatingStatus();
+    }
+
+    /**
+     * Sets a task floating status.
+     * 
+     * @param isFloating
+     *            is <code>true</code> for task to be floating,
+     *            <code>false</code> otherwise.
+     */
+    @Override
+    public void setFloating(boolean isFloating) {
+        _isFloating = isFloating;
+        if (_isFloating) {
+            _date = _time = _endTime = TAG_NULL;
+        }
+    }
+
+    /**
+     * @return <code>true</code> if the task is set to be deleted,
+     *         <code>false</code> otherwise.
+     */
+    @Override
+    public boolean isDeleted() {
+        return _isDeleted;
+    }
+
+    /**
+     * Determines if two tasks are equal through comparison of the
+     * <code>String</code> to be written to the storage file.
+     * 
+     * @param obj
+     *            <code>Task</code> to be compared with
+     * 
+     * @return <code>true</code> if both tasks contain the same information,
+     *         <code>false</code> otherwise.
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Task)) {
+            return false;
+        }
+        Task task = (Task) obj;
+        return this.toString().equals(task.toString());
+    }
+
+    /**
+     * Sets the comparison of two tasks to be time-based to ensure that the
+     * tasks are sorted chronologically in the storage file and
+     * <code>Database</code>
+     * 
+     * @param task
+     *            to be compared with
+     * 
+     * @return <code>0</code> if they are of the same date and time,
+     *         <code>1</code> or <code>-1</code> if they are of different time.
+     */
+    @Override
+    public int compareTo(Task task) {
+        String thisOne = this.getKey() + this.getTime();
+        String thatOne = task.getKey() + task.getTime();
+        int timeComparison = thisOne.compareTo(thatOne);
+        if (timeComparison == 0) {
+            return this.getTitle().compareTo(task.getTitle());
+        }
+        return timeComparison;
+    }
+
+    /**
+     * Generates the key of which the task is placed in the memory.
+     * 
+     * @return <code>String</code> key of the task.
+     */
+    @Override
+    public String getKey() {
+        StringBuilder key = new StringBuilder();
+
+        if (_isDeleted) {
+            key.append(TAG_DELETED_HEAD);
+        }
+
+        if (_isDone) {
+            key.append(TAG_DONE_HEAD);
+        }
+
+        if (_isFloating) {
+            key.append(TAG_FLOATING_HEAD);
+        }
+
+        key.append(_date);
+
+        return key.toString();
+    }
+
+    /**
+     * Checks if a task is overdue based on the overdue status in the
+     * description.
+     * 
+     * @return <code>true</code> if the task is overdue, <code>false</code>
+     *         otherwise.
+     */
+    @Override
+    public boolean isOverdue() {
+        if (_description==null || !_description.contains(STRING_OVERDUE)) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Updates the overdue status of a task against the current time. Sets task
+     * to be floating and prepend overdue information to the description if task
+     * is overdue.
+     */
+    @Override
+    public void updateOverdueStatus() {
+        BakaParser parser = new BakaParser();
+        String today = parser.getDate("today");
+        _time = parser.getTime(_time);
+        _endTime = parser.getTime(_endTime);
+        _date = parser.getDate(_date);
+
+        if (_date == null || _date.equals("null") || _isDone) {
+            return;
+        } 
+        
+        int dateStatus = today.compareTo(_date);
+
+        if (dateStatus > 0) { // over due date
+            setOverdue();
+            
+        } else if (dateStatus == 0) { // same date
+
+            String timeNow = BakaParser.getCurrentTime();
+            int timeNowValue = Integer.valueOf(timeNow);
+
+            if (_time == null || _time.equals(TAG_NULL)) {
+                return;
+            }
+
+            int timeTaskValue = Integer.valueOf(_time);
+            if (timeTaskValue == timeNowValue) { // same time
+                return;
+                
+            } else if (timeTaskValue < timeNowValue) { // overdue time
+                
+                if (_endTime == null || _endTime.equals(TAG_NULL)) {
+                    setOverdue();
+                } else {
+                    int endTimeTaskValue = Integer.valueOf(_endTime);
+                    if (endTimeTaskValue < timeNowValue) {
+                        setOverdue();
+                    }
+                }
+
+            }
+        }
+    }
+
+    /**
+     * Prepends the overdue information to the description and updates the date
+     * and time accordingly.
+     */
+    private void setOverdue() {
+        if (_description == null) {
+            _description = new String();
+        }
+        _description = STRING_OVERDUE + TAG_OPEN + getDate() + TAG_CLOSE
+                + SPACE + _description;
+        _description = _description.trim();
+        setFloating(true);
+    }
+
+    /**
+     * Merges two tasks into one, with <code>null</code> fields being of the
+     * lowest priorities. Information from task specified has a higher priority
+     * over existing information in the <code>Task</code> instance.
+     * 
+     * @param toMerge
+     *            <code>Task</code> containing information to be merged
+     * 
+     * @return Task containing information of updated set of information.
+     */
+    @Override
+    public Task merge(Task toMerge) {
+        if (toMerge.getTitle() != null && !toMerge.getTitle().isEmpty()) {
+            this.setTitle(toMerge.getTitle());
+        }
+        if (toMerge.getVenue() != null && !toMerge.getVenue().equals("null")) {
+            this.setVenue(toMerge.getVenue());
+        }
+        if (toMerge.getDescription() != null
+                && !toMerge.getDescription().isEmpty()) {
+            this.setDescription(toMerge.getDescription());
+        }
+        if (toMerge.getDate() != null && !toMerge.getDate().equals("null")) {
+            this.setDate(toMerge.getDate());
+            removeOverdueComment();
+        }
+        if (toMerge.getTime() != null && !toMerge.getTime().equals("null")) {
+            this.setTime(toMerge.getTime());
+            removeOverdueComment();
+        }
+        if (toMerge.getEndTime() != null
+                && !toMerge.getEndTime().equals("null")) {
+            this.setEndTime(toMerge.getEndTime());
+        } else {
+            if (toMerge.getTime() != null && !toMerge.getTime().equals("null")) {
+                this.setEndTime(null);
+            }
+        }
+        return this;
+    }
+
+    /**
+     * Removes the overdue information from the description of the task
+     */
+    private void removeOverdueComment() {
+        if (this.isOverdue()) {
+            int index = this.getDescription().indexOf("]") + 1;
+            this.setDescription(_description.substring(index));
+        }
+    }
+}
+
+	// End of segment: U:\workspace\BakaTxt\src\bakatxt\core\Task.java
+
+
+
+
+
+	/**
+	 * origin: U:\workspace\BakaTxt\src\bakatxt\core\TaskInterface.java
+	 */
+
+package bakatxt.core;
+
+public interface TaskInterface {
+    public String getTitle();
+
+    public String getDate();
+
+    public String getFormattedDate();
+
+    public String getTime();
+
+    public String getEndTime();
+
+    public String getVenue();
+
+    public String getDescription();
+
+    public String setTitle(String input);
+
+    public String setDate(String input);
+
+    public String setTime(String input);
+
+    public String setEndTime(String input);
+
+    public String setVenue(String input);
+
+    public String setDescription(String input);
+
+    public boolean isDone();
+
+    public boolean isFloating();
+
+    public boolean isDeleted();
+
+    public boolean isOverdue();
+
+    public Task merge(Task toMerge);
+
+    public void setDone(boolean isDone);
+
+    public void setDeleted(boolean isDeleted);
+
+    public void setFloating(boolean isFloating);
+
+    public void updateOverdueStatus();
+
+    public String toDisplayString();
+
+    public String getKey();
+}
+
+	// End of segment: U:\workspace\BakaTxt\src\bakatxt\core\TaskInterface.java
+
+
+
+
+
+	/**
+	 * origin: U:\workspace\BakaTxt\src\bakatxt\core\UserAction.java
+	 */
+
+package bakatxt.core;
+
+import java.util.LinkedList;
+
+public class UserAction implements UserActionInterface {
+
+    private static final String SPACE = " ";
+
+    protected Task _task;
+    protected String _command;
+    protected Database _database;
+
+    /**
+     * Initialize an instance of UserAction with the relevant command and task
+     * associated
+     * 
+     * @param command
+     *            <code>String</code> of the user command
+     * @param task
+     *            associated target task of the command
+     */
+    public UserAction(String command, Task task) {
+        _command = command.toUpperCase();
+        _task = task;
+        _database = Database.getInstance();
+    }
+
+    /**
+     * Executes the command that is called.
+     * 
+     * @return <code>true</code> when the command is successfully executed
+     */
+    @Override
+    public boolean execute() {
+        switch (_command) {
+            case "ADD" :
+                return add(_task);
+            case "DELETE" :
+                return delete(_task);
+            default :
+                return false;
+        }
+    }
+
+    /**
+     * Executes the command that is opposite from the previous command called.
+     * 
+     * @return <code>true</code> when the command is successfully executed
+     */
+    @Override
+    public boolean undo() {
+        switch (_command) {
+            case "ADD" :
+                return delete(_task);
+            case "DELETE" :
+                return add(_task);
+            default :
+                return false;
+        }
+    }
+
+    /**
+     * 
+     * @param task
+     *            is a specific task to be deleted
+     * @return <code>true</code> when the task is successfully deleted
+     */
+    protected boolean delete(Task task) {
+        return _database.delete(task);
+    }
+
+    /**
+     * 
+     * @param task
+     *            is a specific task to be added
+     * @return <code>true</code> when the task is successfully added
+     */
+    protected boolean add(Task task) {
+        return _database.add(task);
+    }
+
+    /**
+     * @return <code>String</code> of command and title of the task
+     */
+    @Deprecated
+    @Override
+    public String commandString() {
+        String output = _command + SPACE + _task.getTitle();
+        return output;
+    }
+
+    /**
+     * @return <code>String</code> of the command that is opposite to the
+     *         command executed in the previous action and title of the task
+     */
+    @Deprecated
+    @Override
+    public String undoCommandString() {
+        String output = null;
+        switch (_command) {
+            case "ADD" :
+                output = "DELETE";
+                break;
+            case "DELETE" :
+                output = "ADD";
+                break;
+            default :
+                output = _command;
+        }
+        output += SPACE + _task.getTitle();
+        return output;
+    }
+
+    /**
+     * @return <code>LinkedList</code> of all of the tasks
+     */
+    @Deprecated
+    @Override
+    public LinkedList<Task> getDisplayTasks() {
+        return _database.getAllTasks();
+    }
+
+}
+
+	// End of segment: U:\workspace\BakaTxt\src\bakatxt\core\UserAction.java
+
+
+
+
+
+	/**
+	 * origin: U:\workspace\BakaTxt\src\bakatxt\core\UserActionInterface.java
+	 */
+
+package bakatxt.core;
+
+import java.util.LinkedList;
+
+public interface UserActionInterface {
+
+    public boolean execute();
+
+    public boolean undo();
+
+    @Deprecated
+    String commandString();
+
+    @Deprecated
+    String undoCommandString();
+
+    @Deprecated
+    LinkedList<Task> getDisplayTasks();
+
+}
+
+	// End of segment: U:\workspace\BakaTxt\src\bakatxt\core\UserActionInterface.java
+
+
+
+
+
+	/**
+	 * origin: U:\workspace\BakaTxt\src\bakatxt\core\UserClear.java
+	 */
+
+package bakatxt.core;
+
+import java.util.LinkedList;
+
+public class UserClear extends UserAction {
+    private LinkedList<Task> _tasks;
+
+    /**
+     * 
+     * @param command
+     *            <code>String</code> of command clear
+     * @param date
+     *            <code>String</code> of a day or a period to clear the tasks
+     */
+    public UserClear(String command, String date) {
+        super(command, null);
+
+        if (date == null) {
+            date = new String();
+        }
+
+        date = date.trim();
+
+        switch (date) {
+            case "" :
+                _tasks = super._database.getTasksWithDate(null);
+                break;
+            case "week" :
+                _tasks = super._database.getWeekTasks();
+                break;
+            case "all" :
+                _tasks = super._database.getAllTasks();
+                break;
+            case "done" :
+                _tasks = super._database.getDoneTasks();
+                break;
+            default :
+                if (command.equals("SEARCH")) {
+                    _tasks = super._database.getTaskWithTitle(date);
+                } else {
+                    BakaParser parser = new BakaParser();
+                    date = parser.getDate(date);
+                    _tasks = super._database.getTasksWithDate(date);
+                }
+        }
+    }
+
+    /**
+     * @return <code>true</code> when all of the tasks are deleted
+     */
+    @Override
+    public boolean execute() {
+        for (Task task : _tasks) {
+            super.delete(task);
+        }
+        return true;
+    }
+
+    /**
+     * @return <code>true</code> when all of the tasks are added
+     */
+    @Override
+    public boolean undo() {
+        for (Task task : _tasks) {
+            super.add(task);
+        }
+        return true;
+    }
+
+}
+
+	// End of segment: U:\workspace\BakaTxt\src\bakatxt\core\UserClear.java
+
+
+
+
+
+	/**
+	 * origin: U:\workspace\BakaTxt\src\bakatxt\core\UserEditStatus.java
+	 */
+
+package bakatxt.core;
+
+public class UserEditStatus extends UserAction {
+    private boolean _flag;
+
+    public UserEditStatus(String command, Task task, boolean flag) {
+        super(command, task);
+        _flag = flag;
+    }
+
+    /**
+     * 
+     * @return <code>true</code> when the status of the task is changed
+     */
+    @Override
+    public boolean execute() {
+        switch (super._command) {
+            case "FLOATING" :
+                return setFloat(super._task, _flag);
+            case "DONE" :
+                return setDone(super._task, _flag);
+            default :
+                return false;
+        }
+    }
+
+    /**
+     * @return <code>true</code> when the status of the task is changed
+     */
+    @Override
+    public boolean undo() {
+        switch (super._command) {
+            case "FLOATING" :
+                return setFloat(super._task, !_flag);
+            case "DONE" :
+                return setDone(super._task, !_flag);
+            default :
+                return false;
+        }
+    }
+
+    /**
+     * 
+     * @param task
+     *            is a specific task
+     * @param flag
+     *            is <code>true</code> to set the task to done
+     * 
+     * @return <code>true</code> if task status is changed, <code>false</code>
+     *         otherwise
+     */
+    private boolean setDone(Task task, boolean flag) {
+        return _database.setDone(task, flag);
+    }
+
+    /**
+     * 
+     * @param task
+     *            is a specific floating task
+     * @param flag
+     *            is <code>true</code> to set the task to floating
+     * 
+     * @return <code>true</code> if task status is changed, <code>false</code>
+     *         otherwise
+     */
+    private boolean setFloat(Task task, boolean flag) {
+        return _database.setFloating(task, flag);
+    }
+}
+
+	// End of segment: U:\workspace\BakaTxt\src\bakatxt\core\UserEditStatus.java
+
+
+
+
+
+	/**
+	 * origin: U:\workspace\BakaTxt\src\bakatxt\core\UserEditTask.java
+	 */
+
+package bakatxt.core;
+
+public class UserEditTask extends UserAction {
+
+    private Task _edited;
+
+    /**
+     * 
+     * @param command
+     *            <code>String</code> of command edit
+     * @param task
+     *            is a specific task that is executed
+     * @param edited
+     *            is a specific task that is edited
+     */
+    public UserEditTask(String command, Task task, Task edited) {
+        super(command, task);
+        _edited = edited;
+    }
+
+    /**
+     * @return <code>true</code> when the original task is deleted and edited
+     *         task is added
+     */
+    @Override
+    public boolean execute() {
+        super.delete(_edited);
+        super.delete(_task);
+        return super.add(_edited);
+    }
+
+    /**
+     * @return <code>true</code> when the original task is added and edited task
+     *         is deleted
+     */
+    @Override
+    public boolean undo() {
+        boolean deleteEdited = super.delete(_edited);
+        boolean addOriginal = super.add(_task);
+        return deleteEdited && addOriginal;
+    }
+
+}
+
+	// End of segment: U:\workspace\BakaTxt\src\bakatxt\core\UserEditTask.java
+
+
+
+
+
+	/**
+	 * origin: U:\workspace\BakaTxt\src\bakatxt\gui\look\ThemeReader.java
+	 */
+
+    /**
+     * Sets the tehem according to the choice index specified.
+     * 
+     * @param input
+     *            index chosen by the user
+     * 
+     * @return <code>true</code> if the theme specified exists and is
+     *         applied, <code>false</code> when theme does not exist.
+     */
+    public static boolean setTheme(String input) {
+        // input is asserted to be a selected choice
+        input = input.trim();
+        LinkedList<Task> choices = themeChoices();
+        Path themePath = null;
+        try {
+            int index = Integer.valueOf(input) - 1;
+            if (index >= choices.size() || index < 0) {
+                return false;
+            }
+            themePath = Paths
+                    .get("themes", choices.get(index).getTitle() + EXT);
+            if (Files.exists(themePath)) {
+                readFile(themePath);
+            } else {
+                return false;
+            }
+        } catch (NumberFormatException ex) {
+
+        }
+        if (themePath != null) {
+            Database.getInstance().updateTheme(themePath.toString());
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Enable setting of theme directly based on specifying <code>Path</code>.
+     * Used to set theme from preferences stored in the storage file.
+     * 
+     * @param themePath
+     *            containing the location of the theme file
+     * 
+     * @return <code>true</code> if the theme exists and sets,
+     *         <code>false</code> otherwise
+     */
+    public static boolean setTheme(Path themePath) {
+        if (Files.exists(themePath)) {
+            readFile(themePath);
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Packages the theme files into a <code>LinkedList</code> to be displayed
+     * to the user as choices.
+     * 
+     * @return <code>LinkedList</code> containing pseudo-Tasks with information
+     *         containing the theme names.
+     */
+    public static LinkedList<Task> themeChoices() {
+        Path dir = Paths.get("themes/").toAbsolutePath();
+        if (!dir.toFile().exists()) {
+            try {
+                Files.createDirectories(dir);
+            } catch (Exception ex) {
+            }
+        }
+        populateDefaultThemes();
+        File[] files = dir.toFile().listFiles();
+        LinkedList<Task> names = new LinkedList<Task>();
+        for (File f : files) {
+            if (f.isFile() && f.toString().contains(EXT)) {
+                String displayString = f.getName();
+                displayString = displayString.replace(EXT, "");
+                Task themeDisplay = new Task(displayString);
+                themeDisplay.setDate(HEADER);
+                names.add(themeDisplay);
+            }
+        }
+        Collections.sort(names);
+        return names;
+    }
+
+    /**
+     * Populate the themes folder with default themes. Overwrites existing
+     * default theme files each time to ensure no corruption in default theme.
+     */
+    private static void populateDefaultThemes() {
+        Charset charset = Charset.forName("UTF-8");
+        OpenOption[] options = { StandardOpenOption.CREATE,
+                StandardOpenOption.TRUNCATE_EXISTING };
+        populateDarkAsMySoulTheme(charset, options);
+        populateWhiteSpaceTheme(charset, options);
+    }
+
+    /**
+     * Populates WhiteSpace.bakaTheme
+     * 
+     * @param charset
+     *            UTF-8
+     * @param options
+     *            Create if do not exists, and reset existing files.
+     */
+    private static void populateWhiteSpaceTheme(Charset charset,
+            OpenOption[] options) {
+        Path defaultTheme = Paths.get("themes/", "WhiteSpace.bakaTheme");
+        try (BufferedWriter outputStream = Files.newBufferedWriter(
+                defaultTheme, charset, options)) {
+            outputStream.write("TYPEFACE = Arial");
+            outputStream.newLine();
+            outputStream.write("INPUT = (255,255,255)");
+            outputStream.newLine();
+            outputStream.write("PANEL = (250,250,250)");
+            outputStream.newLine();
+            outputStream.write("TASK1 = (235,235,235)");
+            outputStream.newLine();
+            outputStream.write("TASK2 = (225,225,225)");
+            outputStream.newLine();
+            outputStream.write("SCROLLBAR = (0,0,0,150)");
+            outputStream.newLine();
+            outputStream.write("SELECTION = (100,100,100)");
+            outputStream.newLine();
+            outputStream.write("DATE = (30,30,30) & PLAIN & 12");
+            outputStream.newLine();
+            outputStream.write("ALERT = (50,50,50) & PLAIN & 14");
+            outputStream.newLine();
+            outputStream.write("LOCATION = (150,150,150) & BOLD & 14");
+            outputStream.newLine();
+            outputStream.write("NUMBER = (70,70,70) & PLAIN & 16");
+            outputStream.newLine();
+            outputStream.write("TITLE = (20,20,20) & BOLD & 16");
+            outputStream.newLine();
+            outputStream.write("INTERACT = (0,0,0) & PLAIN & 24");
+            outputStream.newLine();
+            outputStream.write("DEFAULT = (60,60,60) & PLAIN & 12");
+            outputStream.newLine();
+        } catch (IOException ex) {
+            // not going to do anything
+        }
+    }
+
+    /**
+     * Populates DarkAsMySoul.bakaTheme
+     * 
+     * @param charset
+     *            UTF-8
+     * @param options
+     *            Create if do not exists, and reset existing files.
+     */
+    private static void populateDarkAsMySoulTheme(Charset charset,
+            OpenOption[] options) {
+        Path defaultTheme = Paths.get("themes/", "DarkAsMySoul.bakaTheme");
+        try (BufferedWriter outputStream = Files.newBufferedWriter(
+                defaultTheme, charset, options)) {
+            outputStream.write("TYPEFACE = Arial");
+            outputStream.newLine();
+            outputStream.write("INPUT = (100,100,100)");
+            outputStream.newLine();
+            outputStream.write("PANEL = (66,66,66)");
+            outputStream.newLine();
+            outputStream.write("TASK1 = (48,48,48)");
+            outputStream.newLine();
+            outputStream.write("TASK2 = (36,36,36)");
+            outputStream.newLine();
+            outputStream.write("SCROLLBAR = (0,0,0,100)");
+            outputStream.newLine();
+            outputStream.write("SELECTION = (0,0,0,150)");
+            outputStream.newLine();
+            outputStream.write("DATE = (253,184,19) & PLAIN & 12");
+            outputStream.newLine();
+            outputStream.write("ALERT = (250,250,250) & PLAIN & 12");
+            outputStream.newLine();
+            outputStream.write("LOCATION = (227,122,37) & BOLD & 14");
+            outputStream.newLine();
+            outputStream.write("NUMBER = (80,80,80) & PLAIN & 16");
+            outputStream.newLine();
+            outputStream.write("TITLE = (239,62,47) & BOLD & 18");
+            outputStream.newLine();
+            outputStream.write("INTERACT = (228,224,227) & PLAIN & 24");
+            outputStream.newLine();
+            outputStream.write("DEFAULT = (228,224,227) & PLAIN & 12");
+            outputStream.newLine();
+        } catch (IOException ex) {
+            // not going to do anything
+        }
+    }
+
+	// End of segment: U:\workspace\BakaTxt\src\bakatxt\gui\look\ThemeReader.java
+
+
+
+
+
+	/**
+	 * origin: U:\workspace\BakaTxt\src\bakatxt\international\BakaTongue.java
+	 */
+
+package bakatxt.international;
+
+import java.util.LinkedList;
+import java.util.Locale;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
+import java.util.Set;
+
+import bakatxt.core.Database;
+import bakatxt.core.Task;
+
+public class BakaTongue {
+    private static final String BUNDLE_NAME = "bakatxt.international.BakaLanguage";
+    private static final String SPACE = " ";
+    private static final String HEADER = "LANGUAGE";
+
+    private static final String[] LANGUAGES = { "English", "中文", "한국어", "HINDI" };
+
+    private static Locale currentLocale = new Locale("en", "US");
+    private static ResourceBundle resBundle = ResourceBundle.getBundle(
+            BUNDLE_NAME, currentLocale);
+
+    /**
+     * Retrieves the information from the specified resource bundle
+     * 
+     * @param key
+     *            of the <code>String</code> to be retrieved
+     * @return <code>String</code> from the resource bundle, or
+     *         <code>!KEY!</code> if the key does not exists.
+     */
+    public static String getString(String key) {
+        try {
+            return resBundle.getString(key);
+        } catch (MissingResourceException e) {
+            return '!' + key + '!';
+        }
+    }
+
+    /**
+     * Sets the resource bundle according to the language specified.
+     * 
+     * @param language
+     *            <code>String</code> chosen by the user
+     * 
+     * @return <code>true</code> if the language specified exists and is
+     *         applied, <code>false</code> when language does not exist and
+     *         default English is applied.
+     */
+    public static boolean setLanguage(String language) {
+        boolean isSuccessful = true;
+        switch (language.toLowerCase().trim()) {
+            case "english" :
+            case "1" :
+                currentLocale = new Locale("en", "US");
+                break;
+            case "中文" :
+            case "chinese" :
+            case "2" :
+                currentLocale = new Locale("zh", "CN");
+                break;
+            case "한국어" :
+            case "korean" :
+            case "3" :
+                currentLocale = new Locale("ko", "KR");
+                break;
+            case "hindi" :
+            case "4" :
+                currentLocale = new Locale("hi", "IN");
+                break;
+            case "wah lao" :
+            case "singlish" :
+                currentLocale = new Locale("en", "SG");
+                break;
+            default :
+                currentLocale = new Locale("en", "US");
+                isSuccessful = false;
+        }
+        resBundle = ResourceBundle.getBundle(BUNDLE_NAME, currentLocale);
+        Database.getInstance().updateLocale(currentLocale.toString());
+        return isSuccessful;
+    }
+
+    /**
+     * Enable setting of language directly based on specifying locale and
+     * region. Used to set language from preferences stored in the storage file.
+     * 
+     * @param lang
+     *            <code>String</code> containing locale language code
+     * @param region
+     *            <code>String</code> containing locale region code
+     */
+    public static void setLanguage(String lang, String region) {
+        currentLocale = new Locale(lang.trim(), region.trim());
+        resBundle = ResourceBundle.getBundle(BUNDLE_NAME, currentLocale);
+    }
+
+    /**
+     * Enables pseudo translation of user commands by direct translation of user
+     * command input from other languages to English. Only replaces identifying
+     * elements such as commands and delimiters.
+     * 
+     * @param input
+     *            <code>String</code> containing the user command
+     * @return <code>String</code> containing the original input with replaced
+     *         <code>String</code> of identifiers.
+     */
+    public static String toEnglish(String input) {
+        Set<String> keys = resBundle.keySet();
+
+        Locale target = new Locale("en", "US");
+
+        if (target.equals(currentLocale)) {
+            return input;
+        }
+
+        ResourceBundle resTarget = ResourceBundle
+                .getBundle(BUNDLE_NAME, target);
+        for (String key : keys) {
+            String international = resBundle.getString(key);
+            String english = resTarget.getString(key) + SPACE;
+
+            int commandLength = international.length();
+            if (key.contains("COMMAND")) {
+                if (isAcceptable(input, commandLength)
+                        && isSameCommand(input, international, commandLength)) {
+                    input = input.substring(0, commandLength).toUpperCase()
+                            + input.substring(commandLength);
+
+                    input = input.replace(international, english);
+                }
+            } else if (key.contains("USER_PROMPT") || key.contains("ALERT")) {
+                continue;
+            } else {
+                input = input.replace(international, english);
+            }
+        }
+        return input;
+    }
+
+    /**
+     * Checks if the command identified is in English.
+     * 
+     * @param input
+     *            from the user containing the Command <code>String</code>
+     * @param international
+     *            Command from the English resource bundle
+     * @param commandLength
+     *            <code>length</code> of the Command <code>String</code>
+     * 
+     * @return <code>true</code> if the Commands are equal, <code>false</code>
+     *         otherwise.
+     */
+    private static boolean isSameCommand(String input, String international,
+            int commandLength) {
+        return input.substring(0, commandLength).toUpperCase()
+                .equals(international);
+    }
+
+    /**
+     * Checks if the input is of sufficient length
+     * 
+     * @param input
+     *            to be checked
+     * @param commandLength
+     *            length of the command to be checked against
+     * 
+     * @return <code>true</code> if acceptable, <code>false</code> otherwise
+     */
+    private static boolean isAcceptable(String input, int commandLength) {
+        return input.length() >= commandLength;
+    }
+
+    /**
+     * Packages the languages into a <code>LinkedList</code> to be displayed to
+     * the user as choices.
+     * 
+     * @return <code>LinkedList</code> containing pseudo-Tasks with information
+     *         about the languages.
+     */
+    public static LinkedList<Task> languageChoices() {
+        LinkedList<Task> choices = new LinkedList<Task>();
+        for (int i=0; i<LANGUAGES.length; i++) {
+            Task language = new Task(LANGUAGES[i]);
+            language.setDate(HEADER);
+            choices.add(language);
+        }
+        return choices;
+    }
+}
+
+	// End of segment: U:\workspace\BakaTxt\src\bakatxt\international\BakaTongue.java
+
+
+
+
+
+	/**
+	 * origin: U:\workspace\BakaTxt\src\bakatxt\log\BakaLogFormatter.java
+	 */
+
+package bakatxt.log;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.logging.Formatter;
+import java.util.logging.Handler;
+import java.util.logging.LogRecord;
+
+public class BakaLogFormatter extends Formatter {
+
+    private static final int MAX_BUFFER = 1000;
+    private static final String DATE_FORMAT = "HH:mm:ss:SSS";
+    private static final String SPACE = " ";
+    private static final String COLON = ":";
+    private static final String LINE_SEPARATOR = System
+            .getProperty("line.separator");
+
+    @Override
+    public String format(LogRecord record) {
+        StringBuffer output = new StringBuffer(MAX_BUFFER);
+
+        output.append(calculateDate(record.getMillis()));
+        output.append(SPACE);
+        output.append(record.getSourceClassName());
+        output.append(SPACE);
+        output.append(record.getSourceMethodName());
+        output.append(LINE_SEPARATOR + "\t");
+        output.append(record.getLevel());
+        output.append(COLON + SPACE);
+        output.append(formatMessage(record));
+        output.append(LINE_SEPARATOR);
+
+        return output.toString();
+    }
+
+    private static String calculateDate(long ms) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
+        Date rawDate = new Date(ms);
+        return dateFormat.format(rawDate);
+    }
+
+    @Override
+    public String getHead(Handler handler) {
+        Date now = new Date();
+        return "Session: " + now.toString() + LINE_SEPARATOR;
+    }
+
+    @Override
+    public String getTail(Handler h) {
+        return "End Session" + LINE_SEPARATOR + LINE_SEPARATOR;
+    }
+}
+
+	// End of segment: U:\workspace\BakaTxt\src\bakatxt\log\BakaLogFormatter.java
+
+
+
+
+
+	/**
+	 * origin: U:\workspace\BakaTxt\src\bakatxt\log\BakaLogger.java
+	 */
+
+package bakatxt.log;
+
+import java.io.IOException;
+import java.util.logging.FileHandler;
+import java.util.logging.Handler;
+import java.util.logging.Logger;
+
+public class BakaLogger {
+
+    private static FileHandler _fileTxt;
+    private static BakaLogFormatter _bakaFormat;
+    private static Logger _logger;
+
+    public static void setup() throws SecurityException, IOException {
+        _logger = Logger.getLogger("");
+
+        Handler[] handlers = _logger.getHandlers();
+        for (Handler handler : handlers) {
+            _logger.removeHandler(handler);
+        }
+
+        _fileTxt = new FileHandler("Baka.log", 1048576, 1, true);
+        _bakaFormat = new BakaLogFormatter();
+        _logger.addHandler(_fileTxt);
+        _fileTxt.setFormatter(_bakaFormat);
+    }
+
+    public static void setup(boolean flag) {
+        if (!flag) {
+            return;
+        }
+
+        _logger = Logger.getLogger("");
+
+        Handler[] handlers = _logger.getHandlers();
+        for (Handler handler : handlers) {
+            _logger.removeHandler(handler);
+        }
+
+        try {
+            _fileTxt = new FileHandler("%t/Baka.log", 1048576, 1, true);
+        } catch (SecurityException | IOException ex1) {
+            // do nothing.
+        }
+        _bakaFormat = new BakaLogFormatter();
+        _logger.addHandler(_fileTxt);
+        _fileTxt.setFormatter(_bakaFormat);
+    }
+
+    public static void teardown() {
+        Handler[] handlers = _logger.getHandlers();
+        for (Handler handler : handlers) {
+            handler.close();
+            ;
+        }
+    }
+}
+
+	// End of segment: U:\workspace\BakaTxt\src\bakatxt\log\BakaLogger.java
+
+
+
+
+
+	/**
+	 * origin: U:\workspace\BakaTxt\src\bakatxt\test\DatabaseTest.java
+	 */
+
+package bakatxt.test;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.util.LinkedList;
+
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
+import bakatxt.core.Database;
+import bakatxt.core.Task;
+
+public class DatabaseTest {
+
+    private static Database database;
+    private static Path temp;
+
+    @BeforeClass
+    public static void setUp() throws Exception {
+        temp = Files.createTempFile(Paths.get("BakaStorage.txt")
+                .toAbsolutePath().getParent(),
+                null, null);
+        temp.toFile().deleteOnExit();
+        Files.copy(Paths.get("BakaStorage.txt"), temp,
+                StandardCopyOption.REPLACE_EXISTING);
+        database = Database.getInstance();
+    }
+
+    @AfterClass
+    public static void tearDown() throws Exception {
+        database.close();
+        Files.delete(Paths.get(database.getFileName()));
+        Files.copy(temp, Paths.get("BakaStorage.txt"),
+                StandardCopyOption.REPLACE_EXISTING);
+    }
+
+    @Test
+    public void testAddAndDeleteTask() {
+        Task task = new Task("add test!");
+        task.setDate("3015-05-02");
+        task.setTime("2230");
+
+        database.add(task);
+        LinkedList<Task> tasks = database.getTaskWithTitle("add test");
+        assertTrue(tasks.contains(task));
+
+        database.delete(task);
+        tasks = database.getTaskWithTitle("add test");
+        assertFalse(tasks.contains(task));
+    }
+
+    @Test
+    public void testDeleteTaskDontExist() {
+        Task task = new Task("delete test!");
+        task.setDate("2014-05-02");
+        task.setTime("2230");
+        assertFalse(database.delete(task));
+    }
+
+    @Test
+    public void testSetTaskDone() {
+        Task task = new Task("set done test!");
+        database.add(task);
+        database.setDone(task, true);
+        task.setDone(true);
+        LinkedList<Task> tasks = database.getAllTasks();
+        assertTrue(tasks.contains(task));
+    }
+
+    @Test
+    public void testSetFloating() {
+        Task task = new Task("set floating test!");
+        task.setDate("2014-05-02");
+        task.setTime("2230");
+        database.add(task);
+        database.setFloating(task, true);
+        task.setFloating(true);
+        LinkedList<Task> tasks = database.getAllTasks();
+        assertTrue(tasks.contains(task));
+    }
+
+    @Test
+    public void testGetTasks() {
+        database.updateDoneView(false);
+        Task task1 = new Task("task1");
+        task1.setDate("2015-03-02");
+        database.add(task1);
+        Task task2 = new Task("task2");
+        task2.setDate("2015-12-14");
+        database.add(task2);
+        Task task3 = new Task("task3");
+        task3.setDone(true);
+        task3.setFloating(true);
+        database.add(task3);
+        LinkedList<Task> result = database.getTasksWithDate(task1.getDate());
+        assertTrue(result.contains(task1));
+        result = database.getTasksWithDate("2014-12-14");
+        assertFalse(result.contains(task1));
+        result = database.getAllTasks();
+        assertFalse(result.contains(task3));
+        result = database.getAllTasks();
+        assertTrue(result.contains(task2));
+        result = database.getTasksWithDate(null);
+        assertFalse(result.contains(task3));
+        database.updateDoneView(true);
+    }
+
+    @Test
+    public void testDatabaseOverflow() {
+        for (int year = 2014; year < 3014; year++) {
+            for (int month = 1; month <= 12; month++) {
+                for (int day = 1; day <= 31; day++) {
+                    String date = year
+                            + ((month < 10) ? "-0" + month : "-" + month)
+                            + ((day < 10) ? "-0" + day : "-" + day);
+                    Task task = new Task(date);
+                    task.setDate(date);
+                    database.add(task);
+                }
+            }
+        }
+    }
+
+    @Test
+    public void testRemoveDone() {
+        Task task = new Task("remove done test!");
+        task.setDone(true);
+
+        database.add(task);
+        LinkedList<Task> tasks = database.getAllTasks();
+        assertTrue(tasks.contains(task));
+    }
+
+    @Test
+    public void testGetTaskWithTitle() {
+        Task task = new Task("title");
+        database.add(task);
+        LinkedList<Task> tasks = database.getTaskWithTitle("title");
+        assertTrue(tasks.contains(task));
+    }
+
+    // This is a equivalence test case for adding tasks
+    @Test
+    public void testIsExisting() {
+        Task task = new Task("titleExists");
+        assertTrue(database.add(task));
+        assertFalse(database.add(task));
+    }
+}
+
+	// End of segment: U:\workspace\BakaTxt\src\bakatxt\test\DatabaseTest.java
+
+
+
+
+
+	/**
+	 * origin: U:\workspace\BakaTxt\src\bakatxt\test\TaskTest.java
+	 */
+
+package bakatxt.test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import org.junit.Before;
+import org.junit.Test;
+
+import bakatxt.core.Task;
+
+public class TaskTest {
+
+    Task task;
+
+    @Before
+    public void setUp() throws Exception {
+        task = new Task();
+        task.setTitle("New Task");
+    }
+
+    @Test
+    public void testTaskOutput() {
+        task.setDate("2014-05-02");
+        task.setTime("2230");
+        task.setDone(true);
+        String expected = "[TITLE] New Task [DATE] 2014-05-02 [TIME] 2230 ";
+        String output = task.toDisplayString();
+        assertEquals(expected, output);
+    }
+
+    @Test
+    public void testTaskFileOutput() {
+        task.setDate("2014-05-02");
+        task.setTime("2230");
+        task.setDone(true);
+        task.setFloating(true);
+        task.setDeleted(true);
+
+        String output = task.toString();
+        String expected = "[9999 5000 0000 null null] [TITLE] New Task "
+                + "[DATE] null [TIME] null [ENDTIME] null [VENUE] null "
+                + "[DONE] true [FLOATING] true " + "[DELETED] true "
+                + "[DESCRIPTION] null ";
+        assertEquals(expected, output);
+    }
+
+    @Test
+    public void testTaskFromDatabaseString() {
+        String databaseStr = "[9999 5000 2014-05-02 2230] [TITLE] New Task [DATE] 2014-05-02 [TIME] 2230 [ENDTIME] null [VENUE] null [DONE] true [FLOATING] false [DELETED] true [DESCRIPTION] null ";
+        Task task = new Task(databaseStr);
+        assertTrue(task.isDone());
+        assertFalse(task.isFloating());
+        assertEquals("null", task.getVenue());
+        assertEquals(databaseStr, task.toString());
+    }
+
+    // This is an equivalence partition test case for task creation
+    @Test
+    public void testInvalidDatabaseString() {
+        String fake = "[TITLE] fakeee";
+        Task task = new Task(fake);
+        assertEquals(null, task.getTitle());
+        String real = "[9999 5000 0000 null null] [TITLE] New Task "
+                + "[DATE] null [TIME] null [ENDTIME] null [VENUE] null "
+                + "[DONE] true [FLOATING] true " + "[DELETED] true "
+                + "[DESCRIPTION] null ";
+        task = new Task(real);
+        assertEquals(task.toString(), real);
+    }
+
+    // merging tasks
+    @Test
+    public void testMerging() {
+        Task task = new Task("hello World");
+        task.setTime("2000");
+        task.setEndTime("2100");
+        Task mergeThis = new Task();
+        mergeThis.setTime("1900");
+        mergeThis.setDate("2014-12-14");
+        mergeThis.setDescription("aloha");
+        mergeThis.setVenue("nowhere");
+        task.merge(mergeThis);
+    }
+}
+	// End of segment: U:\workspace\BakaTxt\src\bakatxt\test\TaskTest.java
+
+
+
+
+
+	/**
+	 * origin: U:\workspace\BakaTxt\src\bakatxt\test\UserInputTest.java
+	 */
+
+package bakatxt.test;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import java.util.LinkedList;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import bakatxt.core.BakaParser;
+import bakatxt.core.Database;
+import bakatxt.core.Task;
+import bakatxt.core.UserAction;
+import bakatxt.core.UserEditStatus;
+import bakatxt.core.UserEditTask;
+
+public class UserInputTest {
+
+    private Task dummy;
+    private BakaParser _parser;
+    private Database _database;
+
+    @Before
+    public void setUp() throws Exception {
+        _parser = new BakaParser();
+        _database = Database.getInstance();
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        _database.close();
+    }
+
+    @Test
+    public void testAdd() {
+        dummy = _parser.add("add testAdd command ");
+        UserAction command = new UserAction("add", dummy);
+
+        command.execute();
+        LinkedList<Task> tasks = _database.getAllTasks();
+        assertTrue(tasks.contains(dummy));
+
+        command.undo();
+        tasks = _database.getAllTasks();
+        assertFalse(tasks.contains(dummy));
+    }
+
+    @Test
+    public void testDelete() {
+        dummy = _parser.add("add testDelete command tonight");
+        dummy.updateOverdueStatus();
+        UserAction command = new UserAction("delete", dummy);
+
+        command.execute();
+        LinkedList<Task> tasks = _database.getAllTasks();
+        assertFalse(tasks.contains(dummy));
+
+        command.undo();
+        tasks = _database.getAllTasks();
+        assertTrue(tasks.contains(dummy));
+    }
+
+    @Test
+    public void testEdit() {
+        dummy = _parser.add("add editing1");
+        Task edit = _parser.add("add editing2");
+        UserAction command = new UserEditTask("edit", dummy, edit);
+
+        command.execute();
+        LinkedList<Task> tasks = _database.getAllTasks();
+        assertFalse(tasks.contains(dummy));
+
+        command.undo();
+        tasks = _database.getAllTasks();
+        assertTrue(tasks.contains(dummy));
+    }
+
+    @Test
+    public void testDone() {
+        dummy = _parser.add("add done 1pm tomorrow");
+        // _database.add(dummy);
+        UserAction command = new UserEditStatus("done", dummy, true);
+
+        command.execute();
+        LinkedList<Task> tasks = _database.getDoneTasks();
+        assertTrue(tasks.contains(dummy));
+
+        command.undo();
+        tasks = _database.getAllTasks();
+        assertTrue(tasks.contains(dummy));
+    }
+}
+
+	// End of segment: U:\workspace\BakaTxt\src\bakatxt\test\UserInputTest.java
+
+
+
+
+
