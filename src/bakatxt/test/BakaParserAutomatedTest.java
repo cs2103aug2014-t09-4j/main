@@ -45,7 +45,7 @@ public class BakaParserAutomatedTest {
 
     @Test
     public void testAddInputCase() {
-        String input = BakaBot.ADD + "lUNCH today 2pm";
+        String input = BakaBot.ADD + "lUNCH tomorrow 2pm";
         _bot.inputThisString(input);
         BakaBot.waitAWhile(BakaBot.WAIT_VERY_LONG);
         LinkedList<Task> expected = new LinkedList<Task>();
@@ -167,20 +167,8 @@ public class BakaParserAutomatedTest {
     }
 
     @Test
-    public void testAddDateTonight() {
-        String input = BakaBot.ADD + "dinner tonight";
-        _bot.inputThisString(input);
-        BakaBot.waitAWhile(BakaBot.WAIT_SHORT);
-        LinkedList<Task> expected = new LinkedList<Task>();
-        expected = _database.getTaskWithTitle("dinner");
-        LinkedList<Task> output = new LinkedList<Task>();
-        output.add(_parser.add(input));
-        assertEquals(expected, output);
-    }
-
-    @Test
     public void testAddDateNoon() {
-        String input = BakaBot.ADD + "brunch at noon";
+        String input = BakaBot.ADD + "brunch at noon tomorrow";
         _bot.inputThisString(input);
         BakaBot.waitAWhile(BakaBot.WAIT_SHORT);
         LinkedList<Task> expected = new LinkedList<Task>();
@@ -386,7 +374,7 @@ public class BakaParserAutomatedTest {
 
     @Test
     public void testAddTimeDurationFormat3() {
-        String input = BakaBot.ADD + "studyyy today @ school 13:00 - 6pm";
+        String input = BakaBot.ADD + "studyyy next week @ school 13:00 - 6pm";
         _bot.inputThisString(input);
         BakaBot.waitAWhile(BakaBot.WAIT_SHORT);
         LinkedList<Task> expected = new LinkedList<Task>();

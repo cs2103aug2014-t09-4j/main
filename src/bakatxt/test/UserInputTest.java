@@ -84,7 +84,7 @@ public class UserInputTest {
         UserAction command = new UserEditStatus("done", dummy, true);
 
         command.execute();
-        LinkedList<Task> tasks = _database.getAllTasks();
+        LinkedList<Task> tasks = _database.getDoneTasks();
         assertTrue(tasks.contains(dummy));
 
         command.undo();
