@@ -12,17 +12,14 @@ public class UserEditStatus extends UserAction {
     /**
      * 
      * @return <code>true</code> when the status of the task is changed
-     *         successfully
      */
     @Override
     public boolean execute() {
         switch (super._command) {
             case "FLOATING" :
-                super.setFloat(_task, _flag);
-                return true;
+                return setFloat(super._task, _flag);
             case "DONE" :
-                super.setDone(_task, _flag);
-                return true;
+                return setDone(super._task, _flag);
             default :
                 return false;
         }
@@ -30,19 +27,44 @@ public class UserEditStatus extends UserAction {
 
     /**
      * @return <code>true</code> when the status of the task is changed
-     *         successfully
      */
     @Override
     public boolean undo() {
         switch (super._command) {
             case "FLOATING" :
-                super.setFloat(_task, !_flag);
-                return true;
+                return setFloat(super._task, !_flag);
             case "DONE" :
-                super.setDone(_task, !_flag);
-                return true;
+                return setDone(super._task, !_flag);
             default :
                 return false;
         }
+    }
+
+    /**
+     * 
+     * @param task
+     *            is a specific task
+     * @param flag
+     *            is <code>true</code> to set the task to done
+     * 
+     * @return <code>true</code> if task status is changed, <code>false</code>
+     *         otherwise
+     */
+    private boolean setDone(Task task, boolean flag) {
+        return _database.setDone(task, flag);
+    }
+
+    /**
+     * 
+     * @param task
+     *            is a specific floating task
+     * @param flag
+     *            is <code>true</code> to set the task to floating
+     * 
+     * @return <code>true</code> if task status is changed, <code>false</code>
+     *         otherwise
+     */
+    private boolean setFloat(Task task, boolean flag) {
+        return _database.setFloating(task, flag);
     }
 }

@@ -63,28 +63,6 @@ public class UserAction implements UserActionInterface {
     /**
      * 
      * @param task
-     *            is a specific task
-     * @param flag
-     *            is <code>true</code> to set the task to done
-     */
-    protected void setDone(Task task, boolean flag) {
-        _database.setDone(task, flag);
-    }
-
-    /**
-     * 
-     * @param task
-     *            is a specific floating task
-     * @param flag
-     *            is <code>true</code> to set the task to floating
-     */
-    protected void setFloat(Task task, boolean flag) {
-        _database.setFloating(task, flag);
-    }
-
-    /**
-     * 
-     * @param task
      *            is a specific task to be deleted
      * @return <code>true</code> when the task is successfully deleted
      */
