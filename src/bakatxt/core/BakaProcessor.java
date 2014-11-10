@@ -1,4 +1,4 @@
-//@author A0116014Y
+// @author A0116014Y
 package bakatxt.core;
 
 import java.util.ArrayList;
@@ -63,34 +63,52 @@ public class BakaProcessor {
         _isGui = isGui;
     }
 
+    /**
+     * Takes in a string of input to display tasks according to the content
+     * 
+     * @param input
+     *            is the <code>String</code> containing the parsed content
+     * 
+     * @return boolean, true if the user entered a valid command false if the
+     *         user entered an invalid one
+     */
+
     private boolean displayTask(String input) {
         input = input.trim();
         if (input.contains(SPACE)) {
             String content = _parser.getString(input);
-            
-            switch(content) {
-                case "all":
+
+            switch (content) {
+                case "all" :
                     _displayTasks = _database.getAllTasks();
                     break;
-                case "week":
+                case "week" :
                     _displayTasks = _database.getWeekTasks();
                     break;
                 case "done" :
                     _displayTasks = _database.getDoneTasks();
                     break;
-                default:
+                default :
                     String currentDate = _parser.getDate(content);
                     _displayTasks = _database.getTasksWithDate(currentDate);
             }
         } else {
             _displayTasks = _database.getAllTasks();
         }
-            
+
         if (_displayTasks.isEmpty()) {
             return false;
         }
         return true;
     }
+
+    /**
+     * Takes in a string of input to search for tasks with the input that the
+     * user enters
+     * 
+     * @param input
+     *            is the <code>String</code> containing the search keywords
+     */
 
     private void searchTask(String input) {
         String title = _parser.getString(input).trim();
@@ -101,6 +119,21 @@ public class BakaProcessor {
         return _displayTasks;
     }
 
+    /**
+     * Takes in string of input and command to clear all the tasks in
+     * BakaStorage
+     * 
+     * @param input
+     *            is the <code>String</code> containing content without the
+     *            command
+     * 
+     * @param command
+     *            is the <code>String</code> containing the command to call the
+     *            UserClear class
+     * 
+     * @return boolean, true if the user entered a valid command false if the
+     *         user entered an invalid one
+     */
     private boolean clearTask(String input, String command) {
         UserAction inputCmd;
         boolean isSuccessful = true;
@@ -129,7 +162,7 @@ public class BakaProcessor {
      * command will be taken parsed to get the command word and it will follow
      * the switch statement to do execute its command.
      *
-     * @param str
+     * @param input
      *            is the <code>String</code> containing the command and details
      * @return boolean, true if the user entered a valid command false if the
      *         user entered an invalid one
@@ -302,12 +335,24 @@ public class BakaProcessor {
         return isSuccessful;
     }
 
+    /**
+     * Undo whichever process the user did
+     * 
+     * @return boolean, true if the user entered a valid command false if the
+     *         user entered an invalid one
+     */
     private boolean undoTask() {
         boolean isSuccessful = _ra.undo();
         setToPreviousView();
         return isSuccessful;
     }
 
+    /**
+     * Redo whichever process the user did
+     * 
+     * @return boolean, true if the user entered a valid command false if the
+     *         user entered an invalid one
+     */
     private boolean redoTask() {
         boolean isSuccessful = _ra.redo();
         setToPreviousView();
