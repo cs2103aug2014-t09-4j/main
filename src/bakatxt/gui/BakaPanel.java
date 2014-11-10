@@ -6,7 +6,7 @@ import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.util.LinkedList;
+import java.util.List;
 
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
@@ -33,7 +33,7 @@ public class BakaPanel extends JPanel {
     private static BakaScrollPane _bakaScrollPane;
     private static FormattedText _alertMessage;
 
-    public BakaPanel(LinkedList<Task> tasks) {
+    public BakaPanel(List<Task> tasks) {
 
         _input = new Input();
         _contents = new Contents(tasks);
@@ -88,7 +88,7 @@ public class BakaPanel extends JPanel {
      * @param tasks
      *        the tasks we are putting on the GUI
      */
-    protected void refreshContents(LinkedList<Task> tasks) {
+    protected void refreshContents(List<Task> tasks) {
 
         setBackground(ThemeReader.getPanelColor());
 
