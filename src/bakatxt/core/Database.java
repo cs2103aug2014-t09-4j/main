@@ -416,7 +416,7 @@ public class Database implements DatabaseInterface {
         LOGGER.info("delete task initialized");
 
         // updateFile();
-        // updateMemory();
+        updateMemory();
 
         String key = task.getKey();
         LinkedList<Task> target = _bakaMap.get(key);
