@@ -124,6 +124,9 @@ public class BakaScrollPane extends JScrollPane {
         });
     }
 
+    /**
+     * Timer to set the scrollbar to invisible
+     */
     private void setTimeout() {
         _timer = new Timer(VANISH_TIMER, new ActionListener(){
             @Override
@@ -134,6 +137,9 @@ public class BakaScrollPane extends JScrollPane {
         });
     }
 
+    /**
+     * Creating the scrollbar
+     */
     private static class DisappearingScrollBar extends BasicScrollBarUI {
 
         @Override
@@ -146,10 +152,16 @@ public class BakaScrollPane extends JScrollPane {
             return invisibleButton();
         }
 
+        /**
+         * the track the scrollbar lays on. Set to nothing.
+         */
         @Override
         protected void paintTrack(Graphics g, JComponent c, Rectangle trackBounds) {
         }
 
+        /**
+         * the actual scrollbar
+         */
         @Override
         protected void paintThumb(Graphics g, JComponent c, Rectangle thumbBounds) {
             UIHelper.paintRoundedRectangle(g, ThemeReader.getScrollColor(),
@@ -157,6 +169,11 @@ public class BakaScrollPane extends JScrollPane {
                                            thumbBounds.height, BAR_ROUNDNESS);
         }
 
+        /**
+         * create an invisible JButton for the scrollbar
+         *
+         * @return an invisible JButton
+         */
         private static JButton invisibleButton() {
             JButton invisibleButton = new JButton() {
                 @Override

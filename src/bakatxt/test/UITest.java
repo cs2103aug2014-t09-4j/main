@@ -80,6 +80,7 @@ public class UITest {
 
     /**
      * Ensure that the width of the program does not change
+     *
      * @throws AWTException
      */
     @Test

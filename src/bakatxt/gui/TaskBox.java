@@ -41,6 +41,13 @@ abstract class TaskBox extends JPanel implements BakaAnimator {
         _baseColor = backgroundColor;
     }
 
+    /**
+     * Draws the various components in a taskbox
+     *
+     * @param task
+     *        is the task to draw on the taskbox
+     * @param index is the position within bakatxt where the taskbox
+     */
     protected void addComponentsToPane(Task task, int index) {
         GridBagConstraints layout = new GridBagConstraints();
 
@@ -52,6 +59,14 @@ abstract class TaskBox extends JPanel implements BakaAnimator {
         setTimeEnd(layout, task.getEndTime());
     }
 
+    /**
+     * draw the index number of the task
+     *
+     * @param layout
+     *        the layout we are drawing the string on
+     * @param number
+     *        is the number we are writing
+     */
     private void setNumber(GridBagConstraints layout, int number) {
 
         FormattedText index = new FormattedText(shouldAddLeadingZero(number),
@@ -69,6 +84,16 @@ abstract class TaskBox extends JPanel implements BakaAnimator {
     }
 
     // TODO make locationText a different color
+    /**
+     * draw the task name and the location name of the task
+     *
+     * @param layout
+     *        the layout we are drawing the string on
+     * @param taskText
+     *        the task name we are writing
+     * @param locationText
+     *        the location name we are writing
+     */
     private void setTaskAndLocation(GridBagConstraints layout, String taskText,
                                     String locationText) {
         locationText = removeNullValues(AT, locationText);
@@ -87,6 +112,14 @@ abstract class TaskBox extends JPanel implements BakaAnimator {
         this.add(task, layout);
     }
 
+    /**
+     * draw the description of the task
+     *
+     * @param layout
+     *        the layout we are drawing the string on
+     * @param descriptionText
+     *        the description of the task we are writing
+     */
     private void setDescription(GridBagConstraints layout, String descriptionText) {
         FormattedText description = new FormattedText(descriptionText,
                                                       ThemeReader.getDefaultTheme(),
@@ -103,6 +136,14 @@ abstract class TaskBox extends JPanel implements BakaAnimator {
         this.add(description, layout);
     }
 
+    /**
+     * draw the starting time of the task
+     *
+     * @param layout
+     *        the layout we are drawing the string on
+     * @param startTimeText
+     *        the start time of the task we are writing
+     */
     private void setTimeStart(GridBagConstraints layout, String startTimeText) {
 
         startTimeText = removeNullValues(startTimeText);
@@ -121,6 +162,14 @@ abstract class TaskBox extends JPanel implements BakaAnimator {
         this.add(time, layout);
     }
 
+    /**
+     * draw whether or not the task has been completed
+     *
+     * @param layout
+     *        the layout we are drawing the string on
+     * @param state
+     *        is the task completion state
+     */
     private void setTaskCompletionState(GridBagConstraints layout, String state) {
         FormattedText completionState = new FormattedText(state,
                                                           ThemeReader.getLocationTheme());
@@ -137,6 +186,14 @@ abstract class TaskBox extends JPanel implements BakaAnimator {
         this.add(completionState, layout);
     }
 
+    /**
+     * draw the end time of the task
+     *
+     * @param layout
+     *        the layout we are drawing the string on
+     * @param endTimeText
+     *        is the end time we are writing
+     */
     private void setTimeEnd(GridBagConstraints layout, String endTimeText) {
 
         endTimeText = removeNullValues(endTimeText);
@@ -155,6 +212,14 @@ abstract class TaskBox extends JPanel implements BakaAnimator {
         this.add(time, layout);
     }
 
+    /**
+     * if present, remove null || "null"  and return an empty string. else return
+     * the old string.
+     *
+     * @param s
+     *        the string to check
+     * @return the string after processing
+     */
     private static String removeNullValues(String s) {
         if (isStringNull(s)) {
             return "";
@@ -162,6 +227,16 @@ abstract class TaskBox extends JPanel implements BakaAnimator {
         return s;
     }
 
+    /**
+     * if present, remove null || "null"  and return an empty string. else return
+     * the old string with a prefix.
+     *
+     * @param prefix
+     *        the prefix to append
+     * @param s
+     *        the string to check
+     * @return the string after processing
+     */
     private static String removeNullValues(String prefix, String s) {
         if (isStringNull(s)) {
             return "";
@@ -169,6 +244,13 @@ abstract class TaskBox extends JPanel implements BakaAnimator {
         return prefix + s;
     }
 
+    /**
+     * Add a leading zero for numbers less than 10
+     *
+     * @param number
+     *        the number to add the leading zero
+     * @return the number with the leading zero as a string
+     */
     private static String shouldAddLeadingZero(int number) {
         String num = Integer.toString(number);
         if (number < 10) {
@@ -177,10 +259,25 @@ abstract class TaskBox extends JPanel implements BakaAnimator {
         return num;
     }
 
+    /**
+     * check if a string is null or "null"
+     *
+     * @param s
+     *        the string to check
+     * @return true if the string is either null value
+     */
     private static boolean isStringNull(String s) {
         return (s == null || s.equals("null"));
     }
 
+    /**
+     * check the done state of the task and returns the appropriate string to
+     * show the user
+     *
+     * @param task
+     *        is the task to check the done state
+     * @return a nice looking string to reflect that
+     */
     private static String doneState(Task task) {
         if (task.isDone()) {
             return DONE;
@@ -190,17 +287,26 @@ abstract class TaskBox extends JPanel implements BakaAnimator {
         return UNDONE;
     }
 
+    /**
+     * border is transparent
+     */
     @Override
     protected void paintBorder(Graphics g) {
         g.setColor(UIHelper.TRANSPARENT);
     }
 
-
+    // TODO does not work yet
+    /**
+     * @see {@link bakatxt.gui.look.BakaAnimator}
+     */
     @Override
     public Color getColor() {
         return _baseColor;
     }
 
+    /**
+     * @see {@link bakatxt.gui.look.BakaAnimator}
+     */
     @Override
     public void setColor(Color newColor) {
         setBackground(newColor);

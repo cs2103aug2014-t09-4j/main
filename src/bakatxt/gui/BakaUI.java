@@ -33,7 +33,6 @@ public class BakaUI extends JFrame {
     private static BakaUI _bakaUI;
     private static BakaPanel _bakaPanel;
     private static BakaProcessor _bakaProcessor;
-    private static boolean _isNewTask = false;
 
     private static final String INITIAL_DISPLAY = "display today";
     private static final String HOTKEY = "control SPACE";
@@ -147,13 +146,6 @@ public class BakaUI extends JFrame {
     }
 
     /**
-     * @return
-     */
-    protected static boolean isNewTask() {
-        return _isNewTask;
-    }
-
-    /**
      * This method draws the BakaPanel and sets the window as transparent and
      * centered.
      */
@@ -184,6 +176,9 @@ public class BakaUI extends JFrame {
         });
     }
 
+    /**
+     * Set the UI to show today's tasks on startup
+     */
     private static void setInitialDisplay() {
         EventQueue.invokeLater(new Runnable() {
             @Override
@@ -194,14 +189,30 @@ public class BakaUI extends JFrame {
         });
     }
 
+    /**
+     * Process the input by giving it to bakaProcessor
+     *
+     * @param inputText
+     *        the string to be processed
+     * @return true if the command was successfully executed
+     */
     private static boolean processInput(String inputText) {
         return _bakaProcessor.executeCommand(inputText);
     }
 
+    /**
+     * Animates the components to be animated
+     *
+     * @param shouldAnimate
+     *        is the boolean controlling the animation
+     */
     private static void shouldAnimate(boolean shouldAnimate) {
         _bakaPanel.animateInputBox(shouldAnimate);
     }
 
+    /**
+     * Set up the hotkey for the user to launch bakatxt with
+     */
     private static void setupHotkey() {
         final HotKeyListener listener = new HotKeyListener() {
             @Override
