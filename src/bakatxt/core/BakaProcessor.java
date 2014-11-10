@@ -366,6 +366,9 @@ public class BakaProcessor {
         return isSuccessful;
     }
 
+    /**
+     * Display the command types by adding command to <code>LinkedList</code>
+     */
     private void showHelp() {
         _displayTasks = new LinkedList<Task>();
         for (CommandType c : CommandType.values()) {
@@ -381,6 +384,16 @@ public class BakaProcessor {
         }
     }
 
+    /**
+     * Takes in a String of the language. If the user types 'language' it will
+     * display the options and if the enters the command with the name of
+     * language at the back, it will set the language of the program
+     *
+     * @param input
+     *            is the <code>String</code> containing the name of the language
+     * @return boolean, true if the user entered a valid command false if the
+     *         user entered an invalid one
+     */
     private boolean languageSelector(String input) {
         if (!_isGui) {
             return false;
@@ -399,6 +412,17 @@ public class BakaProcessor {
         return isSuccessful;
     }
 
+    /**
+     * Takes in a String of the name of the theme. If the user enters 'theme' it
+     * will display the options of available themes and if the enters the
+     * command with the name of theme at the back, it will set the theme to the
+     * program
+     *
+     * @param input
+     *            is the <code>String</code> containing the name of the theme
+     * @return boolean, true if the user entered a valid command false if the
+     *         user entered an invalid one
+     */
     private boolean themeSelector(String input) {
         if (!_isGui) {
             return false;
@@ -415,6 +439,15 @@ public class BakaProcessor {
         return isSuccessful;
     }
 
+    /**
+     * Takes in a String of contents and add the task by attaching the command
+     * word 'add' in front of the input
+     *
+     * @param input
+     *            is the <code>String</code> of the content
+     * @return boolean, true if the user entered a valid command false if the
+     *         user entered an invalid one
+     */
     private boolean addTaskWithNoCommandWord(String input) {
         return addTask(input, COMMAND_ADD);
     }
@@ -482,6 +515,20 @@ public class BakaProcessor {
         return isSuccessful;
     }
 
+    /**
+     * Takes in string of input and command to edit the task instantly
+     * 
+     * @param input
+     *            is a new <code>String</code> containing content without the
+     *            command word
+     * 
+     * @param command
+     *            is the <code>String</code> containing the command to call the
+     *            UserEditTask class
+     * 
+     * @return boolean, true if the user entered a valid command false if the
+     *         user entered an invalid one
+     */
     private boolean editInstant(String input, String command) {
         boolean isSuccessful;
         String index = _parser.getCommand(input);
@@ -509,6 +556,20 @@ public class BakaProcessor {
         return isSuccessful;
     }
 
+    /**
+     * Takes in string of input and command to edit the task's description
+     * 
+     * @param input
+     *            is a new <code>String</code> containing description content
+     *            without the command word
+     * 
+     * @param command
+     *            is the <code>String</code> containing the command to call the
+     *            UserEditTask class
+     * 
+     * @return boolean, true if the user entered a valid command false if the
+     *         user entered an invalid one
+     */
     private boolean editDescription(String input, String command) {
         UserAction inputCmd;
         String nextStagePrompt;
@@ -532,6 +593,16 @@ public class BakaProcessor {
         return isSuccessful;
     }
 
+    /**
+     * Takes in string of input and command to edit the task's start time
+     * 
+     * @param input
+     *            is a new <code>String</code> containing the start time without
+     *            the command word
+     * 
+     * @return boolean, true if the user entered a valid command false if the
+     *         user entered an invalid one
+     */
     private boolean editStartTime(String input) {
         String nextStagePrompt;
         String parsedDateTime;
@@ -551,6 +622,16 @@ public class BakaProcessor {
         return true;
     }
 
+    /**
+     * Takes in string of input and command to edit the task's end time
+     * 
+     * @param input
+     *            is a new <code>String</code> containing the end time without
+     *            the command word
+     * 
+     * @return boolean, true if the user entered a valid command false if the
+     *         user entered an invalid one
+     */
     private boolean editEndTime(String input) {
 
         String nextStagePrompt;
@@ -571,6 +652,16 @@ public class BakaProcessor {
         return true;
     }
 
+    /**
+     * Takes in string of input and command to edit the task's date
+     * 
+     * @param input
+     *            is a new <code>String</code> containing the date without the
+     *            command word
+     * 
+     * @return boolean, true if the user entered a valid command false if the
+     *         user entered an invalid one
+     */
     private boolean editDate(String input) {
         String nextStagePrompt;
         String parsedDateTime;
@@ -590,6 +681,16 @@ public class BakaProcessor {
         return true;
     }
 
+    /**
+     * Takes in string of input and command to edit the task's venue
+     * 
+     * @param input
+     *            is a new <code>String</code> containing the start venue
+     *            without the command word
+     * 
+     * @return boolean, true if the user entered a valid command false if the
+     *         user entered an invalid one
+     */
     private boolean editVenue(String input) {
         String nextStagePrompt;
         if (input.toLowerCase().equals(
@@ -607,6 +708,16 @@ public class BakaProcessor {
         return true;
     }
 
+    /**
+     * Takes in string of input and command to edit the task's title
+     * 
+     * @param input
+     *            is a new <code>String</code> containing the title without the
+     *            command word
+     * 
+     * @return boolean, true if the user entered a valid command false if the
+     *         user entered an invalid one
+     */
     private boolean editTitle(String input) {
         String nextStagePrompt;
         if (input.trim().isEmpty()) {
@@ -624,6 +735,16 @@ public class BakaProcessor {
         return true;
     }
 
+    /**
+     * Takes in a String of index and passes the string to the parser to get an
+     * <code>ArrayList</code> of index that will be deleted from the database
+     * 
+     * @param input
+     *            is the <code>String</code> containing the index of the tasks
+     *            that the user wishes to delete
+     * @return boolean, true if the user entered a valid command false if the
+     *         user entered an invalid one
+     */
     private boolean deleteTask(String input) {
         UserAction inputCmd;
         Task task;
@@ -696,6 +817,20 @@ public class BakaProcessor {
         return isSuccessful;
     }
 
+    /**
+     * Takes in string of input and command to add the task to the database
+     * 
+     * @param input
+     *            is the <code>String</code> containing content without the
+     *            command
+     * 
+     * @param command
+     *            is the <code>String</code> containing the command to call the
+     *            UserAction class
+     * 
+     * @return boolean, true if the user entered a valid command false if the
+     *         user entered an invalid one
+     */
     private boolean addTask(String input, String command) {
         UserAction inputCmd;
         Task task;
