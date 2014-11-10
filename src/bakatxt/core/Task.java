@@ -399,7 +399,7 @@ public class Task implements TaskInterface, Comparable<Task> {
             task.append(TAG_VENUE + SPACE + _venue + SPACE);
         }
         if (_description != null && !_description.equals(TAG_NULL)
-                && _description.isEmpty()) {
+                && !_description.isEmpty()) {
             task.append(TAG_DESCRIPTION + SPACE + _description + SPACE);
         }
         
