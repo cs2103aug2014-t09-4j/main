@@ -421,7 +421,8 @@ public class BakaProcessor {
                 isSuccessful = editInstant(input, command);
             } else {
                 int trueIndex = Integer.valueOf(input) - 1;
-                if (trueIndex < 0 || trueIndex >= _displayTasks.size()) {
+                if (trueIndex < 0 || trueIndex >= _displayTasks.size()
+                        || !_isGui) {
                     return false;
                 }
                 isSuccessful = editStages(trueIndex);
