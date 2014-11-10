@@ -5,6 +5,7 @@ package bakatxt.gui;
 
 import java.awt.Color;
 import java.util.LinkedList;
+import java.util.List;
 
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
@@ -27,12 +28,12 @@ class Contents extends JPanel {
 
     private static final int DATE_AND_TASKS_START_POSITION = 1;
 
-    public Contents(LinkedList<Task> tasks) {
+    public Contents(List<Task> tasks) {
 
         setOpaque(false);
         setBackground(UIHelper.TRANSPARENT);
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        LinkedList<Task> tempTasks = tasks;
+        List<Task> tempTasks = tasks;
         updateContents(tempTasks);
     }
 
@@ -40,11 +41,11 @@ class Contents extends JPanel {
      * Check if tasks is empty, displaying the appropriate events.
      *
      * @param tasks
-     *        is all the tasks in the LinkedList<Task> we need to add
+     *        is all the tasks in the List<Task> we need to add
      */
-    protected void updateContents(LinkedList<Task> tasks) {
+    protected void updateContents(List<Task> tasks) {
         try {
-            addTasksByDate(tasks);
+            addTasksByDate((LinkedList<Task>)tasks);
         } catch (NullPointerException e) {
             setNoEvents();
         }
@@ -119,7 +120,7 @@ class Contents extends JPanel {
     }
 
     /**
-     * add all the tasks in the list into the GUI for that date
+     * add all the tasks in the LinkedList into the GUI for that date
      *
      * @param tasks
      *        the list of tasks
