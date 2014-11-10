@@ -36,9 +36,13 @@ public class UserClear extends UserAction {
                 _tasks = super._database.getDoneTasks();
                 break;
             default :
-                BakaParser parser = new BakaParser();
-                date = parser.getDate(date);
-                _tasks = super._database.getTasksWithDate(date);
+                if (command.equals("SEARCH")) {
+                    _tasks = super._database.getTaskWithTitle(date);
+                } else {
+                    BakaParser parser = new BakaParser();
+                    date = parser.getDate(date);
+                    _tasks = super._database.getTasksWithDate(date);
+                }
         }
     }
 

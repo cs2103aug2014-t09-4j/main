@@ -144,12 +144,19 @@ public class BakaProcessor {
             date = _parser.getString(input);
         } else {
             setToPreviousView();
+
+            String prevCommand = _parser.getCommand(_previousAction);
+            if (prevCommand.equals("SEARCH")) {
+                command = prevCommand;
+            }
+
             if (_previousAction.contains(SPACE)) {
                 date = _parser.getString(_previousAction);
             } else {
                 date = "all";
             }
         }
+
         inputCmd = new UserClear(command, date);
         isSuccessful = _ra.execute(inputCmd);
         setToPreviousView();
