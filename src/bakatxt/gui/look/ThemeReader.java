@@ -107,8 +107,11 @@ public class ThemeReader {
      * Enable setting of theme directly based on specifying <code>Path</code>.
      * Used to set theme from preferences stored in the storage file.
      * 
-     * @param Path
+     * @param themePath
      *            containing the location of the theme file
+     * 
+     * @return <code>true</code> if the theme exists and sets,
+     *         <code>false</code> otherwise
      */
     public static boolean setTheme(Path themePath) {
         if (Files.exists(themePath)) {

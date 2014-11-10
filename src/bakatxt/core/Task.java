@@ -446,8 +446,9 @@ public class Task implements TaskInterface, Comparable<Task> {
     /**
      * Sets a task to be deleted from the storage file.
      * 
-     * @param <code>true</code> for task to be deleted, <code>false</code>
-     *        otherwise.
+     * @param isDeleted
+     *            is <code>true</code> for task to be deleted,
+     *            <code>false</code> otherwise.
      */
     @Override
     public void setDeleted(boolean isDeleted) {
@@ -468,8 +469,9 @@ public class Task implements TaskInterface, Comparable<Task> {
      * task is restored. If task is not done, overdue status is updated
      * accordingly.
      * 
-     * @param <code>true</code> for task to be done, <code>false</code> for task
-     *        to be undone.
+     * @param isDone
+     *            is <code>true</code> for task to be done, <code>false</code>
+     *            for task to be undone.
      */
     @Override
     public void setDone(boolean isDone) {
@@ -487,8 +489,9 @@ public class Task implements TaskInterface, Comparable<Task> {
     /**
      * Sets a task floating status.
      * 
-     * @param <code>true</code> for task to be floating, <code>false</code>
-     *        otherwise.
+     * @param isFloating
+     *            is <code>true</code> for task to be floating,
+     *            <code>false</code> otherwise.
      */
     @Override
     public void setFloating(boolean isFloating) {
@@ -511,8 +514,8 @@ public class Task implements TaskInterface, Comparable<Task> {
      * Determines if two tasks are equal through comparison of the
      * <code>String</code> to be written to the storage file.
      * 
-     * @param Task
-     *            to be compared with
+     * @param obj
+     *            <code>Task</code> to be compared with
      * 
      * @return <code>true</code> if both tasks contain the same information,
      *         <code>false</code> otherwise.
@@ -531,7 +534,7 @@ public class Task implements TaskInterface, Comparable<Task> {
      * tasks are sorted chronologically in the storage file and
      * <code>Database</code>
      * 
-     * @param Task
+     * @param task
      *            to be compared with
      * 
      * @return <code>0</code> if they are of the same date and time,
@@ -658,8 +661,8 @@ public class Task implements TaskInterface, Comparable<Task> {
      * lowest priorities. Information from task specified has a higher priority
      * over existing information in the <code>Task</code> instance.
      * 
-     * @param Task
-     *            containing information to be merged
+     * @param toMerge
+     *            <code>Task</code> containing information to be merged
      * 
      * @return Task containing information of updated set of information.
      */

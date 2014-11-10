@@ -11,7 +11,7 @@ public class UserClear extends UserAction {
      * @param command
      *            <code>String</code> of command clear
      * @param date
-     *            code>String</code> of a day or a period to clear the tasks
+     *            <code>String</code> of a day or a period to clear the tasks
      */
     public UserClear(String command, String date) {
         super(command, null);

@@ -784,7 +784,7 @@ public class Database implements DatabaseInterface {
      * 
      * @param task
      *            a task to change the status
-     * @param isDone
+     * @param isFloating
      *            a boolean to specify the status of the task to be set
      * 
      * @return <code>true</code> if the updated task is written to the storage
@@ -856,8 +856,9 @@ public class Database implements DatabaseInterface {
      * Writes the current view option for done tasks into the storage file to
      * enable persistence.
      * 
-     * @param boolean <code>true</code> to show done, <code>false</code>
-     *        otherwise.
+     * @param isViewingDone
+     *            is <code>true</code> to show done, <code>false</code>
+     *            otherwise.
      */
     @Override
     public void updateDoneView(boolean isViewingDone) {
